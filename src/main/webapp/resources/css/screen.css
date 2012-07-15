@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #EAECEE;
+    font-family: Verdana, sans-serif;
+    font-size: 0.9em;
+}
+
+#loader {
+	height: 300px;
+	text-align: center;
+	margin-top: 200px;
+	vertical-align: top;
+	font-size: x-small;
+	color: #555;
+}
+
+.errorMessage {
+    color: red;
+    font-size: smaller;
+}
+
+.successMessage {
+    color: green;
+    font-size: smaller;
+}
