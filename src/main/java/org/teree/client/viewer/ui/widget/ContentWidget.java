@@ -1,5 +1,7 @@
 package org.teree.client.viewer.ui.widget;
 
-public class ContentWidget {
+import com.google.gwt.user.client.ui.Composite;
+
+public class ContentWidget extends Composite {
 
 }

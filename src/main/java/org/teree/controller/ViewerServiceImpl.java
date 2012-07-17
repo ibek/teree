@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import org.jboss.errai.bus.server.annotations.Service;
 import org.teree.shared.ViewerService;
+import org.teree.shared.data.Node;
 
 @ApplicationScoped
 @Service
@@ -17,8 +18,12 @@ public class ViewerServiceImpl implements ViewerService {
     private Logger log;
 
     @Override
-    public void expand() {
-        log.log(Level.INFO, "expand");
+    public Node getMap(String id) {
+        log.log(Level.INFO, "getMap("+id+")");
+        Node root = new Node();
+        root.addChild(new Node());
+        root.addChild(new Node());
+        return root;
     }
     
 }

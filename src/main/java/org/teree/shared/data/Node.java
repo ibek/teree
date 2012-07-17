@@ -1,5 +1,6 @@
 package org.teree.shared.data;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class Node {
@@ -22,6 +23,19 @@ public class Node {
         int index = parent.childNodes.indexOf(this);
         parent.childNodes.add(index+1, node);
         node.setParent(this);
+    }
+    
+    public void remove() {
+        Iterator<Node> it = childNodes.iterator();
+        while(it.hasNext()){
+            Node child = it.next();
+            child.remove();
+        }
+        parent.remove(this);
+    }
+    
+    public void remove(Node child) {
+        childNodes.remove(child);
     }
     
     public NodeContent getContent() {

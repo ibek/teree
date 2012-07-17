@@ -1,6 +1,7 @@
 package org.teree.client.viewer.ui;
 
 import org.teree.shared.ViewerService;
+import org.teree.shared.data.Node;
 import org.jboss.errai.ioc.client.api.Caller;
 
 import com.google.gwt.core.client.GWT;
@@ -24,7 +25,10 @@ public class ViewerUI extends Composite {
 
   public ViewerUI(Caller<ViewerService> service) {
     _service = service;
-    _scene = new Scene(false);
+    Node root = new Node();
+    root.addChild(new Node());
+    root.addChild(new Node());
+    _scene = new Scene(root);
     initWidget(uiBinder.createAndBindUi(this));
     
   }
