@@ -8,6 +8,7 @@ public class Node {
     private NodeContent content;
     private Node parent;
     private List<Node> childNodes;
+    private NodeLocation location;
     
     public void addChild(Node child) {
         childNodes.add(child);
@@ -60,6 +61,20 @@ public class Node {
     
     public void setChildNodes(List<Node> childNodes) {
         this.childNodes = childNodes;
+    }
+    
+    public NodeLocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(NodeLocation location) {
+        this.location = location;
+    }
+
+    public enum NodeLocation {
+        LEFT,
+        ROOT,
+        RIGHT
     }
     
 }

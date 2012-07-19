@@ -9,7 +9,7 @@
 		}
 		
 	</ui:style>
-
+  
 	<g:FlowPanel addStyleNames="{style.rootPanel}">
 		<viewer:Scene ui:field="_scene"></viewer:Scene>
 	</g:FlowPanel>
