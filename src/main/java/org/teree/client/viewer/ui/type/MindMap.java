@@ -16,10 +16,14 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 
 public class MindMap implements MapType {
     
+    //private static final int MARGIN
+    
     private int max_width;
+    private Node _root;
     
     @Override
     public void generate(AbsolutePanel panel, Node root) {
+        _root = root;
 
         panel.clear();
         Canvas canvas = Canvas.createIfSupported();
@@ -39,15 +43,54 @@ public class MindMap implements MapType {
         int maxrw = max_width;
         
         List<List<Node>> cn = new ArrayList<List<Node>>();
-        cn.add(root.getChildNodes());
+        //cn.add(root.getChildNodes());
+        List<Node> lcn = new ArrayList<Node>();
+        List<Node> rcn = new ArrayList<Node>();
+        List<Node> rootcn = root.getChildNodes();
         
+        int lefth = 0;
+        int righth = 0;
+        
+        for(int i=0; i<rootcn.size(); ++i){
+            Node n = rootcn.get(i);
+            if (n.getLocation() == NodeLocation.LEFT) {
+                lefth += left.get(0).get(lcn.size());
+                lcn.add(n);
+            } else {
+                righth += right.get(0).get(rcn.size());
+                rcn.add(n);
+            }
+        }
+
+        int max_x = maxlw + root.getContent().getWidth() + maxrw;
+        int max_y = (lefth > righth)?lefth:righth;
+        panel.setWidth(max_x + "px");
+        panel.setHeight(max_y + "px");
+        
+        panel.add(new NodeWidget(root), max_x/2 - root.getContent().getWidth()/2, max_y/2 - root.getContent().getHeight()/2);
+
+        cn.add(lcn);
+        generate(panel, canvas, cn, NodeLocation.LEFT, max_x/2 - root.getContent().getWidth()/2, max_y/2 - lefth/2);
+        cn.add(rcn);
+        generate(panel, canvas, cn, NodeLocation.RIGHT, max_x/2 + root.getContent().getWidth()/2, max_y/2 - righth/2);
+        
+    }
+    
+    private void generate(AbsolutePanel panel, Canvas canvas, List<List<Node>> cn, NodeLocation loc, int start_x, int start_y) {
         int i = 0, level = 0, mark = 0;
+        int x = start_x;
+        int y = start_y;
+        List<Integer> last_x = new ArrayList<Integer>();
         while(!cn.isEmpty()){
             List<Node> current = cn.get(i);
             for(int k=0; k<current.size(); ++k){
                 Node n = current.get(k);
                 cn.add(n.getChildNodes());
                 // render n
+                y += n.getContent().getHeight();
+                int lx = (loc == NodeLocation.LEFT)?x-n.getContent().getWidth():x
+                last_x.add(x-n.getContent().getWidth());
+                panel.add(new NodeWidget(n), , y);
             }
             i++;
             if (i >= cn.size()) {
@@ -59,11 +102,6 @@ public class MindMap implements MapType {
                 mark = cn.size()-1;
             }
         }
-        
-        int max_x = maxlw + root.getContent().getWidth() + maxrw;
-        int max_y = 0;// TODO
-        panel.setWidth(max_x + "px");
-        panel.setHeight(max_y + "px");
     }
     
     private void setBounds(Node node, List<List<Integer>> bounds, NodeLocation loc) {
