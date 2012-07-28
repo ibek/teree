@@ -5,7 +5,11 @@ import org.teree.shared.data.Node;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 
 public interface MapType {
+    
+    public void prepare(AbsolutePanel panel, Node root);
 
     public void generate(AbsolutePanel panel, Node root);
+    
+    public void resize(AbsolutePanel panel);
     
 }

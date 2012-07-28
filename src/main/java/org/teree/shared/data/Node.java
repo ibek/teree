@@ -1,5 +1,6 @@
 package org.teree.shared.data;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,22 +12,33 @@ public class Node {
     private NodeLocation location;
     
     public void addChild(Node child) {
+        if (childNodes == null) {
+            childNodes = new ArrayList<Node>();
+        }
+        child.setParent(this);
         childNodes.add(child);
     }
     
     public void insertBefore(Node node) {
+        if(parent == null || parent.childNodes == null)
+            return;
         int index = parent.childNodes.indexOf(this);
         parent.childNodes.add(index, node);
         node.setParent(this);
     }
     
     public void insertAfter(Node node) {
+        if(parent == null || parent.childNodes == null)
+            return;
         int index = parent.childNodes.indexOf(this);
         parent.childNodes.add(index+1, node);
         node.setParent(this);
     }
     
     public void remove() {
+        if (childNodes == null) {
+            return;
+        }
         Iterator<Node> it = childNodes.iterator();
         while(it.hasNext()){
             Node child = it.next();
@@ -36,7 +48,9 @@ public class Node {
     }
     
     public void remove(Node child) {
-        childNodes.remove(child);
+        if (childNodes != null) {
+            childNodes.remove(child);
+        }
     }
     
     public NodeContent getContent() {

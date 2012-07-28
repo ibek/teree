@@ -13,12 +13,15 @@ import org.teree.client.viewer.ui.widget.NodeWidget;
 import org.teree.shared.data.Node;
 
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 public class Scene extends Composite {
@@ -36,11 +39,12 @@ public class Scene extends Composite {
     }
     
     public Scene(Node root, boolean editable){
+        _root = root;
         _editable = editable;
         _map = new MindMap();
         
         _panel = new AbsolutePanel();
-        _spanel = new ScrollPanel(_panel);
+        /**_spanel = new ScrollPanel(_panel);
         _spanel.setWidth("100%");
         _spanel.setHeight(Window.getClientHeight() + "px");
         Window.addResizeHandler(new ResizeHandler() {
@@ -51,9 +55,15 @@ public class Scene extends Composite {
             }
 
            });
-        
+        */
         regenerate();
-        initWidget(_spanel);
+        //initWidget(_spanel);
+        initWidget(_panel);
+        initViewport();
+    }
+    
+    public void initViewport(){
+        
     }
     
     public void regenerate(@Observes NodeWidget nw) {
@@ -61,7 +71,15 @@ public class Scene extends Composite {
     }
     
     private void regenerate() {
-        _map.generate(_panel, _root);
+        _map.prepare(_panel, _root);
+        Timer timer = new Timer() { // workaround http://code.google.com/p/google-web-toolkit/issues/detail?id=4286
+            @Override
+            public void run() {
+                _map.resize(_panel);
+                _map.generate(_panel, _root);
+            }
+        };
+        timer.schedule(100);
     }
     
 }

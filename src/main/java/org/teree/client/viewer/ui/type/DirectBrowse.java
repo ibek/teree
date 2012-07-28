@@ -28,4 +28,16 @@ public class DirectBrowse implements MapType {
         panel.setHeight(max_y + "px");
     }
 
+    @Override
+    public void resize(AbsolutePanel panel) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void prepare(AbsolutePanel panel, Node root) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

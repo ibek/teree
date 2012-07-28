@@ -14,26 +14,26 @@ import com.google.gwt.user.client.ui.Label;
 public class NodeWidget extends Composite {
 
     private Node _node;
-    //private ContentWidget _content;
+    private ContentWidget _content;
     
-    private Box _bounds;
     private AbsolutePanel _panel;
     
     private Event<NodeWidget> nodeEvent;
     
     public NodeWidget(Node n) {
         _node = n;
-        _bounds = new Box();
         _panel = new AbsolutePanel();
-        //_panel.add(_content);
-        Label l = new Label();
-        l.setText("ahoj");
-        _panel.add(l);
+        _content = new ContentWidget(_node.getContent());
+        _panel.add(_content);
         initWidget(_panel);
     }
     
-    public Box getBounds() {
-        return _bounds;
+    public Node getNode() {
+        return _node;
+    }
+    
+    public ContentWidget getContent(){
+        return _content;
     }
     
     public void createChild() {
