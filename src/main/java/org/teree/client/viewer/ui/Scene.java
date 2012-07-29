@@ -9,8 +9,10 @@ import javax.enterprise.event.Observes;
 
 import org.teree.client.viewer.ui.type.MapType;
 import org.teree.client.viewer.ui.type.MindMap;
+import org.teree.client.viewer.ui.widget.ContentWidget;
 import org.teree.client.viewer.ui.widget.NodeWidget;
 import org.teree.shared.data.Node;
+import org.teree.shared.data.NodeContent;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.Style;
@@ -25,8 +27,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 public class Scene extends Composite {
-
-    private boolean _editable;
     
     private Node _root;
     private MapType _map;
@@ -34,16 +34,16 @@ public class Scene extends Composite {
     private AbsolutePanel _panel;
     private ScrollPanel _spanel;
     
-    public Scene(Node root){
-        this(root, false);
+    public Scene(){
+        this(null);
     }
     
-    public Scene(Node root, boolean editable){
-        _root = root;
-        _editable = editable;
+    public Scene(Node root){
         _map = new MindMap();
         
         _panel = new AbsolutePanel();
+        _panel.setWidth("100%");
+        _panel.setHeight("100%");
         /**_spanel = new ScrollPanel(_panel);
         _spanel.setWidth("100%");
         _spanel.setHeight(Window.getClientHeight() + "px");
@@ -56,17 +56,23 @@ public class Scene extends Composite {
 
            });
         */
-        regenerate();
         //initWidget(_spanel);
+        if(root != null){
+            setRoot(root);
+        }
         initWidget(_panel);
-        initViewport();
     }
     
-    public void initViewport(){
-        
+    public void setRoot(Node root) {
+        _root = root;
+        regenerate();
     }
     
     public void regenerate(@Observes NodeWidget nw) {
+        regenerate();
+    }
+    
+    public void regenerate(@Observes ContentWidget cw) {
         regenerate();
     }
     

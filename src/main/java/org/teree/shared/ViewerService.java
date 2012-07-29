@@ -1,7 +1,5 @@
 package org.teree.shared;
 
-import java.util.List;
-
 import org.jboss.errai.bus.server.annotations.Remote;
 import org.teree.shared.data.Node;
 
@@ -15,5 +13,7 @@ import org.teree.shared.data.Node;
 public interface ViewerService {
   
     public Node getMap(String id);
+    
+    public String insertMap(Node root);
     
 }

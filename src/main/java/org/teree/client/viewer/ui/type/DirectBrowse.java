@@ -8,7 +8,7 @@ import org.teree.shared.data.Node;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 
-public class DirectBrowse implements MapType {
+public class DirectBrowse extends MapType {
 
     @Override
     public void generate(AbsolutePanel panel, Node root) {
@@ -26,18 +26,6 @@ public class DirectBrowse implements MapType {
         }*/
         panel.setWidth(max_x + "px");
         panel.setHeight(max_y + "px");
-    }
-
-    @Override
-    public void resize(AbsolutePanel panel) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void prepare(AbsolutePanel panel, Node root) {
-        // TODO Auto-generated method stub
-        
     }
 
 }

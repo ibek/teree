@@ -1,9 +1,16 @@
 package org.teree.shared.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jboss.errai.common.client.api.annotations.Portable;
+
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+
+@Portable
 public class Node {
 
     private NodeContent content;
@@ -74,7 +81,9 @@ public class Node {
     }
     
     public void setChildNodes(List<Node> childNodes) {
-        this.childNodes = childNodes;
+        for(int i=0; i<childNodes.size(); ++i){
+            addChild(childNodes.get(i));
+        }
     }
     
     public NodeLocation getLocation() {
@@ -85,10 +94,10 @@ public class Node {
         this.location = location;
     }
 
-    public enum NodeLocation {
+    @Portable
+    public enum NodeLocation implements Serializable {
         LEFT,
-        ROOT,
-        RIGHT
+        RIGHT;
     }
     
 }
