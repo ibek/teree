@@ -11,6 +11,7 @@ import org.teree.client.viewer.ui.type.MapType;
 import org.teree.client.viewer.ui.type.MindMap;
 import org.teree.client.viewer.ui.widget.ContentWidget;
 import org.teree.client.viewer.ui.widget.NodeWidget;
+import org.teree.client.viewer.ui.widget.event.Regenerate;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.NodeContent;
 
@@ -65,24 +66,35 @@ public class Scene extends Composite {
     
     public void setRoot(Node root) {
         _root = root;
-        regenerate();
+        regenerateRoot();
     }
     
-    public void regenerate(@Observes NodeWidget nw) {
-        regenerate();
-    }
-    
-    public void regenerate(@Observes ContentWidget cw) {
-        regenerate();
-    }
-    
-    private void regenerate() {
-        _map.prepare(_panel, _root);
+    private void regenerateRoot() {
+        _map.prepare(_panel, _root, false); // #1
+        final Regenerate reg = new Regenerate() {
+            @Override
+            public void regenerate() {
+                regenerateRoot();
+            }
+        };
         Timer timer = new Timer() { // workaround http://code.google.com/p/google-web-toolkit/issues/detail?id=4286
             @Override
             public void run() {
-                _map.resize(_panel);
-                _map.generate(_panel, _root);
+                boolean succ = _map.resize(_panel); // #2
+                if(!succ){ // some node is too wide
+                    _panel.clear();
+                    _map.prepare(_panel, _root, !succ); // #3.1
+                    Timer t = new Timer() {
+                        @Override
+                        public void run() {
+                            _map.resize(_panel); // #4
+                            _map.generate(_panel, _root, reg); // #5
+                        }
+                    };
+                    t.schedule(100);
+                }else{
+                    _map.generate(_panel, _root, reg); // #3.2
+                }
             }
         };
         timer.schedule(100);

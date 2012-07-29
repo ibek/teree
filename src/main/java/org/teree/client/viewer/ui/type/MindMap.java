@@ -6,7 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.teree.client.viewer.ui.Box;
+import org.teree.client.viewer.ui.widget.ContentWidget;
 import org.teree.client.viewer.ui.widget.NodeWidget;
+import org.teree.client.viewer.ui.widget.event.Regenerate;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 import org.teree.shared.data.NodeContent;
@@ -24,7 +26,7 @@ public class MindMap extends MapType {
     private int max_width;
     
     @Override
-    public void generate(AbsolutePanel panel, Node root) {
+    public void generate(AbsolutePanel panel, Node root, Regenerate reg) {
 
         panel.clear();
         Canvas canvas = Canvas.createIfSupported();
@@ -45,6 +47,7 @@ public class MindMap extends MapType {
         // set bounds for left and right nodes
         for(int i=0; i<rootcn.size(); ++i){
             Node n = rootcn.get(i);
+            
             if (n.getLocation() == NodeLocation.LEFT && n.getChildNodes() != null) {
                 max_width = 0;
                 int h = setBounds(n.getChildNodes(), left, n.getContent().getWidth(), 1);
@@ -99,7 +102,9 @@ public class MindMap extends MapType {
         Context2d context = canvas.getContext2d();
 
         context.beginPath(); // of lines
-        panel.add(new NodeWidget(root), maxlw, max_y/2 - root.getContent().getHeight()); // add root node into middle of scene
+        NodeWidget nw = new NodeWidget(root);
+        nw.setRegenerateListener(reg);
+        panel.add(nw, maxlw, max_y/2 - root.getContent().getHeight()); // add root node into middle of scene
         
         // support content
         context.setFillStyle("red");
@@ -113,8 +118,8 @@ public class MindMap extends MapType {
         lh = (lefth < righth)?(righth-lefth)/2:0;
         rh = (righth < lefth)?(lefth-righth)/2:0;
 
-        generate(panel, context, lcn, left, NodeLocation.LEFT, maxlw, max_y/2 - root.getContent().getHeight(), 0, lh);
-        generate(panel, context, rcn, right, NodeLocation.RIGHT, maxlw+root.getContent().getWidth(), max_y/2 - root.getContent().getHeight(), 0, rh);
+        generate(panel, context, lcn, left, NodeLocation.LEFT, maxlw, max_y/2 - root.getContent().getHeight(), 0, lh, reg);
+        generate(panel, context, rcn, right, NodeLocation.RIGHT, maxlw+root.getContent().getWidth(), max_y/2 - root.getContent().getHeight(), 0, rh, reg);
 
         context.stroke(); // draw the lines
     }
@@ -132,7 +137,7 @@ public class MindMap extends MapType {
      * @param start_cn the point where child nodes begins (Y)
      */
     private void generate(AbsolutePanel panel, Context2d context, List<Node> cn, List<List<Integer>> level_bounds, 
-            NodeLocation loc, int start_x, int start_y, int level, int start_cn) {
+            NodeLocation loc, int start_x, int start_y, int level, int start_cn, Regenerate reg) {
 
         int py = start_cn;
         int lvl = 0;
@@ -141,8 +146,10 @@ public class MindMap extends MapType {
             int x = (loc == NodeLocation.LEFT)?start_x-n.getContent().getWidth():start_x;
             lvl = ((level_bounds.size() > level)?level_bounds.get(level).get(i)/2:0);
             int y = lvl + py;
-            
-            panel.add(new NodeWidget(n), x, y-n.getContent().getHeight()/2);
+
+            NodeWidget nw = new NodeWidget(n);
+            nw.setRegenerateListener(reg);
+            panel.add(nw, x, y-n.getContent().getHeight()/2);
             // underline node
             drawLine(context, x, y+n.getContent().getHeight()/2, x+n.getContent().getWidth(), y+n.getContent().getHeight()/2);
             // draw arrow
@@ -151,7 +158,7 @@ public class MindMap extends MapType {
             if(n.getChildNodes() != null && n.getChildNodes().size() > 0){ // generate child nodes
                 x = (loc == NodeLocation.RIGHT)?start_x+n.getContent().getWidth():x;
                 //y += n.getContent().getHeight();
-                generate(panel, context, n.getChildNodes(), level_bounds, loc, x, y, level+1, py);
+                generate(panel, context, n.getChildNodes(), level_bounds, loc, x, y, level+1, py, reg);
             }
             py += lvl*2; // for next row, increase py
         }
@@ -169,6 +176,7 @@ public class MindMap extends MapType {
         int bounds = 0;
         for(int i=0; i<cn.size(); ++i){
             Node n = cn.get(i);
+            
             List<Node> fcn = n.getChildNodes();
             if (fcn != null && !fcn.isEmpty()) {
                 int h = setBounds(fcn, level_bounds, current_width+n.getContent().getWidth(), level+1); // recursively get height

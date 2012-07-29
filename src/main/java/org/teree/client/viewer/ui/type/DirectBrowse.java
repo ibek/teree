@@ -3,6 +3,7 @@ package org.teree.client.viewer.ui.type;
 import java.util.List;
 
 import org.teree.client.viewer.ui.widget.NodeWidget;
+import org.teree.client.viewer.ui.widget.event.Regenerate;
 import org.teree.shared.data.Node;
 
 import com.google.gwt.canvas.client.Canvas;
@@ -11,7 +12,7 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 public class DirectBrowse extends MapType {
 
     @Override
-    public void generate(AbsolutePanel panel, Node root) {
+    public void generate(AbsolutePanel panel, Node root, Regenerate reg) {
         int max_x = 0, max_y = 0;
         /**while(it.hasNext()) {
             NodeWidget nw = it.next();
