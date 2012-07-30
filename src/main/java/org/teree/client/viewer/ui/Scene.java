@@ -1,30 +1,12 @@
 package org.teree.client.viewer.ui;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-
-import javax.enterprise.event.Observes;
-
 import org.teree.client.viewer.ui.type.MapType;
 import org.teree.client.viewer.ui.type.MindMap;
-import org.teree.client.viewer.ui.widget.ContentWidget;
-import org.teree.client.viewer.ui.widget.NodeWidget;
 import org.teree.client.viewer.ui.widget.event.Regenerate;
 import org.teree.shared.data.Node;
-import org.teree.shared.data.NodeContent;
-
-import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 public class Scene extends Composite {

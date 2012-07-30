@@ -1,23 +1,15 @@
 package org.teree.client.viewer.ui.type;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
-import org.teree.client.viewer.ui.Box;
-import org.teree.client.viewer.ui.widget.ContentWidget;
 import org.teree.client.viewer.ui.widget.NodeWidget;
 import org.teree.client.viewer.ui.widget.event.Regenerate;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
-import org.teree.shared.data.NodeContent;
-
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class MindMap extends MapType {
     
@@ -115,11 +107,15 @@ public class MindMap extends MapType {
         
         // start position for child nodes where height is smaller
         int lh = 0, rh = 0;
-        lh = (lefth < righth)?(righth-lefth)/2:0;
-        rh = (righth < lefth)?(lefth-righth)/2:0;
+        //lh = (lefth < righth)?(righth-lefth)/2:0;
+        //rh = (righth < lefth)?(lefth-righth)/2:0;
 
-        generate(panel, context, lcn, left, NodeLocation.LEFT, maxlw, max_y/2 - root.getContent().getHeight(), 0, lh, reg);
-        generate(panel, context, rcn, right, NodeLocation.RIGHT, maxlw+root.getContent().getWidth(), max_y/2 - root.getContent().getHeight(), 0, rh, reg);
+        // start position for child nodes where root height is biggest 
+        lh += (max_y-lefth)/2;
+        rh += (max_y-righth)/2;
+
+        generate(panel, context, lcn, left, NodeLocation.LEFT, maxlw, max_y/2, 0, lh, reg);
+        generate(panel, context, rcn, right, NodeLocation.RIGHT, maxlw+root.getContent().getWidth(), max_y/2, 0, rh, reg);
 
         context.stroke(); // draw the lines
     }
@@ -158,7 +154,7 @@ public class MindMap extends MapType {
             if(n.getChildNodes() != null && n.getChildNodes().size() > 0){ // generate child nodes
                 x = (loc == NodeLocation.RIGHT)?start_x+n.getContent().getWidth():x;
                 //y += n.getContent().getHeight();
-                generate(panel, context, n.getChildNodes(), level_bounds, loc, x, y, level+1, py, reg);
+                generate(panel, context, n.getChildNodes(), level_bounds, loc, x, y+n.getContent().getHeight()/2, level+1, py, reg);
             }
             py += lvl*2; // for next row, increase py
         }

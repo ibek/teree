@@ -1,21 +1,13 @@
 package org.teree.client.viewer.ui.widget;
 
-import javax.enterprise.event.Event;
-
-import org.teree.client.viewer.ui.Box;
 import org.teree.client.viewer.ui.widget.event.ContentChanged;
 import org.teree.client.viewer.ui.widget.event.Regenerate;
 import org.teree.shared.annotation.Removed;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.NodeContent;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
 
 public class NodeWidget extends Composite {
 

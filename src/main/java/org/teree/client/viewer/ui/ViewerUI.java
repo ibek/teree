@@ -2,8 +2,6 @@ package org.teree.client.viewer.ui;
 
 import org.teree.shared.ViewerService;
 import org.teree.shared.data.Node;
-import org.teree.shared.data.NodeContent;
-import org.teree.shared.data.Node.NodeLocation;
 import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
@@ -13,7 +11,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 

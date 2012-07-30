@@ -7,9 +7,6 @@ import java.util.List;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
 
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-
 @Portable
 public class Node {
 
