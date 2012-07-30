@@ -1,16 +1,20 @@
 package org.teree.client.viewer.ui.widget;
 
 import org.teree.client.viewer.ui.widget.event.ContentChanged;
+import org.teree.client.viewer.ui.widget.event.EditMode;
+import org.teree.client.viewer.ui.widget.event.ViewMode;
 import org.teree.shared.data.NodeContent;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Composite;
@@ -23,17 +27,20 @@ public class ContentWidget extends Composite {
 
     private NodeContent _content;
     
-    private boolean _editable;
-    
     private ContentChanged _changeEvent;
-
-    public static final int MIN_WIDTH = 18;
-    public static final int MIN_HEIGHT = 18;
-    public static final int MAX_WIDTH = 100;
     
-    public ContentWidget(NodeContent content, boolean editable){
+    private EditMode _editEvent;
+    
+    private ViewMode _viewEvent;
+
+    public static final int MIN_WIDTH = 30;
+    public static final int MIN_HEIGHT = 18;
+    public static final int MAX_WIDTH = 400;
+    
+    public ContentWidget(NodeContent content, EditMode elistener, ViewMode vlistener){
         _content = content;
-        _editable = editable;
+        _editEvent = elistener;
+        _viewEvent = vlistener;
         Widget w = getContentWidget();
         if (w != null) {
             initWidget(w);
@@ -43,7 +50,7 @@ public class ContentWidget extends Composite {
     private Widget getContentWidget() {
         Widget w = null;
         if (_content.getText() != null) {
-            if(_editable && _content.getWidth() > 0){
+            if(isEdited() && _content.getWidth() > 0){
                 final TextArea ftb = new TextArea();
                 Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                     @Override
@@ -61,8 +68,13 @@ public class ContentWidget extends Composite {
                 ftb.addKeyUpHandler(new KeyUpHandler() {
                     @Override
                     public void onKeyUp(KeyUpEvent event) {
-                        if(event.getNativeKeyCode() == 13 && !event.isShiftKeyDown()){
+                        if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER && !event.isShiftKeyDown()){
+                            // don't create new line
+                            event.preventDefault(); 
+                            event.stopPropagation();
                             confirmChanges(ftb);
+                        }else if(event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE){
+                            _viewEvent.view();
                         }
                     }
                 });
@@ -78,14 +90,7 @@ public class ContentWidget extends Composite {
                 w.addDomHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        Widget parent = getParent();
-                        if(parent instanceof Panel){
-                            Panel p = (Panel)parent;
-                            remove(p);
-                            ContentWidget cw = new ContentWidget(_content, true);
-                            cw.setContentChangeListener(_changeEvent);
-                            p.add(cw);
-                        }
+                        edit();
                     }
                 }, ClickEvent.getType());
             }
@@ -106,34 +111,29 @@ public class ContentWidget extends Composite {
     }
     
     private void confirmChanges(TextArea ta) {
-        Widget parent = getParent();
-        if(parent instanceof Panel){
-            Panel p = (Panel)parent;
-            String newtext = ta.getText();
-            if(newtext.compareTo(_content.getText()) != 0){
-                _content.setText(newtext);
-                if(_changeEvent != null){
-                    _changeEvent.changed(_content);
-                }
-            }else{
-                remove(p);
-                ContentWidget cw = new ContentWidget(_content, false);
-                cw.setContentChangeListener(_changeEvent);
-                p.add(cw);
+        String newtext = ta.getText();
+        if(newtext.compareTo(_content.getText()) != 0){
+            _content.setText(newtext);
+            if(_changeEvent != null){
+                _changeEvent.changed(_content);
             }
         }
+        _viewEvent.view();
+    }
+    
+    /**
+     * Switch into editable mode.
+     */
+    public void edit(){
+        _editEvent.edit();
     }
     
     public NodeContent getNodeContent() {
         return _content;
     }
     
-    private void remove(Panel p){
-        p.remove(this);
-    }
-    
-    public void setEditable(boolean editable) {
-        _editable = editable;
+    public boolean isEdited(){
+        return _editEvent == null;
     }
     
     public int getWidgetWidth() {

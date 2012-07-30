@@ -43,7 +43,8 @@ public class TestMap {
         Node root = createTextNode("root", null);
         root.addChild(createTextNode("left node1", NodeLocation.LEFT));
         Node left = createTextNode("left node2", NodeLocation.LEFT);
-        left.addChild(createTextNode("left left node", NodeLocation.LEFT));
+        left.addChild(createTextNode("left left node1", NodeLocation.LEFT));
+        left.addChild(createTextNode("left left node2", NodeLocation.LEFT));
         root.addChild(left);
         root.addChild(createTextNode("left node3", NodeLocation.LEFT));
         root.addChild(createTextNode("right node1", NodeLocation.RIGHT));

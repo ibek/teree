@@ -7,6 +7,7 @@ import org.teree.client.viewer.ui.widget.ContentWidget;
 import org.teree.client.viewer.ui.widget.NodeWidget;
 import org.teree.client.viewer.ui.widget.event.Regenerate;
 import org.teree.shared.data.Node;
+import org.teree.shared.data.Node.NodeLocation;
 import org.teree.shared.data.NodeContent;
 
 import com.google.gwt.user.client.DOM;
@@ -19,8 +20,16 @@ public abstract class MapType {
      * Generate map into panel.
      * @param panel
      * @param root
+     * @return selected node (root)
      */
-    public abstract void generate(AbsolutePanel panel, Node root, Regenerate reg);
+    public abstract NodeWidget generate(AbsolutePanel panel, Node root, Regenerate reg);
+    
+    /**
+     * Get location for root child node.
+     * @param root
+     * @return
+     */
+    public abstract NodeLocation getRootChildNodeLocation(Node root);
 
     /**
      * Add nodes into panel to get size of labels. (workaround)

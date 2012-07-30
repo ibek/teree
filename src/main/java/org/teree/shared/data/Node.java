@@ -40,15 +40,16 @@ public class Node {
     }
     
     public void remove() {
-        if (childNodes == null) {
-            return;
+        if(childNodes != null){
+            Iterator<Node> it = childNodes.iterator();
+            while(it.hasNext()){
+                Node child = it.next();
+                child.remove();
+            }
         }
-        Iterator<Node> it = childNodes.iterator();
-        while(it.hasNext()){
-            Node child = it.next();
-            child.remove();
+        if(parent != null){ // cannot remove root
+            parent.remove(this);
         }
-        parent.remove(this);
     }
     
     public void remove(Node child) {

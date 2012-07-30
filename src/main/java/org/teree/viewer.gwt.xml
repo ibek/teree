@@ -19,5 +19,6 @@
 	
 	<source path='client/viewer' />
 	<source path='shared' />
+	<source path='util/gwt' />
 
 </module>

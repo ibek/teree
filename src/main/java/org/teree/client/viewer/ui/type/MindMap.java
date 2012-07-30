@@ -13,12 +13,13 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 
 public class MindMap extends MapType {
     
-    //private static final int MARGIN
+    private static final int MARGIN = 25;
+    private static final int CURVENESS = 20;
     
     private int max_width;
     
     @Override
-    public void generate(AbsolutePanel panel, Node root, Regenerate reg) {
+    public NodeWidget generate(AbsolutePanel panel, Node root, Regenerate reg) {
 
         panel.clear();
         Canvas canvas = Canvas.createIfSupported();
@@ -56,15 +57,14 @@ public class MindMap extends MapType {
                 }
             } else if(n.getLocation() == NodeLocation.LEFT) {
                 left.get(0).add(n.getContent().getHeight());
+                if (maxlw < n.getContent().getWidth()) {
+                    maxlw = n.getContent().getWidth();
+                }
             } else {
                 right.get(0).add(n.getContent().getHeight());
-            }
-            
-            if (maxlw < n.getContent().getWidth()) {
-                maxlw = n.getContent().getWidth();
-            }
-            if (maxrw < n.getContent().getWidth()) {
-                maxrw = n.getContent().getWidth();
+                if (maxrw < n.getContent().getWidth()) {
+                    maxrw = n.getContent().getWidth();
+                }
             }
         }
         
@@ -85,6 +85,8 @@ public class MindMap extends MapType {
             }
         }
 
+        maxlw += left.size()*MARGIN;
+        maxrw += right.size()*MARGIN;
         int max_x = maxlw + root.getContent().getWidth() + maxrw;
         int max_y = (lefth > righth)?lefth:righth;
         max_y += root.getContent().getHeight()/2;
@@ -99,25 +101,43 @@ public class MindMap extends MapType {
         panel.add(nw, maxlw, max_y/2 - root.getContent().getHeight()); // add root node into middle of scene
         
         // support content
-        context.setFillStyle("red");
+        context.setFillStyle("white");
         context.fillRect(0, 0, max_x, max_y);
         
         // underline root
         drawLine(context, maxlw, max_y/2, maxlw+root.getContent().getWidth(), max_y/2);
         
-        // start position for child nodes where height is smaller
         int lh = 0, rh = 0;
-        //lh = (lefth < righth)?(righth-lefth)/2:0;
-        //rh = (righth < lefth)?(lefth-righth)/2:0;
 
-        // start position for child nodes where root height is biggest 
+        // start position for child nodes where root height is biggest
+        // and for child nodes where height is smaller
         lh += (max_y-lefth)/2;
         rh += (max_y-righth)/2;
-
+        
         generate(panel, context, lcn, left, NodeLocation.LEFT, maxlw, max_y/2, 0, lh, reg);
         generate(panel, context, rcn, right, NodeLocation.RIGHT, maxlw+root.getContent().getWidth(), max_y/2, 0, rh, reg);
 
         context.stroke(); // draw the lines
+        
+        return nw;
+    }
+    
+    @Override
+    public NodeLocation getRootChildNodeLocation(Node root) {
+        int left = 0, right = 0;
+        List<Node> cn = root.getChildNodes();
+        if(cn == null || cn.isEmpty()){
+            return NodeLocation.RIGHT;
+        }
+        for(int i=0; i<cn.size(); ++i){
+            Node n = cn.get(i);
+            if(n.getLocation() == NodeLocation.LEFT){
+                left++;
+            }else if(n.getLocation() == NodeLocation.RIGHT){
+                right++;
+            }
+        }
+        return (left < right)?NodeLocation.LEFT:NodeLocation.RIGHT;
     }
     
     /**
@@ -137,9 +157,14 @@ public class MindMap extends MapType {
 
         int py = start_cn;
         int lvl = 0;
+        
+        int margin = (loc == NodeLocation.LEFT)?-MARGIN:MARGIN;
+        int curveness = (loc == NodeLocation.LEFT)?-CURVENESS:CURVENESS;
+        
         for(int i=0; i<cn.size(); ++i){
             Node n = cn.get(i);
             int x = (loc == NodeLocation.LEFT)?start_x-n.getContent().getWidth():start_x;
+            x += margin;
             lvl = ((level_bounds.size() > level)?level_bounds.get(level).get(i)/2:0);
             int y = lvl + py;
 
@@ -149,12 +174,13 @@ public class MindMap extends MapType {
             // underline node
             drawLine(context, x, y+n.getContent().getHeight()/2, x+n.getContent().getWidth(), y+n.getContent().getHeight()/2);
             // draw arrow
-            drawLine(context, start_x, start_y, x+((loc == NodeLocation.LEFT)?n.getContent().getWidth():0), y+n.getContent().getHeight()/2);
+            drawCurve(context, start_x, start_y, x+((loc == NodeLocation.LEFT)?n.getContent().getWidth():0), y+n.getContent().getHeight()/2, curveness);
+            //drawLine(context, start_x, start_y, x+((loc == NodeLocation.LEFT)?n.getContent().getWidth():0), y+n.getContent().getHeight()/2);
             
             if(n.getChildNodes() != null && n.getChildNodes().size() > 0){ // generate child nodes
                 x = (loc == NodeLocation.RIGHT)?start_x+n.getContent().getWidth():x;
                 //y += n.getContent().getHeight();
-                generate(panel, context, n.getChildNodes(), level_bounds, loc, x, y+n.getContent().getHeight()/2, level+1, py, reg);
+                generate(panel, context, n.getChildNodes(), level_bounds, loc, x+((loc == NodeLocation.LEFT)?0:margin), y+n.getContent().getHeight()/2, level+1, py, reg);
             }
             py += lvl*2; // for next row, increase py
         }
@@ -192,6 +218,11 @@ public class MindMap extends MapType {
             }
         }
         return bounds;
+    }
+    
+    private void drawCurve(Context2d context, int x1, int y1, int x2, int y2, int curveness) {
+        context.moveTo(x1, y1);
+        context.bezierCurveTo(x1 + curveness, y1, x2 - curveness, y2, x2, y2);
     }
     
     private void drawLine(Context2d context, int x1, int y1, int x2, int y2) {
