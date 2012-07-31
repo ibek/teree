@@ -19,7 +19,7 @@ public class MindMap extends MapType {
     private int max_width;
     
     @Override
-    public NodeWidget generate(AbsolutePanel panel, Node root, Regenerate reg) {
+    public NodeWidget generate(AbsolutePanel panel, Node root, Regenerate reg, boolean editable) {
 
         panel.clear();
         Canvas canvas = Canvas.createIfSupported();
@@ -96,7 +96,7 @@ public class MindMap extends MapType {
         Context2d context = canvas.getContext2d();
 
         context.beginPath(); // of lines
-        NodeWidget nw = new NodeWidget(root);
+        NodeWidget nw = new NodeWidget(root, editable);
         nw.setRegenerateListener(reg);
         panel.add(nw, maxlw, max_y/2 - root.getContent().getHeight()); // add root node into middle of scene
         
@@ -114,8 +114,8 @@ public class MindMap extends MapType {
         lh += (max_y-lefth)/2;
         rh += (max_y-righth)/2;
         
-        generate(panel, context, lcn, left, NodeLocation.LEFT, maxlw, max_y/2, 0, lh, reg);
-        generate(panel, context, rcn, right, NodeLocation.RIGHT, maxlw+root.getContent().getWidth(), max_y/2, 0, rh, reg);
+        generate(panel, context, lcn, left, NodeLocation.LEFT, maxlw, max_y/2, 0, lh, reg, editable);
+        generate(panel, context, rcn, right, NodeLocation.RIGHT, maxlw+root.getContent().getWidth(), max_y/2, 0, rh, reg, editable);
 
         context.stroke(); // draw the lines
         
@@ -153,7 +153,7 @@ public class MindMap extends MapType {
      * @param start_cn the point where child nodes begins (Y)
      */
     private void generate(AbsolutePanel panel, Context2d context, List<Node> cn, List<List<Integer>> level_bounds, 
-            NodeLocation loc, int start_x, int start_y, int level, int start_cn, Regenerate reg) {
+            NodeLocation loc, int start_x, int start_y, int level, int start_cn, Regenerate reg, boolean editable) {
 
         int py = start_cn;
         int lvl = 0;
@@ -168,7 +168,7 @@ public class MindMap extends MapType {
             lvl = ((level_bounds.size() > level)?level_bounds.get(level).get(i)/2:0);
             int y = lvl + py;
 
-            NodeWidget nw = new NodeWidget(n);
+            NodeWidget nw = new NodeWidget(n, editable);
             nw.setRegenerateListener(reg);
             panel.add(nw, x, y-n.getContent().getHeight()/2);
             // underline node
@@ -180,7 +180,8 @@ public class MindMap extends MapType {
             if(n.getChildNodes() != null && n.getChildNodes().size() > 0){ // generate child nodes
                 x = (loc == NodeLocation.RIGHT)?start_x+n.getContent().getWidth():x;
                 //y += n.getContent().getHeight();
-                generate(panel, context, n.getChildNodes(), level_bounds, loc, x+((loc == NodeLocation.LEFT)?0:margin), y+n.getContent().getHeight()/2, level+1, py, reg);
+                generate(panel, context, n.getChildNodes(), level_bounds, loc, x+((loc == NodeLocation.LEFT)?0:margin),
+                		y+n.getContent().getHeight()/2, level+1, py, reg, editable);
             }
             py += lvl*2; // for next row, increase py
         }

@@ -14,7 +14,10 @@ import org.teree.shared.data.Node.NodeLocation;
 import org.teree.util.gwt.Keyboard;
 
 import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -22,48 +25,52 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class Scene extends Composite {
     
+	private static final int WAIT = 100; // ms, to get right size of content
+	
     private Node _root;
     private NodeWidget _selected;
     private MapType _map;
+    
+    private boolean _editable;
     
     private AbsolutePanel _panel;
     private ScrollPanel _spanel;
     
     public Scene(){
-        this(null);
+        this(false);
     }
     
-    public Scene(Node root){
+    public Scene(boolean editable){
         _map = new MindMap();
-        
         _panel = new AbsolutePanel();
-        _panel.setWidth("100%");
-        _panel.setHeight("100%");
-        /**_spanel = new ScrollPanel(_panel);
+        _editable = editable;
+        
+        _spanel = new ScrollPanel(_panel);
         _spanel.setWidth("100%");
         _spanel.setHeight(Window.getClientHeight() + "px");
         Window.addResizeHandler(new ResizeHandler() {
-
             public void onResize(ResizeEvent event) {
                 _spanel.setWidth(event.getWidth() + "px");
                 _spanel.setHeight(event.getHeight() + "px");
             }
-
-           });
-        */
-        //initWidget(_spanel);
-        if(root != null){
-            setRoot(root);
+		});
+        
+        if(_editable){
+        	initKeyboard();
         }
-        Keyboard.forceStaticInit();
+        initWidget(_spanel);
+    }
+    
+    private void initKeyboard() {
+    	Keyboard.forceStaticInit();
         Keyboard.clearOnKeyUpListeners();
         Keyboard.addOnKeyUpListener(new OnKeyUp() {            
             @Override
             public void onKeyUp(int keyCode) {
-                Node next = null;
-                NodeWidget nextnw = null;
-                System.out.println("key:"+keyCode + " edit:"+_selected.isEdited());
+                //System.out.println("key:"+keyCode);
                 if(_selected != null && !_selected.isEdited()){
+                    Node next = null;
+                    NodeWidget nextnw = null;
                     if (keyCode == KeyCodes.KEY_UP) {
                         next = getUpNode(_selected);
                     }
@@ -92,20 +99,19 @@ public class Scene extends Composite {
                         if(child.getParent().getParent() == null){ // is child of root
                             child.setLocation(_map.getRootChildNodeLocation(_root));
                         }
-                        regenerateRoot(child);
+                        regenerateMap(child);
                     }
                     nextnw = getNodeWidget(next);
                     if(nextnw != null){
                         if(_selected != null){
-                            _selected.setSelected(false);
+                            _selected.unselect();
                         }
                         _selected = nextnw;
-                        _selected.setSelected(true);
+                        _selected.select();
                     }
                 }
             }
         });
-        initWidget(_panel);
     }
     
     private NodeWidget getNodeWidget(Node n) {
@@ -215,63 +221,65 @@ public class Scene extends Composite {
     
     public void setRoot(Node root) {
         _root = root;
-        regenerateRoot(null);
+        regenerateMap(null);
     }
     
-    private void regenerateRoot(final Node select) {
+    private void regenerateMap(final Node select) {
         final int pcount = _panel.getWidgetCount();
+        
         _map.prepare(_panel, _root, false); // #1
+        
         final Regenerate reg = new Regenerate() {
             @Override
             public void regenerate() {
-                regenerateRoot(null);
+                regenerateMap(null);
             }
         };
+        
         Timer timer = new Timer() { // workaround http://code.google.com/p/google-web-toolkit/issues/detail?id=4286
             @Override
             public void run() {
+            	
                 boolean succ = _map.resize(_panel); // #2
+                
                 if(!succ){ // some node is too wide
-                    clear(pcount);
+                	
+                	for(int i=_panel.getWidgetCount()-1; i>pcount; --i){
+                    	// remove NodeWidgets from previous preparation.
+                        _panel.remove(i);
+                    }
+                	
                     _map.prepare(_panel, _root, !succ); // #3.1
+                    
                     Timer t = new Timer() {
                         @Override
                         public void run() {
                             _map.resize(_panel); // #4
-                            NodeWidget s = _map.generate(_panel, _root, reg); // #5
-                            if(_selected == null){
-                                _selected = s; 
-                            }else if(select != null){ // for create child node
-                                _selected = getNodeWidget(select);
-                                _selected.edit();
-                            }else{ // to select back the changed node
-                                _selected = getNodeWidget(_selected.getNode());
-                            }
-                            _selected.setSelected(true);
+                            generate(select, reg); // #5
                         }
                     };
-                    t.schedule(100);
+                    t.schedule(WAIT);
                 }else{
-                    NodeWidget s = _map.generate(_panel, _root, reg); // #3.2
-                    if(_selected == null){
-                        _selected = s; 
-                    }else if(select != null){ // for create child node
-                        _selected = getNodeWidget(select);
-                        _selected.edit();
-                    }else{ // to select back the changed node
-                        _selected = getNodeWidget(_selected.getNode());
-                    }
-                    _selected.setSelected(true);
+                    generate(select, reg); // #3.2
                 }
             }
         };
-        timer.schedule(100);
+        timer.schedule(WAIT);
     }
     
-    private void clear(int from){
-        for(int i=_panel.getWidgetCount()-1; i>from; --i){
-            _panel.remove(i);
-        }
+    private void generate(final Node select, Regenerate reg) {
+    	NodeWidget s = _map.generate(_panel, _root, reg, _editable);
+    	if(_editable){ // only if we can edit the map
+	        if(_selected == null){
+	            _selected = s; 
+	        }else if(select != null){ // for create child node
+	            _selected = getNodeWidget(select);
+	            _selected.edit();
+	        }else{ // to select back the changed node
+	            _selected = getNodeWidget(_selected.getNode());
+	        }
+	        _selected.select();
+    	}
     }
     
 }
