@@ -20,9 +20,8 @@ public abstract class MapType {
      * Generate map into panel.
      * @param panel
      * @param root
-     * @return selected node (root)
      */
-    public abstract NodeWidget generate(AbsolutePanel panel, Node root, Regenerate reg, boolean editable);
+    public abstract void generate(AbsolutePanel panel, Node root, Regenerate reg, boolean editable);
     
     /**
      * Get location for root child node.
@@ -52,7 +51,7 @@ public abstract class MapType {
             nc.setWidth(0);
         }
         
-        NodeWidget nw = new NodeWidget(root, false);
+        NodeWidget nw = new NodeWidget(root, null, false);
         // hide the widgets, we use them only to get right sizes
         DOM.setStyleAttribute(nw.getElement(), "visibility", "hidden");
         

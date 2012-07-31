@@ -1,6 +1,7 @@
 package org.teree.client.viewer.ui.widget;
 
 import org.teree.client.viewer.ui.widget.event.EditMode;
+import org.teree.client.viewer.ui.widget.event.SelectNode;
 import org.teree.client.viewer.ui.widget.event.ViewMode;
 import org.teree.shared.data.NodeContent;
 
@@ -12,6 +13,8 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
@@ -32,7 +35,9 @@ public class TextContentWidget extends ContentWidget {
 	
 	private Widget getContentWidget() {
 		Widget w = null;
+		
 		if(isEdited() && _content.getWidth() > 0){
+		    
             final TextArea ftb = new TextArea();
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
@@ -41,7 +46,7 @@ public class TextContentWidget extends ContentWidget {
                 }
             });
             w = ftb;
-            ftb.addBlurHandler(new BlurHandler() {
+            ftb.addBlurHandler(new BlurHandler() { // lost focus
                 @Override
                 public void onBlur(BlurEvent event) {
                     confirmChanges(ftb);
@@ -68,15 +73,18 @@ public class TextContentWidget extends ContentWidget {
             ftb.setWidth(_content.getWidth()+"px");
             ftb.setHeight(_content.getHeight()+"px");
         } else {
-            w = new Label(_content.getText());
-            w.addDomHandler(new ClickHandler() {
+            
+            Label l = new Label(_content.getText());
+            l.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                	if(_editEvent != null){
-                		_editEvent.edit();
-                	}
+                    if(_editEvent != null && _editable){
+                        _editEvent.edit();
+                    }
                 }
-            }, ClickEvent.getType());
+            });
+            w = l;
+            
         }
 
         // fix for resize minimal node, look at MapType:prepare

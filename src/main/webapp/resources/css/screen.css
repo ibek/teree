@@ -1,9 +1,14 @@
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #EAECEE;
-    font-family: Verdana, sans-serif;
-    font-size: 0.9em;
+	margin: 0;
+	padding: 0;
+	background-color: #EAECEE;
+	font-family: Verdana, sans-serif;
+	font-size: 0.9em;
+}
+
+canvas {
+	outline: none;
+	-webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
 }
 
 #loader {
@@ -16,11 +21,11 @@ body {
 }
 
 .errorMessage {
-    color: red;
-    font-size: smaller;
+	color: red;
+	font-size: smaller;
 }
 
 .successMessage {
-    color: green;
-    font-size: smaller;
+	color: green;
+	font-size: smaller;
 }

@@ -5,10 +5,13 @@ import java.util.List;
 
 import org.teree.client.viewer.ui.widget.NodeWidget;
 import org.teree.client.viewer.ui.widget.event.Regenerate;
+import org.teree.client.viewer.ui.widget.event.SelectNode;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 
 public class MindMap extends MapType {
@@ -19,10 +22,18 @@ public class MindMap extends MapType {
     private int max_width;
     
     @Override
-    public NodeWidget generate(AbsolutePanel panel, Node root, Regenerate reg, boolean editable) {
+    public void generate(AbsolutePanel panel, Node root, Regenerate reg, boolean editable) {
 
         panel.clear();
         Canvas canvas = Canvas.createIfSupported();
+        
+        canvas.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                SelectNode.unselect();
+            }
+        });
+        
         panel.add(canvas);
 
         /**
@@ -96,8 +107,7 @@ public class MindMap extends MapType {
         Context2d context = canvas.getContext2d();
 
         context.beginPath(); // of lines
-        NodeWidget nw = new NodeWidget(root, editable);
-        nw.setRegenerateListener(reg);
+        NodeWidget nw = new NodeWidget(root, reg, editable);
         panel.add(nw, maxlw, max_y/2 - root.getContent().getHeight()); // add root node into middle of scene
         
         // support content
@@ -118,8 +128,6 @@ public class MindMap extends MapType {
         generate(panel, context, rcn, right, NodeLocation.RIGHT, maxlw+root.getContent().getWidth(), max_y/2, 0, rh, reg, editable);
 
         context.stroke(); // draw the lines
-        
-        return nw;
     }
     
     @Override
@@ -168,8 +176,7 @@ public class MindMap extends MapType {
             lvl = ((level_bounds.size() > level)?level_bounds.get(level).get(i)/2:0);
             int y = lvl + py;
 
-            NodeWidget nw = new NodeWidget(n, editable);
-            nw.setRegenerateListener(reg);
+            NodeWidget nw = new NodeWidget(n, reg, editable);
             panel.add(nw, x, y-n.getContent().getHeight()/2);
             // underline node
             drawLine(context, x, y+n.getContent().getHeight()/2, x+n.getContent().getWidth(), y+n.getContent().getHeight()/2);

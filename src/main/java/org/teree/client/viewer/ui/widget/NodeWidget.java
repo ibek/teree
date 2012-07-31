@@ -3,10 +3,13 @@ package org.teree.client.viewer.ui.widget;
 import org.teree.client.viewer.ui.widget.event.ContentChanged;
 import org.teree.client.viewer.ui.widget.event.EditMode;
 import org.teree.client.viewer.ui.widget.event.Regenerate;
+import org.teree.client.viewer.ui.widget.event.SelectNode;
 import org.teree.client.viewer.ui.widget.event.ViewMode;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.NodeContent;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 
@@ -19,14 +22,16 @@ public class NodeWidget extends Composite {
     private final boolean _editable;
 
     private Regenerate _regEvent;
-    private final ViewMode _viewEvent;
-    private final EditMode _editEvent;
+    
+    private final ViewMode _vlistener;
+    private final EditMode _elistener;
     
     private AbsolutePanel _panel;
 
-    public NodeWidget(Node n, boolean editable) {
+    public NodeWidget(Node n, Regenerate rlistener, boolean editable) {
         _node = n;
         _selected = false;
+        _regEvent = rlistener;
         _editable = editable;
         _panel = new AbsolutePanel();
         
@@ -37,29 +42,40 @@ public class NodeWidget extends Composite {
             }
         };
         
-        _editEvent = new EditMode() {
+        _elistener = new EditMode() {
             @Override
             public void edit() {
-                _panel.remove(_content);
-                ContentWidget cw = new ContentWidget(_node.getContent(), null, _viewEvent, _editable);
-                _content = cw;
-                cw.setContentChangeListener(cclistener);
-                _panel.add(cw);
+                if(_selected){
+                    _panel.remove(_content);
+                    ContentWidget cw = ContentWidget.create(_node.getContent(), null, _vlistener, _editable);
+                    _content = cw;
+                    cw.setContentChangeListener(cclistener);
+                    _panel.add(cw);
+                }else{
+                    SelectNode.select(_node);
+                }
             }
         };
         
-        _viewEvent = new ViewMode() {
+        _vlistener = new ViewMode() {
             @Override
             public void view() {
                 _panel.remove(_content);
-                ContentWidget cw = new ContentWidget(_node.getContent(), _editEvent, null, _editable);
+                ContentWidget cw = ContentWidget.create(_node.getContent(), _elistener, null, _editable);
                 _content = cw;
                 cw.setContentChangeListener(cclistener);
                 _panel.add(cw);
             }
         };
         
-        _content = new ContentWidget(n.getContent(), _editEvent, null, _editable);
+        _panel.addDomHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                SelectNode.select(_node);
+            }
+        }, ClickEvent.getType());
+        
+        _content = ContentWidget.create(n.getContent(), _elistener, _vlistener, editable);
         _content.setContentChangeListener(cclistener);
         
         _panel.add(_content);
@@ -91,11 +107,12 @@ public class NodeWidget extends Composite {
     }
     
     public void edit() {
-        _editEvent.edit();
+        SelectNode.select(_node);
+        _elistener.edit();
     }
     
     public void view() {
-    	_viewEvent.view();
+    	_vlistener.view();
     }
 
     public void remove() {
@@ -142,14 +159,6 @@ public class NodeWidget extends Composite {
     
     public boolean isSelected() {
         return _selected;
-    }
-    
-    public Regenerate getRegenerateListener() {
-        return _regEvent;
-    }
-    
-    public void setRegenerateListener(Regenerate listener) {
-        _regEvent = listener;
     }
 
 }

@@ -9,6 +9,7 @@ import org.teree.client.viewer.ui.type.MindMap;
 import org.teree.client.viewer.ui.widget.NodeWidget;
 import org.teree.client.viewer.ui.widget.event.OnKeyUp;
 import org.teree.client.viewer.ui.widget.event.Regenerate;
+import org.teree.client.viewer.ui.widget.event.SelectNode;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 import org.teree.util.gwt.Keyboard;
@@ -23,6 +24,12 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * TODO: improve getDownNode and getUpNode to continue in another branch
+ *
+ * @author ibek
+ *
+ */
 public class Scene extends Composite {
     
 	private static final int WAIT = 100; // ms, to get right size of content
@@ -37,7 +44,7 @@ public class Scene extends Composite {
     private ScrollPanel _spanel;
     
     public Scene(){
-        this(false);
+        this(true);
     }
     
     public Scene(boolean editable){
@@ -58,6 +65,7 @@ public class Scene extends Composite {
         if(_editable){
         	initKeyboard();
         }
+        initHandlers();
         initWidget(_spanel);
     }
     
@@ -103,15 +111,33 @@ public class Scene extends Composite {
                     }
                     nextnw = getNodeWidget(next);
                     if(nextnw != null){
-                        if(_selected != null){
-                            _selected.unselect();
-                        }
-                        _selected = nextnw;
-                        _selected.select();
+                        selectNodeWidget(nextnw);
                     }
                 }
             }
         });
+    }
+    
+    private void initHandlers() {
+        SelectNode.addListener(new SelectNode.Listener() {
+            @Override
+            public void select(Node n) {
+                selectNodeWidget(getNodeWidget(n));
+            }
+            @Override
+            public void unselect() {
+                _selected.unselect();
+                _selected = null;
+            }
+        });
+    }
+    
+    private void selectNodeWidget(NodeWidget nw) {
+        if(_selected != null){
+            _selected.unselect();
+        }
+        _selected = nw;
+        _selected.select();
     }
     
     private NodeWidget getNodeWidget(Node n) {
@@ -224,7 +250,7 @@ public class Scene extends Composite {
         regenerateMap(null);
     }
     
-    private void regenerateMap(final Node select) {
+    private void regenerateMap(final Node edit) {
         final int pcount = _panel.getWidgetCount();
         
         _map.prepare(_panel, _root, false); // #1
@@ -255,30 +281,24 @@ public class Scene extends Composite {
                         @Override
                         public void run() {
                             _map.resize(_panel); // #4
-                            generate(select, reg); // #5
+                            generate(edit, reg); // #5
                         }
                     };
                     t.schedule(WAIT);
                 }else{
-                    generate(select, reg); // #3.2
+                    generate(edit, reg); // #3.2
                 }
             }
         };
         timer.schedule(WAIT);
     }
     
-    private void generate(final Node select, Regenerate reg) {
-    	NodeWidget s = _map.generate(_panel, _root, reg, _editable);
-    	if(_editable){ // only if we can edit the map
-	        if(_selected == null){
-	            _selected = s; 
-	        }else if(select != null){ // for create child node
-	            _selected = getNodeWidget(select);
-	            _selected.edit();
-	        }else{ // to select back the changed node
-	            _selected = getNodeWidget(_selected.getNode());
-	        }
-	        _selected.select();
+    private void generate(final Node edit, Regenerate reg) {
+    	_map.generate(_panel, _root, reg, _editable);
+    	if(_editable && edit != null){ // only if we can edit the map
+    	    // for new child node
+            _selected = getNodeWidget(edit);
+            _selected.edit();
     	}
     }
     
