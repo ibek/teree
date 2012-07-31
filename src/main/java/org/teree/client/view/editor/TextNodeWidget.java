@@ -4,11 +4,13 @@ import org.teree.client.Settings;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.shared.data.Node;
+import org.teree.shared.data.NodeStyle;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -30,6 +32,8 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TextArea;
 
 /**
@@ -91,8 +95,9 @@ public class TextNodeWidget extends NodeWidget {
                     editContent.setFocus(true);
                 }
             });
-            
-            editContent.setStylePrimaryName(resources.nodeStyle().edit());
+
+	        editContent.setStylePrimaryName(resources.css().node());
+	        editContent.addStyleName(resources.css().nodeEdit());
             
         }
         
@@ -173,7 +178,8 @@ public class TextNodeWidget extends NodeWidget {
 				}
 			});
 	        
-	        content.setStylePrimaryName(resources.basicNodeStyle().view());
+	        content.setStylePrimaryName(resources.css().node());
+	        content.addStyleName(resources.css().nodeView());
         
     	}
 
@@ -238,5 +244,22 @@ public class TextNodeWidget extends NodeWidget {
         context.fillText(content.getText(), x, y);
         context.restore();
     }
+
+	@Override
+	public void changeStyle(NodeStyle style) {
+		if (style == null) {
+			return;
+		}
+		
+		NodeStyle ns = node.getStyleOrCreate();
+		
+		if (style.isBold()) {
+			ns.setBold(true);
+			getElement().getStyle().setFontWeight(FontWeight.BOLD);
+		} else {
+			ns.setBold(false);
+			getElement().getStyle().setFontWeight(FontWeight.NORMAL);
+		}
+	}
 
 }

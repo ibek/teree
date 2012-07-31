@@ -11,6 +11,7 @@ import org.bson.types.ObjectId;
 import org.teree.shared.data.IconString;
 import org.teree.shared.data.ImageLink;
 import org.teree.shared.data.Link;
+import org.teree.shared.data.NodeStyle;
 import org.teree.shared.data.Scheme;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
@@ -122,6 +123,7 @@ public class SchemeManager {
             }
             case Link: {
             	Link link = (Link)value;
+                doc.put("text", link.getText());
                 doc.put("url", link.getUrl());
                 break;
             }
@@ -134,6 +136,14 @@ public class SchemeManager {
         
         if (root.getLocation() != null) {
             doc.put("location", root.getLocation().name());
+        }
+        
+        NodeStyle ns = root.getStyle();
+        if (ns != null && !ns.isDefault()) {
+        	BasicDBObject style = new BasicDBObject();
+        	style.put("bold", ns.isBold());
+        	
+        	doc.put("style", style);
         }
         
         doc.put("childNodes", toDBList(root.getChildNodes()));
@@ -151,9 +161,9 @@ public class SchemeManager {
         return s;
     }
     
-    private Node fromNodeDBObject(DBObject root) {
+    private Node fromNodeDBObject(BasicDBObject root) {
         Node node = new Node();
-        NodeType type = NodeType.valueOf((String)root.get("type"));
+        NodeType type = NodeType.valueOf(root.getString("type"));
         
         switch(type){
             case String: {
@@ -162,28 +172,36 @@ public class SchemeManager {
             }
             case IconString: {
                 IconString is = new IconString();
-                is.setText((String)root.get("text"));
-                is.setIconid((Integer)root.get("icon"));
+                is.setText(root.getString("text"));
+                is.setIconid(root.getInt("icon"));
                 node.setContent(is);
                 break;
             }
             case Link: {
             	Link link = new Link();
-            	link.setUrl((String)root.get("url"));
+            	link.setText(root.getString("text"));
+            	link.setUrl(root.getString("url"));
                 node.setContent(link);
                 break;
             }
             case ImageLink: {
             	ImageLink link = new ImageLink();
-            	link.setUrl((String)root.get("url"));
+            	link.setUrl(root.getString("url"));
                 node.setContent(link);
                 break;
             }
         }
         
-        String location = (String)root.get("location");
+        String location = root.getString("location");
         if(location != null){
             node.setLocation(NodeLocation.valueOf(location));
+        }
+        
+        BasicDBObject style = (BasicDBObject)root.get("style");
+        if(style != null){
+        	NodeStyle ns = new NodeStyle();
+            ns.setBold(style.getBoolean("bold"));
+        	node.setStyle(ns);
         }
         node.setChildNodes(fromDBList((BasicDBList)root.get("childNodes")));
         
@@ -204,7 +222,7 @@ public class SchemeManager {
         List<Node> cn = new ArrayList<Node>();
         Iterator<Object> it = childNodes.iterator();
         while(it.hasNext()){
-            cn.add(fromNodeDBObject((DBObject)it.next()));
+            cn.add(fromNodeDBObject((BasicDBObject)it.next()));
         }
         return cn;
     }

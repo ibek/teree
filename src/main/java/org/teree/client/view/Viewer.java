@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.presenter.SchemeViewer;
-import org.teree.client.view.resource.ViewStyle;
+import org.teree.client.view.resource.PageStyle;
 import org.teree.client.view.viewer.Scene;
 import org.teree.shared.data.Node;
 
@@ -25,7 +25,7 @@ public class Viewer extends Composite implements SchemeViewer.Display {
     }
     
 	static {
-		ViewStyle.INSTANCE.css().ensureInjected(); 
+		PageStyle.INSTANCE.css().ensureInjected(); 
 	}
 
     @UiField

@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.view.editor.EditPanel;
 import org.teree.client.view.editor.Scene;
-import org.teree.client.view.resource.ViewStyle;
+import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.Node;
 
 public class Editor extends Composite implements SchemeEditor.Display {
@@ -28,7 +28,7 @@ public class Editor extends Composite implements SchemeEditor.Display {
     }
     
 	static {
-		ViewStyle.INSTANCE.css().ensureInjected(); 
+		PageStyle.INSTANCE.css().ensureInjected(); 
 	}
 
     @UiField
@@ -77,6 +77,13 @@ public class Editor extends Composite implements SchemeEditor.Display {
 			@Override
 			public void onClick(ClickEvent event) {
 				scene.createImageChildNode();
+			}
+		});
+    	
+    	edit.getCreateLinkButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scene.createLinkChildNode();
 			}
 		});
     	

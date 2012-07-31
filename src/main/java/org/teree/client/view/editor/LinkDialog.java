@@ -1,43 +1,27 @@
 package org.teree.client.view.editor;
 
-import com.google.gwt.core.client.GWT;
+import org.teree.client.view.resource.DialogStyle;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-/**
- * 
- * TODO: create another one for imageLink to upload the image ... it won't be possible to use pictures from another pages
- * 
- * @author ibek
- *
- */
 public class LinkDialog extends DialogBox {
-	
-	interface Resources extends ClientBundle {
-		@Source("../resource/dialogStyle.css")
-		DialogStyle css();
-		
-		public interface DialogStyle extends CssResource {
-            String dialog();
-        }
-		
-	}
 
-	private Resources res = GWT.create(Resources.class);
+	private DialogStyle res = DialogStyle.INSTANCE;
 
 	private static final int WIDTH = 180;
-	private static final int HEIGHT = 50;
+	private static final int HEIGHT = 100;
 	
 	private Button okButton;
-	
+
+	private TextBox textField;
 	private TextBox urlField;
 
 	public LinkDialog(String title) {
@@ -51,8 +35,12 @@ public class LinkDialog extends DialogBox {
 		panel.setWidth(WIDTH+"px");
 		panel.setHeight(HEIGHT+"px");
 		
+		textField = new TextBox();
 		urlField = new TextBox();
 		
+		panel.add(new Label("text:"));
+		panel.add(textField);
+		panel.add(new Label("url:"));
 		panel.add(urlField);
 		
 		okButton = new Button("Ok");
@@ -90,7 +78,15 @@ public class LinkDialog extends DialogBox {
 	}
 	
 	public String getUrl() {
-		return urlField.getText();
+		String url = urlField.getText();
+		if (!url.startsWith("http://") && !url.startsWith("https://")) {
+			url = "http://"+url;
+		}
+		return url;
+	}
+	
+	public String getTextField() {
+		return textField.getText();
 	}
 
 }

@@ -14,8 +14,10 @@ import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
 import org.teree.shared.data.ImageLink;
+import org.teree.shared.data.Link;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
+import org.teree.shared.data.NodeStyle;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
@@ -175,6 +177,20 @@ public class Scene extends Composite {
         });
     }
     
+    public void createLinkChildNode() {
+    	Node child = new Node();
+    	child.setContent(new Link());
+    	insertChildNode(child);
+    	
+    	 // to ensure that the node can be focused after insert
+    	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+        		editSelectedNode();
+            }
+        });
+    }
+    
     public void copySelectedNode() {
     	if (selected != null) {
     		copied = selected.getNode().clone();
@@ -255,16 +271,13 @@ public class Scene extends Composite {
     }
     
     /**
-     * TODO: add bold into Node as a Style and ensure right loading and change even in the node here
      * TODO: enable to change the bold with CTRL+B
      */
     public void changeBoldOfSelectedNode() {
     	if (selected != null) {
-    		if (selected.getElement().getStyle().getFontWeight().compareTo("bold") != 0) {
-    			selected.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-    		} else {
-    			selected.getElement().getStyle().setFontWeight(FontWeight.NORMAL);
-    		}
+			NodeStyle style = selected.getNode().getStyleOrCreate();
+			style.setBold(!style.isBold());
+			selected.changeStyle(style);
     	}
     }
     
@@ -430,6 +443,9 @@ public class Scene extends Composite {
 	        }
 	        case ImageLink: {
 	        	return new ImageNodeWidget(node);
+	        }
+	        case Link: {
+	        	return new LinkNodeWidget(node);
 	        }
 	    }
     	

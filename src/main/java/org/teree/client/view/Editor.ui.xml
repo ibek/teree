@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:edit='urn:import:org.teree.client.view.editor'
 	xmlns:view="urn:import:org.teree.client.view">
 	
-	<ui:with field='res' type="org.teree.client.view.resource.ViewStyle" />
+	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
   
 	<g:FlowPanel>
 		<g:FlowPanel addStyleNames="{res.css.header}"> <!-- header -->

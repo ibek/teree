@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.presenter.SchemeExplorer;
 import org.teree.client.view.explorer.Scene;
-import org.teree.client.view.resource.ViewStyle;
+import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.Scheme;
 
 public class Explorer extends Composite implements SchemeExplorer.Display {
@@ -26,7 +26,7 @@ public class Explorer extends Composite implements SchemeExplorer.Display {
     }
     
 	static {
-		ViewStyle.INSTANCE.css().ensureInjected(); 
+		PageStyle.INSTANCE.css().ensureInjected(); 
 	}
 
     @UiField

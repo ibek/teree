@@ -15,18 +15,20 @@ public class Node implements Cloneable {
     private Object content;
     private NodeType type;
     private NodeLocation location;
+    private NodeStyle style;
     
     public Node clone() {
         Node root = new Node();
         root.setContent(content);
         root.setLocation(location);
+        root.setStyle(style.clone());
         for(int i=0; childNodes != null && i<childNodes.size(); ++i){
             root.addChild(childNodes.get(i).clone());
         }
         return root;
     }
-    
-    public void addChild(Node child) {
+
+	public void addChild(Node child) {
         if (child == null) {
             return;
         }
@@ -153,6 +155,21 @@ public class Node implements Cloneable {
     public void setLocation(NodeLocation location) {
         this.location = location;
     }
+    
+    public NodeStyle getStyle() {
+		return style;
+	}
+    
+    public NodeStyle getStyleOrCreate() {
+    	if (style == null) {
+    		style = new NodeStyle();
+    	}
+		return style;
+	}
+
+	public void setStyle(NodeStyle style) {
+		this.style = style;
+	}
 
     public enum NodeType {
         None,

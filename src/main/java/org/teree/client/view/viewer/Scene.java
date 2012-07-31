@@ -72,6 +72,10 @@ public class Scene extends Composite {
 	        	nw = new ImageNodeWidget(node);
 	        	break;
 	        }
+	        case Link: {
+	        	nw = new LinkNodeWidget(node);
+	        	break;
+	        }
 	    }
 		container.add(nw,0,0);
 		

@@ -4,15 +4,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 
-public interface ViewStyle extends ClientBundle {
+public interface PageStyle extends ClientBundle {
 	
-	public final static ViewStyle INSTANCE = GWT.create(ViewStyle.class);
+	public final static PageStyle INSTANCE = GWT.create(PageStyle.class);
 	
-	@Source("viewStyle.css")
-	ViewStyleCssResource css();
+	@Source("pageStyle.css")
+	PageStyleCssResource css();
 
 	
-	public interface ViewStyleCssResource extends CssResource {
+	public interface PageStyleCssResource extends CssResource {
 	    String header();
 	    String editPanel();
 	    String scene();

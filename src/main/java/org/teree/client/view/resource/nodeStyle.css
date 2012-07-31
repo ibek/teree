@@ -1,7 +1,15 @@
 
-.view {
+.node {
 	text-align: left;
 	font-family: monospace;
 	font-size: 14px;
+}
+
+.view {
 	white-space: pre-line;
+}
+
+.edit {
+	border-width: 0px;
+	padding: 0px;
 }
