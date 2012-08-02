@@ -12,6 +12,8 @@
 	</ui:style>
   
 	<g:FlowPanel addStyleNames="{style.rootPanel}">
+	    <g:Button ui:field='_btnAdd' ui:text="Add"></g:Button>
+	    <g:Button ui:field='_btnSave' ui:text="Save"></g:Button>
 		<viewer:Scene ui:field="_scene"></viewer:Scene>
 	</g:FlowPanel>
 

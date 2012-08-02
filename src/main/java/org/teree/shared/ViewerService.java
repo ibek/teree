@@ -16,4 +16,6 @@ public interface ViewerService {
     
     public String insertMap(Node root);
     
+    public void update(String oid, Node root);
+    
 }

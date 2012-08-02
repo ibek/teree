@@ -48,6 +48,12 @@ public class NodeManager {
         return fromDBObject(found);
     }
     
+    public void update(String oid, Node root) {
+    	DBCollection coll = getCollection();
+        DBObject updateById = new BasicDBObject("_id", new ObjectId(oid));
+        coll.update(updateById, toDBObject(root));
+    }
+    
     private BasicDBObject toDBObject(Node root) {
         BasicDBObject doc = new BasicDBObject();
         

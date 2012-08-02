@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 public class DirectBrowse extends MapType {
 
     @Override
-    public NodeWidget generate(AbsolutePanel panel, Node root, Regenerate reg, boolean editable) {
+    public void generate(AbsolutePanel panel, Node root, Regenerate reg, boolean editable) {
         int max_x = 0, max_y = 0;
         /**while(it.hasNext()) {
             NodeWidget nw = it.next();
@@ -25,7 +25,6 @@ public class DirectBrowse extends MapType {
         }*/
         panel.setWidth(max_x + "px");
         panel.setHeight(max_y + "px");
-        return null;
     }
 
     @Override

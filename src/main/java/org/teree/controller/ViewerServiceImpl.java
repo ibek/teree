@@ -31,5 +31,10 @@ public class ViewerServiceImpl implements ViewerService {
     public String insertMap(Node root) {
         return nm.insert(root);
     }
+
+	@Override
+	public void update(String oid, Node root) {
+		nm.update(oid, root);
+	}
     
 }

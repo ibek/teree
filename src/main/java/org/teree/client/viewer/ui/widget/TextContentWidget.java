@@ -16,8 +16,12 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
@@ -56,25 +60,33 @@ public class TextContentWidget extends ContentWidget {
                 @Override
                 public void onKeyUp(KeyUpEvent event) {
                     if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER && !event.isShiftKeyDown()){
-                        // don't create new line
-                        event.preventDefault(); 
-                        event.stopPropagation();
                         confirmChanges(ftb);
                     }else if(event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE){
                         _viewEvent.view();
                     }
                 }
             });
+            ftb.addKeyDownHandler(new KeyDownHandler() {
+				@Override
+				public void onKeyDown(KeyDownEvent event) {
+					if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER && !event.isShiftKeyDown()){
+                        // don't create new line
+                        event.preventDefault(); 
+					}
+				}
+			});
             ftb.setText(_content.getText());
+            DOM.setStyleAttribute(ftb.getElement(), "fontFamily", "monospace");
             Style s = w.getElement().getStyle();
+            s.setFontSize(14.0, Unit.PX);
             s.setBorderWidth(0.0, Unit.PX);
             s.setPadding(0.0, Unit.PX);
             //s.setBackgroundColor("transparent");
-            ftb.setWidth(_content.getWidth()+"px");
+            ftb.setWidth((_content.getWidth()+2)+"px");
             ftb.setHeight(_content.getHeight()+"px");
         } else {
             
-            Label l = new Label(_content.getText());
+            /**Label l = new Label(_content.getText());
             l.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -83,7 +95,20 @@ public class TextContentWidget extends ContentWidget {
                     }
                 }
             });
-            w = l;
+            w = l;*/
+            HTML html = new HTML(_content.getText());
+            html.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    if(_editEvent != null && _editable){
+                        _editEvent.edit();
+                    }
+                }
+            });
+            DOM.setStyleAttribute(html.getElement(), "fontFamily", "monospace");
+            DOM.setStyleAttribute(html.getElement(), "whiteSpace", "pre");
+            html.getElement().getStyle().setFontSize(14.0, Unit.PX);
+            w = html;
             
         }
 

@@ -49,7 +49,7 @@ public class MindMap extends MapType {
         List<Node> rootcn = root.getChildNodes();
         
         // set bounds for left and right nodes
-        for(int i=0; i<rootcn.size(); ++i){
+        for(int i=0; rootcn != null && i<rootcn.size(); ++i){
             Node n = rootcn.get(i);
             
             if (n.getLocation() == NodeLocation.LEFT && n.getChildNodes() != null) {
@@ -85,7 +85,7 @@ public class MindMap extends MapType {
         int righth = 0; // right height
         
         // split child nodes to left and right
-        for(int i=0; i<rootcn.size(); ++i){
+        for(int i=0; rootcn != null && i<rootcn.size(); ++i){
             Node n = rootcn.get(i);
             if (n.getLocation() == NodeLocation.LEFT) {
                 lefth += left.get(0).get(lcn.size());

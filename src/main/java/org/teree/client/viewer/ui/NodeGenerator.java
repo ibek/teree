@@ -4,7 +4,12 @@ import org.teree.shared.data.Node;
 import org.teree.shared.data.NodeContent;
 import org.teree.shared.data.Node.NodeLocation;
 
-public class TestMap {
+public class NodeGenerator {
+
+    public static Node newNode() {
+        Node root = createTextNode("root", null);
+        return root;
+    }
 
     public static Node basic() {
         Node root = createTextNode("root", null);

@@ -245,6 +245,10 @@ public class Scene extends Composite {
         }
     }
     
+    public Node getRoot() {
+    	return _root;
+    }
+    
     public void setRoot(Node root) {
         _root = root;
         regenerateMap(null);
