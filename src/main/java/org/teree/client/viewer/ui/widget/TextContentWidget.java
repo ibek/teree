@@ -8,6 +8,7 @@ import org.teree.shared.data.NodeContent;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.TextDecoration;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -107,7 +108,8 @@ public class TextContentWidget extends ContentWidget {
             });
             DOM.setStyleAttribute(html.getElement(), "fontFamily", "monospace");
             DOM.setStyleAttribute(html.getElement(), "whiteSpace", "pre");
-            html.getElement().getStyle().setFontSize(14.0, Unit.PX);
+            Style s = html.getElement().getStyle();
+            s.setFontSize(14.0, Unit.PX);
             w = html;
             
         }

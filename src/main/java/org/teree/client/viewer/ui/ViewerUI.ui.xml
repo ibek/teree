@@ -4,17 +4,33 @@
 	<ui:style>
 
 		.rootPanel {
-		  margin:0 auto;
+		  float: left;
 		  width: 100%;
 		  height: 100%;
+		}
+
+		.editPanel {
+	      float: right;
+		  width: 300px;
+		}
+		
+		.status {
+		  float: right;
 		}
 		
 	</ui:style>
   
-	<g:FlowPanel addStyleNames="{style.rootPanel}">
-	    <g:Button ui:field='_btnAdd' ui:text="Add"></g:Button>
-	    <g:Button ui:field='_btnSave' ui:text="Save"></g:Button>
+	<g:HTMLPanel addStyleNames="{style.rootPanel}">
+		<div class="{style.editPanel}">
+		<ui:EditPanel>
+		    <g:Button ui:field='_btnNew' ui:text="New"></g:Button>
+		    <g:Button ui:field='_btnSave' ui:text="Save"></g:Button>
+		</ui:EditPanel>
+		</div>
+		<div class="{style.status}">
+			<g:Label ui:field='_status'></g:Label>
+		</div>
 		<viewer:Scene ui:field="_scene"></viewer:Scene>
-	</g:FlowPanel>
+	</g:HTMLPanel>
 
 </ui:UiBinder> 

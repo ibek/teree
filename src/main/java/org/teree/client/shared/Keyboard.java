@@ -1,4 +1,4 @@
-package org.teree.util.gwt;
+package org.teree.client.shared;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,7 @@ public final class Keyboard {
         private native void init()
         /*-{
             $doc.onkeyup = function(evt) {
-                @org.teree.util.gwt.Keyboard::onKeyUp(Lcom/google/gwt/user/client/Event;)(evt || $wnd.event);
+                @org.teree.client.shared.Keyboard::onKeyUp(Lcom/google/gwt/user/client/Event;)(evt || $wnd.event);
             }
         }-*/;
 

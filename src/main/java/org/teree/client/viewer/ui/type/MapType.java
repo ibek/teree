@@ -1,5 +1,6 @@
 package org.teree.client.viewer.ui.type;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public abstract class MapType {
      * @param panel
      * @param root
      */
-    public abstract void generate(AbsolutePanel panel, Node root, Regenerate reg, boolean editable);
+    public abstract void generate(AbsolutePanel panel, Node root, boolean editable);
     
     /**
      * Get location for root child node.
@@ -35,7 +36,7 @@ public abstract class MapType {
      * @param panel
      * @param root
      */
-    public void prepare(AbsolutePanel panel, Node root, boolean resizeReq){
+    public int prepare(AbsolutePanel panel, Node root, Node changed, boolean resizeReq, Regenerate reg, boolean editable, int id) {
         NodeContent nc = root.getContent();
         
         // fix for resize minimal node 
@@ -50,16 +51,52 @@ public abstract class MapType {
         if(nc.getWidth() == ContentWidget.MAX_WIDTH && !resizeReq){
             nc.setWidth(0);
         }
+
+        if(changed == null && id < 0){ // prepare first render
+            NodeWidget nw = new NodeWidget(root, reg, editable);
+            DOM.setStyleAttribute(nw.getElement(), "visibility", "hidden");
+            panel.add(nw, 0, 0);
+        }else if(root == changed){ // prepare regeneration of map
+            if(id >= panel.getWidgetCount() || ((NodeWidget)panel.getWidget(id)).getNode() != changed){ // changed node has been inserted
+                id = insertNode(panel, changed, reg, editable, id);
+            }else{
+                id++;
+            }
+        }else{
+            id++;
+        }
         
-        NodeWidget nw = new NodeWidget(root, null, false);
+        List<Node> cn = root.getChildNodes();
+        List<Node> right = new ArrayList<Node>();
+        for(int i=0; cn != null && i<cn.size(); ++i){
+            Node n = cn.get(i);
+            if(n.getLocation() == NodeLocation.LEFT){
+                id = prepare(panel, n, changed, resizeReq, reg, editable, id);
+            }else{
+                right.add(n);
+            }
+        }
+        for(int i=0; i<right.size(); ++i){
+            id = prepare(panel, right.get(i), changed, resizeReq, reg, editable, id);
+        }
+        return id;
+    }
+    
+    private int insertNode(AbsolutePanel panel, Node node, Regenerate reg, boolean editable, int id) {
+        NodeWidget nw = new NodeWidget(node, reg, editable);
         // hide the widgets, we use them only to get right sizes
         DOM.setStyleAttribute(nw.getElement(), "visibility", "hidden");
-        
-        panel.add(nw, 0, 0);
-        List<Node> cn = root.getChildNodes();
-        for(int i=0; cn != null && i<cn.size(); ++i){
-            prepare(panel, cn.get(i), resizeReq);
+        if(id < panel.getWidgetCount()){
+            panel.insert(nw, 0, 0, id);
+        }else{
+            panel.add(nw,0,0);
         }
+        id++;
+        List<Node> cn = node.getChildNodes();
+        for(int i=0; cn != null && i<cn.size(); ++i){
+            id = insertNode(panel, cn.get(i), reg, editable, id);
+        }
+        return id;
     }
     
     /**

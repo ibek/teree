@@ -1,5 +1,6 @@
 package org.teree.client.viewer.ui;
 
+import org.teree.client.shared.Text;
 import org.teree.shared.ViewerService;
 import org.teree.shared.data.Node;
 import org.jboss.errai.bus.client.api.ErrorCallback;
@@ -12,9 +13,11 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ViewerUI extends Composite {
@@ -26,10 +29,15 @@ public class ViewerUI extends Composite {
 
     private final Caller<ViewerService> _service;
     
+    private Text.Type TT;
+    
     private String _oid;
+    
+    @UiField
+    Label _status;
 
     @UiField
-    Button _btnAdd;
+    Button _btnNew;
 
     @UiField
     Button _btnSave;
@@ -41,18 +49,19 @@ public class ViewerUI extends Composite {
         Window.enableScrolling(false);
         _service = service;
         _scene = new Scene();
+        TT = Text.produceTextTypes();
         _oid = Window.Location.getParameter("oid");
         if(_oid == null){
-        	add(null);
+        	newMap(null);
         } else {
             setNode(_oid);
         }
         initWidget(uiBinder.createAndBindUi(this));
     }
     
-    @UiHandler("_btnAdd")
-    void add(ClickEvent e) {
-    	_scene.setRoot(NodeGenerator.newNode());
+    @UiHandler("_btnNew")
+    void newMap(ClickEvent e) {
+    	_scene.setRoot(NodeGenerator.complex());
     }
     
     @UiHandler("_btnSave")
@@ -61,14 +70,14 @@ public class ViewerUI extends Composite {
     		_service.call(new RemoteCallback<Void>() {
                 @Override
                 public void callback(Void response) {
-                    System.out.println("updated");
+                    setStatus(TT.mapUpdated());
                 }
             }).update(_oid, _scene.getRoot());
     	} else { // insert new
             _service.call(new RemoteCallback<String>() {
                 @Override
                 public void callback(String response) {
-                    System.out.println("inserted oid="+response);
+                    setStatus(TT.mapSaved(response));
                     _oid = response;
                 }
             }).insertMap(_scene.getRoot());
@@ -79,15 +88,27 @@ public class ViewerUI extends Composite {
         _service.call(new RemoteCallback<Node>() {
             @Override
             public void callback(Node response) {
+                setStatus(TT.mapReceived(_oid));
                 _scene.setRoot(response);
             }
         }, new ErrorCallback() {
             @Override
             public boolean error(Message message, Throwable throwable) {
-                System.out.println(throwable.getMessage());
+                setStatus("Error: " + message);
                 return false;
             }
         }).getMap(oid);
+    }
+    
+    private void setStatus(String msg) {
+        _status.setText(msg);
+        Timer t = new Timer() {
+            @Override
+            public void run() {
+                _status.setText("");
+            }
+        };
+        t.schedule(5000);
     }
 
 }

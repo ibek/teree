@@ -8,14 +8,27 @@ import java.util.List;
 import org.jboss.errai.common.client.api.annotations.Portable;
 
 @Portable
-public class Node {
+public class Node implements Cloneable {
 
     private NodeContent content;
     private Node parent;
     private List<Node> childNodes;
     private NodeLocation location;
     
+    public Node clone() {
+        Node root = new Node();
+        root.setContent(content.clone());
+        root.setLocation(location);
+        for(int i=0; childNodes != null && i<childNodes.size(); ++i){
+            root.addChild(childNodes.get(i).clone());
+        }
+        return root;
+    }
+    
     public void addChild(Node child) {
+        if (child == null) {
+            return;
+        }
         if (childNodes == null) {
             childNodes = new ArrayList<Node>();
         }
@@ -41,10 +54,8 @@ public class Node {
     
     public void remove() {
         if(childNodes != null){
-            Iterator<Node> it = childNodes.iterator();
-            while(it.hasNext()){
-                Node child = it.next();
-                child.remove();
+            for(int i=childNodes.size()-1; i>=0; --i){
+                childNodes.get(i).remove();
             }
         }
         if(parent != null){ // cannot remove root

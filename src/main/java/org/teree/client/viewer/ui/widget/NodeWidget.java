@@ -107,17 +107,17 @@ public class NodeWidget extends Composite {
     }
     
     public void edit() {
-        SelectNode.select(_node);
         _elistener.edit();
     }
     
     public void view() {
     	_vlistener.view();
+    	regenerate();
+        SelectNode.select(_node);
     }
 
     public void remove() {
         _node.remove();
-        regenerate();
     }
     
     public void select() {
@@ -138,8 +138,10 @@ public class NodeWidget extends Composite {
     }
     
     private void regenerate() {
+        System.out.println("ahoj");
         if (_regEvent != null) {
-            _regEvent.regenerate();
+            System.out.println("cau");
+            _regEvent.regenerate(_node);
         }
     }
     
