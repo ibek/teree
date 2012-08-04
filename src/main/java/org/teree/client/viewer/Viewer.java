@@ -5,6 +5,9 @@ import javax.inject.Inject;
 
 import org.teree.client.viewer.ui.ViewerUI;
 import org.teree.shared.ViewerService;
+import org.jboss.errai.bus.client.ErraiBus;
+import org.jboss.errai.bus.client.framework.MessageBus;
+import org.jboss.errai.bus.client.framework.RequestDispatcher;
 import org.jboss.errai.ioc.client.api.AfterInitialization;
 import org.jboss.errai.ioc.client.api.Caller;
 import org.jboss.errai.ioc.client.api.EntryPoint;
@@ -26,6 +29,10 @@ public class Viewer {
      */
     @Inject
     private Caller<ViewerService> viewerService;
+    
+    private RequestDispatcher dispatcher = ErraiBus.getDispatcher();
+    
+    private MessageBus bus = ErraiBus.get();
 
     private ViewerUI viewerUi;
 
@@ -44,7 +51,7 @@ public class Viewer {
      */
     @AfterInitialization
     public void createUI() {
-        viewerUi = new ViewerUI(viewerService);
+        viewerUi = new ViewerUI(viewerService, dispatcher, bus);
         DOM.getElementById("loader").removeFromParent();
         RootPanel.get().add(viewerUi);
     }

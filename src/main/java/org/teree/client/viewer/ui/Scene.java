@@ -4,16 +4,26 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jboss.errai.bus.client.api.Message;
+import org.jboss.errai.bus.client.api.MessageCallback;
+import org.jboss.errai.bus.client.api.RemoteCallback;
+import org.jboss.errai.bus.client.api.base.MessageBuilder;
+import org.jboss.errai.bus.client.framework.MessageBus;
+import org.jboss.errai.bus.client.framework.RequestDispatcher;
+import org.jboss.errai.ioc.client.api.Caller;
 import org.teree.client.shared.Keyboard;
 import org.teree.client.viewer.ui.type.MapType;
 import org.teree.client.viewer.ui.type.MindMap;
 import org.teree.client.viewer.ui.widget.NodeWidget;
 import org.teree.client.viewer.ui.widget.event.OnKeyUp;
-import org.teree.client.viewer.ui.widget.event.Regenerate;
+import org.teree.client.viewer.ui.widget.event.NodeChanged;
 import org.teree.client.viewer.ui.widget.event.SelectNode;
+import org.teree.shared.ViewerService;
+import org.teree.shared.data.MapChange;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
@@ -26,12 +36,16 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * TODO: improve getDownNode and getUpNode to continue in another branch
- * TODO: fix select after createChildNode ...
  *
  * @author ibek
  *
  */
 public class Scene extends Composite {
+    
+    public static final int PADDING = 20;
+    private static final String COOP_CHANGE = "coop-change"; 
+    
+    private String _oid;
 	
     private Node _root;
     private NodeWidget _selected;
@@ -41,31 +55,58 @@ public class Scene extends Composite {
     
     private boolean _editable;
     
-    final Regenerate _reg;
+    final NodeChanged _nchanged;
     
     private AbsolutePanel _panel;
     private ScrollPanel _spanel;
     
-    public Scene(){
-        this(true);
+    private Caller<ViewerService> _service;
+    private RequestDispatcher _dispatcher;
+    private MessageBus _bus;
+    
+    public Scene(Caller<ViewerService> service, RequestDispatcher dispatcher, MessageBus bus){
+        this(service, dispatcher, bus, true);
     }
     
-    public Scene(boolean editable){
+    public Scene(Caller<ViewerService> service, RequestDispatcher dispatcher, MessageBus bus, boolean editable){
         
-        _reg = new Regenerate() {
+        _dispatcher = dispatcher;
+        _editable = editable;
+        _bus = bus;
+        _service = service;
+        
+        _nchanged = new NodeChanged() {
             @Override
-            public void regenerate(Node changed) {
-                regenerateMap(changed);
+            public void regenerate(Node changed, boolean edit) {
+                regenerateMap(changed, edit);
+            }
+
+            @Override
+            public void remove(Node node) {
+                removeNode(node);
             }
         };
         
         _map = new MindMap();
-        _panel = new AbsolutePanel();
-        _editable = editable;
+        _panel = new AbsolutePanel(){
+            @Override
+            public void add(Widget w, int left, int top){
+                super.add(w, left+PADDING, top+PADDING);
+            }
+            @Override
+            public void setWidgetPosition(Widget w, int left, int top) {
+                super.setWidgetPosition(w, left+PADDING, top+PADDING);
+            }
+            public int getWidgetLeft(Widget w) {
+                return super.getWidgetLeft(w)-PADDING;
+            }
+            public int getWidgetTop(Widget w) {
+                return super.getWidgetTop(w)-PADDING;
+            }
+        };
+        _panel.getElement().getStyle().setPadding(PADDING, Unit.PX);
         
         _spanel = new ScrollPanel(_panel);
-        _spanel.setWidth("100%");
-        _spanel.setHeight(Window.getClientHeight() + "px");
         Window.addResizeHandler(new ResizeHandler() {
             public void onResize(ResizeEvent event) {
                 _spanel.setWidth(event.getWidth() + "px");
@@ -76,6 +117,7 @@ public class Scene extends Composite {
         if(_editable){
         	initKeyboard();
         }
+        
         initHandlers();
         initWidget(_spanel);
     }
@@ -111,9 +153,7 @@ public class Scene extends Composite {
                         }else{
                             next = getLeftNode(_selected);
                         }
-                        remove(_selected.getNode());
-                        _selected.remove();
-                        regenerateMap(null);
+                        removeNode(_selected.getNode());
                     }
                     else if (keyCode == 45) { // Insert
                         Node child = _selected.createChild();
@@ -145,6 +185,7 @@ public class Scene extends Composite {
                         }else{
                             return;
                         }
+                        next = changed;
                         regenerateMap(changed);
                     }
                     nextnw = getNodeWidget(next);
@@ -164,8 +205,25 @@ public class Scene extends Composite {
             }
             @Override
             public void unselect() {
-                _selected.unselect();
-                _selected = null;
+                if(_selected != null){
+                    _selected.unselect();
+                    _selected = null;
+                }
+            }
+        });
+    }
+    
+    private void initCooperation() {
+        _bus.subscribe(_oid, new MessageCallback() {
+            @Override
+            public void callback(Message message) {
+                MapChange mc = message.get(MapChange.class, COOP_CHANGE);
+                if(mc != null){
+                    System.out.println("received msg " + _root.getContent().getText());
+                    System.out.println("mc:"+mc.getType().name());
+                }else{
+                    System.out.println("received without content, msg " + _root.getContent().getText());
+                }
             }
         });
     }
@@ -173,6 +231,9 @@ public class Scene extends Composite {
     private void selectNodeWidget(NodeWidget nw) {
         if(_selected != null){
             _selected.unselect();
+        }
+        if(nw == null){
+            return;
         }
         _selected = nw;
         _selected.select();
@@ -287,15 +348,25 @@ public class Scene extends Composite {
     	return _root;
     }
     
-    public void setRoot(Node root) {
+    public void setRoot(Node root, String oid) {
+        _oid = oid;
         _root = root;
+        initCooperation();
         generateFirstMap();
     }
     
-    public void remove(Node node){
+    public void removeNode(Node node){
+        _selected.unselect();
+        removeNodeFromPanel(node);
+        _selected.remove();
+        regenerateMap(null);
+        mapChanged(); // TODO: delete from here
+    }
+    
+    public void removeNodeFromPanel(Node node){
         List<Node> nc = node.getChildNodes();
         for(int i=0; nc != null && i<nc.size(); ++i){
-            remove(nc.get(i));
+            removeNodeFromPanel(nc.get(i));
         }
         _panel.remove(getNodeWidget(node));
     }
@@ -305,17 +376,22 @@ public class Scene extends Composite {
     }
     
     private void regenerateMap(final Node changed, final boolean edit) {
+        
+        if(_selected != null){
+            _selected.unselect(); // have to unselect because of the buttons
+            _selected = null;
+        }
 
         final long from = System.currentTimeMillis();
         
-        _map.prepare(_panel, _root, changed, false, _reg, _editable, 1);
+        _map.prepare(_panel, _root, changed, false, _nchanged, _editable, 1);
         
         Timer t = new Timer() {
             @Override
             public void run() {
                 boolean succ = _map.resize(_panel);
                 if(!succ){ // some node is too wide
-                    _map.prepare(_panel, _root, changed, false, _reg, _editable, 1); // #3.1
+                    _map.prepare(_panel, _root, changed, false, _nchanged, _editable, 1); // #3.1
                     _map.resize(_panel); // #4
                     _map.generate(_panel, _root, _editable); // #5
                 }else{
@@ -334,7 +410,7 @@ public class Scene extends Composite {
     private void generateFirstMap() {
 
         _panel.clear();
-        _map.prepare(_panel, _root, null, false, _reg, _editable, -1); // #1
+        _map.prepare(_panel, _root, null, false, _nchanged, _editable, -1); // #1
         
         boolean succ = _map.resize(_panel); // #2
         
@@ -345,11 +421,25 @@ public class Scene extends Composite {
                 _panel.remove(i);
             }
             
-            _map.prepare(_panel, _root, null, !succ, _reg, _editable, -1); // #3.1
+            _map.prepare(_panel, _root, null, !succ, _nchanged, _editable, -1); // #3.1
             _map.resize(_panel); // #4
             _map.generate(_panel, _root, _editable); // #5
         }else{
             _map.generate(_panel, _root, _editable); // #3.2
+        }
+    }
+    
+    private void mapChanged() {
+        if(_oid != null){
+            MapChange mc = new MapChange();
+            mc.setChangedNode(_root);
+            mc.setType(MapChange.Type.CREATED);
+            _service.call(new RemoteCallback<Void>() {
+                @Override
+                public void callback(Void response) {
+                    System.out.println("zavolano z "+_root.getContent().getText());
+                }
+            }).mapChanged(mc);
         }
     }
     

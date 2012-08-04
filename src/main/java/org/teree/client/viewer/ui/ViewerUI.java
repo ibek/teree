@@ -6,6 +6,8 @@ import org.teree.shared.data.Node;
 import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
+import org.jboss.errai.bus.client.framework.MessageBus;
+import org.jboss.errai.bus.client.framework.RequestDispatcher;
 import org.jboss.errai.ioc.client.api.Caller;
 
 import com.google.gwt.core.client.GWT;
@@ -45,10 +47,10 @@ public class ViewerUI extends Composite {
     @UiField(provided = true)
     Scene _scene;
 
-    public ViewerUI(Caller<ViewerService> service) {
+    public ViewerUI(Caller<ViewerService> service, RequestDispatcher dispatcher, MessageBus bus) {
         Window.enableScrolling(false);
         _service = service;
-        _scene = new Scene();
+        _scene = new Scene(service, dispatcher, bus);
         TT = Text.produceTextTypes();
         _oid = Window.Location.getParameter("oid");
         if(_oid == null){
@@ -61,7 +63,8 @@ public class ViewerUI extends Composite {
     
     @UiHandler("_btnNew")
     void newMap(ClickEvent e) {
-    	_scene.setRoot(NodeGenerator.complex());
+        _oid = null;
+    	_scene.setRoot(NodeGenerator.complex(), _oid);
     }
     
     @UiHandler("_btnSave")
@@ -89,7 +92,7 @@ public class ViewerUI extends Composite {
             @Override
             public void callback(Node response) {
                 setStatus(TT.mapReceived(_oid));
-                _scene.setRoot(response);
+                _scene.setRoot(response, _oid);
             }
         }, new ErrorCallback() {
             @Override

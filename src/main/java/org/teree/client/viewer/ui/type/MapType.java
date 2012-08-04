@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.teree.client.viewer.ui.widget.ContentWidget;
 import org.teree.client.viewer.ui.widget.NodeWidget;
-import org.teree.client.viewer.ui.widget.event.Regenerate;
+import org.teree.client.viewer.ui.widget.event.NodeChanged;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 import org.teree.shared.data.NodeContent;
@@ -36,7 +36,7 @@ public abstract class MapType {
      * @param panel
      * @param root
      */
-    public int prepare(AbsolutePanel panel, Node root, Node changed, boolean resizeReq, Regenerate reg, boolean editable, int id) {
+    public int prepare(AbsolutePanel panel, Node root, Node changed, boolean resizeReq, NodeChanged reg, boolean editable, int id) {
         NodeContent nc = root.getContent();
         
         // fix for resize minimal node 
@@ -82,7 +82,7 @@ public abstract class MapType {
         return id;
     }
     
-    private int insertNode(AbsolutePanel panel, Node node, Regenerate reg, boolean editable, int id) {
+    private int insertNode(AbsolutePanel panel, Node node, NodeChanged reg, boolean editable, int id) {
         NodeWidget nw = new NodeWidget(node, reg, editable);
         // hide the widgets, we use them only to get right sizes
         DOM.setStyleAttribute(nw.getElement(), "visibility", "hidden");

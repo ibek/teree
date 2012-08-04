@@ -6,9 +6,13 @@ import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.jboss.errai.bus.client.ErraiBus;
+import org.jboss.errai.bus.client.api.base.MessageBuilder;
+import org.jboss.errai.bus.client.framework.RequestDispatcher;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.teree.dao.NodeManager;
 import org.teree.shared.ViewerService;
+import org.teree.shared.data.MapChange;
 import org.teree.shared.data.Node;
 
 @ApplicationScoped
@@ -16,25 +20,35 @@ import org.teree.shared.data.Node;
 public class ViewerServiceImpl implements ViewerService {
 
     @Inject
-    private Logger log;
+    private Logger _log;
     
     @Inject
-    private NodeManager nm;
+    private NodeManager _nm;
+    
+    private RequestDispatcher _dispatcher = ErraiBus.getDispatcher();
 
     @Override
     public Node getMap(String oid) {
-        log.log(Level.INFO, "getMap("+oid+")");
-        return nm.select(oid);
+        _log.log(Level.INFO, "getMap("+oid+")");
+        return _nm.select(oid);
     }
 
     @Override
     public String insertMap(Node root) {
-        return nm.insert(root);
+        return _nm.insert(root);
     }
 
 	@Override
 	public void update(String oid, Node root) {
-		nm.update(oid, root);
+		_nm.update(oid, root);
 	}
+
+    @Override
+    public void mapChanged(MapChange change) {
+        MessageBuilder.createMessage()
+        .toSubject(change.getOid())
+        .with("coop-change", change)
+        .noErrorHandling().sendGlobalWith(_dispatcher);
+    }
     
 }

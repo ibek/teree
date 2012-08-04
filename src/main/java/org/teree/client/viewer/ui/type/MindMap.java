@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.teree.client.viewer.ui.widget.NodeWidget;
-import org.teree.client.viewer.ui.widget.event.Regenerate;
+import org.teree.client.viewer.ui.widget.event.NodeChanged;
 import org.teree.client.viewer.ui.widget.event.SelectNode;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;

@@ -4,7 +4,6 @@
 	<ui:style>
 
 		.rootPanel {
-		  float: left;
 		  width: 100%;
 		  height: 100%;
 		}
@@ -20,17 +19,17 @@
 		
 	</ui:style>
   
-	<g:HTMLPanel addStyleNames="{style.rootPanel}">
+	<g:HTMLPanel>
+  		<div class="{style.rootPanel}">
+		<viewer:Scene ui:field="_scene"></viewer:Scene>
 		<div class="{style.editPanel}">
 		<ui:EditPanel>
 		    <g:Button ui:field='_btnNew' ui:text="New"></g:Button>
 		    <g:Button ui:field='_btnSave' ui:text="Save"></g:Button>
 		</ui:EditPanel>
 		</div>
-		<div class="{style.status}">
-			<g:Label ui:field='_status'></g:Label>
+		<g:Label ui:field='_status' addStyleNames="{style.status}"></g:Label>
 		</div>
-		<viewer:Scene ui:field="_scene"></viewer:Scene>
 	</g:HTMLPanel>
 
 </ui:UiBinder> 

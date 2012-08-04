@@ -37,11 +37,9 @@ public class Node implements Cloneable {
     }
     
     public void insertBefore(Node node) {
-        if(parent == null || parent.childNodes == null)
-            return;
         int index = parent.childNodes.indexOf(this);
         parent.childNodes.add(index, node);
-        node.setParent(this);
+        node.setParent(parent);
     }
     
     public void insertAfter(Node node) {
@@ -49,7 +47,7 @@ public class Node implements Cloneable {
             return;
         int index = parent.childNodes.indexOf(this);
         parent.childNodes.add(index+1, node);
-        node.setParent(this);
+        node.setParent(parent);
     }
     
     public void remove() {
@@ -93,6 +91,35 @@ public class Node implements Cloneable {
         for(int i=0; i<childNodes.size(); ++i){
             addChild(childNodes.get(i));
         }
+    }
+    
+    public Node under(){
+        List<Node> cn = parent.getChildNodes();
+        boolean next = false;
+        for(int i=0; cn != null && i<cn.size(); ++i){
+            Node child = cn.get(i);
+            if(next){
+                return child;
+            }
+            if(child == this){
+                next = true;
+            }
+        }
+        return null;
+    }
+    
+    public Node upper(){
+        List<Node> cn = parent.getChildNodes();
+        Node n = null, child = null;
+        for(int i=0; cn != null && i<cn.size(); ++i){
+            n = child;
+            child = cn.get(i);
+            if(child == this){
+                break;
+            }
+            
+        }
+        return n;
     }
     
     public NodeLocation getLocation() {
