@@ -1,46 +1,59 @@
 package org.teree.shared.data;
 
+import java.net.URL;
+
 import org.jboss.errai.common.client.api.annotations.Portable;
 
 @Portable
 public class NodeContent implements Cloneable {
-
-    // width and height can be used to determine maximal size of the content
-    private int width;
-    private int height;
     
-    private String text;
+    private Object value;
     
     public NodeContent clone() {
         NodeContent nc = new NodeContent();
-        nc.setHeight(height);
-        nc.setText(text);
-        nc.setWidth(width);
+        nc.setValue(getValue());
         return nc;
     }
 
-    public int getWidth() {
-        return width;
-    }
-    
-    public void setWidth(int width) {
-        this.width = width;
-    }
-    
-    public int getHeight() {
-        return height;
-    }
-    
-    public void setHeight(int height) {
-        this.height = height;
-    }
-    
-    public String getText() {
-        return text;
+    public Object getValue() {
+        return value;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setValue(Object value) {
+        this.value = value;
+    }
+    
+    public Type getType() {
+        return Type.valueOf(getValue().getClass());
+    }
+    
+    public enum Type {
+        None(null),
+        String(String.class),
+        IconString(IconString.class),
+        URL(URL.class);
+        
+        private Class c;
+        
+        Type(Class c) {
+            this.c = c;
+        }
+        
+        public Class toClass() {
+            return c;
+        }
+        
+        public static Type valueOf(Class c) {
+            Type[] v = values();
+            for(int i=0; i<v.length; ++i){
+                Type t = v[i];
+                if(t.toClass() == c){
+                    return t;
+                }
+            }
+            return None;
+        }
+        
     }
     
 }

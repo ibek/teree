@@ -1,4 +1,4 @@
-package org.teree.client.viewer.ui;
+package org.teree.shared;
 
 import org.teree.shared.data.Node;
 import org.teree.shared.data.NodeContent;
@@ -68,7 +68,7 @@ public class NodeGenerator {
     public static Node createTextNode(String text, NodeLocation loc) {
         Node n = new Node();
         NodeContent nc = new NodeContent();
-        nc.setText(text);
+        nc.setValue(text);
         n.setContent(nc);
         n.setLocation(loc);
         return n;

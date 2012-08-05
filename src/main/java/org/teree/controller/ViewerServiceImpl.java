@@ -12,7 +12,7 @@ import org.jboss.errai.bus.client.framework.RequestDispatcher;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.teree.dao.NodeManager;
 import org.teree.shared.ViewerService;
-import org.teree.shared.data.MapChange;
+import org.teree.shared.data.NodeChange;
 import org.teree.shared.data.Node;
 
 @ApplicationScoped
@@ -35,16 +35,19 @@ public class ViewerServiceImpl implements ViewerService {
 
     @Override
     public String insertMap(Node root) {
+        _log.log(Level.INFO, "insertMap("+root.getContent()+")");
         return _nm.insert(root);
     }
 
 	@Override
-	public void update(String oid, Node root) {
+	public void updateMap(String oid, Node root) {
+        _log.log(Level.INFO, "updateMap("+oid+", "+root.getContent()+")");
 		_nm.update(oid, root);
 	}
 
     @Override
-    public void mapChanged(MapChange change) {
+    public void mapChanged(NodeChange change) {
+        _log.log(Level.INFO, "mapChanged("+change.getOid()+")");
         MessageBuilder.createMessage()
         .toSubject(change.getOid())
         .with("coop-change", change)

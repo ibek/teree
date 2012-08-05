@@ -1,9 +1,8 @@
-package org.teree.client.viewer;
+package org.teree.client;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.teree.client.viewer.ui.ViewerUI;
+import org.teree.client.ui.Viewer;
 import org.teree.shared.ViewerService;
 import org.jboss.errai.bus.client.ErraiBus;
 import org.jboss.errai.bus.client.framework.MessageBus;
@@ -16,7 +15,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootPanel;
 
 @EntryPoint
-public class Viewer {
+public class Teree {
 
     /**
      * This is the client-side proxy to the Errai service implemented by
@@ -30,11 +29,9 @@ public class Viewer {
     @Inject
     private Caller<ViewerService> viewerService;
     
-    private RequestDispatcher dispatcher = ErraiBus.getDispatcher();
-    
     private MessageBus bus = ErraiBus.get();
 
-    private ViewerUI viewerUi;
+    private Viewer viewerUi;
 
     /**
      * Builds the UI and populates the member list by making an RPC call to the
@@ -51,14 +48,9 @@ public class Viewer {
      */
     @AfterInitialization
     public void createUI() {
-        viewerUi = new ViewerUI(viewerService, dispatcher, bus);
+        viewerUi = new Viewer();
         DOM.getElementById("loader").removeFromParent();
         RootPanel.get().add(viewerUi);
-    }
-
-    @PostConstruct
-    public void onModuleLoad() {
-        
     }
 
 }

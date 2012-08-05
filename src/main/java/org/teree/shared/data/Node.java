@@ -2,7 +2,6 @@ package org.teree.shared.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -10,9 +9,9 @@ import org.jboss.errai.common.client.api.annotations.Portable;
 @Portable
 public class Node implements Cloneable {
 
-    private NodeContent content;
     private Node parent;
     private List<Node> childNodes;
+    private NodeContent content;
     private NodeLocation location;
     
     public Node clone() {
@@ -53,7 +52,7 @@ public class Node implements Cloneable {
     public void remove() {
         if(childNodes != null){
             for(int i=childNodes.size()-1; i>=0; --i){
-                childNodes.get(i).remove();
+                childNodes.get(i).remove(); // recursively remove
             }
         }
         if(parent != null){ // cannot remove root

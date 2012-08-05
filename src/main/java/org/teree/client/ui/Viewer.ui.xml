@@ -1,6 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:viewer='urn:import:org.teree.client.viewer.ui'>
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:viewer='urn:import:org.teree.client.ui'>
 	<ui:style>
 
 		.rootPanel {

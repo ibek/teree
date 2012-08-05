@@ -18,11 +18,8 @@
         class="org.teree.client.viewer.TereeValidatorFactory">
         <when-type-is class="javax.validation.ValidatorFactory" />
     </replace-with>
-    
-	<entry-point class='org.teree.client.viewer.Viewer' />
 	
-	<source path='client/viewer' />
+	<source path='client' />
 	<source path='shared' />
-	<source path='client/shared' />
 
 </module>

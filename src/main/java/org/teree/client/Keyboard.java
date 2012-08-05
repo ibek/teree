@@ -1,13 +1,7 @@
-package org.teree.client.shared;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.teree.client.viewer.ui.widget.event.OnKeyUp;
+package org.teree.client;
 
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 
@@ -19,7 +13,7 @@ public final class Keyboard {
         listener.init();
     }
     
-    private static List<OnKeyUp> listeners = new ArrayList<OnKeyUp>();
+    //private static List<OnKeyUp> listeners = new ArrayList<OnKeyUp>();
 
     private Keyboard() {
     }
@@ -27,7 +21,7 @@ public final class Keyboard {
     public static void forceStaticInit() {
     };
     
-    public static void addOnKeyUpListener(OnKeyUp listener) {
+    /**public static void addOnKeyUpListener(OnKeyUp listener) {
         listeners.add(listener);
     }
     
@@ -37,12 +31,12 @@ public final class Keyboard {
     
     public static void removeOnKeyUpListener(OnKeyUp listener) {
         listeners.remove(listener);
-    }
+    }*/
 
     private static void onKeyUp(Event event) {
-        for(int i=0; i<listeners.size(); ++i){
+        /**for(int i=0; i<listeners.size(); ++i){
             listeners.get(i).onKeyUp(DOM.eventGetKeyCode(event));
-        }
+        }*/
     }
     
     private static final class WindowCloseHandlerImpl implements CloseHandler<Window> {
@@ -50,7 +44,7 @@ public final class Keyboard {
         private native void init()
         /*-{
             $doc.onkeyup = function(evt) {
-                @org.teree.client.shared.Keyboard::onKeyUp(Lcom/google/gwt/user/client/Event;)(evt || $wnd.event);
+                @org.teree.client.Keyboard::onKeyUp(Lcom/google/gwt/user/client/Event;)(evt || $wnd.event);
             }
         }-*/;
 

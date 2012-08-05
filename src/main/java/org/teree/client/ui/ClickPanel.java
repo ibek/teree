@@ -1,4 +1,4 @@
-package org.teree.client.viewer.ui;
+package org.teree.client.ui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -6,9 +6,9 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTMLPanel;
 
-public class EditPanel extends HTMLPanel implements HasClickHandlers {
+public class ClickPanel extends HTMLPanel implements HasClickHandlers {
 
-    public EditPanel(String html) {
+    public ClickPanel(String html) {
         super(html);
     }
 

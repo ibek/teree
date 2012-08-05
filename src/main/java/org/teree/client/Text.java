@@ -1,4 +1,4 @@
-package org.teree.client.shared;
+package org.teree.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.Messages;
