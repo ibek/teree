@@ -35,6 +35,10 @@ public class ViewerUI extends Composite {
     
     private String _oid;
     
+    private MessageBus _bus;
+    
+    private boolean _cooperate;
+    
     @UiField
     Label _status;
 
@@ -47,10 +51,12 @@ public class ViewerUI extends Composite {
     @UiField(provided = true)
     Scene _scene;
 
-    public ViewerUI(Caller<ViewerService> service, RequestDispatcher dispatcher, MessageBus bus) {
+    public ViewerUI(Caller<ViewerService> service, MessageBus bus) {
         Window.enableScrolling(false);
         _service = service;
-        _scene = new Scene(service, dispatcher, bus);
+        _bus = bus;
+        _cooperate = true;
+        _scene = new Scene(bus);
         TT = Text.produceTextTypes();
         _oid = Window.Location.getParameter("oid");
         if(_oid == null){
@@ -63,6 +69,9 @@ public class ViewerUI extends Composite {
     
     @UiHandler("_btnNew")
     void newMap(ClickEvent e) {
+        if(_oid != null){
+            _bus.unsubscribeAll(_oid);
+        }
         _oid = null;
     	_scene.setRoot(NodeGenerator.complex(), _oid);
     }

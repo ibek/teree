@@ -2,11 +2,13 @@ package org.teree.client.viewer.ui.widget;
 
 import java.util.List;
 
+import org.teree.client.viewer.ui.widget.event.NodeChangeRequest;
 import org.teree.client.viewer.ui.widget.event.ContentChanged;
 import org.teree.client.viewer.ui.widget.event.EditMode;
-import org.teree.client.viewer.ui.widget.event.NodeChanged;
 import org.teree.client.viewer.ui.widget.event.SelectNode;
 import org.teree.client.viewer.ui.widget.event.ViewMode;
+import org.teree.shared.data.MapChange;
+import org.teree.shared.data.MapChange.Type;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.NodeContent;
 import org.teree.shared.data.Node.NodeLocation;
@@ -59,24 +61,27 @@ public class NodeWidget extends Composite {
     private boolean _selected;
     private final boolean _editable;
 
-    private NodeChanged _nchangedEvent;
+    private NodeChangeRequest _changeEvent;
     
     private final ViewMode _vlistener;
     private final EditMode _elistener;
     
     private AbsolutePanel _panel;
+    private AbsolutePanel _parent;
 
-    public NodeWidget(Node n, NodeChanged rlistener, boolean editable) {
+    public NodeWidget(Node n, NodeChangeRequest nclistener, boolean editable) {
         _node = n;
         _selected = false;
-        _nchangedEvent = rlistener;
+        _changeEvent = nclistener;
         _editable = editable;
         _panel = new AbsolutePanel();
         
         final ContentChanged cclistener = new ContentChanged() {
             @Override
             public void changed(NodeContent content) {
-                regenerate();
+                _changeEvent.req(new MapChange()
+                    .setNodeId(_parent.getWidgetIndex(_panel))
+                    .setType(Type.EDIT));
             }
         };
         
@@ -122,6 +127,10 @@ public class NodeWidget extends Composite {
         initWidget(_panel);
     }
     
+    public void init() {
+        _parent = (AbsolutePanel)_panel.getParent();
+    }
+    
     private PushButton createButton(ImageResource ir) {
         final PushButton pb = new PushButton(new Image(ir));
         pb.setStylePrimaryName("action-button");
@@ -143,60 +152,54 @@ public class NodeWidget extends Composite {
             _btnCreateChild.addClickHandler(new ClickHandler() {                
                 @Override
                 public void onClick(ClickEvent event) {
-                    Node child = createChild();
-                    if (_nchangedEvent != null) {
-                        _nchangedEvent.regenerate(child, true);
-                    }
+                    /**_changeEvent.change(, 
+                            new MapChange()
+                            .setNodeId((())_panel.getParent())
+                            .setType(Type.CREATE_CHILD));*/
                 }
             });
             _btnInsertBefore = createButton(_resources.addIcon());
             _btnInsertBefore.addClickHandler(new ClickHandler() {                
                 @Override
                 public void onClick(ClickEvent event) {
-                    Node child = createBefore();
-                    if (_nchangedEvent != null) {
-                        _nchangedEvent.regenerate(child, true);
-                    }
+                    
                 }
             });
             _btnInsertAfter = createButton(_resources.addIcon());
             _btnInsertAfter.addClickHandler(new ClickHandler() {                
                 @Override
                 public void onClick(ClickEvent event) {
-                    Node child = createAfter();
-                    if (_nchangedEvent != null) {
-                        _nchangedEvent.regenerate(child, true);
-                    }
+                    
                 }
             });
             _btnUp = createButton(_resources.upIcon());
             _btnUp.addClickHandler(new ClickHandler() {                
                 @Override
                 public void onClick(ClickEvent event) {
-                    Node n = _node.clone();
+                    /**Node n = _node.clone();
                     Node upper = _node.upper();
-                    _nchangedEvent.remove(_node);
+                    _changeEvent.remove(_node);
                     List<Node> cn = upper.getParent().getChildNodes();
                     n.setParent(upper.getParent());
                     cn.add(cn.indexOf(upper), n);
-                    if (_nchangedEvent != null) {
-                        _nchangedEvent.regenerate(n, false);
-                    }
+                    if (_changeEvent != null) {
+                        _changeEvent.regenerate(n, false);
+                    }*/
                 }
             });
             _btnDown = createButton(_resources.downIcon());
             _btnDown.addClickHandler(new ClickHandler() {                
                 @Override
                 public void onClick(ClickEvent event) {
-                    Node n = _node.clone();
+                    /**Node n = _node.clone();
                     Node under = _node.under();
-                    _nchangedEvent.remove(_node);
+                    _changeEvent.remove(_node);
                     List<Node> cn = under.getParent().getChildNodes();
                     n.setParent(under.getParent());
                     cn.add(cn.indexOf(under)+1, n);
-                    if (_nchangedEvent != null) {
-                        _nchangedEvent.regenerate(n, false);
-                    }
+                    if (_changeEvent != null) {
+                        _changeEvent.regenerate(n, false);
+                    }*/
                 }
             });
         }
@@ -246,7 +249,6 @@ public class NodeWidget extends Composite {
         nc.setText("");
         child.setContent(nc);
         child.setLocation(_node.getLocation());
-        _node.addChild(child);
         return child;
     }
 
@@ -276,7 +278,7 @@ public class NodeWidget extends Composite {
     
     public void view() {
     	_vlistener.view();
-    	regenerate();
+    	//regenerate();
         SelectNode.select(_node);
     }
 
@@ -300,12 +302,6 @@ public class NodeWidget extends Composite {
         } else {
             removeButtons();
             _panel.getElement().getStyle().setBackgroundColor("transparent");
-        }
-    }
-    
-    private void regenerate() {
-        if (_nchangedEvent != null) {
-            _nchangedEvent.regenerate(_node, false);
         }
     }
     

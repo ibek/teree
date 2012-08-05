@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import org.jboss.errai.bus.client.ErraiBus;
 import org.jboss.errai.bus.client.api.base.MessageBuilder;
+import org.jboss.errai.bus.client.framework.MessageBus;
 import org.jboss.errai.bus.client.framework.RequestDispatcher;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.teree.dao.NodeManager;
@@ -25,7 +26,8 @@ public class ViewerServiceImpl implements ViewerService {
     @Inject
     private NodeManager _nm;
     
-    private RequestDispatcher _dispatcher = ErraiBus.getDispatcher();
+    //@Inject
+    //private MessageBus _bus;
 
     @Override
     public Node getMap(String oid) {
@@ -45,10 +47,13 @@ public class ViewerServiceImpl implements ViewerService {
 
     @Override
     public void mapChanged(MapChange change) {
-        MessageBuilder.createMessage()
+        System.out.println("sending map changes");
+        /**MessageBuilder.createMessage()
         .toSubject(change.getOid())
+        .signalling()
         .with("coop-change", change)
-        .noErrorHandling().sendGlobalWith(_dispatcher);
+        .noErrorHandling()
+        .sendNowWith(_bus);*/ 
     }
     
 }

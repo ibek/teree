@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.MessageCallback;
 import org.jboss.errai.bus.client.api.RemoteCallback;
@@ -15,8 +17,9 @@ import org.teree.client.shared.Keyboard;
 import org.teree.client.viewer.ui.type.MapType;
 import org.teree.client.viewer.ui.type.MindMap;
 import org.teree.client.viewer.ui.widget.NodeWidget;
+import org.teree.client.viewer.ui.widget.event.ChangeNode;
+import org.teree.client.viewer.ui.widget.event.NodeChangeRequest;
 import org.teree.client.viewer.ui.widget.event.OnKeyUp;
-import org.teree.client.viewer.ui.widget.event.NodeChanged;
 import org.teree.client.viewer.ui.widget.event.SelectNode;
 import org.teree.shared.ViewerService;
 import org.teree.shared.data.MapChange;
@@ -52,38 +55,40 @@ public class Scene extends Composite {
     private Node _copied;
     private Node _cutted;
     private MapType _map;
-    
+
     private boolean _editable;
+    private boolean _cooperate;
     
-    final NodeChanged _nchanged;
+    private final NodeChangeRequest _changereq;
+    private final ChangeNode _change;
     
     private AbsolutePanel _panel;
     private ScrollPanel _spanel;
     
-    private Caller<ViewerService> _service;
-    private RequestDispatcher _dispatcher;
     private MessageBus _bus;
     
-    public Scene(Caller<ViewerService> service, RequestDispatcher dispatcher, MessageBus bus){
-        this(service, dispatcher, bus, true);
+    public Scene(MessageBus bus){ // for testing purposes
+        this(bus, true, false);
     }
     
-    public Scene(Caller<ViewerService> service, RequestDispatcher dispatcher, MessageBus bus, boolean editable){
+    public Scene(MessageBus bus, boolean editable, boolean cooperate){
         
-        _dispatcher = dispatcher;
         _editable = editable;
+        _cooperate = cooperate;
         _bus = bus;
-        _service = service;
         
-        _nchanged = new NodeChanged() {
+        _changereq = new NodeChangeRequest() {
             @Override
-            public void regenerate(Node changed, boolean edit) {
-                regenerateMap(changed, edit);
+            public void req(MapChange mc) {
+                mapChanged(mc);
             }
-
+        };
+        
+        _change = new ChangeNode() {
+            
             @Override
-            public void remove(Node node) {
-                removeNode(node);
+            protected void regenerate(Node changed, boolean edit) {
+                regenerateMap(changed, edit);
             }
         };
         
@@ -214,18 +219,16 @@ public class Scene extends Composite {
     }
     
     private void initCooperation() {
-        _bus.subscribe(_oid, new MessageCallback() {
-            @Override
-            public void callback(Message message) {
-                MapChange mc = message.get(MapChange.class, COOP_CHANGE);
-                if(mc != null){
-                    System.out.println("received msg " + _root.getContent().getText());
-                    System.out.println("mc:"+mc.getType().name());
-                }else{
-                    System.out.println("received without content, msg " + _root.getContent().getText());
+        if(_oid != null && _editable && _cooperate){
+            _bus.subscribe(_oid, new MessageCallback() {
+                @Override
+                public void callback(Message message) {
+                    System.out.println("ahoj je to tady");
+                    MapChange mc = message.get(MapChange.class, COOP_CHANGE);
+                    _change.change(_panel, mc);
                 }
-            }
-        });
+            });
+        }
     }
     
     private void selectNodeWidget(NodeWidget nw) {
@@ -360,7 +363,6 @@ public class Scene extends Composite {
         removeNodeFromPanel(node);
         _selected.remove();
         regenerateMap(null);
-        mapChanged(); // TODO: delete from here
     }
     
     public void removeNodeFromPanel(Node node){
@@ -384,14 +386,14 @@ public class Scene extends Composite {
 
         final long from = System.currentTimeMillis();
         
-        _map.prepare(_panel, _root, changed, false, _nchanged, _editable, 1);
+        _map.prepare(_panel, _root, changed, false, _changereq, _editable, 1);
         
         Timer t = new Timer() {
             @Override
             public void run() {
                 boolean succ = _map.resize(_panel);
                 if(!succ){ // some node is too wide
-                    _map.prepare(_panel, _root, changed, false, _nchanged, _editable, 1); // #3.1
+                    _map.prepare(_panel, _root, changed, false, _changereq, _editable, 1); // #3.1
                     _map.resize(_panel); // #4
                     _map.generate(_panel, _root, _editable); // #5
                 }else{
@@ -410,7 +412,7 @@ public class Scene extends Composite {
     private void generateFirstMap() {
 
         _panel.clear();
-        _map.prepare(_panel, _root, null, false, _nchanged, _editable, -1); // #1
+        _map.prepare(_panel, _root, null, false, _changereq, _editable, -1); // #1
         
         boolean succ = _map.resize(_panel); // #2
         
@@ -421,7 +423,7 @@ public class Scene extends Composite {
                 _panel.remove(i);
             }
             
-            _map.prepare(_panel, _root, null, !succ, _nchanged, _editable, -1); // #3.1
+            _map.prepare(_panel, _root, null, !succ, _changereq, _editable, -1); // #3.1
             _map.resize(_panel); // #4
             _map.generate(_panel, _root, _editable); // #5
         }else{
@@ -429,17 +431,16 @@ public class Scene extends Composite {
         }
     }
     
-    private void mapChanged() {
-        if(_oid != null){
-            MapChange mc = new MapChange();
-            mc.setChangedNode(_root);
-            mc.setType(MapChange.Type.CREATED);
-            _service.call(new RemoteCallback<Void>() {
-                @Override
-                public void callback(Void response) {
-                    System.out.println("zavolano z "+_root.getContent().getText());
-                }
-            }).mapChanged(mc);
+    private void mapChanged(MapChange mc) {
+        if(_oid != null && _editable && _cooperate) {
+            mc.setOid(_oid);
+            MessageBuilder.createMessage()
+            .toSubject("CooperationService")
+            .with(COOP_CHANGE, mc)
+            .done()
+            .sendNowWith(_bus);
+        }else {
+            _change.change(_panel, mc);
         }
     }
     

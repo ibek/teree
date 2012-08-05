@@ -1,7 +1,6 @@
 package org.teree.client.viewer.ui.type;
 
 import org.teree.client.viewer.ui.widget.NodeWidget;
-import org.teree.client.viewer.ui.widget.event.NodeChanged;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 

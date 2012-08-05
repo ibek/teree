@@ -29,10 +29,9 @@ public class Viewer {
      */
     @Inject
     private Caller<ViewerService> viewerService;
-    
-    private RequestDispatcher dispatcher = ErraiBus.getDispatcher();
-    
-    private MessageBus bus = ErraiBus.get();
+
+    @Inject
+    private MessageBus _bus;
 
     private ViewerUI viewerUi;
 
@@ -51,7 +50,7 @@ public class Viewer {
      */
     @AfterInitialization
     public void createUI() {
-        viewerUi = new ViewerUI(viewerService, dispatcher, bus);
+        viewerUi = new ViewerUI(viewerService, _bus);
         DOM.getElementById("loader").removeFromParent();
         RootPanel.get().add(viewerUi);
     }
