@@ -4,7 +4,7 @@
 <!-- GWT module definition: the rename-to attribute is used to have a shorter 
      module name that doesn't reflect the actual package structure. -->
 
-<module rename-to="viewer">
+<module rename-to="teree">
     <inherits name="org.jboss.errai.common.ErraiCommon"/>
     <inherits name="org.jboss.errai.bus.ErraiBus"/>
     <inherits name="org.jboss.errai.ioc.Container"/>

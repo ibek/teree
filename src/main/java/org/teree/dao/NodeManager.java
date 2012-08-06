@@ -14,6 +14,7 @@ import org.teree.shared.data.IconString;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.NodeContent;
 import org.teree.shared.data.Node.NodeLocation;
+import org.teree.shared.data.NodeContent.Type;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -108,15 +109,18 @@ public class NodeManager {
         switch(type){
             case String: {
                 nc.setValue(root.get("text"));
+                nc.setType(Type.String);
             }
             case URL: {
                 nc.setValue(URI.create((String)root.get("url")));
+                nc.setType(Type.URL);
             }
             case IconString: {
                 IconString is = new IconString();
                 is.setText((String)root.get("text"));
                 is.setIconid((Integer)root.get("text"));
                 nc.setValue(is);
+                nc.setType(Type.IconString);
             }
         }
         

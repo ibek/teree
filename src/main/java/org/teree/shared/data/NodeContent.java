@@ -9,6 +9,8 @@ public class NodeContent implements Cloneable {
     
     private Object value;
     
+    private Type type;
+    
     public NodeContent clone() {
         NodeContent nc = new NodeContent();
         nc.setValue(getValue());
@@ -24,36 +26,18 @@ public class NodeContent implements Cloneable {
     }
     
     public Type getType() {
-        return Type.valueOf(getValue().getClass());
+        return type;
     }
-    
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     public enum Type {
-        None(null),
-        String(String.class),
-        IconString(IconString.class),
-        URL(URL.class);
-        
-        private Class c;
-        
-        Type(Class c) {
-            this.c = c;
-        }
-        
-        public Class toClass() {
-            return c;
-        }
-        
-        public static Type valueOf(Class c) {
-            Type[] v = values();
-            for(int i=0; i<v.length; ++i){
-                Type t = v[i];
-                if(t.toClass() == c){
-                    return t;
-                }
-            }
-            return None;
-        }
-        
+        None,
+        String,
+        IconString,
+        URL;
     }
     
 }

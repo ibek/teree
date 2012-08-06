@@ -5,10 +5,10 @@
 
 	<groupId>org.teree</groupId>
 	<artifactId>teree</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.2-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Teree</name>
-	<description>first prototype</description>
+	<description></description>
 
 	<properties>
 		<!-- Explicitly declaring the source encoding eliminates the following 

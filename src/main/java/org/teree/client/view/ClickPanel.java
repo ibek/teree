@@ -1,4 +1,4 @@
-package org.teree.client.ui;
+package org.teree.client.view;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

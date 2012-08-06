@@ -1,6 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:viewer='urn:import:org.teree.client.ui'>
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tw='urn:import:org.teree.client.view.widget'>
 	<ui:style>
 
 		.rootPanel {
@@ -21,7 +21,7 @@
   
 	<g:HTMLPanel>
   		<div class="{style.rootPanel}">
-		<viewer:Scene ui:field="_scene"></viewer:Scene>
+		<tw:Scene ui:field="_scene"></tw:Scene>
 		<div class="{style.editPanel}">
 		<ui:EditPanel>
 		    <g:Button ui:field='_btnNew' ui:text="New"></g:Button>

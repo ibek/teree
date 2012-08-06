@@ -1,56 +1,39 @@
 package org.teree.client;
 
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
-import org.teree.client.ui.Viewer;
-import org.teree.shared.ViewerService;
 import org.jboss.errai.bus.client.ErraiBus;
 import org.jboss.errai.bus.client.framework.MessageBus;
-import org.jboss.errai.bus.client.framework.RequestDispatcher;
 import org.jboss.errai.ioc.client.api.AfterInitialization;
-import org.jboss.errai.ioc.client.api.Caller;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.RootPanel;
 
 @EntryPoint
 public class Teree {
-
-    /**
-     * This is the client-side proxy to the Errai service implemented by
-     * MemberServiceImpl. The proxy is generated at build time, and injected
-     * into this field when the page loads. You can create additional Errai
-     * services by following this same pattern; just be sure that the
-     * client-side class you inject the Caller into is an injectable class
-     * (client-side injectable classes are annotated with {@code @EntryPoint},
-     * {@code @ApplicationScoped}, or {@code @Singleton}).
-     */
-    @Inject
-    private Caller<ViewerService> viewerService;
     
-    private MessageBus bus = ErraiBus.get();
+    private MessageBus msgBus = ErraiBus.get();
+    
+    private HandlerManager eventBus = new HandlerManager(null);
 
-    private Viewer viewerUi;
+    @Inject
+    private TereeController tc;
 
-    /**
-     * Builds the UI and populates the member list by making an RPC call to the
-     * server.
-     * <p>
-     * Note that because this method performs an RPC call to the server, it is
-     * annotated with AfterInitialization rather than PostConstruct: the
-     * contract of PostConstruct only guarantees that all of <em>this</em>
-     * bean's dependencies have been injected, but it does not guarantee that
-     * the entire runtime environment has completed its bootstrapping routine.
-     * Methods annotated with the Errai-specific AfterInitialization are only
-     * called once everything is up and running, including the communication
-     * channel to the server.
-     */
     @AfterInitialization
-    public void createUI() {
-        viewerUi = new Viewer();
-        DOM.getElementById("loader").removeFromParent();
-        RootPanel.get().add(viewerUi);
+    public void startApp() {
+        tc.go(RootPanel.get());
+    }
+
+    @Produces
+    private HandlerManager produceEventBus() {
+        return eventBus;
+    }
+
+    @Produces
+    private MessageBus produceMessageBus() {
+        return msgBus;
     }
 
 }
