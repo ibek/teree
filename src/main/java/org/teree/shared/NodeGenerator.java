@@ -1,8 +1,8 @@
 package org.teree.shared;
 
 import org.teree.shared.data.Node;
-import org.teree.shared.data.NodeContent;
 import org.teree.shared.data.Node.NodeLocation;
+import org.teree.shared.data.Node.NodeType;
 
 public class NodeGenerator {
 
@@ -67,9 +67,8 @@ public class NodeGenerator {
     
     public static Node createTextNode(String text, NodeLocation loc) {
         Node n = new Node();
-        NodeContent nc = new NodeContent();
-        nc.setValue(text);
-        n.setContent(nc);
+        n.setContent(text);
+        n.setType(NodeType.String);
         n.setLocation(loc);
         return n;
     }

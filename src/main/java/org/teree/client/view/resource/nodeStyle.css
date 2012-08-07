@@ -23,3 +23,19 @@
 	margin: 0;
 }
 
+.selected {
+	background-color: grey;
+}
+
+.view {
+	font-family: monospace;
+	font-size: 14px;
+	white-space: pre;
+}
+
+.edit {
+	font-family: monospace;
+	font-size: 14px;
+	border-width: 0px;
+	padding: 0px;
+}

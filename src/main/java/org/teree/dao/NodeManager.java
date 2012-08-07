@@ -12,9 +12,8 @@ import javax.inject.Inject;
 import org.bson.types.ObjectId;
 import org.teree.shared.data.IconString;
 import org.teree.shared.data.Node;
-import org.teree.shared.data.NodeContent;
 import org.teree.shared.data.Node.NodeLocation;
-import org.teree.shared.data.NodeContent.Type;
+import org.teree.shared.data.Node.NodeType;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -74,9 +73,8 @@ public class NodeManager {
     private BasicDBObject toDBObject(Node root) {
         BasicDBObject doc = new BasicDBObject();
         
-        NodeContent nc = root.getContent();
-        Object value = nc.getValue();
-        NodeContent.Type type = nc.getType();
+        Object value = root.getContent();
+        NodeType type = root.getType();
         doc.put("type", type.name());
         
         switch(type){
@@ -103,28 +101,26 @@ public class NodeManager {
     
     private Node fromDBObject(DBObject root) {
         Node node = new Node();
-        NodeContent nc = new NodeContent();
-        NodeContent.Type type = NodeContent.Type.valueOf((String)root.get("type"));
+        NodeType type = NodeType.valueOf((String)root.get("type"));
         
         switch(type){
             case String: {
-                nc.setValue(root.get("text"));
-                nc.setType(Type.String);
+                node.setContent(root.get("text"));
+                node.setType(NodeType.String);
             }
             case URL: {
-                nc.setValue(URI.create((String)root.get("url")));
-                nc.setType(Type.URL);
+                node.setContent(URI.create((String)root.get("url")));
+                node.setType(NodeType.URL);
             }
             case IconString: {
                 IconString is = new IconString();
                 is.setText((String)root.get("text"));
                 is.setIconid((Integer)root.get("text"));
-                nc.setValue(is);
-                nc.setType(Type.IconString);
+                node.setContent(is);
+                node.setType(NodeType.IconString);
             }
         }
         
-        node.setContent(nc);
         String location = (String)root.get("location");
         if(location != null){
             node.setLocation(NodeLocation.valueOf(location));

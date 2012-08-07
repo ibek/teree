@@ -1,7 +1,8 @@
-package org.teree.client.view.widget;
+package org.teree.client.view.editor;
 
 import org.teree.shared.data.Node;
 
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
@@ -21,31 +22,58 @@ public class NodeWidget extends Composite {
         @Source("resource/down.png")
         ImageResource downIcon();
         
-        @Source("resource/nodeStyle.css")
-        NodeStyle nodeButtons();
+        @Source("../resource/nodeStyle.css")
+        NodeStyle nodeStyle();
         
         public interface NodeStyle extends CssResource {
             String button();
+            String selected();
+            String view();
+            String edit();
         }
         
     }
     
-    private Resources resources = GWT.create(Resources.class);
+    protected Resources resources = GWT.create(Resources.class);
     
-    private Node node;
+    protected Node node;
+    
+    protected AbsolutePanel container;
+    
+    protected boolean selected;
     
     protected NodeWidget(Node node) {
         this.node = node;
+        selected = false;
+        container = new AbsolutePanel();
+        initWidget(container);
     }
     
+    /**
+     * Create NodeWidget according to type of node.
+     * @param node
+     * @return
+     */
     public static NodeWidget create(Node node) {
         
-        switch(node.getContent().getType()){
+        switch(node.getType()){
             case String: {
                 return new TextNodeWidget(node);
             }
         }
         
+        return null;
+    }
+    
+    public NodeWidget select() {
+        selected = true;
+        container.setStyleName(resources.nodeStyle().selected());
+        return this;
+    }
+    
+    public NodeWidget unselect() {
+        selected = false;
+        container.removeStyleName(resources.nodeStyle().selected());
         return null;
     }
 

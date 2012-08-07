@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.presenter.MapView;
-import org.teree.client.view.widget.Scene;
+import org.teree.client.view.editor.Scene;
 import org.teree.shared.data.Node;
 
 public class Viewer extends Composite implements MapView.Display {

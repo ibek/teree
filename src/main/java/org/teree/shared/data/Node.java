@@ -11,12 +11,13 @@ public class Node implements Cloneable {
 
     private Node parent;
     private List<Node> childNodes;
-    private NodeContent content;
+    private Object content;
+    private NodeType type;
     private NodeLocation location;
     
     public Node clone() {
         Node root = new Node();
-        root.setContent(content.clone());
+        root.setContent(content);
         root.setLocation(location);
         for(int i=0; childNodes != null && i<childNodes.size(); ++i){
             root.addChild(childNodes.get(i).clone());
@@ -66,11 +67,11 @@ public class Node implements Cloneable {
         }
     }
     
-    public NodeContent getContent() {
+    public Object getContent() {
         return content;
     }
     
-    public void setContent(NodeContent content) {
+    public void setContent(Object content) {
         this.content = content;
     }
     
@@ -92,6 +93,14 @@ public class Node implements Cloneable {
         }
     }
     
+    public NodeType getType() {
+        return type;
+    }
+
+    public void setType(NodeType type) {
+        this.type = type;
+    }
+
     public Node under(){
         List<Node> cn = parent.getChildNodes();
         boolean next = false;
@@ -129,7 +138,13 @@ public class Node implements Cloneable {
         this.location = location;
     }
 
-    @Portable
+    public enum NodeType {
+        None,
+        String,
+        IconString,
+        URL;
+    }
+
     public enum NodeLocation implements Serializable {
         LEFT,
         RIGHT;
