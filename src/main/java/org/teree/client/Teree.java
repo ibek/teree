@@ -1,5 +1,8 @@
 package org.teree.client;
 
+import java.io.FileInputStream;
+import java.util.Properties;
+
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 

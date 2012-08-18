@@ -1,16 +1,13 @@
-Teree
-=====
+#Teree
 
-Steps
------
+##Steps
 
   1. mvn package
   2. mvn jboss-as:deploy
   3. mvn gwt:run
 
-Features
---------
+##Features
 
-supports MindMaps
-uses MongoDB to store nodes
-
+ - supports MindMaps
+ - uses MongoDB to store nodes
+ - enables cooperation
