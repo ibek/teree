@@ -100,6 +100,14 @@ public class Node implements Cloneable {
     public void setType(NodeType type) {
         this.type = type;
     }
+    
+    public int getNumberOfChildNodes() {
+    	int noc = 0;
+    	for(int i=0; childNodes != null && i < childNodes.size(); ++i, ++noc){
+    		noc += childNodes.get(i).getNumberOfChildNodes(); // recursively get number of their child nodes
+    	}
+    	return noc;
+    }
 
     public Node under(){
         List<Node> cn = parent.getChildNodes();

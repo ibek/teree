@@ -1,5 +1,6 @@
 package org.teree.client.view.viewer;
 
+import org.teree.client.view.NodeType;
 import org.teree.shared.data.Node;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -8,7 +9,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 
-public class NodeWidget extends Composite {
+public class NodeWidget extends Composite implements NodeType {
 
     public interface Resources extends ClientBundle {
         
@@ -48,5 +49,15 @@ public class NodeWidget extends Composite {
         
         return null;
     }
+
+	@Override
+	public int getWidgetWidth() {
+		return getWidget().getOffsetWidth();
+	}
+
+	@Override
+	public int getWidgetHeight() {
+		return getWidget().getOffsetHeight();
+	}
 
 }
