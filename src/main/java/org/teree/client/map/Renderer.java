@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.Widget;
  *
  */
 public abstract class Renderer<T extends Widget & NodeType> {
-	
 
     public void renderEditor(final Canvas canvas, final List<T> nodes, final Node root) {
     	prepare(nodes);
