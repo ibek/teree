@@ -1,6 +1,7 @@
 package org.teree.client.view.editor;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -13,6 +14,7 @@ import org.teree.client.event.SelectNodeHandler;
 import org.teree.client.map.MapType;
 import org.teree.client.map.MindMap;
 import org.teree.client.map.Renderer;
+import org.teree.client.view.editor.NodeWidget;
 import org.teree.shared.data.Node;
 
 import com.google.gwt.canvas.client.Canvas;
@@ -20,11 +22,13 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Scene {
+	
+	private static final int NODE_WIDGET_MARK = 1; // from this mark are node widgets in container
     
     private Node root;
-    private List<NodeWidget> nodes;
     private Renderer<NodeWidget> map;
     
     private AbsolutePanel container;
@@ -46,17 +50,6 @@ public class Scene {
             // deal with it
         }
         
-        nodes = new ArrayList<NodeWidget>();
-        
-        container.add(canvas);
-    }
-    
-    public void update(Node node) {
-    	
-    	// TODO: add and insert nodewidgets
-    	
-    	map.renderEditor(canvas, nodes, root);
-    	
     }
     
     public void bind() {
@@ -95,7 +88,60 @@ public class Scene {
     
     public void setRoot(Node root) {
     	this.root = root;
-        update(null);
+    	container.clear();
+        container.add(canvas);
+        
+        NodeWidget nw = NodeWidget.create(root);
+        container.add(nw);
+        
+        update(root); // initialize
+    }
+    
+    public void update(Node changed) {
+    	update(root, changed, 0);
+    	map.renderEditor(canvas, getNodeWidgets(), root);
+    }
+    
+    private List<NodeWidget> getNodeWidgets() {
+    	Iterator<Widget> it = container.iterator();
+    	List<NodeWidget> nodes = new ArrayList<NodeWidget>();
+    	for (int i=0; it.hasNext(); ++i) {
+    		if(i >= NODE_WIDGET_MARK){
+    			nodes.add((NodeWidget)it.next()); // there is the casting from Widget to NodeWidget
+    		}
+    	}
+    	
+    	return nodes;
+    }
+    
+    private int update(Node current, Node changed, int id) {
+    	
+    	List<Node> cn = current.getChildNodes();
+    	for(int i=0; cn!=null && i<cn.size(); ++i){
+    		Node n = cn.get(i);
+    		if (n == changed || id < container.getWidgetCount() - NODE_WIDGET_MARK) {
+    			id = insertNode(n, id);
+    		}
+    	}
+    	
+    	return id;
+    }
+    
+    private int insertNode(Node node, int id) {
+    	NodeWidget nw = NodeWidget.create(node);
+    	if (id < container.getWidgetCount() - NODE_WIDGET_MARK) {
+    		container.add(nw, 0, 0);
+    	} else {
+    		container.insert(nw, 0, 0, id + NODE_WIDGET_MARK);
+    	}
+    	id++;
+    	
+    	List<Node> cn = node.getChildNodes();
+        for(int i=0; cn != null && i<cn.size(); ++i){
+        	id = insertNode(cn.get(i), id);
+        }
+    	
+    	return id;
     }
 
     private void selectNode(NodeWidget node) {

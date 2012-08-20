@@ -9,7 +9,6 @@ import org.teree.shared.data.Node.NodeLocation;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
 /**

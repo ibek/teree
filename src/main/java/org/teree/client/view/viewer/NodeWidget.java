@@ -3,6 +3,7 @@ package org.teree.client.view.viewer;
 import org.teree.client.view.NodeType;
 import org.teree.shared.data.Node;
 
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.core.client.GWT;
@@ -32,6 +33,8 @@ public class NodeWidget extends Composite implements NodeType {
         this.node = node;
         container = new AbsolutePanel();
         initWidget(container);
+        
+    	DOM.setStyleAttribute(getElement(), "visibility", "hidden");
     }
     
     /**
