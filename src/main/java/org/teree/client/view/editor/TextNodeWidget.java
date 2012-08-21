@@ -76,7 +76,7 @@ public class TextNodeWidget extends NodeWidget {
                 }
             });
             
-            editContent.setStyleName(resources.nodeStyle().edit());
+            //editContent.setStyleName(resources.nodeStyle().edit());
             
         }
         
@@ -100,7 +100,7 @@ public class TextNodeWidget extends NodeWidget {
             }
         });
         
-        content.setStyleName(resources.nodeStyle().view());
+        //content.setStyleName(resources.nodeStyle().view());
         
         if (editContent != null) {
             container.remove(editContent);

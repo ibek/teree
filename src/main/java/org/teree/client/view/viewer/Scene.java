@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.teree.client.map.MapType;
@@ -14,9 +15,10 @@ import org.teree.shared.data.Node;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Scene {
+public class Scene extends Composite {
 	
 	private static final int NODE_WIDGET_MARK = 1; // from this mark are node widgets in container
     
@@ -26,7 +28,6 @@ public class Scene {
     private AbsolutePanel container;
     private Canvas canvas;
     
-    @Inject
     private HandlerManager eventBus;
     
     public Scene() {
@@ -40,6 +41,7 @@ public class Scene {
         }
         
         container.add(canvas);
+        initWidget(container);
     }
     
     public void bind() {

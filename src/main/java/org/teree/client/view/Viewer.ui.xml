@@ -19,11 +19,9 @@
 		
 	</ui:style>
   
-	<g:HTMLPanel>
-  		<div class="{style.rootPanel}">
+	<g:FlowPanel>
 		<tw:Scene ui:field="scene"></tw:Scene>
 		<g:Label ui:field='status' addStyleNames="{style.status}"></g:Label>
-		</div>
-	</g:HTMLPanel>
+	</g:FlowPanel>
 
 </ui:UiBinder> 

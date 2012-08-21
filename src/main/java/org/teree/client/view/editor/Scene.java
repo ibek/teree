@@ -7,6 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.teree.client.Settings;
+import org.teree.client.Teree;
 import org.teree.client.event.NodeChanged;
 import org.teree.client.event.NodeChangedHandler;
 import org.teree.client.event.SelectNode;
@@ -22,9 +23,10 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Scene {
+public class Scene extends Composite {
 	
 	private static final int NODE_WIDGET_MARK = 1; // from this mark are node widgets in container
     
@@ -36,12 +38,10 @@ public class Scene {
     
     private NodeWidget selected;
     
-    @Inject
     private HandlerManager eventBus;
     
     public Scene() {
         
-        bind();
         setMapType(Settings.DEFAULT_MAP_TYPE);
         
         container = new AbsolutePanel();
@@ -50,9 +50,15 @@ public class Scene {
             // deal with it
         }
         
+        bind();
+        
+        initWidget(container);
+        
     }
     
     public void bind() {
+    	
+    	eventBus = Teree.getHandlerManager(); // TODO: fix this, inject doesn't work!!
         
         eventBus.addHandler(SelectNode.TYPE, new SelectNodeHandler() {
             @Override

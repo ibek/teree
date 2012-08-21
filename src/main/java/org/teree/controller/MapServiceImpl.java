@@ -11,13 +11,13 @@ import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.framework.RequestDispatcher;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.teree.dao.NodeManager;
-import org.teree.shared.ViewerService;
+import org.teree.shared.MapService;
 import org.teree.shared.data.NodeChange;
 import org.teree.shared.data.Node;
 
 @ApplicationScoped
 @Service
-public class ViewerServiceImpl implements ViewerService {
+public class MapServiceImpl implements MapService {
 
     @Inject
     private Logger _log;

@@ -12,7 +12,7 @@ import com.google.gwt.resources.client.CssResource;
 
 public class NodeWidget extends Composite implements NodeType {
 
-    public interface Resources extends ClientBundle {
+    /**public interface Resources extends ClientBundle {
         
         @Source("../resource/nodeStyle.css")
         NodeStyle nodeStyle();
@@ -22,8 +22,8 @@ public class NodeWidget extends Composite implements NodeType {
         }
         
     }
-    
-    protected Resources resources = GWT.create(Resources.class);
+
+    protected Resources resources = GWT.create(Resources.class);*/
     
     protected Node node;
     

@@ -13,7 +13,7 @@ import com.google.gwt.resources.client.ImageResource;
 
 public class NodeWidget extends Composite implements NodeType {
 
-    public interface Resources extends ClientBundle {
+    /**public interface Resources extends ClientBundle {
         
         @Source("resource/add.png")
         ImageResource addIcon();
@@ -36,7 +36,7 @@ public class NodeWidget extends Composite implements NodeType {
         
     }
     
-    protected Resources resources = GWT.create(Resources.class);
+    protected Resources resources = GWT.create(Resources.class);*/
     
     protected Node node;
     
@@ -71,13 +71,13 @@ public class NodeWidget extends Composite implements NodeType {
     
     public NodeWidget select() {
         selected = true;
-        container.setStyleName(resources.nodeStyle().selected());
+        //container.setStyleName(resources.nodeStyle().selected());
         return this;
     }
     
     public NodeWidget unselect() {
         selected = false;
-        container.removeStyleName(resources.nodeStyle().selected());
+        //container.removeStyleName(resources.nodeStyle().selected());
         return null;
     }
 

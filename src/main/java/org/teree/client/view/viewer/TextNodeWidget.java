@@ -24,7 +24,7 @@ public class TextNodeWidget extends NodeWidget {
             }
         });
         
-        content.setStyleName(resources.nodeStyle().view());
+        //content.setStyleName(resources.nodeStyle().view());
         container.add(content);
     }
 

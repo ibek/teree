@@ -8,10 +8,10 @@ import org.teree.shared.data.Node;
 * Errai RPC interface that specifies which methods the client can invoke on the
 * server-side service.
 *
-* @see org.teree.controller.ViewerServiceImpl
+* @see org.teree.controller.MapServiceImpl
 */
 @Remote
-public interface ViewerService {
+public interface MapService {
     
     public Node getMap(String oid);
     
