@@ -2,6 +2,7 @@ package org.teree.client;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.jboss.errai.ioc.client.api.AfterInitialization;
 import org.jboss.errai.ioc.client.api.EntryPoint;
@@ -25,6 +26,7 @@ public class Teree {
     }
 
     @Produces
+    @Named(value="eventBus")
     private HandlerManager produceEventBus() {
         return eventBus;
     }

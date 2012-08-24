@@ -1,7 +1,5 @@
 package org.teree.dao;
 
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +9,7 @@ import javax.inject.Inject;
 
 import org.bson.types.ObjectId;
 import org.teree.shared.data.IconString;
+import org.teree.shared.data.Link;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 import org.teree.shared.data.Node.NodeType;
@@ -81,13 +80,14 @@ public class NodeManager {
             case String: {
                 doc.put("text", value);
             }
-            case URL: {
-                doc.put("url", value.toString());
-            }
             case IconString: {
                 IconString is = (IconString)value;
                 doc.put("text", is.getText());
                 doc.put("icon", is.getIconid());
+            }
+            case Link: {
+            	Link link = (Link)value;
+                doc.put("url", link.getUrl());
             }
         }
         
@@ -106,18 +106,17 @@ public class NodeManager {
         switch(type){
             case String: {
                 node.setContent(root.get("text"));
-                node.setType(NodeType.String);
-            }
-            case URL: {
-                node.setContent(URI.create((String)root.get("url")));
-                node.setType(NodeType.URL);
             }
             case IconString: {
                 IconString is = new IconString();
                 is.setText((String)root.get("text"));
-                is.setIconid((Integer)root.get("text"));
+                is.setIconid((Integer)root.get("icon"));
                 node.setContent(is);
-                node.setType(NodeType.IconString);
+            }
+            case Link: {
+            	Link link = new Link();
+            	link.setUrl((String)root.get("url"));
+                node.setContent(link);
             }
         }
         

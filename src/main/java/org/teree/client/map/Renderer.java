@@ -3,7 +3,9 @@ package org.teree.client.map;
 import java.util.List;
 
 import org.teree.client.Settings;
-import org.teree.client.view.NodeType;
+import org.teree.client.view.NodeInterface;
+import org.teree.client.view.editor.NodeWidget;
+import org.teree.client.view.editor.TextNodeWidget;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 
@@ -18,7 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author ibek
  *
  */
-public abstract class Renderer<T extends Widget & NodeType> {
+public abstract class Renderer<T extends Widget & NodeInterface> {
 
     public void renderEditor(final Canvas canvas, final List<T> nodes, final Node root) {
     	prepare(nodes);
@@ -32,7 +34,7 @@ public abstract class Renderer<T extends Widget & NodeType> {
                 render(canvas, nodes, root, true);
             }
         };
-        t.schedule(50); // to ensure that widget automatically resized size is already set
+        t.schedule(10); // to ensure that widget automatically resized size is already set
     }
 
     public void renderViewer(final Canvas canvas, final List<T> nodes, final Node root) {
@@ -47,7 +49,7 @@ public abstract class Renderer<T extends Widget & NodeType> {
                 render(canvas, nodes, root, false);
             }
         };
-        t.schedule(50); // to ensure that widget automatically resized size is already set
+        t.schedule(10); // to ensure that widget automatically resized size is already set
     }
     
     /**
@@ -101,8 +103,6 @@ public abstract class Renderer<T extends Widget & NodeType> {
 	        } else if (node.getWidgetWidth() > Settings.MAX_WIDTH) {
 	            succ = false; // to set correct width in next cycle
 	            node.setWidth(Settings.MAX_WIDTH+"px");// fix change from max size to smaller
-	        } else {
-	            node.setWidth(node.getWidgetWidth()+"px");
 	        }
 	
 	        if (node.getWidgetHeight() < Settings.MIN_HEIGHT) {

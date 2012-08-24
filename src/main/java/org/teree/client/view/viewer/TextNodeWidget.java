@@ -27,5 +27,10 @@ public class TextNodeWidget extends NodeWidget {
         //content.setStyleName(resources.nodeStyle().view());
         container.add(content);
     }
+    
+    @Override
+    public void update() {
+    	content.setText(node.getContent().toString());
+    }
 
 }

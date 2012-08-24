@@ -1,6 +1,6 @@
 package org.teree.client.view.viewer;
 
-import org.teree.client.view.NodeType;
+import org.teree.client.view.NodeInterface;
 import org.teree.shared.data.Node;
 
 import com.google.gwt.user.client.DOM;
@@ -10,7 +10,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 
-public class NodeWidget extends Composite implements NodeType {
+public class NodeWidget extends Composite implements NodeInterface {
 
     /**public interface Resources extends ClientBundle {
         
@@ -29,29 +29,22 @@ public class NodeWidget extends Composite implements NodeType {
     
     protected AbsolutePanel container;
     
-    protected NodeWidget(Node node) {
+    public NodeWidget() {
+    	
+    }
+    
+    public NodeWidget(Node node) {
         this.node = node;
         container = new AbsolutePanel();
         initWidget(container);
         
     	DOM.setStyleAttribute(getElement(), "visibility", "hidden");
     }
-    
-    /**
-     * Create NodeWidget according to type of node.
-     * @param node
-     * @return
-     */
-    public static NodeWidget create(Node node) {
-        
-        switch(node.getType()){
-            case String: {
-                return new TextNodeWidget(node);
-            }
-        }
-        
-        return null;
-    }
+
+	@Override
+	public Node getNode() {
+		return node;
+	}
 
 	@Override
 	public int getWidgetWidth() {
@@ -61,6 +54,11 @@ public class NodeWidget extends Composite implements NodeType {
 	@Override
 	public int getWidgetHeight() {
 		return getWidget().getOffsetHeight();
+	}
+
+	@Override
+	public void update() {
+		// nothing to do
 	}
 
 }

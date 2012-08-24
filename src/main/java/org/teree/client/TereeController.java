@@ -2,6 +2,7 @@ package org.teree.client;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.jboss.errai.ioc.client.api.Caller;
 import org.jboss.errai.ioc.client.container.IOCBeanDef;
@@ -9,10 +10,11 @@ import org.jboss.errai.ioc.client.container.IOCBeanManager;
 import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
-import org.teree.client.event.NodeReceived;
+import org.teree.client.event.MapReceived;
 import org.teree.client.presenter.MapEditor;
-import org.teree.client.presenter.MapView;
+import org.teree.client.presenter.MapViewer;
 import org.teree.client.presenter.Presenter;
+import org.teree.shared.MapGenerator;
 import org.teree.shared.MapService;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
@@ -29,11 +31,14 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 	@Inject
 	private IOCBeanManager manager;
 
-	@Inject
+	@Inject @Named(value="eventBus")
 	private HandlerManager eventBus;
 	
 	@Inject
 	private Caller<MapService> mapService;
+	
+	@Inject
+	private Keyboard keyboard;
 
 	private HasWidgets container;
 
@@ -41,11 +46,12 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 	private static final String VIEW_LINK = "view/oid=";
 	private static final String CREATE_LINK = "create";
 	private static final String EDIT_LINK = "edit/oid=";
-
+	
 	/**
 	 * Bind handlers to eventBus.
 	 */
 	public void bind() {
+		keyboard.init();
 		History.addValueChangeHandler(this);
 	}
 
@@ -62,13 +68,11 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 		} else {
 			History.fireCurrentHistoryState();
 		}
-		System.out.println("ahoj");
 	}
 
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
 		String token = event.getValue();
-		System.out.println(token);
 		if (token != null) {
 			Presenter presenter = null;
 
@@ -79,7 +83,7 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 
 				}*/
 			} else if (token.startsWith(VIEW_LINK)) {
-				IOCBeanDef<MapView> bean = manager.lookupBean(MapView.class);
+				IOCBeanDef<MapViewer> bean = manager.lookupBean(MapViewer.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
 					loadMap(token.substring(VIEW_LINK.length()));
@@ -89,8 +93,9 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 				IOCBeanDef<MapEditor> bean = manager.lookupBean(MapEditor.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
-					createMap();
-					System.out.println("created");
+					presenter.go(container);
+					eventBus.fireEvent(new MapReceived(MapGenerator.complex())); // TODO: create map from templates (even user's)
+					return;
 				}
 			} else if (token.startsWith(EDIT_LINK)) {
 				IOCBeanDef<MapEditor> bean = manager.lookupBean(MapEditor.class);
@@ -99,35 +104,19 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 					loadMap(token.substring(EDIT_LINK.length()));
 				}
 			}
-
+			
 			if (presenter != null) {
 				presenter.go(container);
 			}
+			
 		}
-	}
-	
-	/**
-	 * TODO: create map from templates (even user's)
-	 */
-	private void createMap() {
-		Node root = new Node();
-		root.setContent("root");
-		Node left = new Node();
-		left.setContent("left");
-		left.setLocation(NodeLocation.LEFT);
-		Node right = new Node();
-		right.setContent("right");
-		right.setLocation(NodeLocation.LEFT);
-		root.addChild(left);
-		root.addChild(right);
-		eventBus.fireEvent(new NodeReceived(root));
 	}
 	
 	private void loadMap(String oid) {
 		mapService.call(new RemoteCallback<Node>() {
             @Override
             public void callback(Node response) {
-                eventBus.fireEvent(new NodeReceived(response));
+                eventBus.fireEvent(new MapReceived(response));
             }
         }, new ErrorCallback() {
 			@Override

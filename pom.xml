@@ -341,7 +341,7 @@
 						to not start the default server (embedded jetty), but to download the HTML 
 						host page from the configured runTarget. -->
 					<noServer>true</noServer>
-					<runTarget>http://localhost:8080/teree/viewer.html</runTarget>
+					<runTarget>http://localhost:8080/teree/teree.html</runTarget>
 				</configuration>
 				<executions>
 					<execution>

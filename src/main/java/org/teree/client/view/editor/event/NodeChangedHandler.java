@@ -1,4 +1,4 @@
-package org.teree.client.event;
+package org.teree.client.view.editor.event;
 
 import org.teree.client.view.editor.NodeWidget;
 

@@ -1,9 +1,7 @@
 package org.teree.client.view.editor;
 
-import javax.inject.Inject;
-
-import org.teree.client.event.NodeChanged;
-import org.teree.client.event.SelectNode;
+import org.teree.client.view.editor.event.NodeChanged;
+import org.teree.client.view.editor.event.SelectNode;
 import org.teree.shared.data.Node;
 
 import com.google.gwt.core.client.Scheduler;
@@ -17,7 +15,6 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TextArea;
 
@@ -27,8 +24,9 @@ public class TextNodeWidget extends NodeWidget {
     
     private TextArea editContent;
     
-    @Inject
-    private HandlerManager eventBus;
+    public TextNodeWidget() {
+    	
+    }
     
     protected TextNodeWidget(Node node) {
         super(node);
@@ -37,6 +35,7 @@ public class TextNodeWidget extends NodeWidget {
         
     }
     
+    @Override
     public void edit() {
         if (editContent == null) {
             editContent = new TextArea();
@@ -76,7 +75,7 @@ public class TextNodeWidget extends NodeWidget {
                 }
             });
             
-            //editContent.setStyleName(resources.nodeStyle().edit());
+            editContent.setStylePrimaryName(resources.nodeStyle().edit());
             
         }
         
@@ -88,19 +87,25 @@ public class TextNodeWidget extends NodeWidget {
     }
     
     public void view() {
-        content = new HTML(node.getContent().toString());
-        content.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (selected) { // second click - edit this node
-                    edit();
-                } else { // first click - select this node
-                    fireSelect();
-                }
-            }
-        });
+    	if (content == null) {
+    		
+	        content = new HTML(node.getContent().toString());
+	        content.addClickHandler(new ClickHandler() {
+	            @Override
+	            public void onClick(ClickEvent event) {
+	                if (selected) { // second click - edit this node
+	                    edit();
+	                } else { // first click - select this node
+	                    fireSelect();
+	                }
+	            }
+	        });
+	        
+	        content.setStylePrimaryName(resources.basicNodeStyle().view());
         
-        //content.setStyleName(resources.nodeStyle().view());
+    	}
+    	
+    	content.setText(node.getContent().toString());
         
         if (editContent != null) {
             container.remove(editContent);
@@ -111,16 +116,33 @@ public class TextNodeWidget extends NodeWidget {
     }
     
     private void fireSelect() {
-        eventBus.fireEvent(new SelectNode(this));
+    	getParent().fireEvent(new SelectNode(this));
+    }
+    
+    @Override
+    public NodeWidget select() {
+    	content.getElement().getStyle().setBackgroundColor("grey");
+    	return super.select();
+    }
+    
+    @Override
+    public NodeWidget unselect() {
+    	content.getElement().getStyle().setBackgroundColor(null);
+    	return super.unselect();
     }
     
     private void confirmChanges() {
         String newtext = editContent.getText();
         if(newtext.compareTo(node.getContent().toString()) != 0){
             node.setContent(newtext);
-            eventBus.fireEvent(new NodeChanged(this));
+            getParent().fireEvent(new NodeChanged(this));
         }
-        view(); // nothing changed
+        view();
+    }
+    
+    @Override
+    public void update() {
+    	content.setText(node.getContent().toString());
     }
 
 }

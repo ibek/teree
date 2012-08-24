@@ -4,7 +4,7 @@ import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 import org.teree.shared.data.Node.NodeType;
 
-public class NodeGenerator {
+public class MapGenerator {
 
     public static Node newNode() {
         Node root = createTextNode("root", null);
@@ -68,7 +68,6 @@ public class NodeGenerator {
     public static Node createTextNode(String text, NodeLocation loc) {
         Node n = new Node();
         n.setContent(text);
-        n.setType(NodeType.String);
         n.setLocation(loc);
         return n;
     }

@@ -1,4 +1,4 @@
-package org.teree.client.event;
+package org.teree.client.view.editor.event;
 
 import org.teree.client.view.editor.NodeWidget;
 
@@ -23,4 +23,5 @@ public class NodeChanged extends GwtEvent<NodeChangedHandler> {
     protected void dispatch(NodeChangedHandler handler) {
         handler.changed(this, node);
     }
+    
 }

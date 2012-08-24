@@ -1,6 +1,7 @@
 package org.teree.shared.data;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +74,20 @@ public class Node implements Cloneable {
     
     public void setContent(Object content) {
         this.content = content;
+        
+        // set type
+        if (content instanceof String) {
+        	type = NodeType.String;
+        } 
+        else if (content instanceof IconString) {
+        	type = NodeType.IconString;
+        }
+        else if (content instanceof Link) {
+        	type = NodeType.Link;
+        }
+        else {
+        	type = NodeType.None;
+        }
     }
     
     public Node getParent() {
@@ -95,10 +110,6 @@ public class Node implements Cloneable {
     
     public NodeType getType() {
         return type;
-    }
-
-    public void setType(NodeType type) {
-        this.type = type;
     }
     
     public int getNumberOfChildNodes() {
@@ -150,7 +161,7 @@ public class Node implements Cloneable {
         None,
         String,
         IconString,
-        URL;
+        Link;
     }
 
     public enum NodeLocation implements Serializable {

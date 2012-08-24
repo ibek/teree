@@ -63,4 +63,62 @@ public class Editor extends Composite implements MapEditor.Display {
 		scene.setRoot(root);
 	}
 
+	@Override
+	public void edit() {
+		scene.editSelectedNode();
+	}
+
+	@Override
+	public void delete() {
+		scene.removeSelectedNode();
+	}
+
+	@Override
+	public void insert() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void copy() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cut() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void paste() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void up() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void down() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void left() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void right() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

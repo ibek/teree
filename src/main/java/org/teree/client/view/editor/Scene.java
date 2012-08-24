@@ -4,19 +4,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.teree.client.Settings;
 import org.teree.client.Teree;
-import org.teree.client.event.NodeChanged;
-import org.teree.client.event.NodeChangedHandler;
-import org.teree.client.event.SelectNode;
-import org.teree.client.event.SelectNodeHandler;
 import org.teree.client.map.MapType;
 import org.teree.client.map.MindMap;
 import org.teree.client.map.Renderer;
 import org.teree.client.view.editor.NodeWidget;
+import org.teree.client.view.editor.event.NodeChanged;
+import org.teree.client.view.editor.event.NodeChangedHandler;
+import org.teree.client.view.editor.event.SelectNode;
+import org.teree.client.view.editor.event.SelectNodeHandler;
 import org.teree.shared.data.Node;
+import org.teree.shared.data.Node.NodeLocation;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,6 +30,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import javax.inject.Named;
 
 public class Scene extends Composite {
 	
@@ -37,8 +43,6 @@ public class Scene extends Composite {
     private Canvas canvas;
     
     private NodeWidget selected;
-    
-    private HandlerManager eventBus;
     
     public Scene() {
         
@@ -57,16 +61,14 @@ public class Scene extends Composite {
     }
     
     public void bind() {
-    	
-    	eventBus = Teree.getHandlerManager(); // TODO: fix this, inject doesn't work!!
         
-        eventBus.addHandler(SelectNode.TYPE, new SelectNodeHandler() {
+    	container.addHandler(new SelectNodeHandler() {
             @Override
             public void select(SelectNode event, NodeWidget node) {
                 selectNode(node);
             }
             
-        });
+        }, SelectNode.TYPE);
         
         canvas.addClickHandler(new ClickHandler() {
             @Override
@@ -75,12 +77,12 @@ public class Scene extends Composite {
             }
         });
         
-        eventBus.addHandler(NodeChanged.TYPE, new NodeChangedHandler() {
+        container.addHandler(new NodeChangedHandler() {
             @Override
             public void changed(NodeChanged event, NodeWidget node) {
-                // probably regenerate
+                update(null);
             }
-        });
+        }, NodeChanged.TYPE);
         
     }
     
@@ -97,48 +99,105 @@ public class Scene extends Composite {
     	container.clear();
         container.add(canvas);
         
-        NodeWidget nw = NodeWidget.create(root);
-        container.add(nw);
+        NodeWidget nw = createNodeWidget(root);
+        container.add(nw, 0, 0);
         
         update(root); // initialize
     }
     
     public void update(Node changed) {
-    	update(root, changed, 0);
+    	int id = 1;
+    	
+    	List<Node> cn = root.getChildNodes();
+    	List<Node> right = new ArrayList<Node>();
+    	for (int i=0; cn!=null && i<cn.size(); ++i){
+    		Node n = cn.get(i);
+    		if (n.getLocation() == NodeLocation.LEFT) {
+    			id = update(n, changed, id);
+    		} else {
+    			right.add(n);
+    		}
+    	}
+    	
+    	for (int i=0; i<right.size(); ++i){
+    		Node n = right.get(i);
+    		id = update(n, changed, id);
+    	}
+    	
     	map.renderEditor(canvas, getNodeWidgets(), root);
+    }
+    
+    public void editSelectedNode() {
+    	if (selected != null) {
+    		selected.edit();
+    	}
+    }
+    
+    public void removeSelectedNode() {
+    	if (selected != null) {
+    		removeNodeWidget(selected);
+    		selected.getNode().remove();
+    		selected = null;
+    		update(null);
+    	}
+    }
+    
+    private void removeNodeWidget(NodeWidget nw) {
+    	if (nw.getNode() == root) { // root cannot be removed
+    		return;
+    	}
+    	int id = container.getWidgetIndex(nw);
+    	int count = nw.getNode().getNumberOfChildNodes();
+    	for (int i=-1; i<count; ++i) {
+    		container.remove(id);
+    	}
+    }
+    
+    private int update(Node current, Node changed, int id) {
+    	
+    	if (current == changed || id > container.getWidgetCount() - NODE_WIDGET_MARK - 1) { // -1 because of root
+    		id = insertNode(current, id); // recursively insert the node
+    		return id; // we don't have to insert it recursively again, so return
+    	}
+    	
+    	List<Node> cn = current.getChildNodes();
+    	for(int i=0; cn!=null && i<cn.size(); ++i){
+    		Node n = cn.get(i);
+			id = update(n, changed, id);
+    	}
+    	
+    	return id;
     }
     
     private List<NodeWidget> getNodeWidgets() {
     	Iterator<Widget> it = container.iterator();
     	List<NodeWidget> nodes = new ArrayList<NodeWidget>();
-    	for (int i=0; it.hasNext(); ++i) {
-    		if(i >= NODE_WIDGET_MARK){
-    			nodes.add((NodeWidget)it.next()); // there is the casting from Widget to NodeWidget
+    	while (it.hasNext()) {
+    		Widget w = it.next();
+    		if(w instanceof NodeWidget){
+    			nodes.add((NodeWidget)w); // there is the casting from Widget to NodeWidget
     		}
     	}
     	
     	return nodes;
     }
     
-    private int update(Node current, Node changed, int id) {
+    private NodeWidget createNodeWidget(Node node) {
+    	switch(node.getType()){
+	        case String: {
+	            return new TextNodeWidget(node);
+	        }
+	    }
     	
-    	List<Node> cn = current.getChildNodes();
-    	for(int i=0; cn!=null && i<cn.size(); ++i){
-    		Node n = cn.get(i);
-    		if (n == changed || id < container.getWidgetCount() - NODE_WIDGET_MARK) {
-    			id = insertNode(n, id);
-    		}
-    	}
-    	
-    	return id;
+    	return null;
     }
     
     private int insertNode(Node node, int id) {
-    	NodeWidget nw = NodeWidget.create(node);
-    	if (id < container.getWidgetCount() - NODE_WIDGET_MARK) {
-    		container.add(nw, 0, 0);
+    	NodeWidget nw = createNodeWidget(node);
+    	if (id < container.getWidgetCount() - NODE_WIDGET_MARK - 1) {
+    		container.insert(nw, 0, 0, id + NODE_WIDGET_MARK - 1);
     	} else {
-    		container.insert(nw, 0, 0, id + NODE_WIDGET_MARK);
+    		container.add(nw, 0, 0);
     	}
     	id++;
     	

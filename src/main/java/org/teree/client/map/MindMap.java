@@ -3,7 +3,7 @@ package org.teree.client.map;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.teree.client.view.NodeType;
+import org.teree.client.view.NodeInterface;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 
@@ -13,7 +13,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MindMap<T extends Widget & NodeType> extends Renderer<T> {
+public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 
 	private static final int MARGIN = 25;
 	private static final int CURVENESS = 20;
@@ -34,33 +34,33 @@ public class MindMap<T extends Widget & NodeType> extends Renderer<T> {
 		int maxrw = 0; // max right width
 		List<Node> rootcn = root.getChildNodes();
 		
-		int id = 0; // identifier for node widgets
+		int id = 1; // identifier for node widgets
 
 		// set bounds for left and right nodes
 		for (int i = 0; rootcn != null && i < rootcn.size(); ++i) {
 			Node n = rootcn.get(i);
-			Widget nc = nodes.get(id);
+			T nc = nodes.get(id);
 
 			if (n.getLocation() == NodeLocation.LEFT
 					&& n.getChildNodes() != null) {
 				max_width = 0; // for this node n, it is set in setBounds method!!
-				int h = setBounds(nodes, n.getChildNodes(), left, nc.getOffsetWidth(), 1, id);
+				int h = setBounds(nodes, n.getChildNodes(), left, nc.getOffsetWidth(), 1, id+1);
 				if (nc.getOffsetHeight() > h) {
 					h = nc.getOffsetHeight();
 				}
 				left.get(0).add(h);
-				id += n.getNumberOfChildNodes();
+				id += n.getNumberOfChildNodes() + 1;
 				if (max_width > maxlw) {
 					maxlw = max_width;
 				}
 			} else if (n.getChildNodes() != null) {
 				max_width = 0;
-				int h = setBounds(nodes, n.getChildNodes(), right, nc.getOffsetWidth(), 1, id);
+				int h = setBounds(nodes, n.getChildNodes(), right, nc.getOffsetWidth(), 1, id+1);
 				if (nc.getOffsetHeight() > h) {
 					h = nc.getOffsetHeight();
 				}
 				right.get(0).add(h);
-				id += n.getNumberOfChildNodes();
+				id += n.getNumberOfChildNodes() + 1;
 				if (max_width > maxrw) {
 					maxrw = max_width;
 				}
@@ -96,7 +96,7 @@ public class MindMap<T extends Widget & NodeType> extends Renderer<T> {
 			}
 		}
 		
-		Widget rw = nodes.get(0); // root widget
+		T rw = nodes.get(0); // root widget
 
 		maxlw += left.size() * MARGIN;
 		maxrw += right.size() * MARGIN;
@@ -255,7 +255,7 @@ public class MindMap<T extends Widget & NodeType> extends Renderer<T> {
 		int bounds = 0;
 		for (int i = 0; i < cn.size(); ++i) {
 			Node n = cn.get(i);
-			Widget nw = nodes.get(id);
+			T nw = nodes.get(id);
 
 			List<Node> fcn = n.getChildNodes();
 			if (fcn != null && !fcn.isEmpty()) {
@@ -274,7 +274,7 @@ public class MindMap<T extends Widget & NodeType> extends Renderer<T> {
 				}
 				// add height of the node which is leaf
 				level_bounds.get(level).add(nw.getOffsetHeight());
-
+				
 				// !!! this part set maximal width
 				if (max_width < current_width + nw.getOffsetWidth()) {
 					max_width = current_width + nw.getOffsetWidth();
