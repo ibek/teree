@@ -31,7 +31,8 @@ public abstract class Renderer<T extends Widget & NodeInterface> {
                 if(!succ){ // some node is too wide
                     resize(nodes);
                 }
-                render(canvas, nodes, root, true);
+            	render(canvas, nodes, root, true);
+                
             }
         };
         t.schedule(10); // to ensure that widget automatically resized size is already set
@@ -82,15 +83,16 @@ public abstract class Renderer<T extends Widget & NodeInterface> {
     	for (int i=0; i<nodes.size(); ++i) {
     		T node = nodes.get(i);
         	
-            // fix for resize minimal node
-            if (node.getOffsetWidth() == Settings.MIN_WIDTH) {
-                node.setWidth(0+"px");
+            // fix for resize minimal and maximal nodes
+            if (node.getOffsetWidth() == Settings.MIN_WIDTH || 
+            	node.getOffsetWidth() == Settings.MAX_WIDTH) {
+                node.setWidth("auto");
             }
             if (node.getOffsetHeight() == Settings.MIN_HEIGHT) {
-                node.setHeight(0+"px");
+                node.setHeight("auto");
             }
     	}
-    	
+   
     }
     
     protected boolean resize(List<T> nodes) {
@@ -107,8 +109,6 @@ public abstract class Renderer<T extends Widget & NodeInterface> {
 	
 	        if (node.getWidgetHeight() < Settings.MIN_HEIGHT) {
 	        	node.setHeight(Settings.MIN_HEIGHT+"px");
-	        } else {
-	        	node.setHeight(node.getWidgetHeight()+"px");
 	        }
     	}
     	return succ;

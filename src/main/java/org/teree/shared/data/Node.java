@@ -119,34 +119,17 @@ public class Node implements Cloneable {
     	}
     	return noc;
     }
-
-    public Node under(){
-        List<Node> cn = parent.getChildNodes();
-        boolean next = false;
-        for(int i=0; cn != null && i<cn.size(); ++i){
-            Node child = cn.get(i);
-            if(next){
-                return child;
-            }
-            if(child == this){
-                next = true;
-            }
-        }
-        return null;
-    }
     
-    public Node upper(){
-        List<Node> cn = parent.getChildNodes();
-        Node n = null, child = null;
-        for(int i=0; cn != null && i<cn.size(); ++i){
-            n = child;
-            child = cn.get(i);
-            if(child == this){
-                break;
-            }
-            
-        }
-        return n;
+    public int getNumberOfLeftChildNodes() {
+    	int noc = 0;
+    	for(int i=0; childNodes != null && i < childNodes.size(); ++i){
+    		Node n = childNodes.get(i);
+    		if(n.getLocation() == NodeLocation.LEFT){
+    			noc += n.getNumberOfLeftChildNodes(); // recursively get number of their child nodes
+    			noc++;
+    		}
+    	}
+    	return noc;
     }
     
     public NodeLocation getLocation() {

@@ -2,5 +2,5 @@
 .view {
 	font-family: monospace;
 	font-size: 14px;
-	white-space: pre;
+	white-space: pre-line;
 }

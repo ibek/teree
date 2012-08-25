@@ -19,6 +19,14 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 	private static final int CURVENESS = 20;
 
 	private int max_width;
+	
+	/**
+	 * level of max_width for the case:
+	 * parent1|child2
+	 *        |child3
+	 * the longest parent 2
+	 */
+	private int level;
 
 	@Override
 	protected void render(Canvas canvas, List<T> nodes, Node root, boolean editable) {
@@ -35,6 +43,8 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		List<Node> rootcn = root.getChildNodes();
 		
 		int id = 1; // identifier for node widgets
+		int left_level = 0;
+		int right_level = 0;
 
 		// set bounds for left and right nodes
 		for (int i = 0; rootcn != null && i < rootcn.size(); ++i) {
@@ -44,7 +54,8 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 			if (n.getLocation() == NodeLocation.LEFT
 					&& n.getChildNodes() != null) {
 				max_width = 0; // for this node n, it is set in setBounds method!!
-				int h = setBounds(nodes, n.getChildNodes(), left, nc.getOffsetWidth(), 1, id+1);
+				level = 1;
+				int h = setBounds(nodes, n.getChildNodes(), left, nc.getOffsetWidth(), level, id+1); // don't worry, the current node is set in setBounds
 				if (nc.getOffsetHeight() > h) {
 					h = nc.getOffsetHeight();
 				}
@@ -52,10 +63,12 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 				id += n.getNumberOfChildNodes() + 1;
 				if (max_width > maxlw) {
 					maxlw = max_width;
+					left_level = level+1;
 				}
 			} else if (n.getChildNodes() != null) {
 				max_width = 0;
-				int h = setBounds(nodes, n.getChildNodes(), right, nc.getOffsetWidth(), 1, id+1);
+				level = 1;
+				int h = setBounds(nodes, n.getChildNodes(), right, nc.getOffsetWidth(), level, id+1); // don't worry, the current node is set in setBounds
 				if (nc.getOffsetHeight() > h) {
 					h = nc.getOffsetHeight();
 				}
@@ -63,18 +76,21 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 				id += n.getNumberOfChildNodes() + 1;
 				if (max_width > maxrw) {
 					maxrw = max_width;
+					right_level = level+1;
 				}
 			} else if (n.getLocation() == NodeLocation.LEFT) {
 				left.get(0).add(nc.getOffsetHeight());
 				id++;
 				if (maxlw < nc.getOffsetWidth()) {
 					maxlw = nc.getOffsetWidth();
+					left_level = 1;
 				}
 			} else {
 				right.get(0).add(nc.getOffsetHeight());
 				id++;
 				if (maxrw < nc.getOffsetWidth()) {
 					maxrw = nc.getOffsetWidth();
+					right_level = 1;
 				}
 			}
 		}
@@ -98,8 +114,8 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		
 		T rw = nodes.get(0); // root widget
 
-		maxlw += left.size() * MARGIN;
-		maxrw += right.size() * MARGIN;
+		maxlw += left_level * MARGIN;
+		maxrw += right_level * MARGIN;
 		int max_x = maxlw + rw.getOffsetWidth() + maxrw;
 		int max_y = (lefth > righth) ? lefth : righth;
 		max_y += rw.getOffsetHeight() / 2;
@@ -263,7 +279,7 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 				int h = setBounds(nodes, fcn, level_bounds, current_width + nw.getOffsetWidth(), level + 1, id+1);
 				h = (nw.getOffsetHeight() > h) ? nw.getOffsetHeight() : h;
 				bounds += h;
-				id += n.getNumberOfChildNodes();
+				id += n.getNumberOfChildNodes()+1;
 				level_bounds.get(level).add(h); // add max height of the node
 												// and its child nodes
 			} else { // leaf
@@ -278,6 +294,7 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 				// !!! this part set maximal width
 				if (max_width < current_width + nw.getOffsetWidth()) {
 					max_width = current_width + nw.getOffsetWidth();
+					this.level = level;
 				}
 			}
 		}

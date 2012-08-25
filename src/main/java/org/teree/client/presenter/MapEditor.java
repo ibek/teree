@@ -55,39 +55,39 @@ public class MapEditor implements Presenter {
                 }
 				else if (key == 45) // Insert
 				{
-                	
+                	display.insert();
                 }
 				else if (key == KeyCodes.KEY_DELETE)
 				{
 					display.delete();
 				}
-				else if (key == 67) // C - copy
+				else if (key == 67) // C - copy TODO: change to CTRL+C
 				{
-                	
+                	display.copy();
                 }
-				else if (key == 88) // X - cut
+				else if (key == 88) // X - cut TODO: change to CTRL+X
 				{
-                	
+                	display.cut();
                 }
-				else if (key == 86) // V - paste
+				else if (key == 86) // V - paste TODO: change to CTRL+V
 				{
-                	
+                	display.paste();
                 }
 				else if (key == KeyCodes.KEY_UP)
 				{
-                	
+                	display.up();
                 }
 				else if (key == KeyCodes.KEY_DOWN)
 				{
-                	
+                	display.down();
                 }
 				else if (key == KeyCodes.KEY_LEFT)
 				{
-                	
+                	display.left();
                 }
 				else if (key == KeyCodes.KEY_RIGHT)
 				{
-                	
+                	display.right();
                 }
 			}
 		});

@@ -1,5 +1,7 @@
 #Teree
 
+The structured information database with a tree representation.
+
 ##Steps
 
   1. mvn package

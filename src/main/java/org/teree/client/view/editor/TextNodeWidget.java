@@ -1,5 +1,6 @@
 package org.teree.client.view.editor;
 
+import org.teree.client.Settings;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.shared.data.Node;
@@ -81,6 +82,14 @@ public class TextNodeWidget extends NodeWidget {
         
         editContent.setText(node.getContent().toString());
         
+        // to ensure that the editContent will be focused after all events (key F2)
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                editContent.setFocus(true);
+            }
+        });
+        
         container.remove(content);
         container.add(editContent);
         
@@ -104,8 +113,12 @@ public class TextNodeWidget extends NodeWidget {
 	        content.setStylePrimaryName(resources.basicNodeStyle().view());
         
     	}
-    	
+
     	content.setText(node.getContent().toString());
+    	
+    	if(getOffsetWidth() >= Settings.MAX_WIDTH){
+            content.setWidth(Settings.MAX_WIDTH+"px");
+        }
         
         if (editContent != null) {
             container.remove(editContent);

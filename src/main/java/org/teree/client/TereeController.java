@@ -121,7 +121,7 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
         }, new ErrorCallback() {
 			@Override
 			public boolean error(Message message, Throwable throwable) {
-				// TODO Auto-generated method stub
+				// TODO inform user about the error
 				return false;
 			}
 		}).getMap(oid);

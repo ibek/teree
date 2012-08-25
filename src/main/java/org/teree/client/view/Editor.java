@@ -75,50 +75,42 @@ public class Editor extends Composite implements MapEditor.Display {
 
 	@Override
 	public void insert() {
-		// TODO Auto-generated method stub
-		
+		scene.createTextChildNode();
 	}
 
 	@Override
 	public void copy() {
-		// TODO Auto-generated method stub
-		
+		scene.copySelectedNode();
 	}
 
 	@Override
 	public void cut() {
-		// TODO Auto-generated method stub
-		
+		scene.cutSelectedNode();
 	}
 
 	@Override
 	public void paste() {
-		// TODO Auto-generated method stub
-		
+		scene.pasteNode();
 	}
 
 	@Override
 	public void up() {
-		// TODO Auto-generated method stub
-		
+		scene.selectUpperNode();
 	}
 
 	@Override
 	public void down() {
-		// TODO Auto-generated method stub
-		
+		scene.selectUnderNode();
 	}
 
 	@Override
 	public void left() {
-		// TODO Auto-generated method stub
-		
+		scene.selectLeftNode();
 	}
 
 	@Override
 	public void right() {
-		// TODO Auto-generated method stub
-		
+		scene.selectRightNode();
 	}
 
 }
