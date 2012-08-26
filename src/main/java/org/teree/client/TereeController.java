@@ -11,6 +11,7 @@ import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.teree.client.event.MapReceived;
+import org.teree.client.presenter.MapExplorer;
 import org.teree.client.presenter.MapEditor;
 import org.teree.client.presenter.MapViewer;
 import org.teree.client.presenter.Presenter;
@@ -43,6 +44,7 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 	private HasWidgets container;
 
 	private static final String HOME_LINK = "home";
+	private static final String EXPLORE_LINK = "explore";
 	private static final String VIEW_LINK = "view/oid=";
 	private static final String CREATE_LINK = "create";
 	private static final String EDIT_LINK = "edit/oid=";
@@ -82,6 +84,11 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 					presenter = bean.getInstance();
 
 				}*/
+			} else if (token.startsWith(EXPLORE_LINK)) {
+				IOCBeanDef<MapExplorer> bean = manager.lookupBean(MapExplorer.class);
+				if (bean != null) {
+					presenter = bean.getInstance();
+				}
 			} else if (token.startsWith(VIEW_LINK)) {
 				IOCBeanDef<MapViewer> bean = manager.lookupBean(MapViewer.class);
 				if (bean != null) {
@@ -89,12 +96,11 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 					loadMap(token.substring(VIEW_LINK.length()));
 				}
 			} else if (token.startsWith(CREATE_LINK)) {
-				System.out.println("creating");
 				IOCBeanDef<MapEditor> bean = manager.lookupBean(MapEditor.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
 					presenter.go(container);
-					eventBus.fireEvent(new MapReceived(MapGenerator.complex())); // TODO: create map from templates (even user's)
+					eventBus.fireEvent(new MapReceived(null, MapGenerator.complex())); // TODO: create map from templates (even user's)
 					return;
 				}
 			} else if (token.startsWith(EDIT_LINK)) {
@@ -112,16 +118,16 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 		}
 	}
 	
-	private void loadMap(String oid) {
+	private void loadMap(final String oid) {
 		mapService.call(new RemoteCallback<Node>() {
             @Override
             public void callback(Node response) {
-                eventBus.fireEvent(new MapReceived(response));
+                eventBus.fireEvent(new MapReceived(oid, response));
             }
         }, new ErrorCallback() {
 			@Override
 			public boolean error(Message message, Throwable throwable) {
-				// TODO inform user about the error
+				// TODO inform user about the error - show 404 page
 				return false;
 			}
 		}).getMap(oid);

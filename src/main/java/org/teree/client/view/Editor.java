@@ -1,21 +1,20 @@
 package org.teree.client.view;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.presenter.MapEditor;
-import org.teree.client.view.Viewer.ViewerBinder;
 import org.teree.client.view.editor.Scene;
+import org.teree.client.view.resource.ViewStyle;
 import org.teree.shared.data.Node;
 
 public class Editor extends Composite implements MapEditor.Display {
@@ -24,18 +23,34 @@ public class Editor extends Composite implements MapEditor.Display {
 
     interface EditorBinder extends UiBinder<Widget, Editor> {
     }
+    
+	static {
+		ViewStyle.INSTANCE.css().ensureInjected(); 
+	}
 
     @UiField
     Button btnNew;
 
     @UiField
     Button btnSave;
+
+    @UiField
+    Label linkExplore;
+
+    @UiField
+    Label linkHelp;
     
     @UiField(provided = true)
     Scene scene;
     
+    /**
+     * TODO: make the status floatable on a visible place
+     */
     @UiField
     Label status;
+    
+    //@UiField
+    //UserWidget user;
     
     @PostConstruct
     public void init() {
@@ -111,6 +126,39 @@ public class Editor extends Composite implements MapEditor.Display {
 	@Override
 	public void right() {
 		scene.selectRightNode();
+	}
+
+	@Override
+	public void info(String msg) {
+		status.getElement().getStyle().setColor("black");
+		setStatus(msg);
+	}
+
+	@Override
+	public void error(String msg) {
+		status.getElement().getStyle().setColor("red");
+		setStatus(msg);
+	}
+	
+	private void setStatus(String msg) {
+		status.setText(msg);
+        Timer t = new Timer() {
+            @Override
+            public void run() {
+                status.setText("");
+            }
+        };
+        t.schedule(5000);
+	}
+
+	@Override
+	public HasClickHandlers getExploreLink() {
+		return linkExplore;
+	}
+
+	@Override
+	public HasClickHandlers getHelpLink() {
+		return linkHelp;
 	}
 
 }

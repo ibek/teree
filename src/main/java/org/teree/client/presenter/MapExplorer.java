@@ -1,52 +1,42 @@
 package org.teree.client.presenter;
 
+import java.util.List;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import org.teree.client.Text;
-import org.teree.client.event.MapReceived;
-import org.teree.client.event.MapReceivedHandler;
-import org.teree.client.view.editor.NodeWidget;
-import org.teree.client.view.editor.event.SelectNode;
-import org.teree.client.view.editor.event.SelectNodeHandler;
-import org.teree.shared.data.Node;
+import org.jboss.errai.bus.client.api.ErrorCallback;
+import org.jboss.errai.bus.client.api.Message;
+import org.jboss.errai.bus.client.api.RemoteCallback;
+import org.jboss.errai.ioc.client.api.Caller;
+import org.teree.shared.MapService;
+import org.teree.shared.data.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 @Dependent
-public class MapViewer implements Presenter {
+public class MapExplorer implements Presenter {
 
-    public interface Display {
+	public interface Display {
         HasClickHandlers getNewButton();
         HasClickHandlers getExploreLink();
         HasClickHandlers getHelpLink();
         Widget asWidget();
-        void setRoot(Node root);
-        void info(String msg);
+        void setData(List<Map> maps);
     }
-    
-    @Inject @Named(value="eventBus")
-    private HandlerManager eventBus;
+	
+	@Inject
+	private Caller<MapService> mapService;
     
     @Inject
     private Display display;
-    
-    public void bind() {
-    	
-        eventBus.addHandler(MapReceived.TYPE, new MapReceivedHandler() {
-			@Override
-			public void received(MapReceived event) {
-				display.setRoot(event.getRoot());
-				display.info(Text.LANG.mapReceived(event.getOid()));
-			}
-		});
+	
+	public void bind() {
 		
         display.getNewButton().addClickHandler(new ClickHandler() {
 			@Override
@@ -61,14 +51,29 @@ public class MapViewer implements Presenter {
 				History.newItem("explore");
 			}
 		});
-        
-    }
-    
-    @Override
-    public void go(HasWidgets container) {
-        bind();
+	}
+	
+	@Override
+	public void go(HasWidgets container) {
+		bind();
+		loadData();
         container.clear();
         container.add(display.asWidget());
-    }
+	}
+	
+	private void loadData() {
+		mapService.call(new RemoteCallback<List<Map>>() {
+            @Override
+            public void callback(List<Map> response) {
+                display.setData(response);
+            }
+        }, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				// TODO inform user about the error - show 404 page
+				return false;
+			}
+		}).getAll();
+	}
 
 }

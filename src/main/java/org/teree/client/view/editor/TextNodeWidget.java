@@ -93,6 +93,9 @@ public class TextNodeWidget extends NodeWidget {
         container.remove(content);
         container.add(editContent);
         
+        // to prevent the conflict between copy of text and nodes while this node is edited
+        getParent().fireEvent(new SelectNode(null));
+        
     }
     
     public void view() {

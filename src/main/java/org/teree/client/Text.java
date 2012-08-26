@@ -5,7 +5,7 @@ import com.google.gwt.i18n.client.Messages;
 
 public class Text {
     
-    private static Text.Type tt;
+    public static Text.Type LANG = GWT.create(Text.Type.class);
     
     private Text(){}
     
@@ -13,17 +13,10 @@ public class Text {
 
         String mapReceived(String oid);
         
-        String mapUpdated();
+        String mapUpdated(String oid);
         
-        String mapSaved(String oid);
+        String mapCreated(String oid);
         
-    }
-    
-    public static Text.Type produceTextTypes() {
-        if(tt == null){
-            tt = GWT.create(Text.Type.class);
-        }
-        return tt;
     }
     
 }

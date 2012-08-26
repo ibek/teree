@@ -1,6 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tw='urn:import:org.teree.client.view.viewer'
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:exp='urn:import:org.teree.client.view.explorer'
 	xmlns:view="org.teree.client.view">
 	
 	<ui:with field='res' type="org.teree.client.view.resource.ViewStyle" />
@@ -14,13 +14,16 @@
 					<g:Label ui:field="linkExplore" addStyleNames="{res.css.middle_header_link} {res.css.middle_header_element}">Explore</g:Label>
 					<g:Label ui:field="linkHelp" addStyleNames="{res.css.middle_header_link} {res.css.middle_header_element}">Help</g:Label>
 				</g:HorizontalPanel>
-				<!-- <g:FlowPanel addStyleNames="{res.css.header_login}">
-					<view:UserWidget ui:field="user">
-					</view:UserWidget>
+				<!--<g:FlowPanel addStyleNames="{res.css.header_login}">
+				 <view:UserWidget ui:field="user">
+					<g:Label addStyleNames="{res.css.header_login_user}">user</g:Label>
+				    <g:Button ui:field='btnSettings' ui:text="Settings"></g:Button>
+				    <g:Button ui:field='btnLogout' ui:text="Logout"></g:Button>
+				</view:UserWidget>
 				</g:FlowPanel> -->
 			</g:HorizontalPanel>
 		</g:FlowPanel>
-		<tw:Scene ui:field="scene"></tw:Scene>
+		<exp:Scene ui:field="scene"></exp:Scene>
 		<g:Label ui:field='status' addStyleNames="{res.css.status}"></g:Label>
 	</g:FlowPanel>
 

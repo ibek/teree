@@ -34,7 +34,18 @@ public class Node implements Cloneable {
             childNodes = new ArrayList<Node>();
         }
         child.setParent(this);
-        childNodes.add(child);
+        if (parent == null && child.getLocation() == NodeLocation.LEFT) { // guarantee that left root child nodes will be first
+        	
+        	int id = 0;
+        	for(; id<childNodes.size(); ++id){ // find index of last left child
+        		if (childNodes.get(id).getLocation() == NodeLocation.RIGHT) {
+        			break;
+        		}
+        	}
+        	childNodes.add(id, child);
+        } else {
+        	childNodes.add(child);
+        }
     }
     
     public void insertBefore(Node node) {

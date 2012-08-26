@@ -167,12 +167,9 @@ public class Scene extends Composite {
     	}
     }
     
-    /**
-     * FIXME: conflict between CTRL+key for text and for nodes, cannot copy a text in node and paste the text
-     */
     public void pasteNode() {
-    	if (copied != null) {
-    		//insertChildNode(copied.clone());
+    	if (selected != null && copied != null) { // it has to be selected because of the conflict between copy of text and node
+    		insertChildNode(copied.clone());
     	}
     }
     
@@ -237,26 +234,29 @@ public class Scene extends Composite {
     }
     
     /**======================================================*/
-    
-    /**
-     * FIXME: doesn't work if we want to get back to root when we created a left child of root
-     */
+
     private void selectPrevious() {
     	if (selected != null) {
-	    	// get number of all the previous nodes in parent node
-			Node snode = selected.getNode();
-			List<Node> cn = snode.getParent().getChildNodes();
-	        Node child = null;
-	        int count = 0;
-	        for(int i=0; cn != null && i<cn.size(); ++i){
-	            count += (child != null)?child.getNumberOfChildNodes()+1:0;
-	            child = cn.get(i);
-	            if(child == snode){
-	                break;
-	            }
-	        }
-	        
+    		
+    		int count = 0;
 	        int id = container.getWidgetIndex(selected);
+    		
+    		if (selected.getNode().getParent().getParent() == null) { // parent is root
+    			count = id - NODE_WIDGET_MARK - 1; // to get the right index of the root
+    		} else {
+		    	// get number of all the previous nodes in parent node
+				Node snode = selected.getNode();
+				List<Node> cn = snode.getParent().getChildNodes();
+		        Node child = null;
+		        for(int i=0; cn != null && i<cn.size(); ++i){
+		            count += (child != null)?child.getNumberOfChildNodes()+1:0;
+		            child = cn.get(i);
+		            if(child == snode){
+		                break;
+		            }
+		        }
+    		}
+	        
 	        NodeWidget prev = (NodeWidget)container.getWidget(id - count - 1);
 	        if (prev.getNode() == selected.getNode().getParent()) { // selected is child of previous node
 	        	selectNode(prev);
@@ -274,10 +274,6 @@ public class Scene extends Composite {
     	}
     }
     
-    /**
-     * FIXME: fix add left node with parent root - there are strange widths
-     * @param child
-     */
     private void insertChildNode(Node child) {
     	if (selected != null) {
     		

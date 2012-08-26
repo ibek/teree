@@ -1,6 +1,9 @@
 package org.teree.shared;
 
+import java.util.List;
+
 import org.jboss.errai.bus.server.annotations.Remote;
+import org.teree.shared.data.Map;
 import org.teree.shared.data.NodeChange;
 import org.teree.shared.data.Node;
 
@@ -12,6 +15,8 @@ import org.teree.shared.data.Node;
 */
 @Remote
 public interface MapService {
+	
+	public List<Map> getAll();
     
     public Node getMap(String oid);
     

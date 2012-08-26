@@ -28,7 +28,7 @@ public class Keyboard {
     }
 
     public void onKeyUp(Event event) {
-    	eventBus.fireEvent(new GlobalKeyUp(DOM.eventGetKeyCode(event)));
+    	eventBus.fireEvent(new GlobalKeyUp(event));
     }
     
     private final static class WindowCloseHandlerImpl implements CloseHandler<Window> {

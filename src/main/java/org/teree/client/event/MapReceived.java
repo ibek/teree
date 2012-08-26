@@ -10,8 +10,15 @@ public class MapReceived extends GwtEvent<MapReceivedHandler> {
 
     private Node root;
     
-    public MapReceived(Node root) {
+    private String oid;
+    
+    public MapReceived(String oid, Node root) {
+    	this.oid = oid;
         this.root = root;
+    }
+    
+    public String getOid() {
+    	return oid;
     }
     
     public Node getRoot() {

@@ -1,31 +1,28 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tw='urn:import:org.teree.client.view.editor'>
-	<ui:style>
-
-		.rootPanel {
-		  width: 100%;
-		  height: 100%;
-		}
-
-		.editPanel {
-	      float: right;
-		  width: 300px;
-		}
-		
-		.status {
-		  float: right;
-		}
-		
-	</ui:style>
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tw='urn:import:org.teree.client.view.editor'
+	xmlns:view="org.teree.client.view">
+	
+	<ui:with field='res' type="org.teree.client.view.resource.ViewStyle" />
   
 	<g:FlowPanel>
+		<g:FlowPanel addStyleNames="{res.css.header}"> <!-- header -->
+			<g:HorizontalPanel addStyleNames="{res.css.middle_header}">
+				<g:HorizontalPanel>
+					<g:Label addStyleNames="{res.css.logo}">teree</g:Label>
+				    <g:Button ui:field='btnNew' ui:text="New" addStyleNames="{res.css.middle_header_element}"></g:Button>
+				    <g:Button ui:field='btnSave' ui:text="Save" addStyleNames="{res.css.middle_header_element}"></g:Button>
+					<g:Label ui:field="linkExplore" addStyleNames="{res.css.middle_header_link} {res.css.middle_header_element}">Explore</g:Label>
+					<g:Label ui:field="linkHelp" addStyleNames="{res.css.middle_header_link} {res.css.middle_header_element}">Help</g:Label>
+				</g:HorizontalPanel>
+				<!-- <g:FlowPanel addStyleNames="{res.css.header_login}">
+					<view:UserWidget ui:field="user">
+					</view:UserWidget>
+				</g:FlowPanel> -->
+			</g:HorizontalPanel>
+		</g:FlowPanel>
 		<tw:Scene ui:field="scene"></tw:Scene>
-		<!-- <ui:EditPanel> -->
-		    <g:Button ui:field='btnNew' ui:text="New"></g:Button>
-		    <g:Button ui:field='btnSave' ui:text="Save"></g:Button>
-		<!--</ui:EditPanel> -->
-		<g:Label ui:field='status' addStyleNames="{style.status}"></g:Label>
+		<g:Label ui:field='status' addStyleNames="{res.css.status}"></g:Label>
 	</g:FlowPanel>
 
 </ui:UiBinder> 

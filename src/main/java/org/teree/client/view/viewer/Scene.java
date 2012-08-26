@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import org.teree.client.Settings;
 import org.teree.client.map.MapType;
 import org.teree.client.map.MindMap;
 import org.teree.client.map.Renderer;
+import org.teree.client.view.viewer.NodeWidget;
 import org.teree.shared.data.Node;
 
 import com.google.gwt.canvas.client.Canvas;
@@ -20,12 +17,8 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-@Dependent
 public class Scene extends Composite {
 	
-	private static final int NODE_WIDGET_MARK = 1; // from this mark are node widgets in container
-    
-	private Node root;
 	private Renderer<NodeWidget> map;
 
     private AbsolutePanel container;
@@ -34,6 +27,8 @@ public class Scene extends Composite {
     private HandlerManager viewBus = new HandlerManager(null);
     
     public Scene() {
+    	
+        setMapType(Settings.DEFAULT_MAP_TYPE);
         
         bind();
         
@@ -60,7 +55,6 @@ public class Scene extends Composite {
     }
     
     public void setRoot(Node root) {
-    	this.root = root;
     	container.clear();
         container.add(canvas);
         
@@ -89,19 +83,14 @@ public class Scene extends Composite {
     private List<NodeWidget> getNodeWidgets() {
     	Iterator<Widget> it = container.iterator();
     	List<NodeWidget> nodes = new ArrayList<NodeWidget>();
-    	for (int i=0; it.hasNext(); ++i) {
-    		if(i >= NODE_WIDGET_MARK){
-    			nodes.add((NodeWidget)it.next());
+    	while (it.hasNext()) {
+    		Widget w = it.next();
+    		if(w instanceof NodeWidget){
+    			nodes.add((NodeWidget)w); // there is the casting from Widget to NodeWidget
     		}
     	}
     	
     	return nodes;
-    }
-    
-    @Produces
-    @Named(value="viewBus")
-    private HandlerManager produceViewBus() {
-    	return viewBus;
     }
     
 }

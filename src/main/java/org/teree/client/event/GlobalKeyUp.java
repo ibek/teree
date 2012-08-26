@@ -1,19 +1,20 @@
 package org.teree.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.user.client.Event;
 
 public class GlobalKeyUp extends GwtEvent<GlobalKeyUpHandler> {
     
     public static Type<GlobalKeyUpHandler> TYPE = new Type<GlobalKeyUpHandler>();
 
-    private int key;
+    private Event event;
     
-    public GlobalKeyUp(int key) {
-        this.key = key;
+    public GlobalKeyUp(Event event) {
+        this.event = event;
     }
     
-    public int getKey() {
-    	return key;
+    public Event getEvent() {
+    	return event;
     }
     
     @Override

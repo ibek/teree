@@ -2,9 +2,6 @@
 most important:
 
 fix most of serious bugs
-edit a view existujici mapy
-save
-jednoduchy explore - vypis vsech map podle nazvu root nodu
 ImageNodeWidget, LinkNodeWidget, IconTextNodeWidget
 
 =============
@@ -12,7 +9,7 @@ ImageNodeWidget, LinkNodeWidget, IconTextNodeWidget
 (collaboration)
 (premisteni nodu pres drag & drop) - jindy
 
-udelat testovani ... nastavi testovaci mapy a vytvori z nich obrazky ... manualne se potom projdou obrazky zda jsou zobrazeny spravne
+udelat testovani ... vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
 
 pridat podporu obrazku jako obsahu node
 

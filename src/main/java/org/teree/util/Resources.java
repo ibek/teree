@@ -27,7 +27,7 @@ public class Resources {
    public DB getDatabase(InjectionPoint injectionPoint) {
        if(db == null){
            try {
-               Mongo mongodb = new Mongo("localhost");
+               Mongo mongodb = new Mongo("127.0.0.1");
                db = mongodb.getDB(DBNAME);
            } catch (UnknownHostException e) {
                e.printStackTrace();

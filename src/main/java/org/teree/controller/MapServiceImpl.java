@@ -1,5 +1,6 @@
 package org.teree.controller;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,6 +13,7 @@ import org.jboss.errai.bus.client.framework.RequestDispatcher;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.teree.dao.NodeManager;
 import org.teree.shared.MapService;
+import org.teree.shared.data.Map;
 import org.teree.shared.data.NodeChange;
 import org.teree.shared.data.Node;
 
@@ -26,6 +28,12 @@ public class MapServiceImpl implements MapService {
     private NodeManager _nm;
     
     private RequestDispatcher _dispatcher = ErraiBus.getDispatcher();
+
+	@Override
+	public List<Map> getAll() {
+        _log.log(Level.INFO, "getAll()");
+		return _nm.all();
+	}
 
     @Override
     public Node getMap(String oid) {
