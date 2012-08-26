@@ -1,7 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tw='urn:import:org.teree.client.view.viewer'
-	xmlns:view="org.teree.client.view">
+	xmlns:view="urn:import:org.teree.client.view">
 	
 	<ui:with field='res' type="org.teree.client.view.resource.ViewStyle" />
 
@@ -14,10 +14,8 @@
 					<g:Label ui:field="linkExplore" addStyleNames="{res.css.middle_header_link} {res.css.middle_header_element}">Explore</g:Label>
 					<g:Label ui:field="linkHelp" addStyleNames="{res.css.middle_header_link} {res.css.middle_header_element}">Help</g:Label>
 				</g:HorizontalPanel>
-				<!-- <g:FlowPanel addStyleNames="{res.css.header_login}">
-					<view:UserWidget ui:field="user">
-					</view:UserWidget>
-				</g:FlowPanel> -->
+				<view:UserWidget ui:field="user" addStyleNames="{res.css.header_login}">
+				</view:UserWidget>
 			</g:HorizontalPanel>
 		</g:FlowPanel>
 		<tw:Scene ui:field="scene"></tw:Scene>

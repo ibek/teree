@@ -8,6 +8,7 @@ import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
+import org.teree.client.Settings;
 import org.teree.client.Text;
 import org.teree.client.event.GlobalKeyUp;
 import org.teree.client.event.GlobalKeyUpHandler;
@@ -117,14 +118,14 @@ public class MapEditor implements Presenter {
         display.getNewButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				History.newItem("create");
+				History.newItem(Settings.CREATE_LINK);
 			}
 		});
         
         display.getExploreLink().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				History.newItem("explore");
+				History.newItem(Settings.EXPLORE_LINK);
 			}
 		});
         

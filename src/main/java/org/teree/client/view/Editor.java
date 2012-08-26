@@ -49,8 +49,8 @@ public class Editor extends Composite implements MapEditor.Display {
     @UiField
     Label status;
     
-    //@UiField
-    //UserWidget user;
+    @UiField
+    UserWidget user;
     
     @PostConstruct
     public void init() {

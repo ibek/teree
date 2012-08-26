@@ -3,6 +3,7 @@ package org.teree.client.view;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Button;
 
 /**
  * 
@@ -19,6 +20,10 @@ public class UserWidget extends Composite {
 		container = new HorizontalPanel();
 		user = new Label("user");
 		container.add(user);
+		
+		Button btnSignIn = new Button("sign in");
+		container.add(btnSignIn);
+		
 		initWidget(container);
 	}
 	

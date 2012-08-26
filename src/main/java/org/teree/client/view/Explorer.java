@@ -41,8 +41,8 @@ public class Explorer extends Composite implements MapExplorer.Display {
     @UiField
     Scene scene;
     
-    //@UiField
-    //UserWidget user;
+    @UiField
+    UserWidget user;
     
     @PostConstruct
     public void init() {

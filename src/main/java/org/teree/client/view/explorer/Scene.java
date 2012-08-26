@@ -2,6 +2,7 @@ package org.teree.client.view.explorer;
 
 import java.util.List;
 
+import org.teree.client.Settings;
 import org.teree.shared.data.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -27,7 +28,7 @@ public class Scene extends Composite {
 			public void onClick(ClickEvent event) {
 				Cell c = table.getCellForEvent(event);
 				String oid = c.getElement().getFirstChild().getNodeValue();
-				History.newItem("view/oid="+oid);
+				History.newItem(Settings.VIEW_LINK+oid);
 			}
 		});
 		container.add(table);

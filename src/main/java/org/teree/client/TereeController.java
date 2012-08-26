@@ -42,12 +42,6 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 	private Keyboard keyboard;
 
 	private HasWidgets container;
-
-	private static final String HOME_LINK = "home";
-	private static final String EXPLORE_LINK = "explore";
-	private static final String VIEW_LINK = "view/oid=";
-	private static final String CREATE_LINK = "create";
-	private static final String EDIT_LINK = "edit/oid=";
 	
 	/**
 	 * Bind handlers to eventBus.
@@ -66,7 +60,7 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 		bind();
 
 		if ("".equals(History.getToken())) {
-			History.newItem(CREATE_LINK);
+			History.newItem(Settings.CREATE_LINK);
 		} else {
 			History.fireCurrentHistoryState();
 		}
@@ -78,24 +72,24 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 		if (token != null) {
 			Presenter presenter = null;
 
-			if (token.equals(HOME_LINK)) {
+			if (token.equals(Settings.HOME_LINK)) {
 				/**IOCBeanDef<MapView> bean = manager.lookupBean(MapView.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
 
 				}*/
-			} else if (token.startsWith(EXPLORE_LINK)) {
+			} else if (token.startsWith(Settings.EXPLORE_LINK)) {
 				IOCBeanDef<MapExplorer> bean = manager.lookupBean(MapExplorer.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
 				}
-			} else if (token.startsWith(VIEW_LINK)) {
+			} else if (token.startsWith(Settings.VIEW_LINK)) {
 				IOCBeanDef<MapViewer> bean = manager.lookupBean(MapViewer.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
-					loadMap(token.substring(VIEW_LINK.length()));
+					loadMap(token.substring(Settings.VIEW_LINK.length()));
 				}
-			} else if (token.startsWith(CREATE_LINK)) {
+			} else if (token.startsWith(Settings.CREATE_LINK)) {
 				IOCBeanDef<MapEditor> bean = manager.lookupBean(MapEditor.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
@@ -103,11 +97,11 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 					eventBus.fireEvent(new MapReceived(null, MapGenerator.complex())); // TODO: create map from templates (even user's)
 					return;
 				}
-			} else if (token.startsWith(EDIT_LINK)) {
+			} else if (token.startsWith(Settings.EDIT_LINK)) {
 				IOCBeanDef<MapEditor> bean = manager.lookupBean(MapEditor.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
-					loadMap(token.substring(EDIT_LINK.length()));
+					loadMap(token.substring(Settings.EDIT_LINK.length()));
 				}
 			}
 			

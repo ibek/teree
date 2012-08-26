@@ -4,6 +4,7 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.teree.client.Settings;
 import org.teree.client.Text;
 import org.teree.client.event.MapReceived;
 import org.teree.client.event.MapReceivedHandler;
@@ -51,14 +52,14 @@ public class MapViewer implements Presenter {
         display.getNewButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				History.newItem("create");
+				History.newItem(Settings.CREATE_LINK);
 			}
 		});
         
         display.getExploreLink().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				History.newItem("explore");
+				History.newItem(Settings.EXPLORE_LINK);
 			}
 		});
         
