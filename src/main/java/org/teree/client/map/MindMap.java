@@ -10,6 +10,7 @@ import org.teree.shared.data.Node.NodeLocation;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -27,9 +28,13 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 	 * the longest parent 2
 	 */
 	private int level;
+	
+	private int left = 0;
+	private int top = 0;
 
 	@Override
 	protected void render(Canvas canvas, List<T> nodes, Node root, boolean editable) {
+		
 		/**
 		 * left.get(col).get(row)
 		 */
@@ -128,10 +133,13 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		Context2d context = canvas.getContext2d();
 
 		id = 0;
+		
+		this.left = canvas.getAbsoluteLeft() - canvas.getParent().getAbsoluteLeft(); // getRelativeLeft
+		this.top = canvas.getAbsoluteTop() - canvas.getParent().getAbsoluteTop(); // getRelativeTop
 
 		context.beginPath(); // of lines
 		AbsolutePanel panel = (AbsolutePanel) rw.getParent();
-		panel.setWidgetPosition(rw, maxlw, max_y / 2 - rw.getOffsetHeight()); // set root node into middle of scene
+		panel.setWidgetPosition(rw, this.left + maxlw, this.top + max_y / 2 - rw.getOffsetHeight()); // set root node into middle of scene
 		DOM.setStyleAttribute(rw.getElement(), "visibility", "visible");
 		id++;
 
@@ -226,7 +234,7 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 			lvl = ((level_bounds.size() > level) ? level_bounds.get(level).get(status.get(level)) / 2 : 0);
 			int y = lvl + py;
 
-			panel.setWidgetPosition(nw, x, y - nw.getOffsetHeight() / 2);
+			panel.setWidgetPosition(nw, this.left + x, this.top + y - nw.getOffsetHeight() / 2);
 			DOM.setStyleAttribute(nw.getElement(), "visibility", "visible");
 			status.set(level, status.get(level) + 1);
 			id++;

@@ -1,5 +1,6 @@
 
 .view {
+	text-align: left;
 	font-family: monospace;
 	font-size: 14px;
 	white-space: pre-line;

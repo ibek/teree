@@ -10,6 +10,8 @@ import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -24,33 +26,30 @@ public abstract class Renderer<T extends Widget & NodeInterface> {
 
     public void renderEditor(final Canvas canvas, final List<T> nodes, final Node root) {
     	prepare(nodes);
-    	Timer t = new Timer() {
+    	Scheduler.get().scheduleDeferred(new ScheduledCommand() { // to ensure that widget automatically resized size is already set
             @Override
-            public void run() {
+            public void execute() {
                 boolean succ = resize(nodes);
                 if(!succ){ // some node is too wide
                     resize(nodes);
                 }
             	render(canvas, nodes, root, true);
-                
             }
-        };
-        t.schedule(10); // to ensure that widget automatically resized size is already set
+        });
     }
 
     public void renderViewer(final Canvas canvas, final List<T> nodes, final Node root) {
     	prepare(nodes);
-    	Timer t = new Timer() {
+    	Scheduler.get().scheduleDeferred(new ScheduledCommand() { // to ensure that widget automatically resized size is already set
             @Override
-            public void run() {
+            public void execute() {
                 boolean succ = resize(nodes);
                 if(!succ){ // some node is too wide
                     resize(nodes);
                 }
-                render(canvas, nodes, root, false);
+            	render(canvas, nodes, root, false);
             }
-        };
-        t.schedule(10); // to ensure that widget automatically resized size is already set
+        });
     }
     
     /**

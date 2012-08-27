@@ -1,6 +1,6 @@
 package org.teree.client.view.editor.event;
 
-import org.teree.client.view.editor.NodeWidget;
+import org.teree.shared.data.Node;
 
 import com.google.gwt.event.shared.GwtEvent;
 
@@ -8,10 +8,14 @@ public class NodeChanged extends GwtEvent<NodeChangedHandler> {
     
     public static Type<NodeChangedHandler> TYPE = new Type<NodeChangedHandler>();
 
-    private NodeWidget node;
+    private Node node;
     
-    public NodeChanged(NodeWidget node) {
+    public NodeChanged(Node node) {
         this.node = node;
+    }
+    
+    public Node getNode() {
+    	return node;
     }
     
     @Override
@@ -21,7 +25,7 @@ public class NodeChanged extends GwtEvent<NodeChangedHandler> {
 
     @Override
     protected void dispatch(NodeChangedHandler handler) {
-        handler.changed(this, node);
+        handler.changed(this);
     }
     
 }

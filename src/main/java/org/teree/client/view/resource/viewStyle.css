@@ -5,6 +5,22 @@
 	margin-bottom: 10px;
 }
 
+.editPanel {
+	background-color: #e0e0e0;
+	width: 600px;
+	height: 20px;
+	margin: 0 auto;
+	margin-top: -10px;
+	margin-bottom: 10px;
+	padding-bottom: 5px;
+	border: 1px solid #101010;
+	border-top: none;
+}
+
+.scene {
+	text-align: center;
+}
+
 .middle_header {
 	padding-top: 5px;
 	color: #101010;

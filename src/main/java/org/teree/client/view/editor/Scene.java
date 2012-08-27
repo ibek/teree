@@ -19,6 +19,7 @@ import org.teree.shared.data.Node.NodeLocation;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -72,11 +73,11 @@ public class Scene extends Composite {
         });
         
         container.addHandler(new NodeChangedHandler() {
-            @Override
-            public void changed(NodeChanged event, NodeWidget node) {
-                update(null);
-            }
-        }, NodeChanged.TYPE);
+			@Override
+			public void changed(NodeChanged event) {
+				update(event.getNode());
+			}
+		}, NodeChanged.TYPE);
         
     }
     
@@ -229,6 +230,20 @@ public class Scene extends Composite {
     			int id = container.getWidgetIndex(selected);
                 NodeWidget next = (NodeWidget)container.getWidget(id + selected.getNode().getNumberOfLeftChildNodes() + 1);
             	selectNode(next);
+    		}
+    	}
+    }
+    
+    /**
+     * TODO: add bold into Node and ensure right loading and change even in the node here
+     * TODO: enable to change the bold with CTRL+B
+     */
+    public void changeBoldOfSelectedNode() {
+    	if (selected != null) {
+    		if (selected.getElement().getStyle().getFontWeight().compareTo("bold") != 0) {
+    			selected.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+    		} else {
+    			selected.getElement().getStyle().setFontWeight(FontWeight.NORMAL);
     		}
     	}
     }

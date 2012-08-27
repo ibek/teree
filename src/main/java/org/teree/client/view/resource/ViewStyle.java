@@ -14,6 +14,8 @@ public interface ViewStyle extends ClientBundle {
 	
 	public interface ViewStyleCssResource extends CssResource {
 	    String header();
+	    String editPanel();
+	    String scene();
 	    String middle_header();
 	    String logo();
 	    String middle_header_element();

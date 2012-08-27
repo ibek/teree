@@ -1,6 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tw='urn:import:org.teree.client.view.editor'
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:edit='urn:import:org.teree.client.view.editor'
 	xmlns:view="urn:import:org.teree.client.view">
 	
 	<ui:with field='res' type="org.teree.client.view.resource.ViewStyle" />
@@ -19,7 +19,8 @@
 				</view:UserWidget>
 			</g:HorizontalPanel>
 		</g:FlowPanel>
-		<tw:Scene ui:field="scene"></tw:Scene>
+		<edit:EditPanel ui:field="edit" addStyleNames="{res.css.editPanel}"></edit:EditPanel>
+		<edit:Scene ui:field="scene" addStyleNames="{res.css.scene}"></edit:Scene>
 		<g:Label ui:field='status' addStyleNames="{res.css.status}"></g:Label>
 	</g:FlowPanel>
 

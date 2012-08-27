@@ -3,6 +3,8 @@ package org.teree.client.view;
 import javax.annotation.PostConstruct;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -13,6 +15,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.presenter.MapEditor;
+import org.teree.client.view.editor.EditPanel;
 import org.teree.client.view.editor.Scene;
 import org.teree.client.view.resource.ViewStyle;
 import org.teree.shared.data.Node;
@@ -43,6 +46,9 @@ public class Editor extends Composite implements MapEditor.Display {
     @UiField(provided = true)
     Scene scene;
     
+    @UiField
+    EditPanel edit;
+    
     /**
      * TODO: make the status floatable on a visible place
      */
@@ -56,6 +62,23 @@ public class Editor extends Composite implements MapEditor.Display {
     public void init() {
     	scene = new Scene();
         initWidget(uiBinder.createAndBindUi(this));
+        bind();
+    }
+    
+    private void bind() {
+    	edit.getCreateTextButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scene.createTextChildNode();
+			}
+		});
+    	
+    	edit.getBoldButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scene.changeBoldOfSelectedNode();
+			}
+		});
     }
     
     @Override

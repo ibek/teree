@@ -1,16 +1,25 @@
 
-most important:
+stage1:
 
 fix most of serious bugs
-ImageNodeWidget, LinkNodeWidget, IconTextNodeWidget
+edit panel - bold, color, new child(image, url) ...
+implementuj bold do Node jako Boolean
+vytvoreni kategorii a podkategorii pro mapy
+ImageNodeWidget, LinkNodeWidget, IconTextNodeWidget, ConnectorNodeWidget (to connect another map)
+service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
 
-=============
+stage2:
 
-(collaboration)
-(premisteni nodu pres drag & drop) - jindy
+login - openId
+public & private maps
+
+milestone1:
 
 udelat testovani ... vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
+direct explore - novy typ generovani mapy
 
-pridat podporu obrazku jako obsahu node
+milestone2:
+
+collaboration
 
 
