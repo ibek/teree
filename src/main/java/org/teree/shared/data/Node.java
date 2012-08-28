@@ -96,6 +96,9 @@ public class Node implements Cloneable {
         else if (content instanceof Link) {
         	type = NodeType.Link;
         }
+        else if (content instanceof ImageLink) {
+        	type = NodeType.ImageLink;
+        }
         else {
         	type = NodeType.None;
         }
@@ -155,7 +158,8 @@ public class Node implements Cloneable {
         None,
         String,
         IconString,
-        Link;
+        Link,
+        ImageLink;
     }
 
     public enum NodeLocation implements Serializable {

@@ -13,6 +13,7 @@ import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
+import org.teree.shared.data.ImageLink;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 
@@ -144,6 +145,20 @@ public class Scene extends Composite {
     public void createTextChildNode() {
     	Node child = new Node();
     	child.setContent("");
+    	insertChildNode(child);
+    	
+    	 // to ensure that the node can be focused after insert
+    	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+        		editSelectedNode();
+            }
+        });
+    }
+    
+    public void createImageChildNode() {
+    	Node child = new Node();
+    	child.setContent(new ImageLink());
     	insertChildNode(child);
     	
     	 // to ensure that the node can be focused after insert
@@ -356,6 +371,9 @@ public class Scene extends Composite {
     	switch(node.getType()){
 	        case String: {
 	            return new TextNodeWidget(node);
+	        }
+	        case ImageLink: {
+	        	return new ImageNodeWidget(node);
 	        }
 	    }
     	

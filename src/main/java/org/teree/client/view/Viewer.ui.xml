@@ -18,7 +18,7 @@
 				</view:UserWidget>
 			</g:HorizontalPanel>
 		</g:FlowPanel>
-		<tw:Scene ui:field="scene"></tw:Scene>
+		<tw:Scene ui:field="scene" addStyleNames="{res.css.scene}"></tw:Scene>
 		<g:Label ui:field='status' addStyleNames="{res.css.status}"></g:Label>
 	</g:FlowPanel>
 

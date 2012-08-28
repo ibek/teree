@@ -3,11 +3,11 @@ package org.teree.shared.data;
 import org.jboss.errai.common.client.api.annotations.Portable;
 
 @Portable
-public class Link {
+public class ImageLink {
 
 	private String url;
 	
-	public Link() {
+	public ImageLink() {
 		
 	}
 

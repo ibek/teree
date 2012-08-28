@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import org.bson.types.ObjectId;
 import org.teree.shared.data.IconString;
+import org.teree.shared.data.ImageLink;
 import org.teree.shared.data.Link;
 import org.teree.shared.data.Map;
 import org.teree.shared.data.Node;
@@ -94,6 +95,12 @@ public class NodeManager {
 	            	m.setRootContent(link);
 	                break;
 	            }
+	            case ImageLink: {
+	            	ImageLink link = new ImageLink();
+	            	link.setUrl((String)dbo.get("url"));
+	            	m.setRootContent(link);
+	                break;
+	            }
         	}
         	
         	
@@ -136,6 +143,11 @@ public class NodeManager {
                 doc.put("url", link.getUrl());
                 break;
             }
+            case ImageLink: {
+            	ImageLink link = (ImageLink)value;
+                doc.put("url", link.getUrl());
+                break;
+            }
         }
         
         if(root.getLocation() != null){
@@ -164,6 +176,12 @@ public class NodeManager {
             }
             case Link: {
             	Link link = new Link();
+            	link.setUrl((String)root.get("url"));
+                node.setContent(link);
+                break;
+            }
+            case ImageLink: {
+            	ImageLink link = new ImageLink();
             	link.setUrl((String)root.get("url"));
                 node.setContent(link);
                 break;

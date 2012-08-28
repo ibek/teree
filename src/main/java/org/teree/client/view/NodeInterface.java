@@ -10,6 +10,4 @@ public interface NodeInterface {
 	
 	public int getWidgetHeight();
 	
-	public void update();
-	
 }

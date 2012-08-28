@@ -5,7 +5,7 @@ fix most of serious bugs
 edit panel - bold, color, new child(image, url) ...
 implementuj bold do Node jako Boolean
 vytvoreni kategorii a podkategorii pro mapy
-ImageNodeWidget, LinkNodeWidget, IconTextNodeWidget, ConnectorNodeWidget (to connect another map)
+LinkNodeWidget, IconTextNodeWidget, ConnectorNodeWidget (to connect another map)
 service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
 
 stage2:

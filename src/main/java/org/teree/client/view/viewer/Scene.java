@@ -69,6 +69,11 @@ public class Scene extends Composite {
 		switch(node.getType()){
 	        case String: {
 	            nw = new TextNodeWidget(node);
+	            break;
+	        }
+	        case ImageLink: {
+	        	nw = new ImageNodeWidget(node);
+	        	break;
 	        }
 	    }
 		container.add(nw,0,0);

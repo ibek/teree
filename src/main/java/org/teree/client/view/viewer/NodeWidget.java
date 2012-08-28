@@ -56,9 +56,4 @@ public class NodeWidget extends Composite implements NodeInterface {
 		return getWidget().getOffsetHeight();
 	}
 
-	@Override
-	public void update() {
-		// nothing to do
-	}
-
 }

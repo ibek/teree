@@ -48,7 +48,7 @@ public class TextNodeWidget extends NodeWidget {
     	
     }
     
-    protected TextNodeWidget(Node node) {
+    public TextNodeWidget(Node node) {
         super(node);
         
         view();
@@ -171,6 +171,7 @@ public class TextNodeWidget extends NodeWidget {
 	        content.addDropHandler(new DropHandler() {
 				@Override
 				public void onDrop(DropEvent event) {
+			        content.getElement().getStyle().setBackgroundColor("white");
 	                dropData(event);
 				}
 			});
@@ -203,39 +204,6 @@ public class TextNodeWidget extends NodeWidget {
         event.getDataTransfer().setDragImage(content.getElement(), 10, 10);
     }
     
-    private void dropData(DropEvent event) {
-    	event.preventDefault();
-        content.getElement().getStyle().setBackgroundColor("white");
-        
-        try {
-        	Integer id = Integer.valueOf(event.getData("id"));
-        	if (id != null) {
-            	NodeWidget nw = (NodeWidget)((AbsolutePanel)getParent()).getWidget(id);
-            	if (nw.getNode() == node) { // don't move the dragged node to the same node
-            		return;
-            	}
-                Node child = nw.getNode().clone();
-                if (node.getLocation() != null) {
-                	child.setLocation(node.getLocation());
-                }
-                node.addChild(child);
-                
-                // remove the moved nodes
-                int count = child.getNumberOfChildNodes();
-                nw.removeFromParent();
-                for (int i=0; i<count; ++i) {
-                	((NodeWidget)((AbsolutePanel)getParent()).getWidget(id)).removeFromParent();
-                }
-                nw.getNode().remove();
-                
-                getParent().fireEvent(new NodeChanged(child));
-            }
-        } catch(NumberFormatException ex) {
-        	// ignore
-        }
-        
-    }
-    
     private void fireSelect() {
     	getParent().fireEvent(new SelectNode(this));
     }
@@ -261,7 +229,6 @@ public class TextNodeWidget extends NodeWidget {
         view();
     }
     
-    @Override
     public void update() {
     	content.setText(node.getContent().toString());
     }

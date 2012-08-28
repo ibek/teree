@@ -1,9 +1,11 @@
 package org.teree.client.view.editor;
 
 import org.teree.client.view.NodeInterface;
+import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.shared.data.Node;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.DropEvent;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.DOM;
@@ -66,9 +68,6 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
         
     	DOM.setStyleAttribute(getElement(), "visibility", "hidden");
     }
-
-	@Override
-	public abstract void update();
 	
 	public abstract void edit();
     
@@ -80,6 +79,38 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
     public NodeWidget unselect() {
         selected = false;
         return null;
+    }
+    
+    public void dropData(DropEvent event) {
+    	event.preventDefault();
+        
+        try {
+        	Integer id = Integer.valueOf(event.getData("id"));
+        	if (id != null) {
+            	NodeWidget nw = (NodeWidget)((AbsolutePanel)getParent()).getWidget(id);
+            	if (nw.getNode() == node) { // don't move the dragged node to the same node
+            		return;
+            	}
+                Node child = nw.getNode().clone();
+                if (node.getLocation() != null) {
+                	child.setLocation(node.getLocation());
+                }
+                node.addChild(child);
+                
+                // remove the moved nodes
+                int count = child.getNumberOfChildNodes();
+                nw.removeFromParent();
+                for (int i=0; i<count; ++i) {
+                	((NodeWidget)((AbsolutePanel)getParent()).getWidget(id)).removeFromParent();
+                }
+                nw.getNode().remove();
+                
+                getParent().fireEvent(new NodeChanged(child));
+            }
+        } catch(NumberFormatException ex) {
+        	// ignore
+        }
+        
     }
 
 	@Override

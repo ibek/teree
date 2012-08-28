@@ -73,6 +73,13 @@ public class Editor extends Composite implements MapEditor.Display {
 			}
 		});
     	
+    	edit.getCreateImgButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scene.createImageChildNode();
+			}
+		});
+    	
     	edit.getBoldButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

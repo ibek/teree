@@ -1,5 +1,8 @@
 package org.teree.shared.data;
 
+import org.jboss.errai.common.client.api.annotations.Portable;
+
+@Portable
 public class IconString {
 
     private String text;
