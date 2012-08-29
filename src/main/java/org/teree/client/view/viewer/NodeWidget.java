@@ -12,18 +12,18 @@ import com.google.gwt.resources.client.CssResource;
 
 public abstract class NodeWidget extends Composite implements NodeInterface {
 
-    /**public interface Resources extends ClientBundle {
+	public interface Resources extends ClientBundle {
         
-        @Source("../resource/nodeStyle.css")
-        NodeStyle nodeStyle();
+        @Source("../resource/basicNodeStyle.css")
+        BasicNodeStyle basicNodeStyle();
         
-        public interface NodeStyle extends CssResource {
+        public interface BasicNodeStyle extends CssResource {
             String view();
         }
         
     }
-
-    protected Resources resources = GWT.create(Resources.class);*/
+    
+    protected Resources resources = GWT.create(Resources.class);
     
     protected Node node;
     
@@ -36,6 +36,7 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
     public NodeWidget(Node node) {
         this.node = node;
         container = new AbsolutePanel();
+        resources.basicNodeStyle().ensureInjected();
         initWidget(container);
         
     	DOM.setStyleAttribute(getElement(), "visibility", "hidden");

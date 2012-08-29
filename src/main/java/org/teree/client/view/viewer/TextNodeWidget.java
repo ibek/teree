@@ -24,14 +24,19 @@ public class TextNodeWidget extends NodeWidget {
                 // TODO: add support for collapse
             }
         });
+
+        content.setStylePrimaryName(resources.basicNodeStyle().view());
         
-        //content.addStyleName(resources.nodeStyle().view());
         container.add(content);
     }
 
     @Override
     public void draw(Context2d context, int x, int y) {
+    	context.save();
+    	context.setFont("14px monospace");
+        context.setFillStyle("#000000");
         context.fillText(content.getText(), x, y);
+        context.restore();
     }
 
 }

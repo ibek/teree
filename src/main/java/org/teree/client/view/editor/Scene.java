@@ -18,13 +18,18 @@ import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.ImageData;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Scene extends Composite {
@@ -265,8 +270,53 @@ public class Scene extends Composite {
     
     public String getSchemePicture() {
         Canvas canvas = Canvas.createIfSupported();
+        canvas.setCoordinateSpaceHeight((int)this.canvas.getOffsetHeight());
+        canvas.setCoordinateSpaceWidth((int)this.canvas.getOffsetWidth());
         scheme.renderPicture(canvas, getNodeWidgets(), root);
         return canvas.toDataUrl();
+    }
+    
+    public String getSchemeSamplePicture() {
+        Canvas canvas = Canvas.createIfSupported();
+        double scale = 0.7;
+        canvas.setCoordinateSpaceHeight((int)(this.canvas.getOffsetHeight()*scale));
+        canvas.setCoordinateSpaceWidth((int)(this.canvas.getOffsetWidth()*scale));
+        canvas.getContext2d().scale(scale, scale);
+        List<NodeWidget> nw = getNodeWidgets();
+        scheme.renderPicture(canvas, nw, root);
+        
+        NodeWidget root = nw.get(0);
+        int x,y,w,h;
+        x = (int)(root.getAbsoluteLeft() - this.canvas.getAbsoluteLeft() + root.getWidgetWidth()/2 - Settings.SAMPLE_MAX_WIDTH/2/scale);
+        if (x < 0) {
+        	x = 0;
+        	w = (int)(root.getAbsoluteLeft() - this.canvas.getAbsoluteLeft() + root.getWidgetWidth()/2 + Settings.SAMPLE_MAX_WIDTH/2/scale);
+        	if (w > this.canvas.getOffsetWidth()) {
+        		w = this.canvas.getOffsetWidth();
+        	}
+        } else {
+        	w = (int)(Settings.SAMPLE_MAX_WIDTH/scale);
+        }
+        
+        y = (int)(root.getAbsoluteTop() - this.canvas.getAbsoluteTop() + root.getWidgetHeight()/2 - Settings.SAMPLE_MAX_HEIGHT/2/scale);
+        if (y < 0) {
+        	y = 0;
+        	h = (int)(root.getAbsoluteTop() - this.canvas.getAbsoluteTop() + root.getWidgetHeight()/2 + Settings.SAMPLE_MAX_HEIGHT/2/scale);
+        	if (h > this.canvas.getOffsetHeight()) {
+        		h = this.canvas.getOffsetHeight();
+        	}
+        } else {
+        	h = (int)(Settings.SAMPLE_MAX_HEIGHT/scale);
+        }
+        
+        ImageData data = canvas.getContext2d().getImageData(x*scale, y*scale, w*scale, h*scale);
+        Canvas canvasTmp = Canvas.createIfSupported();
+        canvasTmp.setCoordinateSpaceHeight((int) data.getHeight());
+        canvasTmp.setCoordinateSpaceWidth((int) data.getWidth());
+        Context2d context = canvasTmp.getContext2d();
+        context.putImageData(data, 0, 0);
+        
+        return canvasTmp.toDataUrl();
     }
     
     /**======================================================*/

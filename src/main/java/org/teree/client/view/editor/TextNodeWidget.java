@@ -232,7 +232,11 @@ public class TextNodeWidget extends NodeWidget {
 
     @Override
     public void draw(Context2d context, int x, int y) {
+    	context.save();
+    	context.setFont("14px monospace");
+        context.setFillStyle("#000000");
         context.fillText(content.getText(), x, y);
+        context.restore();
     }
 
 }

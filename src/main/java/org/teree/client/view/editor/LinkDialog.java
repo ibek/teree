@@ -12,6 +12,13 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+/**
+ * 
+ * TODO: create another one for imageLink to upload the image ... it won't be possible to use pictures from another pages
+ * 
+ * @author ibek
+ *
+ */
 public class LinkDialog extends DialogBox {
 	
 	interface Resources extends ClientBundle {

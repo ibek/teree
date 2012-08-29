@@ -134,30 +134,36 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		// for case root is biggest
 		max_y = (max_y / 2 - rw.getOffsetHeight() > 0) ? max_y : rw.getOffsetHeight() * 2;
 		
-		canvas.setCoordinateSpaceWidth(max_x);
-		canvas.setCoordinateSpaceHeight(max_y);
+		if (!makePicture) {
+			canvas.setCoordinateSpaceWidth(max_x);
+			canvas.setCoordinateSpaceHeight(max_y);
+		}
 		Context2d context = canvas.getContext2d();
 		this.context = context;
 
 		id = 0;
-		
-		this.left = canvas.getAbsoluteLeft() - canvas.getParent().getAbsoluteLeft(); // getRelativeLeft
-		this.top = canvas.getAbsoluteTop() - canvas.getParent().getAbsoluteTop(); // getRelativeTop
 
 		context.beginPath(); // of lines
-		
-		if (makePicture) {
-		    rw.draw(context, this.left + maxlw, this.top + max_y / 2 - rw.getOffsetHeight());
-		} else {
-    		AbsolutePanel panel = (AbsolutePanel) rw.getParent();
-    		panel.setWidgetPosition(rw, this.left + maxlw, this.top + max_y / 2 - rw.getOffsetHeight()); // set root node into middle of scene
-    		DOM.setStyleAttribute(rw.getElement(), "visibility", "visible");
-		}
-		id++;
 
 		// support content
 		context.setFillStyle("white");
 		context.fillRect(0, 0, max_x, max_y);
+		
+		if (makePicture) {
+
+		    rw.draw(context, maxlw, max_y / 2 - 5);
+		    
+		} else {
+			
+			this.left = canvas.getAbsoluteLeft() - canvas.getParent().getAbsoluteLeft(); // getRelativeLeft
+			this.top = canvas.getAbsoluteTop() - canvas.getParent().getAbsoluteTop(); // getRelativeTop
+			
+    		AbsolutePanel panel = (AbsolutePanel) rw.getParent();
+    		panel.setWidgetPosition(rw, this.left + maxlw, this.top + max_y / 2 - rw.getOffsetHeight()); // set root node into middle of scene
+    		DOM.setStyleAttribute(rw.getElement(), "visibility", "visible");
+    		
+		}
+		id++;
 
 		// underline root
 		drawLine(context, maxlw, max_y / 2, maxlw
@@ -247,7 +253,7 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 			int y = lvl + py;
 
 			if (makePicture) {
-	            nw.draw(context, this.left + x, this.top + y - nw.getOffsetHeight() / 2);
+	            nw.draw(context, x, y + nw.getOffsetHeight() / 2 - 5);
 	        } else {
     			panel.setWidgetPosition(nw, this.left + x, this.top + y - nw.getOffsetHeight() / 2);
     			DOM.setStyleAttribute(nw.getElement(), "visibility", "visible");

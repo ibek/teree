@@ -2,24 +2,32 @@
 stage1:
 
 fix most of serious bugs
-edit panel - bold, color, new child(image, url) ...
-implementuj bold do Node jako Boolean
-vytvoreni kategorii a podkategorii pro mapy
-LinkNodeWidget, IconTextNodeWidget, ConnectorNodeWidget (to connect another map)
-service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
+implementuj bold do Node jako Boolean - pribude nova trida Style
+LinkNodeWidget, IconTextNodeWidget
+dej dokupy ty styly, hlavne basicNodeStyle a nodeStyle apod ... aby to bylo pouzitelne i pro image, link apod
+upload obrazku a vyber z techto obrazku pri vkladani ImageNodeWidgetu
+ (obrazky co ma uzivatel v library (otagovane apod) - odkazy na ty obrazky + si muze pridat nektere obrazky z public schemat) 
 
 stage2:
 
+import a export z/do freemindmap a obrazku
 login - openId
 public & private scheme
+vytvoreni kategorii a podkategorii pro mapy - budou definovany pro scheme pri publikovani, defaultne se ulozi jako private
 
 milestone1:
 
+floatable status
 udelat testovani ... vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
 direct explore - novy typ generovani mapy
+service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
+ConnectorNodeWidget (to connect another map)
+podpora collapse node
 
 milestone2:
 
+tvorba map z templates
+resit vsechny mozne specialni pripady chyb
 collaboration
-
+grafika a styly
 

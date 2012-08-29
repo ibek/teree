@@ -7,6 +7,7 @@ import org.teree.shared.data.Node;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.ImageElement;
@@ -18,6 +19,7 @@ import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.ui.Image;
 
 public class ImageNodeWidget extends NodeWidget {
@@ -46,7 +48,8 @@ public class ImageNodeWidget extends NodeWidget {
 	}
 
 	private void init() {
-		content = new Image(res.noImage());
+		content = new Image();
+		content.setUrl(res.noImage().getSafeUri());
 
 		content.addClickHandler(new ClickHandler() {
 			@Override
@@ -63,7 +66,7 @@ public class ImageNodeWidget extends NodeWidget {
 			@Override
 			public void onError(ErrorEvent event) {
 				((ImageLink) node.getContent()).setUrl(null);
-				content.setResource(res.noImage());
+				content.setUrl(res.noImage().getSafeUri());
 			}
 		});
 		
@@ -129,9 +132,14 @@ public class ImageNodeWidget extends NodeWidget {
 		linkDialog.show();
 	}
 
+	/**
+	 * TODO: try to enable on remote server or try to fix the security exception with crossorigin attribute somehow
+	 */
     @Override
     public void draw(Context2d context, int x, int y) {
-        context.drawImage(ImageElement.as(content.getElement()), x, y);
+    	context.save();
+    	context.drawImage(ImageElement.as(content.getElement()), x, y-content.getHeight());
+        context.restore();
     }
 
 }

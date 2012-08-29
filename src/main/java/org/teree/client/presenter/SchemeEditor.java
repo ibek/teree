@@ -41,7 +41,7 @@ public class SchemeEditor implements Presenter {
         void setRoot(Node root);
         void info(String msg);
         void error(String msg);
-        String getSchemePicture();
+        String getSchemeSamplePicture();
     }
     
     @Inject @Named(value="eventBus")
@@ -131,7 +131,7 @@ public class SchemeEditor implements Presenter {
         display.getSaveButton().addClickHandler(new ClickHandler() {            
             @Override
             public void onClick(ClickEvent event) {
-                scheme.setSchemePicture(display.getSchemePicture());
+                scheme.setSchemePicture(display.getSchemeSamplePicture());
                 saveScheme();
             }
         });

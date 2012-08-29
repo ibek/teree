@@ -192,8 +192,8 @@ public class Editor extends Composite implements SchemeEditor.Display {
 	}
 
     @Override
-    public String getSchemePicture() {
-        return scene.getSchemePicture();
+    public String getSchemeSamplePicture() {
+        return scene.getSchemeSamplePicture();
     }
 
 }

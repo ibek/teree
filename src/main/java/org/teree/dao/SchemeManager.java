@@ -55,6 +55,9 @@ public class SchemeManager {
      * @return node
      */
     public Scheme select(String oid) {
+    	if (oid == null) {
+    		return null;
+    	}
         DBCollection coll = getCollection();
         DBObject searchById = new BasicDBObject("_id", new ObjectId(oid));
         DBObject found = coll.findOne(searchById);
@@ -143,6 +146,7 @@ public class SchemeManager {
         
         s.setRoot(fromNodeDBObject((BasicDBObject)scheme.get("root")));
         s.setSchemePicture((String)scheme.get("screen"));
+        s.setOid(((ObjectId)scheme.get("_id")).toStringMongod());
         
         return s;
     }

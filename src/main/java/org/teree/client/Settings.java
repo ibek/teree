@@ -13,6 +13,9 @@ public class Settings {
     public static final int MIN_WIDTH = 50;
     public static final int MAX_WIDTH = 400;
     public static final int MIN_HEIGHT = 18;
+
+    public static final int SAMPLE_MAX_WIDTH = 300;
+    public static final int SAMPLE_MAX_HEIGHT = 200;
     
     public static final SchemeType DEFAULT_SCHEME_TYPE = SchemeType.MindMap;
     
