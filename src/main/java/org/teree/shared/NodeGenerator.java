@@ -2,9 +2,8 @@ package org.teree.shared;
 
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
-import org.teree.shared.data.Node.NodeType;
 
-public class MapGenerator {
+public class NodeGenerator {
 
     public static Node newNode() {
         Node root = createTextNode("root", null);

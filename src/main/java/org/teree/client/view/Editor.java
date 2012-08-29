@@ -14,13 +14,13 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.teree.client.presenter.MapEditor;
+import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.view.editor.EditPanel;
 import org.teree.client.view.editor.Scene;
 import org.teree.client.view.resource.ViewStyle;
 import org.teree.shared.data.Node;
 
-public class Editor extends Composite implements MapEditor.Display {
+public class Editor extends Composite implements SchemeEditor.Display {
 	
 	private static EditorBinder uiBinder = GWT.create(EditorBinder.class);
 
@@ -190,5 +190,10 @@ public class Editor extends Composite implements MapEditor.Display {
 	public HasClickHandlers getHelpLink() {
 		return linkHelp;
 	}
+
+    @Override
+    public String getSchemePicture() {
+        return scene.getSchemePicture();
+    }
 
 }

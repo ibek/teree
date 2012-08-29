@@ -5,30 +5,27 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.teree.client.Settings;
-import org.teree.client.map.MapType;
-import org.teree.client.map.MindMap;
-import org.teree.client.map.Renderer;
+import org.teree.client.scheme.MindMap;
+import org.teree.client.scheme.SchemeType;
+import org.teree.client.scheme.Renderer;
 import org.teree.client.view.viewer.NodeWidget;
 import org.teree.shared.data.Node;
 
 import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Scene extends Composite {
 	
-	private Renderer<NodeWidget> map;
+	private Renderer<NodeWidget> scheme;
 
     private AbsolutePanel container;
     private Canvas canvas;
     
-    private HandlerManager viewBus = new HandlerManager(null);
-    
     public Scene() {
     	
-        setMapType(Settings.DEFAULT_MAP_TYPE);
+        setSchemeType(Settings.DEFAULT_SCHEME_TYPE);
         
         bind();
         
@@ -46,10 +43,10 @@ public class Scene extends Composite {
         
     }
     
-    public void setMapType(MapType type) {
+    public void setSchemeType(SchemeType type) {
     	switch(type) {
 	    	case MindMap: {
-	    		map = new MindMap<NodeWidget>();
+	    		scheme = new MindMap<NodeWidget>();
 	    	}
     	}
     }
@@ -60,7 +57,7 @@ public class Scene extends Composite {
         
         init(root);
         
-        map.renderViewer(canvas, getNodeWidgets(), root);
+        scheme.renderViewer(canvas, getNodeWidgets(), root);
     }
     
     private void init(Node node) {

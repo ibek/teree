@@ -3,14 +3,14 @@ package org.teree.shared.data;
 import org.jboss.errai.common.client.api.annotations.Portable;
 
 @Portable
-public class MapChange {
+public class SchemeChange {
 
     private String oid;
     private int nodeId;
     private Node changedNode;
     private Type type;
     
-    public MapChange() {
+    public SchemeChange() {
         
     }
     
@@ -18,7 +18,7 @@ public class MapChange {
         return oid;
     }
 
-    public MapChange setOid(String oid) {
+    public SchemeChange setOid(String oid) {
         this.oid = oid;
         return this;
     }
@@ -27,7 +27,7 @@ public class MapChange {
         return nodeId;
     }
 
-    public MapChange setNodeId(int nodeId) {
+    public SchemeChange setNodeId(int nodeId) {
         this.nodeId = nodeId;
         return this;
     }
@@ -36,7 +36,7 @@ public class MapChange {
         return changedNode;
     }
 
-    public MapChange setChangedNode(Node changedNode) {
+    public SchemeChange setChangedNode(Node changedNode) {
         this.changedNode = changedNode;
         return this;
     }
@@ -45,7 +45,7 @@ public class MapChange {
         return type;
     }
 
-    public MapChange setType(Type type) {
+    public SchemeChange setType(Type type) {
         this.type = type;
         return this;
     }

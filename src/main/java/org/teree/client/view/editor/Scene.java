@@ -5,9 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.teree.client.Settings;
-import org.teree.client.map.MapType;
-import org.teree.client.map.MindMap;
-import org.teree.client.map.Renderer;
+import org.teree.client.scheme.MindMap;
+import org.teree.client.scheme.SchemeType;
+import org.teree.client.scheme.Renderer;
 import org.teree.client.view.editor.NodeWidget;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.NodeChangedHandler;
@@ -32,7 +32,7 @@ public class Scene extends Composite {
 	private static final int NODE_WIDGET_MARK = 1; // from this mark are node widgets in container
     
     private Node root;
-    private Renderer<NodeWidget> map;
+    private Renderer<NodeWidget> scheme;
     
     private AbsolutePanel container;
     private Canvas canvas;
@@ -42,7 +42,7 @@ public class Scene extends Composite {
     
     public Scene() {
         
-        setMapType(Settings.DEFAULT_MAP_TYPE);
+        setSchemeType(Settings.DEFAULT_SCHEME_TYPE);
         
         container = new AbsolutePanel();
         canvas = Canvas.createIfSupported();
@@ -82,10 +82,10 @@ public class Scene extends Composite {
         
     }
     
-    public void setMapType(MapType type) {
+    public void setSchemeType(SchemeType type) {
     	switch(type) {
 	    	case MindMap: {
-	    		map = new MindMap<NodeWidget>();
+	    		scheme = new MindMap<NodeWidget>();
 	    	}
     	}
     }
@@ -124,7 +124,7 @@ public class Scene extends Composite {
     		id = update(n, changed, id);
     	}
     	
-    	map.renderEditor(canvas, getNodeWidgets(), root);
+    	scheme.renderEditor(canvas, getNodeWidgets(), root);
     }
     
     public void editSelectedNode() {
@@ -250,7 +250,7 @@ public class Scene extends Composite {
     }
     
     /**
-     * TODO: add bold into Node and ensure right loading and change even in the node here
+     * TODO: add bold into Node as a Style and ensure right loading and change even in the node here
      * TODO: enable to change the bold with CTRL+B
      */
     public void changeBoldOfSelectedNode() {
@@ -261,6 +261,12 @@ public class Scene extends Composite {
     			selected.getElement().getStyle().setFontWeight(FontWeight.NORMAL);
     		}
     	}
+    }
+    
+    public String getSchemePicture() {
+        Canvas canvas = Canvas.createIfSupported();
+        scheme.renderPicture(canvas, getNodeWidgets(), root);
+        return canvas.toDataUrl();
     }
     
     /**======================================================*/
@@ -310,7 +316,7 @@ public class Scene extends Composite {
     		NodeLocation loc = selected.getNode().getLocation();
     		int offset = selected.getNode().getNumberOfChildNodes() + 1;
     		if (selected.getNode().getParent() == null) {
-    			loc = map.getRootChildNodeLocation(root);
+    			loc = scheme.getRootChildNodeLocation(root);
     			if (loc == NodeLocation.LEFT) {
     				offset = selected.getNode().getNumberOfLeftChildNodes() + 1;
     			}

@@ -12,10 +12,11 @@ import org.teree.client.Settings;
 import org.teree.client.Text;
 import org.teree.client.event.GlobalKeyUp;
 import org.teree.client.event.GlobalKeyUpHandler;
-import org.teree.client.event.MapReceived;
-import org.teree.client.event.MapReceivedHandler;
+import org.teree.client.event.SchemeReceived;
+import org.teree.client.event.SchemeReceivedHandler;
 import org.teree.client.view.KeyAction;
-import org.teree.shared.MapService;
+import org.teree.shared.GeneralService;
+import org.teree.shared.data.Scheme;
 import org.teree.shared.data.Node;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -29,7 +30,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 @Dependent
-public class MapEditor implements Presenter {
+public class SchemeEditor implements Presenter {
 
     public interface Display extends KeyAction {
         HasClickHandlers getNewButton();
@@ -40,28 +41,26 @@ public class MapEditor implements Presenter {
         void setRoot(Node root);
         void info(String msg);
         void error(String msg);
+        String getSchemePicture();
     }
     
     @Inject @Named(value="eventBus")
     private HandlerManager eventBus;
     
 	@Inject
-	private Caller<MapService> mapService;
+	private Caller<GeneralService> generalService;
     
     @Inject
     private Display display;
     
-    private String oid;
-    
-    private Node root;
+    private Scheme scheme;
     
     public void bind() {
-    	eventBus.addHandler(MapReceived.TYPE, new MapReceivedHandler() {
+    	eventBus.addHandler(SchemeReceived.TYPE, new SchemeReceivedHandler() {
 			@Override
-			public void received(MapReceived event) {
-				oid = event.getOid();
-				root = event.getRoot();
-				display.setRoot(root);
+			public void received(SchemeReceived event) {
+				scheme = event.getScheme();
+				display.setRoot(scheme.getRoot());
 			}
 		});
     	
@@ -132,7 +131,8 @@ public class MapEditor implements Presenter {
         display.getSaveButton().addClickHandler(new ClickHandler() {            
             @Override
             public void onClick(ClickEvent event) {
-                saveMap();
+                scheme.setSchemePicture(display.getSchemePicture());
+                saveScheme();
             }
         });
     }
@@ -144,13 +144,13 @@ public class MapEditor implements Presenter {
         container.add(display.asWidget());
     }
     
-    public void saveMap() {
-    	if (oid == null) {
-	    	mapService.call(new RemoteCallback<String>() {
+    public void saveScheme() {
+    	if (scheme.getOid() == null) {
+	    	generalService.call(new RemoteCallback<String>() {
 	            @Override
 	            public void callback(String response) {
-	                oid = response;
-	                display.info(Text.LANG.mapCreated(oid));
+	                scheme.setOid(response);
+	                display.info(Text.LANG.schemeCreated(scheme.getOid()));
 	            }
 	        }, new ErrorCallback() {
 				@Override
@@ -158,12 +158,12 @@ public class MapEditor implements Presenter {
 					display.error(message.toString());
 					return false;
 				}
-			}).insertMap(root);
+			}).insertScheme(scheme);
     	} else {
-    		mapService.call(new RemoteCallback<Void>() {
+    		generalService.call(new RemoteCallback<Void>() {
 	            @Override
 	            public void callback(Void response) {
-	                display.info(Text.LANG.mapUpdated(oid));
+	                display.info(Text.LANG.schemeUpdated(scheme.getOid()));
 	            }
 	        }, new ErrorCallback() {
 				@Override
@@ -171,7 +171,7 @@ public class MapEditor implements Presenter {
 					display.error(message.toString());
 					return false;
 				}
-			}).updateMap(oid, root);
+			}).updateScheme(scheme);
     	}
     }
 

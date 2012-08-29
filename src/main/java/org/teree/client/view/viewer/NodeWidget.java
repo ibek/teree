@@ -10,7 +10,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 
-public class NodeWidget extends Composite implements NodeInterface {
+public abstract class NodeWidget extends Composite implements NodeInterface {
 
     /**public interface Resources extends ClientBundle {
         

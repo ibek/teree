@@ -54,10 +54,6 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
     
     protected boolean selected;
     
-    public NodeWidget() {
-    	this(null);
-    }
-    
     public NodeWidget(Node node) {
         this.node = node;
         selected = false;

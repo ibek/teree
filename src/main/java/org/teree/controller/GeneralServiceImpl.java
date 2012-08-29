@@ -11,51 +11,50 @@ import org.jboss.errai.bus.client.ErraiBus;
 import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.framework.RequestDispatcher;
 import org.jboss.errai.bus.server.annotations.Service;
-import org.teree.dao.NodeManager;
-import org.teree.shared.MapService;
-import org.teree.shared.data.Map;
-import org.teree.shared.data.NodeChange;
-import org.teree.shared.data.Node;
+import org.teree.dao.SchemeManager;
+import org.teree.shared.GeneralService;
+import org.teree.shared.data.Scheme;
+import org.teree.shared.data.SchemeChange;
 
 @ApplicationScoped
 @Service
-public class MapServiceImpl implements MapService {
+public class GeneralServiceImpl implements GeneralService {
 
     @Inject
     private Logger _log;
     
     @Inject
-    private NodeManager _nm;
+    private SchemeManager _sm;
     
     private RequestDispatcher _dispatcher = ErraiBus.getDispatcher();
 
 	@Override
-	public List<Map> getAll() {
+	public List<Scheme> getAll() {
         _log.log(Level.INFO, "getAll()");
-		return _nm.all();
+		return _sm.all();
 	}
 
     @Override
-    public Node getMap(String oid) {
-        _log.log(Level.INFO, "getMap("+oid+")");
-        return _nm.select(oid);
+    public Scheme getScheme(String oid) {
+        _log.log(Level.INFO, "getScheme("+oid+")");
+        return _sm.select(oid);
     }
 
     @Override
-    public String insertMap(Node root) {
-        _log.log(Level.INFO, "insertMap("+root.getContent()+")");
-        return _nm.insert(root);
+    public String insertScheme(Scheme s) {
+        _log.log(Level.INFO, "insertScheme("+s.getRoot().getContent()+")");
+        return _sm.insert(s);
     }
 
 	@Override
-	public void updateMap(String oid, Node root) {
-        _log.log(Level.INFO, "updateMap("+oid+", "+root.getContent()+")");
-		_nm.update(oid, root);
+	public void updateScheme(Scheme s) {
+        _log.log(Level.INFO, "updateScheme("+s.getOid()+", "+s.getRoot().getContent()+")");
+		_sm.update(s);
 	}
 
     @Override
-    public void mapChanged(NodeChange change) {
-        _log.log(Level.INFO, "mapChanged("+change.getOid()+")");
+    public void schemeChanged(SchemeChange change) {
+        _log.log(Level.INFO, "schemeChanged("+change.getOid()+")");
         MessageBuilder.createMessage()
         .toSubject(change.getOid())
         .with("coop-change", change)

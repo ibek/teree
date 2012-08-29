@@ -10,8 +10,8 @@ import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
 import org.teree.client.Settings;
-import org.teree.shared.MapService;
-import org.teree.shared.data.Map;
+import org.teree.shared.GeneralService;
+import org.teree.shared.data.Scheme;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -21,18 +21,18 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 @Dependent
-public class MapExplorer implements Presenter {
+public class SchemeExplorer implements Presenter {
 
 	public interface Display {
         HasClickHandlers getNewButton();
         HasClickHandlers getExploreLink();
         HasClickHandlers getHelpLink();
         Widget asWidget();
-        void setData(List<Map> maps);
+        void setData(List<Scheme> slist);
     }
 	
 	@Inject
-	private Caller<MapService> mapService;
+	private Caller<GeneralService> generalService;
     
     @Inject
     private Display display;
@@ -63,9 +63,9 @@ public class MapExplorer implements Presenter {
 	}
 	
 	private void loadData() {
-		mapService.call(new RemoteCallback<List<Map>>() {
+		generalService.call(new RemoteCallback<List<Scheme>>() {
             @Override
-            public void callback(List<Map> response) {
+            public void callback(List<Scheme> response) {
                 display.setData(response);
             }
         }, new ErrorCallback() {

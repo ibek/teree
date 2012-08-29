@@ -10,13 +10,14 @@ import org.jboss.errai.ioc.client.container.IOCBeanManager;
 import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
-import org.teree.client.event.MapReceived;
-import org.teree.client.presenter.MapExplorer;
-import org.teree.client.presenter.MapEditor;
-import org.teree.client.presenter.MapViewer;
+import org.teree.client.event.SchemeReceived;
+import org.teree.client.presenter.SchemeExplorer;
+import org.teree.client.presenter.SchemeEditor;
+import org.teree.client.presenter.SchemeViewer;
 import org.teree.client.presenter.Presenter;
-import org.teree.shared.MapGenerator;
-import org.teree.shared.MapService;
+import org.teree.shared.NodeGenerator;
+import org.teree.shared.GeneralService;
+import org.teree.shared.data.Scheme;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 
@@ -36,7 +37,7 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 	private HandlerManager eventBus;
 	
 	@Inject
-	private Caller<MapService> mapService;
+	private Caller<GeneralService> generalService;
 	
 	@Inject
 	private Keyboard keyboard;
@@ -79,29 +80,31 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 
 				}*/
 			} else if (token.startsWith(Settings.EXPLORE_LINK)) {
-				IOCBeanDef<MapExplorer> bean = manager.lookupBean(MapExplorer.class);
+				IOCBeanDef<SchemeExplorer> bean = manager.lookupBean(SchemeExplorer.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
 				}
 			} else if (token.startsWith(Settings.VIEW_LINK)) {
-				IOCBeanDef<MapViewer> bean = manager.lookupBean(MapViewer.class);
+				IOCBeanDef<SchemeViewer> bean = manager.lookupBean(SchemeViewer.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
-					loadMap(token.substring(Settings.VIEW_LINK.length()));
+					loadScheme(token.substring(Settings.VIEW_LINK.length()));
 				}
 			} else if (token.startsWith(Settings.CREATE_LINK)) {
-				IOCBeanDef<MapEditor> bean = manager.lookupBean(MapEditor.class);
+				IOCBeanDef<SchemeEditor> bean = manager.lookupBean(SchemeEditor.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
 					presenter.go(container);
-					eventBus.fireEvent(new MapReceived(null, MapGenerator.complex())); // TODO: create map from templates (even user's)
+					Scheme s = new Scheme();
+					s.setRoot(NodeGenerator.complex()); // TODO: create map from templates (even user's)
+					eventBus.fireEvent(new SchemeReceived(s)); 
 					return;
 				}
 			} else if (token.startsWith(Settings.EDIT_LINK)) {
-				IOCBeanDef<MapEditor> bean = manager.lookupBean(MapEditor.class);
+				IOCBeanDef<SchemeEditor> bean = manager.lookupBean(SchemeEditor.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
-					loadMap(token.substring(Settings.EDIT_LINK.length()));
+					loadScheme(token.substring(Settings.EDIT_LINK.length()));
 				}
 			}
 			
@@ -112,11 +115,11 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 		}
 	}
 	
-	private void loadMap(final String oid) {
-		mapService.call(new RemoteCallback<Node>() {
+	private void loadScheme(final String oid) {
+		generalService.call(new RemoteCallback<Scheme>() {
             @Override
-            public void callback(Node response) {
-                eventBus.fireEvent(new MapReceived(oid, response));
+            public void callback(Scheme response) {
+                eventBus.fireEvent(new SchemeReceived(response));
             }
         }, new ErrorCallback() {
 			@Override
@@ -124,7 +127,7 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 				// TODO inform user about the error - show 404 page
 				return false;
 			}
-		}).getMap(oid);
+		}).getScheme(oid);
 	}
 
 }

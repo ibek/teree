@@ -12,12 +12,12 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.teree.client.presenter.MapViewer;
+import org.teree.client.presenter.SchemeViewer;
 import org.teree.client.view.resource.ViewStyle;
 import org.teree.client.view.viewer.Scene;
 import org.teree.shared.data.Node;
 
-public class Viewer extends Composite implements MapViewer.Display {
+public class Viewer extends Composite implements SchemeViewer.Display {
 
 	private static ViewerBinder uiBinder = GWT.create(ViewerBinder.class);
 

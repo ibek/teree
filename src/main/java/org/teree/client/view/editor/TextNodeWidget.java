@@ -5,6 +5,7 @@ import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.shared.data.Node;
 
+import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
@@ -43,10 +44,6 @@ public class TextNodeWidget extends NodeWidget {
     private HTML content;
     
     private TextArea editContent;
-    
-    public TextNodeWidget() {
-    	
-    }
     
     public TextNodeWidget(Node node) {
         super(node);
@@ -231,6 +228,11 @@ public class TextNodeWidget extends NodeWidget {
     
     public void update() {
     	content.setText(node.getContent().toString());
+    }
+
+    @Override
+    public void draw(Context2d context, int x, int y) {
+        context.fillText(content.getText(), x, y);
     }
 
 }

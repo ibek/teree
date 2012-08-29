@@ -5,9 +5,11 @@ import org.teree.client.view.editor.event.SelectNode;
 import org.teree.shared.data.ImageLink;
 import org.teree.shared.data.Node;
 
+import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ErrorEvent;
@@ -32,10 +34,6 @@ public class ImageNodeWidget extends NodeWidget {
 	private Resources res = GWT.create(Resources.class);
 	
 	private boolean firstRender = true;
-
-	public ImageNodeWidget() {
-
-	}
 
 	public ImageNodeWidget(Node node) {
 		super(node);
@@ -114,7 +112,7 @@ public class ImageNodeWidget extends NodeWidget {
 				@Override
 				public void onClick(ClickEvent event) {
 					((ImageLink)node.getContent()).setUrl(linkDialog.getUrl());
-					Scheduler.get().scheduleDeferred(new ScheduledCommand() { // to have the right size of image before rendering
+					Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 			            @Override
 			            public void execute() {
 							update();
@@ -130,5 +128,10 @@ public class ImageNodeWidget extends NodeWidget {
 				getAbsoluteTop() + content.getHeight()/2 - linkDialog.getOffsetHeight()/2);
 		linkDialog.show();
 	}
+
+    @Override
+    public void draw(Context2d context, int x, int y) {
+        context.drawImage(ImageElement.as(content.getElement()), x, y);
+    }
 
 }

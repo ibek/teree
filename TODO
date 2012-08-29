@@ -11,7 +11,7 @@ service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
 stage2:
 
 login - openId
-public & private maps
+public & private scheme
 
 milestone1:
 

@@ -13,12 +13,12 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.teree.client.presenter.MapExplorer;
+import org.teree.client.presenter.SchemeExplorer;
 import org.teree.client.view.explorer.Scene;
 import org.teree.client.view.resource.ViewStyle;
-import org.teree.shared.data.Map;
+import org.teree.shared.data.Scheme;
 
-public class Explorer extends Composite implements MapExplorer.Display {
+public class Explorer extends Composite implements SchemeExplorer.Display {
 
 	private static ExplorerBinder uiBinder = GWT.create(ExplorerBinder.class);
 
@@ -70,8 +70,8 @@ public class Explorer extends Composite implements MapExplorer.Display {
 	}
 
 	@Override
-	public void setData(List<Map> maps) {
-		scene.setData(maps);
+	public void setData(List<Scheme> slist) {
+		scene.setData(slist);
 	}
 
 }

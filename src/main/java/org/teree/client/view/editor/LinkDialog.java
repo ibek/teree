@@ -1,15 +1,11 @@
 package org.teree.client.view.editor;
 
-import org.teree.client.view.editor.ImageNodeWidget.Resources;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -33,9 +29,9 @@ public class LinkDialog extends DialogBox {
 	private static final int WIDTH = 180;
 	private static final int HEIGHT = 50;
 	
-	private Button ok;
+	private Button okButton;
 	
-	private TextBox url;
+	private TextBox urlField;
 
 	public LinkDialog(String title) {
 		res.css().ensureInjected();
@@ -48,11 +44,11 @@ public class LinkDialog extends DialogBox {
 		panel.setWidth(WIDTH+"px");
 		panel.setHeight(HEIGHT+"px");
 		
-		url = new TextBox();
+		urlField = new TextBox();
 		
-		panel.add(url);
+		panel.add(urlField);
 		
-		ok = new Button("Ok");
+		okButton = new Button("Ok");
 		
 		Button cancel = new Button("Cancel");
 		cancel.addClickHandler(new ClickHandler() {
@@ -63,7 +59,7 @@ public class LinkDialog extends DialogBox {
 		});
 		
 		HorizontalPanel buttons = new HorizontalPanel();
-		buttons.add(ok);
+		buttons.add(okButton);
 		buttons.add(cancel);
 		
 		panel.add(buttons);
@@ -83,11 +79,11 @@ public class LinkDialog extends DialogBox {
 	}
 	
 	public HasClickHandlers getOk() {
-		return ok;
+		return okButton;
 	}
 	
 	public String getUrl() {
-		return url.getText();
+		return urlField.getText();
 	}
 
 }

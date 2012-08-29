@@ -11,11 +11,11 @@ public class Text {
     
     public interface Type extends Messages {
 
-        String mapReceived(String oid);
+        String schemeReceived(String oid);
         
-        String mapUpdated(String oid);
+        String schemeUpdated(String oid);
         
-        String mapCreated(String oid);
+        String schemeCreated(String oid);
         
     }
     

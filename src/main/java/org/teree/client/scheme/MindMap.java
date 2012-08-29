@@ -1,4 +1,4 @@
-package org.teree.client.map;
+package org.teree.client.scheme;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +31,15 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 	
 	private int left = 0;
 	private int top = 0;
+	
+	private boolean makePicture;
+	
+	private Context2d context;
 
 	@Override
-	protected void render(Canvas canvas, List<T> nodes, Node root, boolean editable) {
+	protected void render(Canvas canvas, List<T> nodes, Node root, boolean makePicture, boolean editable) {
+	    
+	    this.makePicture = makePicture;
 		
 		/**
 		 * left.get(col).get(row)
@@ -131,6 +137,7 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		canvas.setCoordinateSpaceWidth(max_x);
 		canvas.setCoordinateSpaceHeight(max_y);
 		Context2d context = canvas.getContext2d();
+		this.context = context;
 
 		id = 0;
 		
@@ -138,9 +145,14 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		this.top = canvas.getAbsoluteTop() - canvas.getParent().getAbsoluteTop(); // getRelativeTop
 
 		context.beginPath(); // of lines
-		AbsolutePanel panel = (AbsolutePanel) rw.getParent();
-		panel.setWidgetPosition(rw, this.left + maxlw, this.top + max_y / 2 - rw.getOffsetHeight()); // set root node into middle of scene
-		DOM.setStyleAttribute(rw.getElement(), "visibility", "visible");
+		
+		if (makePicture) {
+		    rw.draw(context, this.left + maxlw, this.top + max_y / 2 - rw.getOffsetHeight());
+		} else {
+    		AbsolutePanel panel = (AbsolutePanel) rw.getParent();
+    		panel.setWidgetPosition(rw, this.left + maxlw, this.top + max_y / 2 - rw.getOffsetHeight()); // set root node into middle of scene
+    		DOM.setStyleAttribute(rw.getElement(), "visibility", "visible");
+		}
 		id++;
 
 		// support content
@@ -226,7 +238,7 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 
 		for (int i = 0; i < cn.size(); ++i) {
 			Node n = cn.get(i);
-			Widget nw = nodes.get(id);
+			T nw = nodes.get(id);
 			AbsolutePanel panel = (AbsolutePanel) nw.getParent();
 			
 			int x = (loc == NodeLocation.LEFT) ? start_x - nw.getOffsetWidth() : start_x;
@@ -234,8 +246,12 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 			lvl = ((level_bounds.size() > level) ? level_bounds.get(level).get(status.get(level)) / 2 : 0);
 			int y = lvl + py;
 
-			panel.setWidgetPosition(nw, this.left + x, this.top + y - nw.getOffsetHeight() / 2);
-			DOM.setStyleAttribute(nw.getElement(), "visibility", "visible");
+			if (makePicture) {
+	            nw.draw(context, this.left + x, this.top + y - nw.getOffsetHeight() / 2);
+	        } else {
+    			panel.setWidgetPosition(nw, this.left + x, this.top + y - nw.getOffsetHeight() / 2);
+    			DOM.setStyleAttribute(nw.getElement(), "visibility", "visible");
+	        }
 			status.set(level, status.get(level) + 1);
 			id++;
 			// underline node

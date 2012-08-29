@@ -6,8 +6,8 @@ import javax.inject.Named;
 
 import org.teree.client.Settings;
 import org.teree.client.Text;
-import org.teree.client.event.MapReceived;
-import org.teree.client.event.MapReceivedHandler;
+import org.teree.client.event.SchemeReceived;
+import org.teree.client.event.SchemeReceivedHandler;
 import org.teree.client.view.editor.NodeWidget;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 @Dependent
-public class MapViewer implements Presenter {
+public class SchemeViewer implements Presenter {
 
     public interface Display {
         HasClickHandlers getNewButton();
@@ -41,11 +41,11 @@ public class MapViewer implements Presenter {
     
     public void bind() {
     	
-        eventBus.addHandler(MapReceived.TYPE, new MapReceivedHandler() {
+        eventBus.addHandler(SchemeReceived.TYPE, new SchemeReceivedHandler() {
 			@Override
-			public void received(MapReceived event) {
-				display.setRoot(event.getRoot());
-				display.info(Text.LANG.mapReceived(event.getOid()));
+			public void received(SchemeReceived event) {
+				display.setRoot(event.getScheme().getRoot());
+				display.info(Text.LANG.schemeReceived(event.getScheme().getOid()));
 			}
 		});
 		

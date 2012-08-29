@@ -1,4 +1,4 @@
-package org.teree.client.map;
+package org.teree.client.scheme;
 
 import java.util.List;
 
@@ -33,32 +33,44 @@ public abstract class Renderer<T extends Widget & NodeInterface> {
                 if(!succ){ // some node is too wide
                     resize(nodes);
                 }
-            	render(canvas, nodes, root, true);
+            	render(canvas, nodes, root, false, true);
             }
         });
     }
 
     public void renderViewer(final Canvas canvas, final List<T> nodes, final Node root) {
-    	prepare(nodes);
-    	Scheduler.get().scheduleDeferred(new ScheduledCommand() { // to ensure that widget automatically resized size is already set
+        prepare(nodes);
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() { // to ensure that widget automatically resized size is already set
             @Override
             public void execute() {
                 boolean succ = resize(nodes);
                 if(!succ){ // some node is too wide
                     resize(nodes);
                 }
-            	render(canvas, nodes, root, false);
+                render(canvas, nodes, root, false, false);
             }
         });
     }
+
+    public void renderPicture(Canvas canvas, final List<T> nodes, final Node root) {
+        prepare(nodes);
+        boolean succ = resize(nodes);
+        if(!succ){ // some node is too wide
+            resize(nodes);
+        }
+        render(canvas, nodes, root, true, false);
+    }
     
     /**
-     * Generate map.
+     * Generate scheme.
      * 
-     * @param panel
+     * @param canvas
+     * @param nodes
      * @param root
+     * @param makePicture generate the map into canvas to be transformed into picture
+     * @param editable
      */
-    protected abstract void render(Canvas canvas, List<T> nodes, Node root, boolean editable);
+    protected abstract void render(Canvas canvas, List<T> nodes, Node root, boolean makePicture, boolean editable);
 
     /**
      * Get location for root child node.
@@ -71,12 +83,6 @@ public abstract class Renderer<T extends Widget & NodeInterface> {
     	return NodeLocation.RIGHT;
     }
 
-    /**
-     * Add nodes into panel to get size of labels. (workaround)
-     * 
-     * @param panel
-     * @param root
-     */
     protected void prepare(List<T> nodes) {
 
     	for (int i=0; i<nodes.size(); ++i) {

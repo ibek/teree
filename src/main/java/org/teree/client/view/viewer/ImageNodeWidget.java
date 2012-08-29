@@ -3,7 +3,9 @@ package org.teree.client.view.viewer;
 import org.teree.shared.data.ImageLink;
 import org.teree.shared.data.Node;
 
+import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
 import com.google.gwt.resources.client.ClientBundle;
@@ -53,5 +55,10 @@ public class ImageNodeWidget extends NodeWidget {
 		}
 		
 	}
+
+    @Override
+    public void draw(Context2d context, int x, int y) {
+        context.drawImage(ImageElement.as(content.getElement()), x, y);
+    }
 
 }
