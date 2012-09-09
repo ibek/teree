@@ -1,4 +1,4 @@
-package org.teree.controller;
+package org.teree.server.controller;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -9,15 +9,19 @@ import javax.inject.Inject;
 
 import org.jboss.errai.bus.client.ErraiBus;
 import org.jboss.errai.bus.client.api.base.MessageBuilder;
+import org.jboss.errai.bus.client.framework.MessageBus;
 import org.jboss.errai.bus.client.framework.RequestDispatcher;
 import org.jboss.errai.bus.server.annotations.Service;
-import org.teree.dao.SchemeManager;
+import org.jboss.errai.bus.server.annotations.security.RequireAuthentication;
+import org.teree.server.auth.OAuthIdentifierFetcher;
+import org.teree.server.dao.SchemeManager;
 import org.teree.shared.GeneralService;
 import org.teree.shared.data.Scheme;
 import org.teree.shared.data.SchemeChange;
 
 @ApplicationScoped
 @Service
+//@RequireAuthentication
 public class GeneralServiceImpl implements GeneralService {
 
     @Inject
@@ -25,6 +29,9 @@ public class GeneralServiceImpl implements GeneralService {
     
     @Inject
     private SchemeManager _sm;
+    
+    @Inject
+    private OAuthIdentifierFetcher _userinfo;
     
     private RequestDispatcher _dispatcher = ErraiBus.getDispatcher();
 

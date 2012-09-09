@@ -9,6 +9,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/gwt-oauth2-0.2-alpha.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

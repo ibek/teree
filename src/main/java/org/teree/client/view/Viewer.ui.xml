@@ -6,18 +6,7 @@
 	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
 
 	<g:FlowPanel>
-		<g:FlowPanel addStyleNames="{res.css.header}"> <!-- header -->
-			<g:HorizontalPanel addStyleNames="{res.css.middle_header}">
-				<g:HorizontalPanel>
-					<g:Label addStyleNames="{res.css.logo}">teree</g:Label>
-				    <g:Button ui:field='btnNew' ui:text="New" addStyleNames="{res.css.middle_header_element}"></g:Button>
-					<g:Label ui:field="linkExplore" addStyleNames="{res.css.middle_header_link} {res.css.middle_header_element}">Explore</g:Label>
-					<g:Label ui:field="linkHelp" addStyleNames="{res.css.middle_header_link} {res.css.middle_header_element}">Help</g:Label>
-				</g:HorizontalPanel>
-				<view:UserWidget ui:field="user" addStyleNames="{res.css.header_login}">
-				</view:UserWidget>
-			</g:HorizontalPanel>
-		</g:FlowPanel>
+		<view:Header ui:field="header"/>
 		<tw:Scene ui:field="scene" addStyleNames="{res.css.scene}"></tw:Scene>
 		<g:Label ui:field='status' addStyleNames="{res.css.status}"></g:Label>
 	</g:FlowPanel>

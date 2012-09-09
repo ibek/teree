@@ -7,13 +7,23 @@
 
     <servlet>
         <servlet-name>ErraiServlet</servlet-name>
-        <servlet-class>org.jboss.errai.bus.server.servlet.DefaultBlockingServlet</servlet-class>
+        <servlet-class>org.teree.server.controller.ErraiServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>OAuthServlet</servlet-name>
+        <servlet-class>org.teree.server.auth.OAuthServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>ErraiServlet</servlet-name>
         <url-pattern>*.erraiBus</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>OAuthServlet</servlet-name>
+        <url-pattern>/oauth</url-pattern>
     </servlet-mapping>
 
 </web-app>

@@ -28,21 +28,12 @@ public class Explorer extends Composite implements SchemeExplorer.Display {
 	static {
 		PageStyle.INSTANCE.css().ensureInjected(); 
 	}
-
-    @UiField
-    Button btnNew;
-
-    @UiField
-    Label linkExplore;
-
-    @UiField
-    Label linkHelp;
+	
+	@UiField
+	Header header;
     
     @UiField
     Scene scene;
-    
-    @UiField
-    UserWidget user;
     
     @PostConstruct
     public void init() {
@@ -55,18 +46,18 @@ public class Explorer extends Composite implements SchemeExplorer.Display {
     }
 
 	@Override
-	public HasClickHandlers getNewButton() {
-		return btnNew;
+	public HasClickHandlers getCreateLink() {
+		return header.getCreateLink();
 	}
 
 	@Override
 	public HasClickHandlers getExploreLink() {
-		return linkExplore;
+		return header.getExploreLink();
 	}
 
 	@Override
 	public HasClickHandlers getHelpLink() {
-		return linkHelp;
+		return header.getHelpLink();
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package org.teree.dao;
+package org.teree.server.dao;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,10 +27,11 @@ import com.mongodb.DBObject;
 @Stateless
 public class SchemeManager {
 
-    @Inject
-    DB db;
+	@Inject
+    MongoDB mdb;
     
     private DBCollection getCollection() {
+    	DB db = mdb.getDatabase();
         DBCollection coll = db.getCollection("scheme");
         if(coll == null){
             coll = db.createCollection("scheme", null);

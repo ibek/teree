@@ -10,7 +10,7 @@ import org.teree.shared.data.SchemeChange;
 * Errai RPC interface that specifies which methods the client can invoke on the
 * server-side service.
 *
-* @see org.teree.controller.GeneralServiceImpl
+* @see org.teree.server.controller.GeneralServiceImpl
 */
 @Remote
 public interface GeneralService {

@@ -2,7 +2,6 @@
 0.3:
 
 export obrazku
-login - openId
 public & private scheme
 vytvoreni kategorii a podkategorii pro mapy - budou definovany pro scheme pri publikovani, defaultne se ulozi jako private
 upload obrazku a vyber z techto obrazku pri vkladani ImageNodeWidgetu
@@ -22,6 +21,7 @@ import a export z/do freemindmap
 tvorba map z templates
 resit vsechny mozne specialni pripady chyb
 grafika a styly
+authentication - oauth support
 
 0.6:
 

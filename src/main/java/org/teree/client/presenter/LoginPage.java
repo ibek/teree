@@ -5,13 +5,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.teree.client.Settings;
-import org.teree.client.Text;
-import org.teree.client.event.SchemeReceived;
-import org.teree.client.event.SchemeReceivedHandler;
-import org.teree.client.view.editor.NodeWidget;
-import org.teree.client.view.editor.event.SelectNode;
-import org.teree.client.view.editor.event.SelectNodeHandler;
-import org.teree.shared.data.Node;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -22,12 +15,12 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 @Dependent
-public class SchemeViewer implements Presenter {
+public class LoginPage implements Presenter {
 
-    public interface Display extends Header {
+	public interface Display extends Header {
+        //HasClickHandlers getGoogleButton();
         Widget asWidget();
-        void setRoot(Node root);
-        void info(String msg);
+        void fail();
     }
     
     @Inject @Named(value="eventBus")
@@ -37,14 +30,6 @@ public class SchemeViewer implements Presenter {
     private Display display;
     
     public void bind() {
-    	
-        eventBus.addHandler(SchemeReceived.TYPE, new SchemeReceivedHandler() {
-			@Override
-			public void received(SchemeReceived event) {
-				display.setRoot(event.getScheme().getRoot());
-				display.info(Text.LANG.schemeReceived(event.getScheme().getOid()));
-			}
-		});
 		
         display.getCreateLink().addClickHandler(new ClickHandler() {
 			@Override
@@ -60,6 +45,17 @@ public class SchemeViewer implements Presenter {
 			}
 		});
         
+        /**display.getGoogleButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				Window.Location.replace("/teree/oauth?callback=teree.html#explore"); // TODO: change to home
+			}
+		});*/
+        
+    }
+    
+    public void fail() {
+    	display.fail();
     }
     
     @Override

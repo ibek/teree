@@ -30,18 +30,9 @@ public class Editor extends Composite implements SchemeEditor.Display {
 	static {
 		PageStyle.INSTANCE.css().ensureInjected(); 
 	}
-
-    @UiField
-    Button btnNew;
-
-    @UiField
-    Button btnSave;
-
-    @UiField
-    Label linkExplore;
-
-    @UiField
-    Label linkHelp;
+	
+	@UiField
+	Header header;
     
     @UiField(provided = true)
     Scene scene;
@@ -55,12 +46,12 @@ public class Editor extends Composite implements SchemeEditor.Display {
     @UiField
     Label status;
     
-    @UiField
-    UserWidget user;
+    public Editor() {
+    	scene = new Scene();
+    }
     
     @PostConstruct
     public void init() {
-    	scene = new Scene();
         initWidget(uiBinder.createAndBindUi(this));
         bind();
     }
@@ -101,13 +92,13 @@ public class Editor extends Composite implements SchemeEditor.Display {
     }
 
     @Override
-    public HasClickHandlers getNewButton() {
-        return btnNew;
+    public HasClickHandlers getCreateLink() {
+        return header.getCreateLink();
     }
 
     @Override
     public HasClickHandlers getSaveButton() {
-        return btnSave;
+        return edit.getSaveButton();
     }
 
 	@Override
@@ -190,12 +181,12 @@ public class Editor extends Composite implements SchemeEditor.Display {
 
 	@Override
 	public HasClickHandlers getExploreLink() {
-		return linkExplore;
+		return header.getExploreLink();
 	}
 
 	@Override
 	public HasClickHandlers getHelpLink() {
-		return linkHelp;
+		return header.getHelpLink();
 	}
 
     @Override

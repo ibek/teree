@@ -9,7 +9,8 @@
     <inherits name="org.jboss.errai.bus.ErraiBus"/>
     <inherits name="org.jboss.errai.ioc.Container"/>
     <inherits name="org.jboss.errai.enterprise.CDI"/>
-    <inherits name="com.google.gwt.i18n.I18N"/>    
+    <inherits name="com.google.gwt.i18n.I18N"/>
+    <inherits name='com.github.gwtbootstrap.Bootstrap' />
     
 	<extend-property name="locale" values="en"/>
 	<set-property name="locale" value="en"/>

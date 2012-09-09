@@ -13,15 +13,7 @@ public interface PageStyle extends ClientBundle {
 
 	
 	public interface PageStyleCssResource extends CssResource {
-	    String header();
-	    String editPanel();
 	    String scene();
-	    String middle_header();
-	    String logo();
-	    String middle_header_element();
-	    String middle_header_link();
-	    String header_login();
-	    String header_login_user();
 	    String status();
 	}
 	

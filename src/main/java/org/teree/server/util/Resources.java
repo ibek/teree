@@ -1,8 +1,10 @@
-package org.teree.util;
+package org.teree.server.util;
 
 import java.net.UnknownHostException;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
@@ -18,24 +20,6 @@ public class Resources {
    @Produces
    public Logger produceLog(InjectionPoint injectionPoint) {
       return Logger.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
-   }
-   
-   private static final String DBNAME = "teree";
-   private static DB db;
-   
-   @Produces
-   public DB getDatabase(InjectionPoint injectionPoint) {
-       if(db == null){
-           try {
-               Mongo mongodb = new Mongo("127.0.0.1");
-               db = mongodb.getDB(DBNAME);
-           } catch (UnknownHostException e) {
-               e.printStackTrace();
-           } catch (MongoException e) {
-               e.printStackTrace();
-           }
-       }
-       return db;
    }
    
 }

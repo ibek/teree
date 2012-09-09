@@ -27,15 +27,9 @@ public class Viewer extends Composite implements SchemeViewer.Display {
 	static {
 		PageStyle.INSTANCE.css().ensureInjected(); 
 	}
-
-    @UiField
-    Button btnNew;
-
-    @UiField
-    Label linkExplore;
-
-    @UiField
-    Label linkHelp;
+	
+	@UiField
+	Header header;
     
     @UiField(provided = true)
     Scene scene;
@@ -43,12 +37,12 @@ public class Viewer extends Composite implements SchemeViewer.Display {
     @UiField
     Label status;
     
-    @UiField
-    UserWidget user;
+    public Viewer() {
+    	scene = new Scene();
+    }
     
     @PostConstruct
     public void init() {
-    	scene = new Scene();
         initWidget(uiBinder.createAndBindUi(this));
     }
     
@@ -75,18 +69,18 @@ public class Viewer extends Composite implements SchemeViewer.Display {
 	}
 
 	@Override
-	public HasClickHandlers getNewButton() {
-		return btnNew;
+	public HasClickHandlers getCreateLink() {
+		return header.getCreateLink();
 	}
 
 	@Override
 	public HasClickHandlers getExploreLink() {
-		return linkExplore;
+		return header.getExploreLink();
 	}
 
 	@Override
 	public HasClickHandlers getHelpLink() {
-		return linkHelp;
+		return header.getHelpLink();
 	}
 
 }

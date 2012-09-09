@@ -1,64 +1,7 @@
-.header {
-	background-color: #e0e0e0;
-	height: 40px;
-	border-bottom: 3px double #101010;
-	margin-bottom: 10px;
-}
-
-.editPanel {
-	background-color: #e0e0e0;
-	width: 600px;
-	height: 20px;
-	margin: 0 auto;
-	margin-top: -10px;
-	margin-bottom: 10px;
-	padding-bottom: 5px;
-	border: 1px solid #101010;
-	border-top: none;
-}
 
 .scene {
-	text-align: center;
-}
-
-.middle_header {
-	padding-top: 5px;
-	color: #101010;
-	width: 900px;
 	margin: 0 auto;
-	font-size: 26px;
-	font-family: monospace;
-	font-weight: bold;
-}
-
-.logo {
-	margin-right: 10px;
-}
-
-.middle_header_element {
-	color: #505050;
-	font-size: 14px;
-	margin-left: 5px;
-}
-
-.middle_header_link {
-	padding: 10px;
-	padding-right: 0px;
-	cursor: pointer;
-	cursor: hand;
-}
-
-.header_login {
-	color: #505050;
-	float: right;
-	font-size: 14px;
-	margin: 5px;
-}
-
-.header_login_user {
-	cursor: pointer;
-	cursor: hand;
-	padding: 5px;
+	text-align: center;
 }
 
 .status {

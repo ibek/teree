@@ -32,11 +32,8 @@ import com.google.gwt.user.client.ui.Widget;
 @Dependent
 public class SchemeEditor implements Presenter {
 
-    public interface Display extends KeyAction {
-        HasClickHandlers getNewButton();
+    public interface Display extends KeyAction, Header {
         HasClickHandlers getSaveButton();
-        HasClickHandlers getExploreLink();
-        HasClickHandlers getHelpLink();
         Widget asWidget();
         void setRoot(Node root);
         void info(String msg);
@@ -114,7 +111,7 @@ public class SchemeEditor implements Presenter {
 			}
 		});
 		
-        display.getNewButton().addClickHandler(new ClickHandler() {
+        display.getCreateLink().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				History.newItem(Settings.CREATE_LINK);

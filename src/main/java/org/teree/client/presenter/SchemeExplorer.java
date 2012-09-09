@@ -23,10 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 @Dependent
 public class SchemeExplorer implements Presenter {
 
-	public interface Display {
-        HasClickHandlers getNewButton();
-        HasClickHandlers getExploreLink();
-        HasClickHandlers getHelpLink();
+	public interface Display extends Header {
         Widget asWidget();
         void setData(List<Scheme> slist);
     }
@@ -39,7 +36,7 @@ public class SchemeExplorer implements Presenter {
 	
 	public void bind() {
 		
-        display.getNewButton().addClickHandler(new ClickHandler() {
+        display.getCreateLink().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				History.newItem(Settings.CREATE_LINK);

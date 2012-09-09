@@ -1,0 +1,39 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:view="urn:import:org.teree.client.view"
+	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
+
+	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
+
+	<ui:style>
+
+		.alternativeSignIn {
+			margin: 10px;
+		}
+
+	</ui:style>
+
+	<g:FlowPanel ui:field="panel">
+		<view:Header ui:field="header"/>
+		<g:HorizontalPanel addStyleNames="{res.css.scene}">
+			<g:FlowPanel>
+				<b:WellForm ui:field="form">
+					<b:ControlLabel>Username</b:ControlLabel>
+					<b:TextBox ui:field="username" placeholder="Username" />
+					<b:ControlLabel>Password</b:ControlLabel>
+					<b:PasswordTextBox ui:field="password"
+						placeholder="Password" />
+					<b:FormActions>
+						<b:SubmitButton ui:field="signin">Sign in</b:SubmitButton>
+					</b:FormActions>
+				</b:WellForm>
+			</g:FlowPanel>
+			<!-- <g:VerticalPanel addStyleNames="{style.alternativeSignIn}">
+				<b:Button ui:field='btnGoogle' type="PRIMARY" size="LARGE">Google</b:Button>
+				<b:Button type="PRIMARY" size="LARGE">Twitter</b:Button>
+			</g:VerticalPanel>
+			 -->
+		</g:HorizontalPanel>
+	</g:FlowPanel>
+
+</ui:UiBinder> 
