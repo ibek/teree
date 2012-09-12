@@ -2,6 +2,8 @@ package org.teree.client.view;
 
 import javax.annotation.PostConstruct;
 
+import com.github.gwtbootstrap.client.ui.Alert;
+import com.github.gwtbootstrap.client.ui.constants.AlertType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -14,6 +16,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.teree.client.Text;
 import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.view.editor.EditPanel;
 import org.teree.client.view.editor.Scene;
@@ -40,11 +43,8 @@ public class Editor extends Composite implements SchemeEditor.Display {
     @UiField
     EditPanel edit;
     
-    /**
-     * TODO: make the status floatable on a visible place
-     */
     @UiField
-    Label status;
+    Alert status;
     
     public Editor() {
     	scene = new Scene();
@@ -158,22 +158,23 @@ public class Editor extends Composite implements SchemeEditor.Display {
 
 	@Override
 	public void info(String msg) {
-		status.getElement().getStyle().setColor("black");
+		status.setType(AlertType.INFO);
 		setStatus(msg);
 	}
 
 	@Override
 	public void error(String msg) {
-		status.getElement().getStyle().setColor("red");
+		status.setType(AlertType.ERROR);
 		setStatus(msg);
 	}
 	
 	private void setStatus(String msg) {
 		status.setText(msg);
-        Timer t = new Timer() {
+		status.setVisible(true);
+		Timer t = new Timer() {
             @Override
             public void run() {
-                status.setText("");
+            	status.setVisible(false);
             }
         };
         t.schedule(5000);
@@ -193,5 +194,10 @@ public class Editor extends Composite implements SchemeEditor.Display {
     public String getSchemeSamplePicture() {
         return scene.getSchemeSamplePicture();
     }
+
+	@Override
+	public void bold() {
+		scene.changeBoldOfSelectedNode();
+	}
 
 }

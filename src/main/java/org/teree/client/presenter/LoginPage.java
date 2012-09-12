@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 @Dependent
 public class LoginPage implements Presenter {
 
-	public interface Display extends Header {
+	public interface Display extends Template {
         //HasClickHandlers getGoogleButton();
         Widget asWidget();
         void fail();
@@ -30,20 +30,6 @@ public class LoginPage implements Presenter {
     private Display display;
     
     public void bind() {
-		
-        display.getCreateLink().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem(Settings.CREATE_LINK);
-			}
-		});
-        
-        display.getExploreLink().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem(Settings.EXPLORE_LINK);
-			}
-		});
         
         /**display.getGoogleButton().addClickHandler(new ClickHandler() {
 			@Override
@@ -64,5 +50,10 @@ public class LoginPage implements Presenter {
         container.clear();
         container.add(display.asWidget());
     }
+
+	@Override
+	public Template getTemplate() {
+		return display;
+	}
 
 }

@@ -15,6 +15,7 @@
 
 	<g:FlowPanel ui:field="panel">
 		<view:Header ui:field="header"/>
+		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<g:HorizontalPanel addStyleNames="{res.css.scene}">
 			<g:FlowPanel>
 				<b:WellForm ui:field="form">

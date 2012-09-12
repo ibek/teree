@@ -1,14 +1,14 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tw='urn:import:org.teree.client.view.viewer'
-	xmlns:view="urn:import:org.teree.client.view">
+	xmlns:view="urn:import:org.teree.client.view" xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 	
 	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
 
 	<g:FlowPanel>
 		<view:Header ui:field="header"/>
+		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<tw:Scene ui:field="scene" addStyleNames="{res.css.scene}"></tw:Scene>
-		<g:Label ui:field='status' addStyleNames="{res.css.status}"></g:Label>
 	</g:FlowPanel>
 
 </ui:UiBinder> 

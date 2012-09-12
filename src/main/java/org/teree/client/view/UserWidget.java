@@ -15,20 +15,12 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
-/**
- * 
- * TODO: implement login and through this widget enable sign in, join, logout
- * ...
- * 
- */
 public class UserWidget extends Composite {
 
 	private Nav container;
 
 	private Button signIn;
-
 	private Button join;
-
 	private NavLink user;
 	
 	private UserInfo ui;

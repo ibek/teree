@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 @Dependent
 public class SchemeViewer implements Presenter {
 
-    public interface Display extends Header {
+    public interface Display extends Template {
         Widget asWidget();
         void setRoot(Node root);
         void info(String msg);
@@ -45,20 +45,6 @@ public class SchemeViewer implements Presenter {
 				display.info(Text.LANG.schemeReceived(event.getScheme().getOid()));
 			}
 		});
-		
-        display.getCreateLink().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem(Settings.CREATE_LINK);
-			}
-		});
-        
-        display.getExploreLink().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem(Settings.EXPLORE_LINK);
-			}
-		});
         
     }
     
@@ -68,5 +54,10 @@ public class SchemeViewer implements Presenter {
         container.clear();
         container.add(display.asWidget());
     }
+
+	@Override
+	public Template getTemplate() {
+		return display;
+	}
 
 }

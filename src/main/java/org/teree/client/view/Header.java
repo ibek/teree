@@ -1,5 +1,8 @@
 package org.teree.client.view;
 
+import org.teree.client.presenter.HeaderTemplate;
+import org.teree.client.presenter.Template;
+
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -8,7 +11,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Header extends Composite implements org.teree.client.presenter.Header {
+public class Header extends Composite implements HeaderTemplate {
 
 	private static HeaderBinder uiBinder = GWT.create(HeaderBinder.class);
 

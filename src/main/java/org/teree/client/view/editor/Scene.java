@@ -270,9 +270,6 @@ public class Scene extends Composite {
     	}
     }
     
-    /**
-     * TODO: enable to change the bold with CTRL+B
-     */
     public void changeBoldOfSelectedNode() {
     	if (selected != null) {
 			NodeStyle style = selected.getNode().getStyleOrCreate();

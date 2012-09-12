@@ -7,6 +7,7 @@ import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
 import org.jboss.errai.bus.client.protocols.SecurityParts;
 import org.jboss.errai.common.client.protocols.MessageParts;
+import org.teree.client.Text;
 import org.teree.client.presenter.LoginPage;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.AuthType;
@@ -62,11 +63,9 @@ public class Login extends Composite implements LoginPage.Display {
 
     @UiField
     SubmitButton signin;
-    
-    //@UiField
-    //Button btnGoogle;
 
-	private Alert alert = null;
+    @UiField
+	Alert status;
 	
 	@PostConstruct
     public void init() {
@@ -104,24 +103,15 @@ public class Login extends Composite implements LoginPage.Display {
 		return btnGoogle;
 	}*/
 	
-	/**
-	 * TODO: move the style into pageStyle
-	 */
 	@Override
 	public void fail() {
-		if (alert == null) {
-			alert = new Alert();
-			alert.setType(AlertType.ERROR);
-			alert.setText("Login failed ... wrong username and/or password."); // TODO: change to TEXT.LANG...
-			Style style = alert.getElement().getStyle();
-			style.setPosition(Position.ABSOLUTE);
-			style.setRight(5, Unit.PX);
-		}
-		panel.insert(alert, panel.getWidgetIndex(header)+1);
+		status.setType(AlertType.ERROR);
+		status.setText(Text.LANG.loginFailed());
+		status.setVisible(true);
 		Timer t = new Timer() {
             @Override
             public void run() {
-                panel.remove(alert);
+            	status.setVisible(false);
             }
         };
         t.schedule(5000);

@@ -1,7 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:edit='urn:import:org.teree.client.view.editor'
-	xmlns:view="urn:import:org.teree.client.view">
+	xmlns:view="urn:import:org.teree.client.view" xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 	
 	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
 	
@@ -19,8 +19,8 @@
 	<g:FlowPanel>
 		<view:Header ui:field="header"/>
 		<edit:EditPanel ui:field="edit" addStyleNames="{style.editPanel}"></edit:EditPanel>
+		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<edit:Scene ui:field="scene" addStyleNames="{res.css.scene}"></edit:Scene>
-		<g:Label ui:field='status' addStyleNames="{res.css.status}"></g:Label>
 	</g:FlowPanel>
 
 </ui:UiBinder> 

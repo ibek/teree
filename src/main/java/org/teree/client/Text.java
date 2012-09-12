@@ -12,10 +12,10 @@ public class Text {
     public interface Type extends Messages {
 
         String schemeReceived(String oid);
-        
         String schemeUpdated(String oid);
-        
         String schemeCreated(String oid);
+        
+        String loginFailed();
         
     }
     

@@ -18,10 +18,13 @@ import org.teree.client.presenter.SchemeExplorer;
 import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.presenter.SchemeViewer;
 import org.teree.client.presenter.Presenter;
+import org.teree.client.presenter.Template;
 import org.teree.shared.NodeGenerator;
 import org.teree.shared.GeneralService;
 import org.teree.shared.data.Scheme;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -29,7 +32,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 
 @ApplicationScoped
-public class TereeController implements Presenter, ValueChangeHandler<String> {
+public class TereeController implements ValueChangeHandler<String> {
 
 	@Inject
 	private IOCBeanManager manager;
@@ -66,11 +69,30 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 			}
 		});
 	}
+	
+	private void bindPresenter(Presenter presenter) {
+		Template temp = presenter.getTemplate();
+		
+		temp.getCreateLink().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				History.newItem(Settings.CREATE_LINK);
+			}
+		});
+		
+		
+		temp.getExploreLink().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				History.newItem(Settings.EXPLORE_LINK);
+			}
+		});
+		
+	}
 
 	/**
 	 * @see org.teree.client.presenter.Presenter
 	 */
-	@Override
 	public void go(HasWidgets container) {
 		this.container = container;
 		bind();
@@ -115,9 +137,7 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 					presenter = bean.getInstance();
 					presenter.go(container);
 					Scheme s = new Scheme();
-					s.setRoot(NodeGenerator.complex()); // TODO: create map from
-														// templates (even
-														// user's)
+					s.setRoot(NodeGenerator.complex()); // TODO: create map from templates (even user's)
 					eventBus.fireEvent(new SchemeReceived(s));
 					return;
 				}
@@ -150,6 +170,7 @@ public class TereeController implements Presenter, ValueChangeHandler<String> {
 
 			if (presenter != null) {
 				presenter.go(container);
+				bindPresenter(presenter);
 			}
 
 		}

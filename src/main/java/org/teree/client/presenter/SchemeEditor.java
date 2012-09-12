@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 @Dependent
 public class SchemeEditor implements Presenter {
 
-    public interface Display extends KeyAction, Header {
+    public interface Display extends KeyAction, Template {
         HasClickHandlers getSaveButton();
         Widget asWidget();
         void setRoot(Node root);
@@ -92,6 +92,10 @@ public class SchemeEditor implements Presenter {
 				{
                 	display.paste();
                 }
+				else if (key == 66 && e.getCtrlKey())
+				{
+                	display.bold();
+                }
 				else if (key == KeyCodes.KEY_UP)
 				{
                 	display.up();
@@ -110,20 +114,6 @@ public class SchemeEditor implements Presenter {
                 }
 			}
 		});
-		
-        display.getCreateLink().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem(Settings.CREATE_LINK);
-			}
-		});
-        
-        display.getExploreLink().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem(Settings.EXPLORE_LINK);
-			}
-		});
         
         display.getSaveButton().addClickHandler(new ClickHandler() {            
             @Override
@@ -140,6 +130,11 @@ public class SchemeEditor implements Presenter {
         container.clear();
         container.add(display.asWidget());
     }
+
+	@Override
+	public Template getTemplate() {
+		return display;
+	}
     
     public void saveScheme() {
     	if (scheme.getOid() == null) {

@@ -2,6 +2,8 @@ package org.teree.client.view;
 
 import javax.annotation.PostConstruct;
 
+import com.github.gwtbootstrap.client.ui.Alert;
+import com.github.gwtbootstrap.client.ui.constants.AlertType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -12,6 +14,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.teree.client.Text;
 import org.teree.client.presenter.SchemeViewer;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.client.view.viewer.Scene;
@@ -35,7 +38,7 @@ public class Viewer extends Composite implements SchemeViewer.Display {
     Scene scene;
     
     @UiField
-    Label status;
+    Alert status;
     
     public Viewer() {
     	scene = new Scene();
@@ -58,11 +61,13 @@ public class Viewer extends Composite implements SchemeViewer.Display {
 
 	@Override
 	public void info(String msg) {
+		status.setType(AlertType.INFO);
 		status.setText(msg);
-        Timer t = new Timer() {
+		status.setVisible(true);
+		Timer t = new Timer() {
             @Override
             public void run() {
-                status.setText("");
+            	status.setVisible(false);
             }
         };
         t.schedule(5000);
