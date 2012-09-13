@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.teree.client.CurrentUser;
 import org.teree.client.Text;
 import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.view.editor.EditPanel;
@@ -23,7 +24,7 @@ import org.teree.client.view.editor.Scene;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.Node;
 
-public class Editor extends Composite implements SchemeEditor.Display {
+public class Editor extends TemplateScene implements SchemeEditor.Display {
 	
 	private static EditorBinder uiBinder = GWT.create(EditorBinder.class);
 
@@ -33,9 +34,6 @@ public class Editor extends Composite implements SchemeEditor.Display {
 	static {
 		PageStyle.INSTANCE.css().ensureInjected(); 
 	}
-	
-	@UiField
-	Header header;
     
     @UiField(provided = true)
     Scene scene;
@@ -89,11 +87,6 @@ public class Editor extends Composite implements SchemeEditor.Display {
     @Override
     public Widget asWidget() {
         return this;
-    }
-
-    @Override
-    public HasClickHandlers getCreateLink() {
-        return header.getCreateLink();
     }
 
     @Override
@@ -178,16 +171,6 @@ public class Editor extends Composite implements SchemeEditor.Display {
             }
         };
         t.schedule(5000);
-	}
-
-	@Override
-	public HasClickHandlers getExploreLink() {
-		return header.getExploreLink();
-	}
-
-	@Override
-	public HasClickHandlers getHelpLink() {
-		return header.getHelpLink();
 	}
 
     @Override

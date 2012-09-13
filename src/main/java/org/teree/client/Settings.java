@@ -13,6 +13,8 @@ public class Settings {
 	public static final String FAILED_LOGIN_LINK = "login?failed";
 	public static final String JOIN_LINK = "join";
 	public static final String TAUTH_LINK = "tauth";
+	
+	public static final String COOKIE_SESSION_ID = "sessionId";
 
     public static final int MIN_WIDTH = 50;
     public static final int MAX_WIDTH = 400;

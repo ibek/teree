@@ -1,5 +1,7 @@
 package org.teree.client;
 
+import java.util.Date;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -11,8 +13,18 @@ import org.jboss.errai.bus.client.ErraiBus;
 import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.MessageCallback;
+import org.jboss.errai.bus.client.api.QueueSession;
 import org.jboss.errai.bus.client.api.RemoteCallback;
+import org.jboss.errai.bus.client.api.base.CommandMessage;
+import org.jboss.errai.bus.client.api.base.MessageBuilder;
+import org.jboss.errai.bus.client.framework.MessageBus;
+import org.jboss.errai.bus.client.protocols.SecurityCommands;
+import org.jboss.errai.bus.client.protocols.SecurityParts;
+import org.jboss.errai.common.client.protocols.MessageParts;
+import org.jboss.errai.common.client.protocols.Resources;
 import org.teree.client.event.SchemeReceived;
+import org.teree.client.event.UserInfoReceived;
+import org.teree.client.event.UserInfoReceivedHandler;
 import org.teree.client.presenter.LoginPage;
 import org.teree.client.presenter.SchemeExplorer;
 import org.teree.client.presenter.SchemeEditor;
@@ -21,13 +33,17 @@ import org.teree.client.presenter.Presenter;
 import org.teree.client.presenter.Template;
 import org.teree.shared.NodeGenerator;
 import org.teree.shared.GeneralService;
+import org.teree.shared.UserService;
+import org.teree.shared.data.AuthType;
 import org.teree.shared.data.Scheme;
+import org.teree.shared.data.UserInfo;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 
@@ -46,6 +62,9 @@ public class TereeController implements ValueChangeHandler<String> {
 
 	@Inject
 	private Keyboard keyboard;
+	
+	@Inject
+	private CurrentUser user;
 
 	private HasWidgets container;
 
@@ -62,6 +81,14 @@ public class TereeController implements ValueChangeHandler<String> {
 				if (message.getCommandType().equals("FailedAuth")) {
 					History.newItem(Settings.FAILED_LOGIN_LINK);
 				} else if (message.getCommandType().equals("SuccessfulAuth")) {
+					
+					// remember current logged user
+					QueueSession sess = message.getResource(QueueSession.class, Resources.Session.name());
+					String sessionId = sess.getSessionId();
+					loadUserInfoData(sessionId);
+					Date expires = new Date(new Date().getTime() + (1000 * 60 * 60)); // expires in one hour
+					Cookies.setCookie(Settings.COOKIE_SESSION_ID, sessionId, expires);
+					
 					History.newItem(Settings.EXPLORE_LINK); // TODO: should continue with previous task
 				} else {
 					History.newItem(Settings.LOGIN_LINK);
@@ -71,7 +98,7 @@ public class TereeController implements ValueChangeHandler<String> {
 	}
 	
 	private void bindPresenter(Presenter presenter) {
-		Template temp = presenter.getTemplate();
+		final Template temp = presenter.getTemplate();
 		
 		temp.getCreateLink().addClickHandler(new ClickHandler() {
 			@Override
@@ -80,11 +107,17 @@ public class TereeController implements ValueChangeHandler<String> {
 			}
 		});
 		
-		
 		temp.getExploreLink().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				History.newItem(Settings.EXPLORE_LINK);
+			}
+		});
+		
+		eventBus.addHandler(UserInfoReceived.TYPE, new UserInfoReceivedHandler() {
+			@Override
+			public void received(UserInfoReceived event) {
+				temp.setCurrentUser(user);
 			}
 		});
 		
@@ -109,6 +142,8 @@ public class TereeController implements ValueChangeHandler<String> {
 		String token = event.getValue();
 		if (token != null) {
 			Presenter presenter = null;
+			
+			boolean createScheme = false;
 
 			if (token.equals(Settings.HOME_LINK)) {
 				/**
@@ -135,11 +170,7 @@ public class TereeController implements ValueChangeHandler<String> {
 						.lookupBean(SchemeEditor.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
-					presenter.go(container);
-					Scheme s = new Scheme();
-					s.setRoot(NodeGenerator.complex()); // TODO: create map from templates (even user's)
-					eventBus.fireEvent(new SchemeReceived(s));
-					return;
+					createScheme = true;
 				}
 			} else if (token.startsWith(Settings.EDIT_LINK)) {
 				IOCBeanDef<SchemeEditor> bean = manager
@@ -169,8 +200,24 @@ public class TereeController implements ValueChangeHandler<String> {
 			}*/
 
 			if (presenter != null) {
+				
 				presenter.go(container);
 				bindPresenter(presenter);
+				
+				String sessionId = Cookies.getCookie(Settings.COOKIE_SESSION_ID);
+				if (sessionId == null) {
+					user.clear();
+				} else if (user.getSessionId() == null) {
+					loadUserInfoData(sessionId);
+				} else {
+					presenter.getTemplate().setCurrentUser(user);
+				}
+				
+				if (createScheme) {
+					Scheme s = new Scheme();
+					s.setRoot(NodeGenerator.complex()); // TODO: create map from templates (even user's)
+					eventBus.fireEvent(new SchemeReceived(s));
+				}
 			}
 
 		}
@@ -189,6 +236,26 @@ public class TereeController implements ValueChangeHandler<String> {
 				return false;
 			}
 		}).getScheme(oid);
+	}
+	
+	private void loadUserInfoData(final String sessionId) {
+		
+		ErraiBus.get().subscribe("UserInfoReceiver", new MessageCallback() {
+			@Override
+			public void callback(Message message) {
+				UserInfo ui = message.get(UserInfo.class, UserInfo.PART);
+				user.setSessionId(sessionId);
+				user.set(ui);
+				eventBus.fireEvent(new UserInfoReceived(user));
+			}
+		});
+		
+		MessageBuilder.createMessage("UserInfoProvider")
+			.command("UserInfoProvider")
+	        .with(MessageParts.ReplyTo, "UserInfoReceiver")
+	        .with(MessageParts.SessionID, sessionId)
+	        .done().sendNowWith(ErraiBus.get());
+		
 	}
 
 }

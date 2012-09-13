@@ -20,7 +20,7 @@ import org.teree.client.view.resource.PageStyle;
 import org.teree.client.view.viewer.Scene;
 import org.teree.shared.data.Node;
 
-public class Viewer extends Composite implements SchemeViewer.Display {
+public class Viewer extends TemplateScene implements SchemeViewer.Display {
 
 	private static ViewerBinder uiBinder = GWT.create(ViewerBinder.class);
 
@@ -30,9 +30,6 @@ public class Viewer extends Composite implements SchemeViewer.Display {
 	static {
 		PageStyle.INSTANCE.css().ensureInjected(); 
 	}
-	
-	@UiField
-	Header header;
     
     @UiField(provided = true)
     Scene scene;
@@ -71,21 +68,6 @@ public class Viewer extends Composite implements SchemeViewer.Display {
             }
         };
         t.schedule(5000);
-	}
-
-	@Override
-	public HasClickHandlers getCreateLink() {
-		return header.getCreateLink();
-	}
-
-	@Override
-	public HasClickHandlers getExploreLink() {
-		return header.getExploreLink();
-	}
-
-	@Override
-	public HasClickHandlers getHelpLink() {
-		return header.getHelpLink();
 	}
 
 }

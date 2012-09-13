@@ -18,7 +18,7 @@ import org.teree.client.view.explorer.Scene;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.Scheme;
 
-public class Explorer extends Composite implements SchemeExplorer.Display {
+public class Explorer extends TemplateScene implements SchemeExplorer.Display {
 
 	private static ExplorerBinder uiBinder = GWT.create(ExplorerBinder.class);
 
@@ -28,9 +28,6 @@ public class Explorer extends Composite implements SchemeExplorer.Display {
 	static {
 		PageStyle.INSTANCE.css().ensureInjected(); 
 	}
-	
-	@UiField
-	Header header;
     
     @UiField
     Scene scene;
@@ -44,21 +41,6 @@ public class Explorer extends Composite implements SchemeExplorer.Display {
     public Widget asWidget() {
         return this;
     }
-
-	@Override
-	public HasClickHandlers getCreateLink() {
-		return header.getCreateLink();
-	}
-
-	@Override
-	public HasClickHandlers getExploreLink() {
-		return header.getExploreLink();
-	}
-
-	@Override
-	public HasClickHandlers getHelpLink() {
-		return header.getHelpLink();
-	}
 
 	@Override
 	public void setData(List<Scheme> slist) {

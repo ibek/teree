@@ -4,6 +4,8 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.jboss.errai.bus.client.ErraiBus;
+import org.jboss.errai.bus.client.framework.MessageBus;
 import org.jboss.errai.ioc.client.api.AfterInitialization;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 
@@ -13,7 +15,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 @EntryPoint
 public class Teree {
     
-    //private MessageBus msgBus = ErraiBus.get();
+    //private static MessageBus msgBus = ErraiBus.get();
     
     private static HandlerManager eventBus = new HandlerManager(null);
 
@@ -36,7 +38,8 @@ public class Teree {
     }
 
     /**@Produces
-    public MessageBus produceMessageBus() {
+    @Named(value="msgBus")
+    private MessageBus produceMessageBus() {
         return msgBus;
     }*/
 

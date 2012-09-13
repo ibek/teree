@@ -1,30 +1,38 @@
 
 0.3:
 
-export obrazku
+DBAuth prihlaseni a registrace
+~DBAuth pres SSL
 public & private scheme
 vytvoreni kategorii a podkategorii pro mapy - budou definovany pro scheme pri publikovani, defaultne se ulozi jako private
-upload obrazku a vyber z techto obrazku pri vkladani ImageNodeWidgetu
- (obrazky co ma uzivatel v library (otagovane apod) - odkazy na ty obrazky + si muze pridat nektere obrazky z public schemat)
+rozdelit explore na kategorie a podkategorie
+vytvorit stranku uzivatele kde bude mit vlastni kategorie a podkategorie podle jeho schemat ktera tam budou zobrazena podobne jako v explore
 
 0.4:
 
-floatable status
+export obrazku
+upload obrazku a vyber z techto obrazku pri vkladani ImageNodeWidgetu
+ (obrazky co ma uzivatel v library (otagovane apod) - odkazy na ty obrazky + si muze pridat nektere obrazky z public schemat)
+umoznit tagovani map
+zobrazit tagy u map v explore
+resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
+
+0.5:
+
+upraveni explore - zmenit zobrazeni map do mrizky
 direct explore - novy typ generovani mapy
 service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
 ConnectorNodeWidget (to connect another map)
 podpora collapse node
 
-0.5:
+0.6:
 
+IconTextNodeWidget
 import a export z/do freemindmap
 tvorba map z templates
-resit vsechny mozne specialni pripady chyb
-grafika a styly
-authentication - oauth support
 
-0.6:
+future:
 
 udelat testovani ... vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
 collaboration
-IconTextNodeWidget
+authentication - oauth support

@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Login extends Composite implements LoginPage.Display {
+public class Login extends TemplateScene implements LoginPage.Display {
 
 	private static LoginBinder uiBinder = GWT.create(LoginBinder.class);
 
@@ -48,9 +48,6 @@ public class Login extends Composite implements LoginPage.Display {
 	
 	@UiField
 	FlowPanel panel;
-	
-	@UiField
-	Header header;
     
     @UiField
     WellForm form;
@@ -82,21 +79,6 @@ public class Login extends Composite implements LoginPage.Display {
 	        .with(SecurityParts.Password, password.getText()) // TODO: encode password
 	        .done().sendNowWith(ErraiBus.get());
     }
-	
-	@Override
-	public HasClickHandlers getCreateLink() {
-		return header.getCreateLink();
-	}
-
-	@Override
-	public HasClickHandlers getExploreLink() {
-		return header.getExploreLink();
-	}
-
-	@Override
-	public HasClickHandlers getHelpLink() {
-		return header.getHelpLink();
-	}
 
 	/**@Override
 	public HasClickHandlers getGoogleButton() {

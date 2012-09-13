@@ -27,4 +27,9 @@ public class UserInfo {
 		this.name = name;
 	}
 	
+	public void set(UserInfo ui) {
+		username = ui.username;
+		name = ui.name;
+	}
+	
 }

@@ -9,6 +9,7 @@ import org.jboss.errai.bus.client.protocols.SecurityParts;
 import org.jboss.errai.bus.server.security.auth.AuthenticationAdapter;
 import org.jboss.errai.bus.server.service.ErraiService;
 import org.jboss.errai.bus.server.util.SessionContext;
+import org.jboss.errai.common.client.protocols.Resources;
 import org.scribe.model.Token;
 import org.teree.server.dao.UserInfoManager;
 import org.teree.shared.data.AuthType;
@@ -37,26 +38,26 @@ public class TAuthAdapter implements AuthenticationAdapter {
      * @param message
      */
     public void challenge(final Message message) {
-        System.out.println("auth");
-        System.out.println(message.getCommandType());
         
         final AuthType at = message.get(AuthType.class, AuthType.PART);
         
         switch(at) {
 	        case Database: {
 	            
-	            final String name = message.get(String.class, SecurityParts.Name);
+	            final String username = message.get(String.class, SecurityParts.Name);
 	            final String password = message.get(String.class, SecurityParts.Password);
 	            
-	            UserInfo ui = uim.select(name, password);
+	            UserInfo ui = uim.select(username, password);
 	            
 	            if (ui == null) { // authentication failed
 	            	MessageBuilder.createConversation(message)
 	                .subjectProvided()
 	                .command(SecurityCommands.FailedAuth)
-	                .with(SecurityParts.Name, name)
+	                .with(SecurityParts.Name, username)
 	                .noErrorHandling().sendNowWith(bus);
 	            } else {
+	            	
+	            	addAuthenticationCredentials(message, username, password);
 	            	
 	    	        MessageBuilder.createConversation(message)
 	    	                .subjectProvided()
@@ -89,6 +90,13 @@ public class TAuthAdapter implements AuthenticationAdapter {
 	        	
 	        }
         }
+    }
+
+    // TODO: add the authentication into session
+    private void addAuthenticationCredentials(Message message, String username, String password) {
+        QueueSession session = message.getResource(QueueSession.class, Resources.Session.name());
+        session.setAttribute("username", username);
+        session.setAttribute("password", password);
     }
 
     // TODO: add the authentication into session

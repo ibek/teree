@@ -1,5 +1,6 @@
 package org.teree.client.view;
 
+import org.teree.client.CurrentUser;
 import org.teree.client.presenter.HeaderTemplate;
 import org.teree.client.presenter.Template;
 
@@ -26,6 +27,9 @@ public class Header extends Composite implements HeaderTemplate {
 
     @UiField
     NavLink help;
+
+    @UiField
+    UserWidget user;
     
     public Header() {
         initWidget(uiBinder.createAndBindUi(this));
@@ -44,6 +48,11 @@ public class Header extends Composite implements HeaderTemplate {
 	@Override
 	public HasClickHandlers getHelpLink() {
 		return help;
+	}
+
+	@Override
+	public void setCurrentUser(CurrentUser user) {
+		this.user.setCurrentUser(user);
 	}
 
 }

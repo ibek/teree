@@ -18,10 +18,6 @@ public class SchemeReceived extends GwtEvent<SchemeReceivedHandler> {
         return s;
     }
 
-    public void setScheme(Scheme s) {
-        this.s = s;
-    }
-
     @Override
     public Type<SchemeReceivedHandler> getAssociatedType() {
         return TYPE;

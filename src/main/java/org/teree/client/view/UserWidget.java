@@ -1,5 +1,6 @@
 package org.teree.client.view;
 
+import org.teree.client.CurrentUser;
 import org.teree.client.Settings;
 import org.teree.shared.data.UserInfo;
 
@@ -21,15 +22,15 @@ public class UserWidget extends Composite {
 
 	private Button signIn;
 	private Button join;
-	private NavLink user;
+	private NavLink userHome;
 	
-	private UserInfo ui;
+	private CurrentUser user;
 
 	public UserWidget() {
 		container = new Nav();
 		container.setAlignment(Alignment.RIGHT);
-		user = new NavLink("User");
-		container.add(user);
+		userHome = new NavLink("User");
+		container.add(userHome);
 
 		signIn = new Button("Sign in");
 		join = new Button("Join");
@@ -56,7 +57,7 @@ public class UserWidget extends Composite {
 			}
 		});
 		
-		user.addClickHandler(new ClickHandler() {
+		userHome.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO: redirect to user's home page
@@ -64,13 +65,9 @@ public class UserWidget extends Composite {
 		});
 	}
 	
-	public UserInfo getUser() {
-		return ui;
-	}
-	
-	public void setUser(UserInfo ui) {
-		this.ui = ui;
-		user.setText(ui.getUsername());
+	public void setCurrentUser(CurrentUser cu) {
+		this.user = cu;
+		userHome.setText(cu.getUsername());
 	}
 
 }
