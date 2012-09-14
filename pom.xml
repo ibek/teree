@@ -26,7 +26,7 @@
 			work with JBoss EAP 6. It requires you have access to the JBoss EAP 6 maven 
 			repository. -->
 		<!-- <version.org.jboss.spec.jboss.javaee6>3.0.0.Beta1-redhat-1</version.org.jboss.spec.jboss.javaee6> -->
-		<version.org.jboss.errai>2.0.2.Final</version.org.jboss.errai>
+		<version.org.jboss.errai>2.1-SNAPSHOT</version.org.jboss.errai>
 		<version.com.google.gwt>2.4.0</version.com.google.gwt>
 		<version.org.mongodb>2.7.2</version.org.mongodb>
 		<version.org.codehaus.mojo.gwt.maven.plugin>${version.com.google.gwt}</version.org.codehaus.mojo.gwt.maven.plugin>
@@ -305,6 +305,12 @@
 			<groupId>org.mindrot</groupId>
 			<artifactId>jbcrypt</artifactId>
 			<version>0.3m</version>
+		</dependency>
+			
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.2</version>
 		</dependency>
 
 	</dependencies>
@@ -605,7 +611,7 @@
 			<releases>
 			</releases>
 			<snapshots>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 			</snapshots>
 		</repository>
 		

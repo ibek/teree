@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.teree.client.CurrentUser;
 import org.teree.client.Text;
 import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.view.editor.EditPanel;

@@ -6,6 +6,8 @@ import org.teree.shared.data.UserInfo;
 @Remote
 public interface UserService {
 	
+	public UserInfo getUserInfo();
+	
 	public void register(UserInfo ui, String password);
 	
 }

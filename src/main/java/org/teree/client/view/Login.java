@@ -63,6 +63,9 @@ public class Login extends TemplateScene implements LoginPage.Display {
 
     @UiField
 	Alert status;
+    
+    @UiField
+    Button btnGoogle;
 	
 	@PostConstruct
     public void init() {
@@ -80,10 +83,10 @@ public class Login extends TemplateScene implements LoginPage.Display {
 	        .done().sendNowWith(ErraiBus.get());
     }
 
-	/**@Override
+	@Override
 	public HasClickHandlers getGoogleButton() {
 		return btnGoogle;
-	}*/
+	}
 	
 	@Override
 	public void fail() {

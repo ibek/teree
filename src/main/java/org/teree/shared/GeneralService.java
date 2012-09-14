@@ -19,14 +19,4 @@ public interface GeneralService {
     
     public Scheme getScheme(String oid);
     
-    public String insertScheme(Scheme s);
-    
-    public void updateScheme(Scheme s);
-    
-    /**
-     * Inform cooperated users about change.
-     * @param change info
-     */
-    public void schemeChanged(SchemeChange change);
-    
 }

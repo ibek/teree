@@ -11,9 +11,9 @@ import org.scribe.model.Verb;
 import org.teree.server.controller.RedirectException;
 import org.teree.shared.data.UserInfo;
 
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONValue;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @Stateless
 public class OAuthIdentifierFetcher {
@@ -35,8 +35,9 @@ public class OAuthIdentifierFetcher {
 
 		if (response != null) {
 			String body = response.getBody();
-			JSONObject obj = JSONParser.parseStrict(body).isObject();
-			googleid = obj.get("id").isString().stringValue();
+			System.out.println(body);
+			JsonObject obj = new JsonParser().parse(body).getAsJsonObject();
+			googleid = obj.get("id").getAsString();
 		}
 
 		return googleid;

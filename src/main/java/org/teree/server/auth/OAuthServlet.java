@@ -74,7 +74,8 @@ public class OAuthServlet extends HttpServlet {
 		tokens.remove(oAuthToken);
 
 		HttpSession session = req.getSession();
-		session.setAttribute(ErraiService.SESSION_AUTH_DATA, accessToken);
+		session.setAttribute("auth", AuthType.OAuth.name());
+		session.setAttribute("token", accessToken);
 		
 		/**Message msg = MessageBuilder.createMessage("AuthenticationService")
 	        .command(SecurityCommands.AuthRequest)

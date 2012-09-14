@@ -16,6 +16,7 @@ import org.teree.client.event.SchemeReceived;
 import org.teree.client.event.SchemeReceivedHandler;
 import org.teree.client.view.KeyAction;
 import org.teree.shared.GeneralService;
+import org.teree.shared.SecuredService;
 import org.teree.shared.data.Scheme;
 import org.teree.shared.data.Node;
 
@@ -45,7 +46,7 @@ public class SchemeEditor implements Presenter {
     private HandlerManager eventBus;
     
 	@Inject
-	private Caller<GeneralService> generalService;
+	private Caller<SecuredService> securedService;
     
     @Inject
     private Display display;
@@ -138,7 +139,7 @@ public class SchemeEditor implements Presenter {
     
     public void saveScheme() {
     	if (scheme.getOid() == null) {
-	    	generalService.call(new RemoteCallback<String>() {
+    		securedService.call(new RemoteCallback<String>() {
 	            @Override
 	            public void callback(String response) {
 	                scheme.setOid(response);
@@ -152,7 +153,7 @@ public class SchemeEditor implements Presenter {
 				}
 			}).insertScheme(scheme);
     	} else {
-    		generalService.call(new RemoteCallback<Void>() {
+    		securedService.call(new RemoteCallback<Void>() {
 	            @Override
 	            public void callback(Void response) {
 	                display.info(Text.LANG.schemeUpdated(scheme.getOid()));

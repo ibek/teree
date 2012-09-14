@@ -16,6 +16,7 @@ import org.teree.shared.data.Scheme;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 import org.teree.shared.data.Node.NodeType;
+import org.teree.shared.data.UserInfo;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -39,20 +40,19 @@ public class SchemeManager {
         return coll;
     }
     
-    /**
-     * Insert new scheme.
-     * @param s
-     * @return oid
-     */
-    public String insert(Scheme s) {
+    public String insertPrivate(Scheme s, UserInfo ui) {
+    	if (ui == null) {
+    		return null;
+    	}
         DBObject dbo = toSchemeDBObject(s);
+        dbo.put("owner", ui.getUserId());
         DBCollection coll = getCollection();
         coll.insert(dbo);
         return ((ObjectId)dbo.get("_id")).toStringMongod();
     }
     
     /**
-     * Select specific node identified by oid.
+     * Select specific scheme identified by oid.
      * @param oid
      * @return node
      */
@@ -60,18 +60,47 @@ public class SchemeManager {
     	if (oid == null) {
     		return null;
     	}
-        DBCollection coll = getCollection();
         DBObject searchById = new BasicDBObject("_id", new ObjectId(oid));
-        DBObject found = coll.findOne(searchById);
+        return select(searchById);
+    }
+    
+    public Scheme selectPrivate(String oid, UserInfo ui) {
+    	if (oid == null || ui == null) {
+    		return null;
+    	}
+        DBObject searchBy = new BasicDBObject("_id", new ObjectId(oid));
+        searchBy.put("owner", ui.getUserId());
+        return select(searchBy);
+    }
+    
+    private Scheme select(DBObject searchBy) {
+        DBCollection coll = getCollection();
+        DBObject found = coll.findOne(searchBy);
         return fromSchemeDBObject(found);
     }
     
-    public List<Scheme> all() {
-    	List<Scheme> all = new ArrayList<Scheme>();
-    	DBCollection coll = getCollection();
+    /**
+     * Get all public schemes.
+     * @return
+     */
+    public List<Scheme> allPublic() {
     	DBObject keys = new BasicDBObject();
     	keys.put("screen", 1);
-        DBCursor found = coll.find(new BasicDBObject(), keys);
+    	DBObject ref = new BasicDBObject("owner", new BasicDBObject("$exists", false));
+    	return all(ref, keys);
+    }
+    
+    public List<Scheme> allPrivate(UserInfo ui) {
+    	DBObject keys = new BasicDBObject();
+    	keys.put("screen", 1);
+    	DBObject ref = new BasicDBObject("owner", ui.getUserId());
+    	return all(ref, keys);
+    }
+
+    private List<Scheme> all(DBObject ref, DBObject keys) {
+    	List<Scheme> all = new ArrayList<Scheme>();
+    	DBCollection coll = getCollection();
+        DBCursor found = coll.find(ref, keys);
         while(found.hasNext()) {
         	DBObject dbo = found.next();
         	Scheme s = new Scheme();

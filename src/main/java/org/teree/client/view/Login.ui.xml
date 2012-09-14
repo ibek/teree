@@ -29,11 +29,11 @@
 					</b:FormActions>
 				</b:WellForm>
 			</g:FlowPanel>
-			<!-- <g:VerticalPanel addStyleNames="{style.alternativeSignIn}">
+			<g:VerticalPanel addStyleNames="{style.alternativeSignIn}">
 				<b:Button ui:field='btnGoogle' type="PRIMARY" size="LARGE">Google</b:Button>
 				<b:Button type="PRIMARY" size="LARGE">Twitter</b:Button>
 			</g:VerticalPanel>
-			 -->
+			
 		</g:HorizontalPanel>
 	</g:FlowPanel>
 

@@ -6,7 +6,9 @@ import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.framework.MessageBus;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
 import org.jboss.errai.bus.client.protocols.SecurityParts;
+import org.jboss.errai.bus.server.api.RpcContext;
 import org.jboss.errai.bus.server.security.auth.AuthenticationAdapter;
+import org.jboss.errai.bus.server.security.auth.DefaultAdapter;
 import org.jboss.errai.bus.server.service.ErraiService;
 import org.jboss.errai.bus.server.util.SessionContext;
 import org.jboss.errai.common.client.protocols.Resources;
@@ -16,6 +18,7 @@ import org.teree.shared.data.AuthType;
 import org.teree.shared.data.UserInfo;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 public class TAuthAdapter implements AuthenticationAdapter {
 
@@ -37,8 +40,8 @@ public class TAuthAdapter implements AuthenticationAdapter {
      *
      * @param message
      */
+    @Override
     public void challenge(final Message message) {
-        
         final AuthType at = message.get(AuthType.class, AuthType.PART);
         
         switch(at) {
@@ -70,7 +73,6 @@ public class TAuthAdapter implements AuthenticationAdapter {
 	        }
 	        case OAuth: {
 	        	
-	        	//Token accessToken = message.get(Token.class, OAuthServlet.ACCESS_TOKEN_PART);
 	        	Token accessToken = getAuthenticationToken(message);
 	        	if (accessToken == null) {
 	        		MessageBuilder.createConversation(message)
@@ -80,6 +82,7 @@ public class TAuthAdapter implements AuthenticationAdapter {
 	        		return;
 	        	}
 	        	String googleid = uif.fetch(accessToken);
+	        	addAuthenticationCredentials(message, googleid);
 	        	UserInfo ui = uim.selectByGoogleId(googleid);
 	        	
 	        	MessageBuilder.createConversation(message)
@@ -92,33 +95,48 @@ public class TAuthAdapter implements AuthenticationAdapter {
         }
     }
 
-    // TODO: add the authentication into session
     private void addAuthenticationCredentials(Message message, String username, String password) {
-        QueueSession session = message.getResource(QueueSession.class, Resources.Session.name());
+        QueueSession queueSession = message.getResource(QueueSession.class, Resources.Session.name());
+        final HttpSession session = queueSession.getAttribute(HttpSession.class, HttpSession.class.getName());
+        session.setAttribute("auth", AuthType.Database.name());
         session.setAttribute("username", username);
         session.setAttribute("password", password);
     }
 
-    // TODO: add the authentication into session
-    private void addAuthenticationToken(Message message, Token accessToken) {
-        QueueSession session = message.getResource(QueueSession.class, "Session");
-        session.setAttribute(ErraiService.SESSION_AUTH_DATA, accessToken);
+    private void addAuthenticationCredentials(Message message, String googleid) {
+        QueueSession queueSession = message.getResource(QueueSession.class, Resources.Session.name());
+        final HttpSession session = queueSession.getAttribute(HttpSession.class, HttpSession.class.getName());
+        session.setAttribute("auth", AuthType.OAuth.name());
+        session.setAttribute("googleid", googleid);
     }
     
     private Token getAuthenticationToken(Message message) {
-    	SessionContext ctx = SessionContext.get(message);
-        return ctx.getSession().getAttribute(Token.class, ErraiService.SESSION_AUTH_DATA);
+    	QueueSession queueSession = message.getResource(QueueSession.class, Resources.Session.name());
+        final HttpSession session = queueSession.getAttribute(HttpSession.class, HttpSession.class.getName());
+        return (Token)session.getAttribute("token");
     }
 
+    @Override
     public boolean isAuthenticated(Message message) {
-        QueueSession session = message.getResource(QueueSession.class, "Session");
-        return session != null && session.hasAttribute(ErraiService.SESSION_AUTH_DATA);
+    	System.out.println("check Auth");
+    	QueueSession queueSession = message.getResource(QueueSession.class, Resources.Session.name());
+        final HttpSession session = (queueSession==null)?null:queueSession.getAttribute(HttpSession.class, HttpSession.class.getName());
+        return session != null && session.getAttribute("auth")!=null && 
+        		((session.getAttribute("username")!=null && session.getAttribute("password")!=null) || 
+        		 (session.getAttribute("token")!=null && session.getAttribute("googleid")!=null));
     }
 
+    @Override
     public boolean endSession(Message message) {
         boolean sessionEnded = isAuthenticated(message);
         if (sessionEnded) {
-            message.getResource(QueueSession.class, "Session").removeAttribute(ErraiService.SESSION_AUTH_DATA);
+        	QueueSession queueSession = message.getResource(QueueSession.class, Resources.Session.name());
+            final HttpSession session = (queueSession==null)?null:queueSession.getAttribute(HttpSession.class, HttpSession.class.getName());
+            session.removeAttribute("auth");
+            session.removeAttribute("username");
+            session.removeAttribute("password");
+            session.removeAttribute("token");
+            session.removeAttribute("googleid");
             return true;
         } else {
             return false;

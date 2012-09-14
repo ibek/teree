@@ -1,20 +1,23 @@
 package org.teree.client.view;
 
-import org.teree.client.CurrentUser;
+import org.jboss.errai.bus.client.ErraiBus;
+import org.jboss.errai.bus.client.api.base.MessageBuilder;
+import org.jboss.errai.bus.client.protocols.SecurityCommands;
+import org.jboss.errai.bus.client.protocols.SecurityParts;
+import org.jboss.errai.common.client.protocols.MessageParts;
 import org.teree.client.Settings;
+import org.teree.shared.data.AuthType;
 import org.teree.shared.data.UserInfo;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Nav;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.constants.Alignment;
+import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 
 public class UserWidget extends Composite {
 
@@ -22,9 +25,11 @@ public class UserWidget extends Composite {
 
 	private Button signIn;
 	private Button join;
+	private Button settings;
+	private Button logout;
 	private NavLink userHome;
 	
-	private CurrentUser user;
+	private UserInfo user;
 
 	public UserWidget() {
 		container = new Nav();
@@ -34,8 +39,12 @@ public class UserWidget extends Composite {
 
 		signIn = new Button("Sign in");
 		join = new Button("Join");
+		settings = new Button("", IconType.WRENCH);
+		logout = new Button("",IconType.SIGNOUT);
 		container.add(signIn);
 		container.add(join);
+		container.add(settings);
+		container.add(logout);
 		
 		bind();
 
@@ -57,6 +66,22 @@ public class UserWidget extends Composite {
 			}
 		});
 		
+		settings.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO: settings for user
+			}
+		});
+		
+		logout.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				MessageBuilder.createMessage("AuthenticationService")
+			        .command(SecurityCommands.EndSession)
+			        .done().sendNowWith(ErraiBus.get());
+			}
+		});
+		
 		userHome.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -65,9 +90,20 @@ public class UserWidget extends Composite {
 		});
 	}
 	
-	public void setCurrentUser(CurrentUser cu) {
-		this.user = cu;
-		userHome.setText(cu.getUsername());
+	public void setCurrentUser(UserInfo ui) {
+		this.user = ui;
+		boolean logged = ui != null && ui.getUsername() != null;
+		
+		userHome.setVisible(logged);
+		settings.setVisible(logged);
+		logout.setVisible(logged);
+		
+		signIn.setVisible(!logged);
+		join.setVisible(!logged);
+		
+		if (logged) {
+			userHome.setText(ui.getUsername());
+		}
 	}
 
 }

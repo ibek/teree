@@ -7,9 +7,24 @@ public class UserInfo {
 	
 	public static final String PART = "UserInfo";
 	
+	private String userId;
+	
 	private String username;
 	
 	private String name;
+	
+	public void clear() {
+		setUsername(null);
+		setName(null);
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
 	public String getUsername() {
 		return username;
@@ -28,8 +43,10 @@ public class UserInfo {
 	}
 	
 	public void set(UserInfo ui) {
-		username = ui.username;
-		name = ui.name;
+		if (ui != null) {
+			username = ui.username;
+			name = ui.name;
+		}
 	}
 	
 }

@@ -1,7 +1,7 @@
 package org.teree.client.view;
 
-import org.teree.client.CurrentUser;
 import org.teree.client.presenter.Template;
+import org.teree.shared.data.UserInfo;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiField;
@@ -32,7 +32,7 @@ public abstract class TemplateScene extends Composite implements Template {
 	}
 
 	@Override
-	public void setCurrentUser(CurrentUser user) {
+	public void setCurrentUser(UserInfo user) {
 		header.setCurrentUser(user);
 	}
 	

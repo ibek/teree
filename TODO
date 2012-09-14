@@ -1,10 +1,12 @@
 
 0.3:
 
-DBAuth prihlaseni a registrace
+registrace DBAuth a OAuth
 ~DBAuth pres SSL
 public & private scheme
 vytvoreni kategorii a podkategorii pro mapy - budou definovany pro scheme pri publikovani, defaultne se ulozi jako private
+upraveni explore - zmenit zobrazeni map do mrizky
+ - omezit explore strankovanim - limit x map na stranku (dotazy uz jsou pripravene)
 rozdelit explore na kategorie a podkategorie
 vytvorit stranku uzivatele kde bude mit vlastni kategorie a podkategorie podle jeho schemat ktera tam budou zobrazena podobne jako v explore
 
@@ -19,7 +21,6 @@ resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - 
 
 0.5:
 
-upraveni explore - zmenit zobrazeni map do mrizky
 direct explore - novy typ generovani mapy
 service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
 ConnectorNodeWidget (to connect another map)
@@ -33,6 +34,6 @@ tvorba map z templates
 
 future:
 
+upravit pom.xml - aby mel mene zavislosti a verze byly jen na jednom miste
 udelat testovani ... vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
 collaboration
-authentication - oauth support

@@ -2,6 +2,7 @@ package org.teree.server.dao;
 
 import javax.inject.Inject;
 
+import org.bson.types.ObjectId;
 import org.teree.shared.data.UserInfo;
 
 import com.mongodb.BasicDBObject;
@@ -75,6 +76,7 @@ public class UserInfoManager {
     	
         UserInfo ui = new UserInfo();
 
+        ui.setUserId(((ObjectId)userinfo.get("_id")).toStringMongod());
         ui.setUsername((String)userinfo.get("username"));
         ui.setName((String)userinfo.get("name"));
         

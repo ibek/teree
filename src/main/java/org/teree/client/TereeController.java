@@ -1,6 +1,7 @@
 package org.teree.client;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -17,14 +18,13 @@ import org.jboss.errai.bus.client.api.QueueSession;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.bus.client.api.base.CommandMessage;
 import org.jboss.errai.bus.client.api.base.MessageBuilder;
+import org.jboss.errai.bus.client.api.builder.DefaultRemoteCallBuilder;
 import org.jboss.errai.bus.client.framework.MessageBus;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
 import org.jboss.errai.bus.client.protocols.SecurityParts;
 import org.jboss.errai.common.client.protocols.MessageParts;
 import org.jboss.errai.common.client.protocols.Resources;
 import org.teree.client.event.SchemeReceived;
-import org.teree.client.event.UserInfoReceived;
-import org.teree.client.event.UserInfoReceivedHandler;
 import org.teree.client.presenter.LoginPage;
 import org.teree.client.presenter.SchemeExplorer;
 import org.teree.client.presenter.SchemeEditor;
@@ -33,6 +33,7 @@ import org.teree.client.presenter.Presenter;
 import org.teree.client.presenter.Template;
 import org.teree.shared.NodeGenerator;
 import org.teree.shared.GeneralService;
+import org.teree.shared.SecuredService;
 import org.teree.shared.UserService;
 import org.teree.shared.data.AuthType;
 import org.teree.shared.data.Scheme;
@@ -61,10 +62,20 @@ public class TereeController implements ValueChangeHandler<String> {
 	private Caller<GeneralService> generalService;
 
 	@Inject
+	private Caller<UserService> userService;
+
+	@Inject
 	private Keyboard keyboard;
 	
-	@Inject
-	private CurrentUser user;
+	@Inject @Named("currentUser")
+	private UserInfo currentUser;
+	
+	/**
+	 * Current presenter.
+	 */
+	private Presenter presenter;
+	
+	private Presenter tmpPresenter;
 
 	private HasWidgets container;
 
@@ -78,20 +89,34 @@ public class TereeController implements ValueChangeHandler<String> {
 		ErraiBus.get().subscribe("LoginClient", new MessageCallback() {
 			@Override
 			public void callback(Message message) {
-				if (message.getCommandType().equals("FailedAuth")) {
-					History.newItem(Settings.FAILED_LOGIN_LINK);
-				} else if (message.getCommandType().equals("SuccessfulAuth")) {
-					
-					// remember current logged user
-					QueueSession sess = message.getResource(QueueSession.class, Resources.Session.name());
-					String sessionId = sess.getSessionId();
-					loadUserInfoData(sessionId);
-					Date expires = new Date(new Date().getTime() + (1000 * 60 * 60)); // expires in one hour
-					Cookies.setCookie(Settings.COOKIE_SESSION_ID, sessionId, expires);
-					
-					History.newItem(Settings.EXPLORE_LINK); // TODO: should continue with previous task
-				} else {
-					History.newItem(Settings.LOGIN_LINK);
+				String type = message.getCommandType();
+				switch(SecurityCommands.valueOf(type)) {
+					case SuccessfulAuth: {
+						loadUserInfoData();
+						
+						if (tmpPresenter != null) {
+							setPresenter(tmpPresenter);
+							tmpPresenter = null;
+						} else {
+							History.newItem(Settings.EXPLORE_LINK);
+						}
+						
+						break;
+					}
+					case FailedAuth: {
+						History.newItem(Settings.FAILED_LOGIN_LINK);
+						break;
+					}
+					case SecurityChallenge: {
+						System.out.println("auth is required");
+						tmpPresenter = presenter;
+						History.newItem(Settings.LOGIN_LINK);
+						break;
+					}
+					case EndSession: {
+						currentUser.clear();
+						presenter.getTemplate().setCurrentUser(currentUser);
+					}
 				}
 			}
 		});
@@ -111,13 +136,6 @@ public class TereeController implements ValueChangeHandler<String> {
 			@Override
 			public void onClick(ClickEvent event) {
 				History.newItem(Settings.EXPLORE_LINK);
-			}
-		});
-		
-		eventBus.addHandler(UserInfoReceived.TYPE, new UserInfoReceivedHandler() {
-			@Override
-			public void received(UserInfoReceived event) {
-				temp.setCurrentUser(user);
 			}
 		});
 		
@@ -190,28 +208,18 @@ public class TereeController implements ValueChangeHandler<String> {
 					}
 					
 				}
-			} /**else if (token.startsWith(Settings.TAUTH_LINK)) {
+			} else if (token.startsWith(Settings.TAUTH_LINK)) {
 				System.out.println("#oauth");
 				MessageBuilder.createMessage("AuthenticationService")
 			        .command(SecurityCommands.AuthRequest)
 			        .with(MessageParts.ReplyTo, "LoginClient")
 			        .with(AuthType.PART, AuthType.OAuth)
 			        .done().sendNowWith(ErraiBus.get());
-			}*/
+			}
 
 			if (presenter != null) {
 				
-				presenter.go(container);
-				bindPresenter(presenter);
-				
-				String sessionId = Cookies.getCookie(Settings.COOKIE_SESSION_ID);
-				if (sessionId == null) {
-					user.clear();
-				} else if (user.getSessionId() == null) {
-					loadUserInfoData(sessionId);
-				} else {
-					presenter.getTemplate().setCurrentUser(user);
-				}
+				setPresenter(presenter);
 				
 				if (createScheme) {
 					Scheme s = new Scheme();
@@ -221,6 +229,20 @@ public class TereeController implements ValueChangeHandler<String> {
 			}
 
 		}
+	}
+	
+	private void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
+		presenter.go(container);
+		bindPresenter(presenter);
+		
+		String sessionId = Cookies.getCookie(Settings.COOKIE_SESSION_ID);
+		if (sessionId == null) {
+			currentUser.clear();
+		} else if (currentUser.getName() == null) {
+			loadUserInfoData();
+		}
+		presenter.getTemplate().setCurrentUser(currentUser);
 	}
 
 	private void loadScheme(final String oid) {
@@ -238,23 +260,21 @@ public class TereeController implements ValueChangeHandler<String> {
 		}).getScheme(oid);
 	}
 	
-	private void loadUserInfoData(final String sessionId) {
+	private void loadUserInfoData() {
 		
-		ErraiBus.get().subscribe("UserInfoReceiver", new MessageCallback() {
+		userService.call(new RemoteCallback<UserInfo>() {
 			@Override
-			public void callback(Message message) {
-				UserInfo ui = message.get(UserInfo.class, UserInfo.PART);
-				user.setSessionId(sessionId);
-				user.set(ui);
-				eventBus.fireEvent(new UserInfoReceived(user));
+			public void callback(UserInfo response) {
+				currentUser.set(response);
+				presenter.getTemplate().setCurrentUser(currentUser);
 			}
-		});
-		
-		MessageBuilder.createMessage("UserInfoProvider")
-			.command("UserInfoProvider")
-	        .with(MessageParts.ReplyTo, "UserInfoReceiver")
-	        .with(MessageParts.SessionID, sessionId)
-	        .done().sendNowWith(ErraiBus.get());
+		}, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		}).getUserInfo();
 		
 	}
 

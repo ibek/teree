@@ -15,8 +15,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 @EntryPoint
 public class Teree {
     
-    //private static MessageBus msgBus = ErraiBus.get();
-    
     private static HandlerManager eventBus = new HandlerManager(null);
 
     @Inject
@@ -31,10 +29,6 @@ public class Teree {
     @Named(value="eventBus")
     private HandlerManager produceEventBus() {
         return eventBus;
-    }
-    
-    public static HandlerManager getHandlerManager() {
-    	return eventBus;
     }
 
     /**@Produces

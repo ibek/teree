@@ -1,8 +1,8 @@
 package org.teree.client.view;
 
-import org.teree.client.CurrentUser;
 import org.teree.client.presenter.HeaderTemplate;
 import org.teree.client.presenter.Template;
+import org.teree.shared.data.UserInfo;
 
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.google.gwt.core.client.GWT;
@@ -51,7 +51,7 @@ public class Header extends Composite implements HeaderTemplate {
 	}
 
 	@Override
-	public void setCurrentUser(CurrentUser user) {
+	public void setCurrentUser(UserInfo user) {
 		this.user.setCurrentUser(user);
 	}
 
