@@ -4,15 +4,12 @@ import java.util.List;
 
 import org.teree.client.Settings;
 import org.teree.client.view.NodeInterface;
-import org.teree.client.view.editor.NodeWidget;
-import org.teree.client.view.editor.TextNodeWidget;
 import org.teree.shared.data.Node;
 import org.teree.shared.data.Node.NodeLocation;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Widget;
 
 /**

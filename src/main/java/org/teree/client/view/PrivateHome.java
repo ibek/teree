@@ -10,16 +10,15 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.teree.client.presenter.SchemeExplorer;
 import org.teree.client.view.explorer.Scene;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.Scheme;
 
-public class Explorer extends TemplateScene implements SchemeExplorer.Display {
+public class PrivateHome extends TemplateScene implements org.teree.client.presenter.PrivateHome.Display {
 
 	private static ExplorerBinder uiBinder = GWT.create(ExplorerBinder.class);
 
-    interface ExplorerBinder extends UiBinder<Widget, Explorer> {
+    interface ExplorerBinder extends UiBinder<Widget, PrivateHome> {
     }
     
 	static {

@@ -1,7 +1,6 @@
 package org.teree.shared.data;
 
 import java.io.Serializable;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,8 @@ public class Node implements Cloneable {
     private NodeLocation location;
     private NodeStyle style;
     
-    public Node clone() {
+    @Override
+	public Node clone() {
         Node root = new Node();
         root.setContent(content);
         root.setLocation(location);

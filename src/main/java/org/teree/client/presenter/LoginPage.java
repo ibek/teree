@@ -4,13 +4,10 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.teree.client.Settings;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
@@ -35,6 +32,7 @@ public class LoginPage implements Presenter {
         display.getGoogleButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				// FIXME: the /teree is not nice ... try to get the right location of the application
 				Window.Location.replace("/teree/oauth?callback=teree.html#explore"); // TODO: change to home
 			}
 		});

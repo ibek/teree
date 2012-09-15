@@ -1,7 +1,6 @@
 package org.teree.client.view;
 
 import org.teree.client.presenter.HeaderTemplate;
-import org.teree.client.presenter.Template;
 import org.teree.shared.data.UserInfo;
 
 import com.github.gwtbootstrap.client.ui.NavLink;

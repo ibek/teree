@@ -24,14 +24,10 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.ImageData;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Scene extends Composite {
@@ -280,8 +276,8 @@ public class Scene extends Composite {
     
     public String getSchemePicture() {
         Canvas canvas = Canvas.createIfSupported();
-        canvas.setCoordinateSpaceHeight((int)this.canvas.getOffsetHeight());
-        canvas.setCoordinateSpaceWidth((int)this.canvas.getOffsetWidth());
+        canvas.setCoordinateSpaceHeight(this.canvas.getOffsetHeight());
+        canvas.setCoordinateSpaceWidth(this.canvas.getOffsetWidth());
         scheme.renderPicture(canvas, getNodeWidgets(), root);
         return canvas.toDataUrl();
     }
@@ -321,8 +317,8 @@ public class Scene extends Composite {
         
         ImageData data = canvas.getContext2d().getImageData(x*scale, y*scale, w*scale, h*scale);
         Canvas canvasTmp = Canvas.createIfSupported();
-        canvasTmp.setCoordinateSpaceHeight((int) data.getHeight());
-        canvasTmp.setCoordinateSpaceWidth((int) data.getWidth());
+        canvasTmp.setCoordinateSpaceHeight(data.getHeight());
+        canvasTmp.setCoordinateSpaceWidth(data.getWidth());
         Context2d context = canvasTmp.getContext2d();
         context.putImageData(data, 0, 0);
         

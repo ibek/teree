@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.jboss.errai.bus.server.annotations.Remote;
 import org.teree.shared.data.Scheme;
-import org.teree.shared.data.SchemeChange;
 
 /**
 * Errai RPC interface that specifies which methods the client can invoke on the
@@ -14,8 +13,10 @@ import org.teree.shared.data.SchemeChange;
 */
 @Remote
 public interface GeneralService {
+
+	public List<Scheme> getAllFrom(String from_oid, int limit);
 	
-	public List<Scheme> getAll();
+	public List<Scheme> getAllTo(String to_oid, int limit);
     
     public Scheme getScheme(String oid);
     

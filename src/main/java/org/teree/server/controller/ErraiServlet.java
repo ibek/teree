@@ -44,8 +44,8 @@ public class ErraiServlet extends DefaultBlockingServlet {
 	
 	protected void setProvider(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		provider.setRequest((HttpServletRequest)req);
-		provider.setResponse((HttpServletResponse)resp);
+		provider.setRequest(req);
+		provider.setResponse(resp);
 	}
 
 }

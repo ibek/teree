@@ -8,8 +8,10 @@ import org.teree.shared.data.SchemeChange;
 
 @Remote
 public interface SecuredService {
+
+	public List<Scheme> getPrivateSchemesFrom(String from_oid, int limit);
 	
-	public List<Scheme> getAllPrivateSchemes();
+	public List<Scheme> getPrivateSchemesTo(String to_oid, int limit);
     
     public Scheme getPrivateScheme(String oid);
     

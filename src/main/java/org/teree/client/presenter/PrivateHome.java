@@ -9,7 +9,7 @@ import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
-import org.teree.shared.GeneralService;
+import org.teree.shared.SecuredService;
 import org.teree.shared.data.Scheme;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 @Dependent
-public class SchemeExplorer implements Presenter {
+public class PrivateHome implements Presenter {
 
 	public interface Display extends Template {
         Widget asWidget();
@@ -31,7 +31,7 @@ public class SchemeExplorer implements Presenter {
     }
 	
 	@Inject
-	private Caller<GeneralService> generalService;
+	private Caller<SecuredService> securedService;
     
     @Inject
     private Display display;
@@ -72,7 +72,7 @@ public class SchemeExplorer implements Presenter {
 	}
 	
 	private void loadData(String from_oid) {
-		generalService.call(new RemoteCallback<List<Scheme>>() {
+		securedService.call(new RemoteCallback<List<Scheme>>() {
             @Override
             public void callback(List<Scheme> response) {
                 display.setData(response);
@@ -83,11 +83,11 @@ public class SchemeExplorer implements Presenter {
 				// TODO inform user about the error
 				return false;
 			}
-		}).getAllFrom(from_oid, 3);
+		}).getPrivateSchemesFrom(from_oid, 3);
 	}
 	
 	private void loadPreviousData(String to_oid) {
-		generalService.call(new RemoteCallback<List<Scheme>>() {
+		securedService.call(new RemoteCallback<List<Scheme>>() {
             @Override
             public void callback(List<Scheme> response) {
                 display.setData(response);
@@ -98,7 +98,7 @@ public class SchemeExplorer implements Presenter {
 				// TODO inform user about the error
 				return false;
 			}
-		}).getAllTo(to_oid, 3);
+		}).getPrivateSchemesTo(to_oid, 3);
 	}
 
 }

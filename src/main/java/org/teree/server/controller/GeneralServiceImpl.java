@@ -23,9 +23,15 @@ public class GeneralServiceImpl implements GeneralService {
     private SchemeManager _sm;
 
 	@Override
-	public List<Scheme> getAll() {
-        _log.log(Level.INFO, "getAll()");
-		return _sm.allPublic();
+	public List<Scheme> getAllFrom(String from_oid, int limit) {
+        _log.log(Level.INFO, "getAllFrom()");
+		return _sm.allPublicFrom(from_oid, limit);
+	}
+	
+	@Override
+	public List<Scheme> getAllTo(String to_oid, int limit) {
+        _log.log(Level.INFO, "getAllTo()");
+		return _sm.allPublicTo(to_oid, limit);
 	}
 
     @Override

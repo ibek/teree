@@ -1,8 +1,5 @@
 package org.teree.client;
 
-import java.util.Date;
-import java.util.List;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -14,18 +11,13 @@ import org.jboss.errai.bus.client.ErraiBus;
 import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.MessageCallback;
-import org.jboss.errai.bus.client.api.QueueSession;
 import org.jboss.errai.bus.client.api.RemoteCallback;
-import org.jboss.errai.bus.client.api.base.CommandMessage;
 import org.jboss.errai.bus.client.api.base.MessageBuilder;
-import org.jboss.errai.bus.client.api.builder.DefaultRemoteCallBuilder;
-import org.jboss.errai.bus.client.framework.MessageBus;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
-import org.jboss.errai.bus.client.protocols.SecurityParts;
 import org.jboss.errai.common.client.protocols.MessageParts;
-import org.jboss.errai.common.client.protocols.Resources;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.presenter.LoginPage;
+import org.teree.client.presenter.PrivateHome;
 import org.teree.client.presenter.SchemeExplorer;
 import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.presenter.SchemeViewer;
@@ -33,7 +25,6 @@ import org.teree.client.presenter.Presenter;
 import org.teree.client.presenter.Template;
 import org.teree.shared.NodeGenerator;
 import org.teree.shared.GeneralService;
-import org.teree.shared.SecuredService;
 import org.teree.shared.UserService;
 import org.teree.shared.data.AuthType;
 import org.teree.shared.data.Scheme;
@@ -208,8 +199,13 @@ public class TereeController implements ValueChangeHandler<String> {
 					}
 					
 				}
+			} else if (token.startsWith(Settings.PRIVATE_LINK)) {
+				IOCBeanDef<PrivateHome> bean = manager
+						.lookupBean(PrivateHome.class);
+				if (bean != null) {
+					presenter = bean.getInstance();
+				}
 			} else if (token.startsWith(Settings.TAUTH_LINK)) {
-				System.out.println("#oauth");
 				MessageBuilder.createMessage("AuthenticationService")
 			        .command(SecurityCommands.AuthRequest)
 			        .with(MessageParts.ReplyTo, "LoginClient")

@@ -3,12 +3,8 @@
 
 registrace DBAuth a OAuth
 ~DBAuth pres SSL
-public & private scheme
-vytvoreni kategorii a podkategorii pro mapy - budou definovany pro scheme pri publikovani, defaultne se ulozi jako private
-upraveni explore - zmenit zobrazeni map do mrizky
- - omezit explore strankovanim - limit x map na stranku (dotazy uz jsou pripravene)
-rozdelit explore na kategorie a podkategorie
-vytvorit stranku uzivatele kde bude mit vlastni kategorie a podkategorie podle jeho schemat ktera tam budou zobrazena podobne jako v explore
+vytvorit zakladni Home stranku
+clean code (SchemeManager ...) + pridat komentare kde je treba
 
 0.4:
 
@@ -17,23 +13,34 @@ upload obrazku a vyber z techto obrazku pri vkladani ImageNodeWidgetu
  (obrazky co ma uzivatel v library (otagovane apod) - odkazy na ty obrazky + si muze pridat nektere obrazky z public schemat)
 umoznit tagovani map
 zobrazit tagy u map v explore
+umoznit presouvat mapu nebo minimalne pridat posuvnik vlevo-vpravo
 resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
 
 0.5:
 
-direct explore - novy typ generovani mapy
+direct explore - novy typ generovani mapy, nejspis pro to bude stacit mindmapa protoze leva strana se zajisti uz na serveru pri cteni 
 service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
 ConnectorNodeWidget (to connect another map)
+funkce pro rozdeleni mapy na dve - z nodu vytvorit novou mapu a propojit connectorNodeWidgetem
 podpora collapse node
 
 0.6:
 
+upravit pom.xml - aby mel mene zavislosti a verze byly jen na jednom miste
 IconTextNodeWidget
 import a export z/do freemindmap
 tvorba map z templates
+vytvorit stranku pro nastaveni uzivatele - jmeno, email, zmena hesla apod
+
+-------- alpha release --------
+
+0.7:
+
+udelat testovani podle nalezenych chyb + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
 
 future:
 
-upravit pom.xml - aby mel mene zavislosti a verze byly jen na jednom miste
-udelat testovani ... vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
 collaboration
+undo-redo funkce
+vyhledavani - pomoci tagu + fulltext
+MathNodeWidget

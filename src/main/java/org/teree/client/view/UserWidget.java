@@ -3,10 +3,7 @@ package org.teree.client.view;
 import org.jboss.errai.bus.client.ErraiBus;
 import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
-import org.jboss.errai.bus.client.protocols.SecurityParts;
-import org.jboss.errai.common.client.protocols.MessageParts;
 import org.teree.client.Settings;
-import org.teree.shared.data.AuthType;
 import org.teree.shared.data.UserInfo;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -35,6 +32,7 @@ public class UserWidget extends Composite {
 		container = new Nav();
 		container.setAlignment(Alignment.RIGHT);
 		userHome = new NavLink("User");
+		userHome.setIcon(IconType.HOME);
 		container.add(userHome);
 
 		signIn = new Button("Sign in");
@@ -85,7 +83,7 @@ public class UserWidget extends Composite {
 		userHome.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				// TODO: redirect to user's home page
+				History.newItem(Settings.PRIVATE_LINK);
 			}
 		});
 	}

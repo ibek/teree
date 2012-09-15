@@ -4,8 +4,6 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.jboss.errai.bus.client.ErraiBus;
-import org.jboss.errai.bus.client.framework.MessageBus;
 import org.jboss.errai.ioc.client.api.AfterInitialization;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 
