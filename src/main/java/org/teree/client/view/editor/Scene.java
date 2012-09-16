@@ -63,8 +63,8 @@ public class Scene extends Composite {
         
     	container.addHandler(new SelectNodeHandler() {
             @Override
-            public void select(SelectNode event, NodeWidget node) {
-                selectNode(node);
+            public void select(SelectNode event) {
+                selectNode(event.getNodeWidget());
             }
             
         }, SelectNode.TYPE);

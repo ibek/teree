@@ -34,8 +34,6 @@ public class SchemeEditor implements Presenter {
         HasClickHandlers getSaveButton();
         Widget asWidget();
         void setRoot(Node root);
-        void info(String msg);
-        void error(String msg);
         String getSchemeSamplePicture();
     }
     

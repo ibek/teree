@@ -36,37 +36,32 @@ public class SecuredServiceImpl implements SecuredService {
 
 	@Override
 	public List<Scheme> getPrivateSchemesFrom(String from_oid, int limit) {
-        _log.log(Level.INFO, "getPrivateSchemesFrom()");
 		return _sm.allPrivateFrom(_us.getUserInfo(), from_oid, limit);
 	}
 
 	@Override
 	public List<Scheme> getPrivateSchemesTo(String to_oid, int limit) {
-		_log.log(Level.INFO, "getPrivateSchemesTo()");
 		return _sm.allPrivateTo(_us.getUserInfo(), to_oid, limit);
 	}
 
     @Override
 	public Scheme getPrivateScheme(String oid) {
-        _log.log(Level.INFO, "getPrivateScheme("+oid+")");
         return _sm.selectPrivate(oid, _us.getUserInfo());
     }
 
     @Override
 	public String insertScheme(Scheme s) {
-        _log.log(Level.INFO, "insertPrivateScheme("+s.getRoot().getContent()+")");
         return _sm.insertPrivate(s, _us.getUserInfo());
     }
 
 	@Override
 	public void updateScheme(Scheme s) {
-        _log.log(Level.INFO, "updatePrivateScheme("+s.getOid()+", "+s.getRoot().getContent()+")");
 		_sm.updatePrivate(s, _us.getUserInfo());
 	}
 	
 	@Override
-	public void publishScheme(Scheme s) {
-		// TODO: publish scheme
+	public void publishScheme(String oid) {
+		_sm.publish(oid, _us.getUserInfo());
 	}
 
     @Override

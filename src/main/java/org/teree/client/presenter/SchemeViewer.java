@@ -19,7 +19,6 @@ public class SchemeViewer implements Presenter {
     public interface Display extends Template {
         Widget asWidget();
         void setRoot(Node root);
-        void info(String msg);
     }
     
     @Inject @Named(value="eventBus")

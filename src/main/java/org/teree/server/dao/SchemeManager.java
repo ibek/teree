@@ -40,17 +40,6 @@ public class SchemeManager {
         return coll;
     }
     
-    public String insertPrivate(Scheme s, UserInfo ui) {
-    	if (ui == null) {
-    		return null;
-    	}
-        DBObject dbo = toSchemeDBObject(s);
-        dbo.put("owner", ui.getUserId());
-        DBCollection coll = getCollection();
-        coll.insert(dbo);
-        return ((ObjectId)dbo.get("_id")).toStringMongod();
-    }
-    
     /**
      * Select specific scheme identified by oid.
      * @param oid
@@ -77,6 +66,17 @@ public class SchemeManager {
         DBCollection coll = getCollection();
         DBObject found = coll.findOne(searchBy);
         return fromSchemeDBObject(found);
+    }
+    
+    public String insertPrivate(Scheme s, UserInfo ui) {
+    	if (ui == null) {
+    		return null;
+    	}
+        DBObject dbo = toSchemeDBObject(s);
+        dbo.put("owner", ui.getUserId());
+        DBCollection coll = getCollection();
+        coll.insert(dbo);
+        return ((ObjectId)dbo.get("_id")).toStringMongod();
     }
     
     /**
@@ -155,6 +155,15 @@ public class SchemeManager {
         return res;
     }
     
+    public void publish(String oid, UserInfo ui) {
+    	DBCollection coll = getCollection();
+        DBObject updateById = new BasicDBObject("_id", new ObjectId(oid));
+        updateById.put("owner", ui.getUserId());
+        DBObject update = new BasicDBObject("$set", new BasicDBObject("author", ui.getUserId()));
+        update.put("$unset", new BasicDBObject("owner", 1));
+        coll.update(updateById, update);
+    }
+    
     /**
      * Update scheme identified by oid.
      * @param s
@@ -169,9 +178,7 @@ public class SchemeManager {
     	DBCollection coll = getCollection();
         DBObject updateById = new BasicDBObject("_id", new ObjectId(s.getOid()));
         updateById.put("owner", ui.getUserId());
-        DBObject dbo = toSchemeDBObject(s);
-        dbo.put("owner", ui.getUserId());
-        coll.update(updateById, dbo);
+        coll.update(updateById, toSchemeDBObject(s));
     }
     
     private BasicDBObject toSchemeDBObject(Scheme s) {

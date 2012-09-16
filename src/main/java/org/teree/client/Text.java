@@ -14,8 +14,10 @@ public class Text {
         String schemeReceived(String oid);
         String schemeUpdated(String oid);
         String schemeCreated(String oid);
+        String schemePublished(String oid);
         
         String loginFailed();
+        String connectionIssue();
         
     }
     

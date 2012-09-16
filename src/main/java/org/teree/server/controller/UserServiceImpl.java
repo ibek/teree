@@ -18,6 +18,9 @@ public class UserServiceImpl implements UserService {
 	@Inject
 	UserInfoManager _uim;
 	
+	/**
+	 * TODO: Consider some caching because it is commonly used by other services to guarantee that the operation is secured.
+	 */
 	@Override
 	public UserInfo getUserInfo() {
 		HttpSession session = RpcContext.getHttpSession();
@@ -41,9 +44,20 @@ public class UserServiceImpl implements UserService {
 		return ui;
 	}
 
+	/**
+	 * TODO: should throw some exceptions (user exists...)
+	 */
 	@Override
 	public void register(UserInfo ui, String password) {
 		_uim.insert(ui, password);
+	}
+
+	/**
+	 * TODO: should throw some exceptions (user exists...)
+	 */
+	@Override
+	public void registerWithGoogle(UserInfo ui, String googleid) {
+		_uim.insertWithGoogleId(ui, googleid);
 	}
 
 }

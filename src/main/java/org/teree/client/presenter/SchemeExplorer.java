@@ -9,6 +9,7 @@ import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
+import org.teree.client.Text;
 import org.teree.shared.GeneralService;
 import org.teree.shared.data.Scheme;
 
@@ -80,7 +81,7 @@ public class SchemeExplorer implements Presenter {
         }, new ErrorCallback() {
 			@Override
 			public boolean error(Message message, Throwable throwable) {
-				// TODO inform user about the error
+				display.error(Text.LANG.connectionIssue());
 				return false;
 			}
 		}).getAllFrom(from_oid, 3);
@@ -95,7 +96,7 @@ public class SchemeExplorer implements Presenter {
         }, new ErrorCallback() {
 			@Override
 			public boolean error(Message message, Throwable throwable) {
-				// TODO inform user about the error
+				display.error(Text.LANG.connectionIssue());
 				return false;
 			}
 		}).getAllTo(to_oid, 3);

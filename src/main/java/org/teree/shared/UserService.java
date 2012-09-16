@@ -10,4 +10,6 @@ public interface UserService {
 	
 	public void register(UserInfo ui, String password);
 	
+	public void registerWithGoogle(UserInfo ui, String googleid);
+	
 }

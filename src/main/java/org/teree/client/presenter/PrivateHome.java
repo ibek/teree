@@ -9,6 +9,10 @@ import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
+import org.teree.client.Text;
+import org.teree.client.view.explorer.event.HasPublishSchemeHandlers;
+import org.teree.client.view.explorer.event.PublishScheme;
+import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.shared.SecuredService;
 import org.teree.shared.data.Scheme;
 
@@ -26,6 +30,7 @@ public class PrivateHome implements Presenter {
         void setData(List<Scheme> slist);
         HasClickHandlers getNextButton();
         HasClickHandlers getPreviousButton();
+        HasPublishSchemeHandlers getScheme();
         String getFirstOid();
         String getLastOid();
     }
@@ -44,6 +49,24 @@ public class PrivateHome implements Presenter {
 				if (from != null) {
 					loadData(from);
 				}
+			}
+		});
+		
+		display.getScheme().addPublishHandler(new PublishSchemeHandler() {
+			@Override
+			public void select(final PublishScheme event) {
+				securedService.call(new RemoteCallback<Void>() {
+					@Override
+					public void callback(Void response) {
+						display.info(Text.LANG.schemePublished(event.getScheme().getOid()));
+					}
+				}, new ErrorCallback() {
+					@Override
+					public boolean error(Message message, Throwable throwable) {
+						// TODO Auto-generated method stub
+						return false;
+					}
+				}).publishScheme(event.getScheme().getOid());
 			}
 		});
 		
@@ -80,7 +103,7 @@ public class PrivateHome implements Presenter {
         }, new ErrorCallback() {
 			@Override
 			public boolean error(Message message, Throwable throwable) {
-				// TODO inform user about the error
+				display.error(Text.LANG.connectionIssue());
 				return false;
 			}
 		}).getPrivateSchemesFrom(from_oid, 3);
@@ -95,7 +118,7 @@ public class PrivateHome implements Presenter {
         }, new ErrorCallback() {
 			@Override
 			public boolean error(Message message, Throwable throwable) {
-				// TODO inform user about the error
+				display.error(Text.LANG.connectionIssue());
 				return false;
 			}
 		}).getPrivateSchemesTo(to_oid, 3);

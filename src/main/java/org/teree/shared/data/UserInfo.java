@@ -8,10 +8,9 @@ public class UserInfo {
 	public static final String PART = "UserInfo";
 	
 	private String userId;
-	
 	private String username;
-	
 	private String name;
+	private String email;
 	
 	public void clear() {
 		setUsername(null);
@@ -42,6 +41,14 @@ public class UserInfo {
 		this.name = name;
 	}
 	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public void set(UserInfo ui) {
 		if (ui != null) {
 			username = ui.username;

@@ -14,6 +14,10 @@ public class SelectNode extends GwtEvent<SelectNodeHandler> {
         this.node = node;
     }
     
+    public NodeWidget getNodeWidget() {
+    	return node;
+    }
+    
     @Override
     public Type<SelectNodeHandler> getAssociatedType() {
         return TYPE;
@@ -21,6 +25,6 @@ public class SelectNode extends GwtEvent<SelectNodeHandler> {
 
     @Override
     protected void dispatch(SelectNodeHandler handler) {
-        handler.select(this, node);
+        handler.select(this);
     }
 }

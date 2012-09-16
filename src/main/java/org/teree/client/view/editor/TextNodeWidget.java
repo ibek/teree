@@ -228,6 +228,7 @@ public class TextNodeWidget extends NodeWidget {
             getParent().fireEvent(new NodeChanged(null)); // null because nothing was inserted
         }
         view();
+        fireSelect();
     }
     
     public void update() {

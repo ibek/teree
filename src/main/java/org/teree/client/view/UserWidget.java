@@ -90,7 +90,7 @@ public class UserWidget extends Composite {
 	
 	public void setCurrentUser(UserInfo ui) {
 		this.user = ui;
-		boolean logged = ui != null && ui.getUsername() != null;
+		boolean logged = ui != null && ui.getName() != null;
 		
 		userHome.setVisible(logged);
 		settings.setVisible(logged);
@@ -100,7 +100,7 @@ public class UserWidget extends Composite {
 		join.setVisible(!logged);
 		
 		if (logged) {
-			userHome.setText(ui.getUsername());
+			userHome.setText(ui.getName());
 		}
 	}
 

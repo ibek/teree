@@ -7,25 +7,21 @@ import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
 import org.jboss.errai.bus.client.protocols.SecurityParts;
 import org.jboss.errai.common.client.protocols.MessageParts;
-import org.teree.client.Text;
 import org.teree.client.presenter.LoginPage;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.AuthType;
 
-import com.github.gwtbootstrap.client.ui.Alert;
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.PasswordTextBox;
 import com.github.gwtbootstrap.client.ui.SubmitButton;
 import com.github.gwtbootstrap.client.ui.TextBox;
 import com.github.gwtbootstrap.client.ui.WellForm;
-import com.github.gwtbootstrap.client.ui.constants.AlertType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -54,9 +50,6 @@ public class Login extends TemplateScene implements LoginPage.Display {
 
     @UiField
     SubmitButton signin;
-
-    @UiField
-	Alert status;
     
     @UiField
     Button btnGoogle;
@@ -80,20 +73,6 @@ public class Login extends TemplateScene implements LoginPage.Display {
 	@Override
 	public HasClickHandlers getGoogleButton() {
 		return btnGoogle;
-	}
-	
-	@Override
-	public void fail() {
-		status.setType(AlertType.ERROR);
-		status.setText(Text.LANG.loginFailed());
-		status.setVisible(true);
-		Timer t = new Timer() {
-            @Override
-            public void run() {
-            	status.setVisible(false);
-            }
-        };
-        t.schedule(5000);
 	}
 
 }

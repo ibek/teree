@@ -3,22 +3,33 @@ package org.teree.client.view.explorer;
 import java.util.List;
 
 import org.teree.client.view.SchemeWidget;
+import org.teree.client.view.explorer.event.HasPublishSchemeHandlers;
+import org.teree.client.view.explorer.event.PublishScheme;
+import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.shared.data.Scheme;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
-public class Scene extends Composite {
+public class Scene extends Composite implements HasPublishSchemeHandlers {
 
 	private HorizontalPanel container;
 	private FlowPanel schemeContainer;
 	private Button next;
 	private Button previous;
+	
+	private HandlerManager publishManager;
+	
+	private boolean enablePublish = false;
 	
 	/**
 	 * To prevent unnecessary calls for next and previous page.
@@ -32,6 +43,8 @@ public class Scene extends Composite {
 		schemeContainer = new FlowPanel();
 		schemeContainer.getElement().getStyle().setPaddingLeft(5, Unit.PX);
 		schemeContainer.getElement().getStyle().setPaddingRight(5, Unit.PX);
+		
+		publishManager = new HandlerManager(schemeContainer);
 		
 		next = new Button("", IconType.CHEVRON_RIGHT);
 		next.setHeight("100%");
@@ -54,8 +67,15 @@ public class Scene extends Composite {
 		schemeContainer.clear();
 		for(int i=0; i<slist.size(); ++i) {
 			Scheme s = slist.get(i);
-			SchemeWidget sw = new SchemeWidget();
+			final SchemeWidget sw = new SchemeWidget();
+			sw.enablePublish(enablePublish);
 			sw.setScheme(s);
+			sw.getPublishButton().addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					publishManager.fireEvent(new PublishScheme(sw.getScheme()));
+				}
+			});
 			schemeContainer.add(sw);
 		}
 	}
@@ -88,6 +108,15 @@ public class Scene extends Composite {
 
 	public HasClickHandlers getPreviousButton() {
 		return previous;
+	}
+	
+	public void enablePublish(boolean state){
+		this.enablePublish = state;
+	}
+
+	@Override
+	public HandlerRegistration addPublishHandler(PublishSchemeHandler handler) {
+		return publishManager.addHandler(PublishScheme.TYPE, handler);
 	}
 	
 }

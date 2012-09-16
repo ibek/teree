@@ -80,6 +80,10 @@ public class TAuthAdapter implements AuthenticationAdapter {
 	        	String googleid = uif.fetch(accessToken);
 	        	addAuthenticationCredentials(message, googleid);
 	        	UserInfo ui = uim.selectByGoogleId(googleid);
+	        	if (ui == null) { // register if the user is not in database
+	        		ui = uif.fetchUserInfo(accessToken);
+	        		uim.insertWithGoogleId(ui, googleid);
+	        	}
 	        	
 	        	MessageBuilder.createConversation(message)
                 .subjectProvided()

@@ -1,18 +1,14 @@
 
-0.3:
-
-registrace DBAuth a OAuth
-~DBAuth pres SSL
-vytvorit zakladni Home stranku
-clean code (SchemeManager ...) + pridat komentare kde je treba
-
 0.4:
 
+pridat tooltipy pro tlacitka (publish, remove ...)
+DBAuth sifrovani hesla
 export obrazku
 upload obrazku a vyber z techto obrazku pri vkladani ImageNodeWidgetu
  (obrazky co ma uzivatel v library (otagovane apod) - odkazy na ty obrazky + si muze pridat nektere obrazky z public schemat)
 umoznit tagovani map
 zobrazit tagy u map v explore
+odstraneni mapy
 umoznit presouvat mapu nebo minimalne pridat posuvnik vlevo-vpravo
 resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
 
@@ -44,3 +40,4 @@ collaboration
 undo-redo funkce
 vyhledavani - pomoci tagu + fulltext
 MathNodeWidget
+DBAuth pres SSL

@@ -11,6 +11,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.view.explorer.Scene;
+import org.teree.client.view.explorer.event.HasPublishSchemeHandlers;
+import org.teree.client.view.explorer.event.PublishScheme;
+import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.Scheme;
 
@@ -31,6 +34,16 @@ public class PrivateHome extends TemplateScene implements org.teree.client.prese
     @PostConstruct
     public void init() {
         initWidget(uiBinder.createAndBindUi(this));
+    	scene.enablePublish(true);
+    }
+    
+    private void bind() {
+		scene.addHandler(new PublishSchemeHandler() {
+			@Override
+			public void select(PublishScheme event) {
+				
+			}
+		}, PublishScheme.TYPE);
     }
     
     @Override
@@ -61,6 +74,11 @@ public class PrivateHome extends TemplateScene implements org.teree.client.prese
 	@Override
 	public String getLastOid() {
 		return scene.getLastOid();
+	}
+
+	@Override
+	public HasPublishSchemeHandlers getScheme() {
+		return scene;
 	}
 
 }

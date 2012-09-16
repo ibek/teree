@@ -2,12 +2,9 @@ package org.teree.client.view;
 
 import javax.annotation.PostConstruct;
 
-import com.github.gwtbootstrap.client.ui.Alert;
-import com.github.gwtbootstrap.client.ui.constants.AlertType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.presenter.SchemeViewer;
@@ -29,9 +26,6 @@ public class Viewer extends TemplateScene implements SchemeViewer.Display {
     @UiField(provided = true)
     Scene scene;
     
-    @UiField
-    Alert status;
-    
     public Viewer() {
     	scene = new Scene();
     }
@@ -50,19 +44,5 @@ public class Viewer extends TemplateScene implements SchemeViewer.Display {
     public void setRoot(Node root) {
         scene.setRoot(root);
     }
-
-	@Override
-	public void info(String msg) {
-		status.setType(AlertType.INFO);
-		status.setText(msg);
-		status.setVisible(true);
-		Timer t = new Timer() {
-            @Override
-            public void run() {
-            	status.setVisible(false);
-            }
-        };
-        t.schedule(5000);
-	}
 
 }

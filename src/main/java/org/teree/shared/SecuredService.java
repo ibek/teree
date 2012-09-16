@@ -19,7 +19,7 @@ public interface SecuredService {
     
     public void updateScheme(Scheme s);
     
-    public void publishScheme(Scheme s);
+    public void publishScheme(String oid);
     
     /**
      * Inform cooperated users about change.

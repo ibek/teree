@@ -1,0 +1,95 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:view="urn:import:org.teree.client.view"
+	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
+
+	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
+
+	<ui:style>
+
+		.alternativeRegister {
+			margin: 10px;
+		}
+
+	</ui:style>
+
+	<g:FlowPanel ui:field="panel">
+		<view:Header ui:field="header"/>
+		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
+		<g:HorizontalPanel addStyleNames="{res.css.scene}">
+			<g:FlowPanel>
+				<b:WellForm ui:field="form" type="HORIZONTAL">
+					<b:Fieldset>
+                        <b:Legend>
+                            Register new user
+                            <small>all fields are required</small>
+                        </b:Legend>
+                        
+						<b:ControlGroup ui:field="usernameControlGroup">
+                            <b:ControlLabel for="username">
+                                Username
+                            </b:ControlLabel>
+                            <b:Controls>
+                                <b:TextBox b:id="username"
+                                    ui:field="username" placeholder="Username" />
+                                <b:HelpInline ui:field="usernameHelpInline" />
+                            </b:Controls>
+                        </b:ControlGroup>
+                        
+						<b:ControlGroup ui:field="nameControlGroup">
+                            <b:ControlLabel for="name">
+                                Name
+                            </b:ControlLabel>
+                            <b:Controls>
+                                <b:TextBox b:id="name"
+                                    ui:field="name" placeholder="Name" />
+                                <b:HelpInline ui:field="nameHelpInline" />
+                            </b:Controls>
+                        </b:ControlGroup>
+                        
+						<b:ControlGroup ui:field="passwordControlGroup">
+                            <b:ControlLabel for="password">
+                                Password
+                            </b:ControlLabel>
+                            <b:Controls>
+								<b:PasswordTextBox b:id="password" ui:field="password"
+									placeholder="Password" />
+                                <b:HelpInline ui:field="passwordHelpInline" />
+                            </b:Controls>
+                            <b:ControlLabel for="confirmPassword">
+                                Confirm password
+                            </b:ControlLabel>
+                            <b:Controls>
+								<b:PasswordTextBox b:id="confirmPassword" ui:field="confirmPassword"
+									placeholder="Confirm password" />
+                                <b:HelpInline ui:field="confirmPasswordHelpInline" />
+                            </b:Controls>
+                        </b:ControlGroup>
+						
+						<b:ControlGroup ui:field="emailControlGroup">
+                            <b:ControlLabel for="email">
+                                Email
+                            </b:ControlLabel>
+                            <b:Controls>
+                                <b:TextBox b:id="email"
+                                    ui:field="email" placeholder="Email" />
+                                <b:HelpInline ui:field="emailHelpInline" />
+                            </b:Controls>
+                        </b:ControlGroup>
+                        
+						<b:FormActions>
+							<b:SubmitButton type="PRIMARY" ui:field="register">Register</b:SubmitButton>
+							<b:Button ui:field="cancel">Cancel</b:Button>
+						</b:FormActions>
+                    </b:Fieldset>
+				</b:WellForm>
+			</g:FlowPanel>
+			<g:VerticalPanel addStyleNames="{style.alternativeRegister}">
+				<b:Button ui:field='btnGoogle' size="LARGE">Google</b:Button>
+				<b:Button size="LARGE">Twitter</b:Button>
+			</g:VerticalPanel>
+			
+		</g:HorizontalPanel>
+	</g:FlowPanel>
+
+</ui:UiBinder> 

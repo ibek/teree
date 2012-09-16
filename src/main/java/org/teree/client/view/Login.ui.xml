@@ -25,13 +25,13 @@
 					<b:PasswordTextBox ui:field="password"
 						placeholder="Password" />
 					<b:FormActions>
-						<b:SubmitButton ui:field="signin">Sign in</b:SubmitButton>
+						<b:SubmitButton type="PRIMARY" ui:field="signin">Sign in</b:SubmitButton>
 					</b:FormActions>
 				</b:WellForm>
 			</g:FlowPanel>
 			<g:VerticalPanel addStyleNames="{style.alternativeSignIn}">
-				<b:Button ui:field='btnGoogle' type="PRIMARY" size="LARGE">Google</b:Button>
-				<b:Button type="PRIMARY" size="LARGE">Twitter</b:Button>
+				<b:Button ui:field='btnGoogle' size="LARGE">Google</b:Button>
+				<b:Button size="LARGE">Twitter</b:Button>
 			</g:VerticalPanel>
 			
 		</g:HorizontalPanel>

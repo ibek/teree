@@ -7,6 +7,8 @@ import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
 import org.scribe.model.Token;
 import org.scribe.model.Verb;
+import org.teree.shared.data.UserInfo;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -36,6 +38,23 @@ public class OAuthIdentifierFetcher {
 		}
 
 		return googleid;
+	}
+
+	public UserInfo fetchUserInfo(Token accessToken) {
+		UserInfo ui = new UserInfo();
+
+		OAuthRequest request = new OAuthRequest(Verb.GET, USERINFO_URL);
+		Response response = fetcher.fetch(request, accessToken);
+
+		if (response != null) {
+			String body = response.getBody();
+			System.out.println(body);
+			JsonObject obj = new JsonParser().parse(body).getAsJsonObject();
+			ui.setName(obj.get("name").getAsString());
+			ui.setEmail(obj.get("email").getAsString());
+		}
+
+		return ui;
 	}
 
 }

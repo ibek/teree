@@ -36,10 +36,7 @@ public class OAuthServlet extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String callback = req.getRequestURL().toString() + "?callback="
-				+ req.getParameter("callback");
-		
-		System.out.println("req="+callback);
+		String callback = req.getRequestURL().toString();
 
 		OAuthService service = new ServiceBuilder().provider(GoogleApi.class)
 				.apiKey("anonymous").apiSecret("anonymous").scope(OAuthFetcher.SCOPES)
@@ -66,17 +63,6 @@ public class OAuthServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		session.setAttribute("auth", AuthType.OAuth.name());
 		session.setAttribute("token", accessToken);
-		
-		/**Message msg = MessageBuilder.createMessage("AuthenticationService")
-	        .command(SecurityCommands.AuthRequest)
-	        .with(MessageParts.ReplyTo, "LoginClient")
-	        .with(AuthType.PART, AuthType.OAuth)
-	        .with(ACCESS_TOKEN_PART, accessToken)
-	        .getMessage();
-		
-		new TAuthAdapter(ErraiBus.get()).challenge(msg);*/
-
-		//resp.sendRedirect(TAUTH_LOGIN + req.getParameter("callback"));
 		resp.sendRedirect(TAUTH_LOGIN);
 		
 	}

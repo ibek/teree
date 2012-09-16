@@ -2,15 +2,12 @@ package org.teree.client.view;
 
 import javax.annotation.PostConstruct;
 
-import com.github.gwtbootstrap.client.ui.Alert;
-import com.github.gwtbootstrap.client.ui.constants.AlertType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.presenter.SchemeEditor;
@@ -35,9 +32,6 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
     
     @UiField
     EditPanel edit;
-    
-    @UiField
-    Alert status;
     
     public Editor() {
     	scene = new Scene();
@@ -142,30 +136,6 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
 	@Override
 	public void right() {
 		scene.selectRightNode();
-	}
-
-	@Override
-	public void info(String msg) {
-		status.setType(AlertType.INFO);
-		setStatus(msg);
-	}
-
-	@Override
-	public void error(String msg) {
-		status.setType(AlertType.ERROR);
-		setStatus(msg);
-	}
-	
-	private void setStatus(String msg) {
-		status.setText(msg);
-		status.setVisible(true);
-		Timer t = new Timer() {
-            @Override
-            public void run() {
-            	status.setVisible(false);
-            }
-        };
-        t.schedule(5000);
 	}
 
     @Override

@@ -1,13 +1,17 @@
 package org.teree.client.view;
 
+import org.teree.client.Settings;
 import org.teree.client.presenter.HeaderTemplate;
 import org.teree.shared.data.UserInfo;
 
+import com.github.gwtbootstrap.client.ui.Brand;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -17,6 +21,9 @@ public class Header extends Composite implements HeaderTemplate {
 
     interface HeaderBinder extends UiBinder<Widget, Header> {
     }
+
+    @UiField
+    Brand home;
 
     @UiField
     NavLink create;
@@ -32,22 +39,33 @@ public class Header extends Composite implements HeaderTemplate {
     
     public Header() {
         initWidget(uiBinder.createAndBindUi(this));
+        bind();
     }
-	
-	@Override
-	public HasClickHandlers getCreateLink() {
-		return create;
-	}
-
-	@Override
-	public HasClickHandlers getExploreLink() {
-		return explore;
-	}
-
-	@Override
-	public HasClickHandlers getHelpLink() {
-		return help;
-	}
+    
+    private void bind() {
+		
+		home.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				History.newItem(Settings.HOME_LINK);
+			}
+		});
+		
+		create.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				History.newItem(Settings.CREATE_LINK);
+			}
+		});
+		
+		explore.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				History.newItem(Settings.EXPLORE_LINK);
+			}
+		});
+		
+    }
 
 	@Override
 	public void setCurrentUser(UserInfo user) {

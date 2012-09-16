@@ -29,6 +29,7 @@ public class UserInfoManager {
 
         doc.put("username", ui.getUsername());
         doc.put("name", ui.getName());
+        doc.put("email", ui.getEmail());
         doc.put("password", password);
         
         DBCollection coll = getCollection();
@@ -38,10 +39,12 @@ public class UserInfoManager {
     public void insertWithGoogleId(UserInfo ui, String googleid) {
         BasicDBObject doc = new BasicDBObject();
 
-        doc.put("username", ui.getUsername());
         doc.put("name", ui.getName());
+        doc.put("email", ui.getEmail());
         doc.put("googleid", googleid);
         
+        DBCollection coll = getCollection();
+        coll.insert(doc);
     }
     
     public void update(UserInfo ui, String password) {
@@ -79,6 +82,7 @@ public class UserInfoManager {
         ui.setUserId(((ObjectId)userinfo.get("_id")).toStringMongod());
         ui.setUsername((String)userinfo.get("username"));
         ui.setName((String)userinfo.get("name"));
+        ui.setEmail((String)userinfo.get("email"));
         
         return ui;
     }

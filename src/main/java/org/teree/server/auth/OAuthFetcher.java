@@ -12,7 +12,7 @@ import org.scribe.oauth.OAuthService;
 @Stateless
 public class OAuthFetcher {
 	
-	protected static final String SCOPES = "https://www.googleapis.com/auth/userinfo.profile";
+	protected static final String SCOPES = "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
 	
 	public OAuthFetcher() {
 		

@@ -6,19 +6,8 @@ import org.jboss.errai.common.client.api.annotations.Portable;
 public class Scheme {
 
 	private String oid;
-	
 	private Node.NodeType type;
-	
-	private Object rootContent;
-	
-	/**
-	 * SchemePicture is used for exploration.
-	 */
 	private String schemePicture;
-	
-	/**
-	 * Root can be null for exploration - for that purpose, there is the rootContent.
-	 */
 	private Node root;
 
 	public String getSchemePicture() {
@@ -51,14 +40,6 @@ public class Scheme {
 
 	public void setType(Node.NodeType type) {
 		this.type = type;
-	}
-
-	public Object getRootContent() {
-		return rootContent;
-	}
-
-	public void setRootContent(Object rootContent) {
-		this.rootContent = rootContent;
 	}
 	
 }

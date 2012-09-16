@@ -10,6 +10,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -20,6 +21,7 @@ public class SchemeWidget extends Composite {
 	private FlowPanel panel;
 	private Well w;
 	private Image screen;
+	private Button publish;
 	private Button remove;
 	private Button edit;
 	private Button view;
@@ -39,6 +41,11 @@ public class SchemeWidget extends Composite {
 		w.setHeight((Settings.SAMPLE_MAX_HEIGHT)+"px");
 		
 		screen = new Image();
+
+		publish = new Button("", IconType.GLOBE);
+		publish.setVisible(false);
+		publish.getElement().getStyle().setFloat(Style.Float.LEFT);
+		
 		remove = new Button("", IconType.TRASH);
 		Style rs = remove.getElement().getStyle();
 		rs.setFloat(Style.Float.RIGHT);
@@ -62,6 +69,7 @@ public class SchemeWidget extends Composite {
 		Style vs = view.getElement().getStyle();
 		vs.setFloat(Style.Float.RIGHT);
 		
+		panel.add(publish);
 		panel.add(remove);
 		w.add(screen);
 		w.add(edit);
@@ -79,6 +87,14 @@ public class SchemeWidget extends Composite {
 	public void setScheme(Scheme scheme) {
 		this.scheme = scheme;
 		screen.setUrl(scheme.getSchemePicture());
+	}
+	
+	public HasClickHandlers getPublishButton() {
+		return publish;
+	}
+	
+	public void enablePublish(boolean state) {
+		publish.setVisible(state);
 	}
 	
 }

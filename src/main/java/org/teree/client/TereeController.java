@@ -16,13 +16,14 @@ import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
 import org.jboss.errai.common.client.protocols.MessageParts;
 import org.teree.client.event.SchemeReceived;
+import org.teree.client.presenter.HomePage;
+import org.teree.client.presenter.JoinPage;
 import org.teree.client.presenter.LoginPage;
 import org.teree.client.presenter.PrivateHome;
 import org.teree.client.presenter.SchemeExplorer;
 import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.presenter.SchemeViewer;
 import org.teree.client.presenter.Presenter;
-import org.teree.client.presenter.Template;
 import org.teree.shared.NodeGenerator;
 import org.teree.shared.GeneralService;
 import org.teree.shared.UserService;
@@ -30,8 +31,6 @@ import org.teree.shared.data.AuthType;
 import org.teree.shared.data.Scheme;
 import org.teree.shared.data.UserInfo;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -83,13 +82,14 @@ public class TereeController implements ValueChangeHandler<String> {
 				String type = message.getCommandType();
 				switch(SecurityCommands.valueOf(type)) {
 					case SuccessfulAuth: {
-						loadUserInfoData();
+						
+						currentUser.set(message.get(UserInfo.class, UserInfo.PART));
 						
 						if (tmpPresenter != null) {
 							setPresenter(tmpPresenter);
 							tmpPresenter = null;
 						} else {
-							History.newItem(Settings.EXPLORE_LINK);
+							History.newItem(Settings.HOME_LINK);
 						}
 						
 						break;
@@ -111,25 +111,6 @@ public class TereeController implements ValueChangeHandler<String> {
 				}
 			}
 		});
-	}
-	
-	private void bindPresenter(Presenter presenter) {
-		final Template temp = presenter.getTemplate();
-		
-		temp.getCreateLink().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem(Settings.CREATE_LINK);
-			}
-		});
-		
-		temp.getExploreLink().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem(Settings.EXPLORE_LINK);
-			}
-		});
-		
 	}
 
 	/**
@@ -155,12 +136,10 @@ public class TereeController implements ValueChangeHandler<String> {
 			boolean createScheme = false;
 
 			if (token.equals(Settings.HOME_LINK)) {
-				/**
-				 * IOCBeanDef<MapView> bean = manager.lookupBean(MapView.class);
-				 * if (bean != null) { presenter = bean.getInstance();
-				 * 
-				 * }
-				 */
+				IOCBeanDef<HomePage> bean = manager.lookupBean(HomePage.class);
+				if (bean != null) { 
+					presenter = bean.getInstance();
+				}
 			} else if (token.startsWith(Settings.EXPLORE_LINK)) {
 				IOCBeanDef<SchemeExplorer> bean = manager
 						.lookupBean(SchemeExplorer.class);
@@ -193,11 +172,15 @@ public class TereeController implements ValueChangeHandler<String> {
 						.lookupBean(LoginPage.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
-					
 					if (token.startsWith(Settings.FAILED_LOGIN_LINK)) {
 						((LoginPage)presenter).fail();
 					}
-					
+				}
+			} else if (token.startsWith(Settings.JOIN_LINK)) {
+				IOCBeanDef<JoinPage> bean = manager
+						.lookupBean(JoinPage.class);
+				if (bean != null) {
+					presenter = bean.getInstance();
 				}
 			} else if (token.startsWith(Settings.PRIVATE_LINK)) {
 				IOCBeanDef<PrivateHome> bean = manager
@@ -230,7 +213,6 @@ public class TereeController implements ValueChangeHandler<String> {
 	private void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 		presenter.go(container);
-		bindPresenter(presenter);
 		
 		String sessionId = Cookies.getCookie(Settings.COOKIE_SESSION_ID);
 		if (sessionId == null) {
