@@ -4,6 +4,7 @@ import org.teree.client.Settings;
 import org.teree.shared.data.Scheme;
 
 import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.Well;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.dom.client.Style;
@@ -69,8 +70,13 @@ public class SchemeWidget extends Composite {
 		Style vs = view.getElement().getStyle();
 		vs.setFloat(Style.Float.RIGHT);
 		
-		panel.add(publish);
-		panel.add(remove);
+		Tooltip pt = new Tooltip("Publish scheme");
+        pt.add(publish);
+		panel.add(pt);
+		
+        Tooltip rt = new Tooltip("Remove scheme");
+        rt.add(remove);
+		panel.add(rt);
 		w.add(screen);
 		w.add(edit);
 		w.add(view);

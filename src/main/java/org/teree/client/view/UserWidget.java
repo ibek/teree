@@ -9,6 +9,7 @@ import org.teree.shared.data.UserInfo;
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Nav;
 import com.github.gwtbootstrap.client.ui.NavLink;
+import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.constants.Alignment;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -37,12 +38,20 @@ public class UserWidget extends Composite {
 
 		signIn = new Button("Sign in");
 		join = new Button("Join");
+
 		settings = new Button("", IconType.WRENCH);
+		
 		logout = new Button("",IconType.SIGNOUT);
 		container.add(signIn);
 		container.add(join);
-		container.add(settings);
-		container.add(logout);
+
+        Tooltip ts = new Tooltip("Settings");
+        ts.add(settings);
+		container.add(ts);
+		
+        Tooltip tl = new Tooltip("Logout");
+        tl.add(logout);
+		container.add(tl);
 		
 		bind();
 

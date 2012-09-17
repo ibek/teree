@@ -1,6 +1,7 @@
 package org.teree.client.view.editor;
 
 import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -33,11 +34,24 @@ public class EditPanel extends Composite {
 
 		container.add(save);
 		container.add(space);
-		container.add(createText);
-		container.add(createImg);
-		container.add(createLink);
+		
+		Tooltip tct = new Tooltip("Create text child node");
+		tct.add(createText);
+		container.add(tct);
+
+        Tooltip tci = new Tooltip("Create image child node");
+        tci.add(createImg);
+		container.add(tci);
+
+        Tooltip tcl = new Tooltip("Create link child node");
+        tcl.add(createLink);
+		container.add(tcl);
+		
 		container.add(space2);
-		container.add(bold);
+		
+        Tooltip tcb = new Tooltip("Bold text node");
+        tcb.add(bold);
+		container.add(tcb);
 		
 		initWidget(container);
 		

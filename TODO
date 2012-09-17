@@ -1,7 +1,6 @@
 
 0.4:
 
-pridat tooltipy pro tlacitka (publish, remove ...)
 DBAuth sifrovani hesla
 export obrazku
 upload obrazku a vyber z techto obrazku pri vkladani ImageNodeWidgetu
