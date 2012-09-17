@@ -22,6 +22,7 @@ public class Scene extends Composite {
 
     private AbsolutePanel container;
     private Canvas canvas;
+    private Node root;
     
     public Scene() {
     	
@@ -52,12 +53,21 @@ public class Scene extends Composite {
     }
     
     public void setRoot(Node root) {
+    	this.root = root;
     	container.clear();
         container.add(canvas);
         
         init(root);
         
         scheme.renderViewer(canvas, getNodeWidgets(), root);
+    }
+    
+    public String getSchemePicture() {
+        Canvas canvas = Canvas.createIfSupported();
+        canvas.setCoordinateSpaceHeight(this.canvas.getOffsetHeight());
+        canvas.setCoordinateSpaceWidth(this.canvas.getOffsetWidth());
+        scheme.renderPicture(canvas, getNodeWidgets(), root);
+        return canvas.toDataUrl();
     }
     
     private void init(Node node) {

@@ -4,9 +4,21 @@
 	xmlns:view="urn:import:org.teree.client.view" xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 	
 	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
+	
+	<ui:style>
+
+		.viewPanel {
+			margin: 0 auto;
+			margin-top: -10px;
+			margin-bottom: 10px;
+			padding-bottom: 5px;
+		}
+
+	</ui:style>
 
 	<g:FlowPanel>
 		<view:Header ui:field="header"/>
+		<tw:ViewPanel ui:field="view" addStyleNames="{style.viewPanel}"></tw:ViewPanel>
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<tw:Scene ui:field="scene" addStyleNames="{res.css.scene}"></tw:Scene>
 	</g:FlowPanel>

@@ -12,6 +12,7 @@ import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.constants.Alignment;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
+import com.github.gwtbootstrap.client.ui.constants.Placement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
@@ -46,10 +47,12 @@ public class UserWidget extends Composite {
 		container.add(join);
 
         Tooltip ts = new Tooltip("Settings");
+        ts.setPlacement(Placement.BOTTOM);
         ts.add(settings);
 		container.add(ts);
 		
         Tooltip tl = new Tooltip("Logout");
+        tl.setPlacement(Placement.BOTTOM);
         tl.add(logout);
 		container.add(tl);
 		

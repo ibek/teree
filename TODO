@@ -3,8 +3,7 @@
 
 DBAuth sifrovani hesla
 export obrazku
-upload obrazku a vyber z techto obrazku pri vkladani ImageNodeWidgetu
- (obrazky co ma uzivatel v library (otagovane apod) - odkazy na ty obrazky + si muze pridat nektere obrazky z public schemat)
+obrazky pridavat jako adresu - upravit + zprovoznit getImageData
 umoznit tagovani map
 zobrazit tagy u map v explore
 odstraneni mapy
@@ -13,14 +12,7 @@ resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - 
 
 0.5:
 
-direct explore - novy typ generovani mapy, nejspis pro to bude stacit mindmapa protoze leva strana se zajisti uz na serveru pri cteni 
-service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
-ConnectorNodeWidget (to connect another map)
-funkce pro rozdeleni mapy na dve - z nodu vytvorit novou mapu a propojit connectorNodeWidgetem
 podpora collapse node
-
-0.6:
-
 upravit pom.xml - aby mel mene zavislosti a verze byly jen na jednom miste
 IconTextNodeWidget
 import a export z/do freemindmap
@@ -29,9 +21,16 @@ vytvorit stranku pro nastaveni uzivatele - jmeno, email, zmena hesla apod
 
 -------- alpha release --------
 
+0.6:
+
+direct explore - novy typ generovani mapy, nejspis pro to bude stacit mindmapa protoze leva strana se zajisti uz na serveru pri cteni 
+service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
+ConnectorNodeWidget (to connect another map)
+funkce pro rozdeleni mapy na dve - z nodu vytvorit novou mapu a propojit connectorNodeWidgetem
+
 0.7:
 
-udelat testovani podle nalezenych chyb + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
+udelat testovani podle nalezenych chyb z alpha release + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
 
 future:
 
