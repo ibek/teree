@@ -106,7 +106,7 @@ public class TereeController implements ValueChangeHandler<String> {
 					}
 					case EndSession: {
 						currentUser.clear();
-						presenter.getTemplate().setCurrentUser(currentUser);
+						History.newItem(Settings.HOME_LINK);
 					}
 				}
 			}
@@ -121,7 +121,7 @@ public class TereeController implements ValueChangeHandler<String> {
 		bind();
 
 		if ("".equals(History.getToken())) {
-			History.newItem(Settings.CREATE_LINK);
+			History.newItem(Settings.HOME_LINK);
 		} else {
 			History.fireCurrentHistoryState();
 		}

@@ -116,9 +116,12 @@ public class TAuthAdapter implements AuthenticationAdapter {
         return (Token)session.getAttribute("token");
     }
 
+    /**
+     * This method is not used because Errai Auth doesn't work with CDI.
+     * The auth check is performed by SecurityInterceptor through @RequireAuthentication.
+     */
     @Override
     public boolean isAuthenticated(Message message) {
-    	System.out.println("check Auth");
     	QueueSession queueSession = message.getResource(QueueSession.class, Resources.Session.name());
         final HttpSession session = (queueSession==null)?null:queueSession.getAttribute(HttpSession.class, HttpSession.class.getName());
         return session != null && session.getAttribute("auth")!=null && 

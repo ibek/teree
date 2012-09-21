@@ -143,6 +143,7 @@ public class SchemeEditor implements Presenter {
 	        }, new ErrorCallback() {
 				@Override
 				public boolean error(Message message, Throwable throwable) {
+					System.out.println(throwable.getMessage());
 					display.error(message.toString());
 					return false;
 				}

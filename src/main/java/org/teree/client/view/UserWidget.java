@@ -55,10 +55,10 @@ public class UserWidget extends Composite {
         tl.setPlacement(Placement.BOTTOM);
         tl.add(logout);
 		container.add(tl);
-		
-		bind();
 
 		initWidget(container);
+		
+		bind();
 	}
 
 	private void bind() {

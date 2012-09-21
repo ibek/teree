@@ -11,7 +11,7 @@ import org.jboss.errai.bus.client.ErraiBus;
 import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.framework.RequestDispatcher;
 import org.jboss.errai.bus.server.annotations.Service;
-import org.jboss.errai.bus.server.annotations.security.RequireAuthentication;
+import org.teree.server.auth.RequireAuthentication;
 import org.teree.server.dao.SchemeManager;
 import org.teree.shared.SecuredService;
 import org.teree.shared.UserService;
@@ -51,6 +51,7 @@ public class SecuredServiceImpl implements SecuredService {
 
     @Override
 	public String insertScheme(Scheme s) {
+    	System.out.println("insertScheme()");
         return _sm.insertPrivate(s, _us.getUserInfo());
     }
 

@@ -37,15 +37,6 @@ public class PrivateHome extends TemplateScene implements org.teree.client.prese
     	scene.enablePublish(true);
     }
     
-    private void bind() {
-		scene.addHandler(new PublishSchemeHandler() {
-			@Override
-			public void select(PublishScheme event) {
-				
-			}
-		}, PublishScheme.TYPE);
-    }
-    
     @Override
     public Widget asWidget() {
         return this;
