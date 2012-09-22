@@ -11,7 +11,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.view.explorer.Scene;
-import org.teree.client.view.explorer.event.HasPublishSchemeHandlers;
+import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.PublishScheme;
 import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.client.view.resource.PageStyle;
@@ -68,7 +68,7 @@ public class PrivateHome extends TemplateScene implements org.teree.client.prese
 	}
 
 	@Override
-	public HasPublishSchemeHandlers getScheme() {
+	public HasSchemeHandlers getScene() {
 		return scene;
 	}
 

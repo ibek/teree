@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.presenter.SchemeExplorer;
 import org.teree.client.view.explorer.Scene;
+import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.Scheme;
 
@@ -62,6 +63,11 @@ public class Explorer extends TemplateScene implements SchemeExplorer.Display {
 	@Override
 	public String getLastOid() {
 		return scene.getLastOid();
+	}
+
+	@Override
+	public HasSchemeHandlers getScene() {
+		return scene;
 	}
 
 }

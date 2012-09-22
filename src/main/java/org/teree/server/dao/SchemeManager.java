@@ -165,6 +165,21 @@ public class SchemeManager {
     }
     
     /**
+     * Only owner or author can remove scheme.
+     * @param oid
+     * @param ui
+     */
+    public boolean remove(String oid, UserInfo ui) {
+    	DBCollection coll = getCollection();
+        DBObject removeBy = new BasicDBObject("_id", new ObjectId(oid));
+        BasicDBList list = new BasicDBList();
+        list.add(new BasicDBObject("owner", ui.getUserId()));
+        list.add(new BasicDBObject("author", ui.getUserId()));
+        removeBy.put("$or", list);
+        return coll.remove(removeBy).getN() == 1;
+    }
+    
+    /**
      * Update scheme identified by oid.
      * @param s
      */

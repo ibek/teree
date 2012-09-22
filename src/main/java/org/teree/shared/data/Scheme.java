@@ -2,11 +2,15 @@ package org.teree.shared.data;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
 
+/**
+ * 
+ * TODO: add details for scheme - (author, owner), created, lastEdit 
+ *
+ */
 @Portable
 public class Scheme {
 
 	private String oid;
-	private Node.NodeType type;
 	private String schemePicture;
 	private Node root;
 
@@ -32,14 +36,6 @@ public class Scheme {
 
 	public void setOid(String oid) {
 		this.oid = oid;
-	}
-
-	public Node.NodeType getType() {
-		return type;
-	}
-
-	public void setType(Node.NodeType type) {
-		this.type = type;
 	}
 	
 }

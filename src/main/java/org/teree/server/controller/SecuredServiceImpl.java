@@ -51,7 +51,6 @@ public class SecuredServiceImpl implements SecuredService {
 
     @Override
 	public String insertScheme(Scheme s) {
-    	System.out.println("insertScheme()");
         return _sm.insertPrivate(s, _us.getUserInfo());
     }
 
@@ -63,6 +62,11 @@ public class SecuredServiceImpl implements SecuredService {
 	@Override
 	public void publishScheme(String oid) {
 		_sm.publish(oid, _us.getUserInfo());
+	}
+	
+	@Override
+	public boolean removeScheme(String oid) {
+		return _sm.remove(oid, _us.getUserInfo());
 	}
 
     @Override

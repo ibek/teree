@@ -25,6 +25,6 @@ public class PublishScheme extends GwtEvent<PublishSchemeHandler> {
 
     @Override
     protected void dispatch(PublishSchemeHandler handler) {
-        handler.select(this);
+        handler.publish(this);
     }
 }

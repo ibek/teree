@@ -4,6 +4,6 @@ import com.google.gwt.event.shared.EventHandler;
 
 public interface PublishSchemeHandler extends EventHandler {
 
-    public void select(PublishScheme event);
+    public void publish(PublishScheme event);
     
 }

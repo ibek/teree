@@ -99,6 +99,10 @@ public class SchemeWidget extends Composite {
 		return publish;
 	}
 	
+	public HasClickHandlers getRemoveButton() {
+		return remove;
+	}
+	
 	public void enablePublish(boolean state) {
 		publish.setVisible(state);
 	}

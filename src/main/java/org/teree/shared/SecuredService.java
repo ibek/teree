@@ -21,6 +21,8 @@ public interface SecuredService {
     
     public void publishScheme(String oid);
     
+    public boolean removeScheme(String oid);
+    
     /**
      * Inform cooperated users about change.
      * @param change info

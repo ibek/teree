@@ -6,7 +6,6 @@ export obrazku
 obrazky pridavat jako adresu - upravit + zprovoznit getImageData
 umoznit tagovani map
 zobrazit tagy u map v explore
-odstraneni mapy
 umoznit presouvat mapu nebo minimalne pridat posuvnik vlevo-vpravo
 resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
 

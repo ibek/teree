@@ -15,6 +15,7 @@ public class Text {
         String schemeUpdated(String oid);
         String schemeCreated(String oid);
         String schemePublished(String oid);
+        String schemeRemoved(String oid);
         
         String loginFailed();
         String connectionIssue();

@@ -10,7 +10,11 @@ import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
 import org.teree.client.Text;
+import org.teree.client.view.explorer.event.HasSchemeHandlers;
+import org.teree.client.view.explorer.event.RemoveScheme;
+import org.teree.client.view.explorer.event.RemoveSchemeHandler;
 import org.teree.shared.GeneralService;
+import org.teree.shared.SecuredService;
 import org.teree.shared.data.Scheme;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -27,12 +31,16 @@ public class SchemeExplorer implements Presenter {
         void setData(List<Scheme> slist);
         HasClickHandlers getNextButton();
         HasClickHandlers getPreviousButton();
+        HasSchemeHandlers getScene();
         String getFirstOid();
         String getLastOid();
     }
 	
 	@Inject
 	private Caller<GeneralService> generalService;
+	
+	@Inject
+	private Caller<SecuredService> securedService;
     
     @Inject
     private Display display;
@@ -55,6 +63,28 @@ public class SchemeExplorer implements Presenter {
 				if (to != null) {
 					loadPreviousData(to);
 				}
+			}
+		});
+		
+		display.getScene().addRemoveHandler(new RemoveSchemeHandler() {
+			@Override
+			public void remove(final RemoveScheme event) {
+				securedService.call(new RemoteCallback<Boolean>() {
+					@Override
+					public void callback(Boolean response) {
+						if (response) {
+							display.info(Text.LANG.schemeRemoved(event.getScheme().getOid()));
+						} else {
+							display.error("You are not owner or author of the scheme.");
+						}
+					}
+				}, new ErrorCallback() {
+					@Override
+					public boolean error(Message message, Throwable throwable) {
+						// TODO Auto-generated method stub
+						return false;
+					}
+				}).removeScheme(event.getScheme().getOid());
 			}
 		});
 	}

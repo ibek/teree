@@ -3,9 +3,11 @@ package org.teree.client.view.explorer;
 import java.util.List;
 
 import org.teree.client.view.SchemeWidget;
-import org.teree.client.view.explorer.event.HasPublishSchemeHandlers;
+import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.PublishScheme;
 import org.teree.client.view.explorer.event.PublishSchemeHandler;
+import org.teree.client.view.explorer.event.RemoveScheme;
+import org.teree.client.view.explorer.event.RemoveSchemeHandler;
 import org.teree.shared.data.Scheme;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -20,14 +22,15 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
-public class Scene extends Composite implements HasPublishSchemeHandlers {
+public class Scene extends Composite implements HasSchemeHandlers {
 
 	private HorizontalPanel container;
 	private FlowPanel schemeContainer;
 	private Button next;
 	private Button previous;
-	
+
 	private HandlerManager publishManager;
+	private HandlerManager removeManager;
 	
 	private boolean enablePublish = false;
 	
@@ -43,8 +46,9 @@ public class Scene extends Composite implements HasPublishSchemeHandlers {
 		schemeContainer = new FlowPanel();
 		schemeContainer.getElement().getStyle().setPaddingLeft(5, Unit.PX);
 		schemeContainer.getElement().getStyle().setPaddingRight(5, Unit.PX);
-		
+
 		publishManager = new HandlerManager(schemeContainer);
+		removeManager = new HandlerManager(schemeContainer);
 		
 		next = new Button("", IconType.CHEVRON_RIGHT);
 		next.setHeight("100%");
@@ -74,6 +78,12 @@ public class Scene extends Composite implements HasPublishSchemeHandlers {
 				@Override
 				public void onClick(ClickEvent event) {
 					publishManager.fireEvent(new PublishScheme(sw.getScheme()));
+				}
+			});
+			sw.getRemoveButton().addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					removeManager.fireEvent(new RemoveScheme(sw.getScheme()));
 				}
 			});
 			schemeContainer.add(sw);
@@ -117,6 +127,11 @@ public class Scene extends Composite implements HasPublishSchemeHandlers {
 	@Override
 	public HandlerRegistration addPublishHandler(PublishSchemeHandler handler) {
 		return publishManager.addHandler(PublishScheme.TYPE, handler);
+	}
+
+	@Override
+	public HandlerRegistration addRemoveHandler(RemoveSchemeHandler handler) {
+		return removeManager.addHandler(RemoveScheme.TYPE, handler);
 	}
 	
 }
