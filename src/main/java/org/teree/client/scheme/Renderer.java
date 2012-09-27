@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.teree.client.Settings;
 import org.teree.client.view.NodeInterface;
-import org.teree.shared.data.Node;
-import org.teree.shared.data.Node.NodeLocation;
+import org.teree.shared.data.scheme.Node;
+import org.teree.shared.data.scheme.Node.NodeLocation;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.Scheduler;

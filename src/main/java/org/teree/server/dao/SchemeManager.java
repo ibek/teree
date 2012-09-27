@@ -8,14 +8,14 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.bson.types.ObjectId;
-import org.teree.shared.data.IconString;
-import org.teree.shared.data.ImageLink;
-import org.teree.shared.data.Link;
-import org.teree.shared.data.NodeStyle;
-import org.teree.shared.data.Scheme;
-import org.teree.shared.data.Node;
-import org.teree.shared.data.Node.NodeLocation;
-import org.teree.shared.data.Node.NodeType;
+import org.teree.shared.data.scheme.IconString;
+import org.teree.shared.data.scheme.ImageLink;
+import org.teree.shared.data.scheme.Link;
+import org.teree.shared.data.scheme.Node;
+import org.teree.shared.data.scheme.NodeStyle;
+import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.scheme.Node.NodeLocation;
+import org.teree.shared.data.scheme.Node.NodeType;
 import org.teree.shared.data.UserInfo;
 
 import com.mongodb.BasicDBList;

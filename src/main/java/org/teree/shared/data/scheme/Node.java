@@ -1,4 +1,4 @@
-package org.teree.shared.data;
+package org.teree.shared.data.scheme;
 
 import java.io.Serializable;
 import java.util.ArrayList;

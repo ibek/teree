@@ -15,7 +15,7 @@ import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.PublishScheme;
 import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.client.view.resource.PageStyle;
-import org.teree.shared.data.Scheme;
+import org.teree.shared.data.scheme.Scheme;
 
 public class PrivateHome extends TemplateScene implements org.teree.client.presenter.PrivateHome.Display {
 

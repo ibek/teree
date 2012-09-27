@@ -9,16 +9,22 @@ import org.teree.client.scheme.MindMap;
 import org.teree.client.scheme.SchemeType;
 import org.teree.client.scheme.Renderer;
 import org.teree.client.view.editor.NodeWidget;
+import org.teree.client.view.editor.event.BrowseItems;
+import org.teree.client.view.editor.event.BrowseItemsHandler;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
-import org.teree.shared.data.ImageLink;
-import org.teree.shared.data.Link;
-import org.teree.shared.data.Node;
-import org.teree.shared.data.Node.NodeLocation;
-import org.teree.shared.data.NodeStyle;
+import org.teree.client.view.editor.storage.Browser;
+import org.teree.client.view.editor.storage.BrowserLoadRequestHandler;
+import org.teree.client.view.editor.storage.ItemType;
+import org.teree.shared.data.scheme.ImageLink;
+import org.teree.shared.data.scheme.Link;
+import org.teree.shared.data.scheme.Node;
+import org.teree.shared.data.scheme.NodeStyle;
+import org.teree.shared.data.scheme.Node.NodeLocation;
 
+import com.github.gwtbootstrap.client.ui.Modal;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.ImageData;
@@ -43,6 +49,10 @@ public class Scene extends Composite {
     private NodeWidget selected;
     private Node copied;
     
+    private Browser browser;
+    private Modal browserWindow;
+    private BrowserLoadRequestHandler browserLoadRequestHandler;
+    
     public Scene() {
         
         setSchemeType(Settings.DEFAULT_SCHEME_TYPE);
@@ -52,6 +62,11 @@ public class Scene extends Composite {
         if (canvas == null) { // canvas is not supported
             // deal with it
         }
+        
+		browserWindow = new Modal(false);
+		browserWindow.setTitle("Choose image");
+		browser = new Browser();
+		browserWindow.add(browser);
         
         bind();
         
@@ -68,6 +83,14 @@ public class Scene extends Composite {
             }
             
         }, SelectNode.TYPE);
+        
+    	container.addHandler(new BrowseItemsHandler() {
+			@Override
+			public void browse(BrowseItems event) {
+				browserWindow.show();
+				browserLoadRequestHandler.loadRequest(event.getType());
+			}
+		}, BrowseItems.TYPE);
         
         canvas.addClickHandler(new ClickHandler() {
             @Override
@@ -324,6 +347,14 @@ public class Scene extends Composite {
         
         return canvasTmp.toDataUrl();
     }
+    
+    public void setBrowserItems(List<?> items, ItemType type) {
+    	browser.setBrowserItems(items, type);
+    }
+    
+    public void setBrowserLoadRequestHandler(BrowserLoadRequestHandler handler) {
+		browserLoadRequestHandler = handler;
+	}
     
     /**======================================================*/
 

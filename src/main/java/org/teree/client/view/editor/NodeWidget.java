@@ -3,8 +3,8 @@ package org.teree.client.view.editor;
 import org.teree.client.view.NodeInterface;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.resource.NodeCssStyle;
-import org.teree.shared.data.Node;
-import org.teree.shared.data.NodeStyle;
+import org.teree.shared.data.scheme.Node;
+import org.teree.shared.data.scheme.NodeStyle;
 
 import com.google.gwt.event.dom.client.DropEvent;
 import com.google.gwt.user.client.DOM;

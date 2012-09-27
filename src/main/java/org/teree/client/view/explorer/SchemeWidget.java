@@ -1,7 +1,7 @@
-package org.teree.client.view;
+package org.teree.client.view.explorer;
 
 import org.teree.client.Settings;
-import org.teree.shared.data.Scheme;
+import org.teree.shared.data.scheme.Scheme;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Tooltip;

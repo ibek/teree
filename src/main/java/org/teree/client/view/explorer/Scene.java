@@ -2,13 +2,12 @@ package org.teree.client.view.explorer;
 
 import java.util.List;
 
-import org.teree.client.view.SchemeWidget;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.PublishScheme;
 import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
-import org.teree.shared.data.Scheme;
+import org.teree.shared.data.scheme.Scheme;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.constants.IconType;

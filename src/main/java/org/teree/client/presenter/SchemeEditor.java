@@ -1,5 +1,7 @@
 package org.teree.client.presenter;
 
+import java.util.List;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -14,9 +16,13 @@ import org.teree.client.event.GlobalKeyUpHandler;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.event.SchemeReceivedHandler;
 import org.teree.client.view.KeyAction;
-import org.teree.shared.SecuredService;
-import org.teree.shared.data.Scheme;
-import org.teree.shared.data.Node;
+import org.teree.client.view.editor.storage.BrowserLoadRequestHandler;
+import org.teree.client.view.editor.storage.ItemType;
+import org.teree.shared.SecuredSchemeService;
+import org.teree.shared.SecuredStorageService;
+import org.teree.shared.data.scheme.Node;
+import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.storage.ImageInfo;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -35,13 +41,18 @@ public class SchemeEditor implements Presenter {
         Widget asWidget();
         void setRoot(Node root);
         String getSchemeSamplePicture();
+        void setBrowserItems(List<?> items, ItemType type);
+        void setBrowserLoadRequestHandler(BrowserLoadRequestHandler handler);
     }
     
     @Inject @Named(value="eventBus")
     private HandlerManager eventBus;
     
 	@Inject
-	private Caller<SecuredService> securedService;
+	private Caller<SecuredSchemeService> securedScheme;
+    
+	@Inject
+	private Caller<SecuredStorageService> securedStorage;
     
     @Inject
     private Display display;
@@ -118,6 +129,14 @@ public class SchemeEditor implements Presenter {
                 saveScheme();
             }
         });
+        
+        display.setBrowserLoadRequestHandler(new BrowserLoadRequestHandler() {
+			@Override
+			public void loadRequest(ItemType type) {
+				loadBrowserItems(type);
+			}
+		});
+        
     }
     
     @Override
@@ -134,7 +153,7 @@ public class SchemeEditor implements Presenter {
     
     public void saveScheme() {
     	if (scheme.getOid() == null) {
-    		securedService.call(new RemoteCallback<String>() {
+    		securedScheme.call(new RemoteCallback<String>() {
 	            @Override
 	            public void callback(String response) {
 	                scheme.setOid(response);
@@ -148,7 +167,7 @@ public class SchemeEditor implements Presenter {
 				}
 			}).insertScheme(scheme);
     	} else {
-    		securedService.call(new RemoteCallback<Void>() {
+    		securedScheme.call(new RemoteCallback<Void>() {
 	            @Override
 	            public void callback(Void response) {
 	                display.info(Text.LANG.schemeUpdated(scheme.getOid()));
@@ -160,6 +179,26 @@ public class SchemeEditor implements Presenter {
 					return false;
 				}
 			}).updateScheme(scheme);
+    	}
+    }
+    
+    public void loadBrowserItems(ItemType type) {
+    	switch (type) {
+	    	case Image: {
+	    		securedStorage.call(new RemoteCallback<List<ImageInfo>>() {
+		            @Override
+		            public void callback(List<ImageInfo> response) {
+		                display.setBrowserItems(response, ItemType.Image);
+		            }
+		        }, new ErrorCallback() {
+					@Override
+					public boolean error(Message message, Throwable throwable) {
+						display.error(message.toString());
+						return false;
+					}
+				}).getImages("/"); // TODO: make prefix changeable
+	    		break;
+	    	}
     	}
     }
 

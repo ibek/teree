@@ -1,4 +1,4 @@
-package org.teree.shared.data;
+package org.teree.shared.data.scheme;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
 

@@ -34,7 +34,6 @@ public class UserWidget extends Composite {
 		container = new Nav();
 		container.setAlignment(Alignment.RIGHT);
 		userHome = new NavLink("User");
-		userHome.setIcon(IconType.HOME);
 		container.add(userHome);
 
 		signIn = new Button("Sign in");
@@ -42,7 +41,7 @@ public class UserWidget extends Composite {
 
 		settings = new Button("", IconType.WRENCH);
 		
-		logout = new Button("",IconType.SIGNOUT);
+		logout = new Button("", IconType.SIGNOUT);
 		container.add(signIn);
 		container.add(join);
 
@@ -57,6 +56,8 @@ public class UserWidget extends Composite {
 		container.add(tl);
 
 		initWidget(container);
+		
+		userHome.setIcon(IconType.HOME);
 		
 		bind();
 	}

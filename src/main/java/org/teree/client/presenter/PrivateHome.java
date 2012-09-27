@@ -15,8 +15,8 @@ import org.teree.client.view.explorer.event.PublishScheme;
 import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
-import org.teree.shared.SecuredService;
-import org.teree.shared.data.Scheme;
+import org.teree.shared.SecuredSchemeService;
+import org.teree.shared.data.scheme.Scheme;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -38,7 +38,7 @@ public class PrivateHome implements Presenter {
     }
 	
 	@Inject
-	private Caller<SecuredService> securedService;
+	private Caller<SecuredSchemeService> securedService;
     
     @Inject
     private Display display;
@@ -61,6 +61,7 @@ public class PrivateHome implements Presenter {
 					@Override
 					public void callback(Void response) {
 						display.info(Text.LANG.schemePublished(event.getScheme().getOid()));
+						loadData(null);
 					}
 				}, new ErrorCallback() {
 					@Override
@@ -90,6 +91,7 @@ public class PrivateHome implements Presenter {
 					public void callback(Boolean response) {
 						if (response) {
 							display.info(Text.LANG.schemeRemoved(event.getScheme().getOid()));
+							loadData(null);
 						} else {
 							display.error("You are not owner or author of the scheme.");
 						}

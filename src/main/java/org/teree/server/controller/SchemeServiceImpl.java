@@ -8,12 +8,12 @@ import javax.inject.Inject;
 
 import org.jboss.errai.bus.server.annotations.Service;
 import org.teree.server.dao.SchemeManager;
-import org.teree.shared.GeneralService;
-import org.teree.shared.data.Scheme;
+import org.teree.shared.SchemeService;
+import org.teree.shared.data.scheme.Scheme;
 
 @ApplicationScoped
 @Service
-public class GeneralServiceImpl implements GeneralService {
+public class SchemeServiceImpl implements SchemeService {
 
     @Inject
     private Logger _log;

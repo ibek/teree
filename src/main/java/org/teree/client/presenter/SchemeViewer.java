@@ -7,7 +7,7 @@ import javax.inject.Named;
 import org.teree.client.Text;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.event.SchemeReceivedHandler;
-import org.teree.shared.data.Node;
+import org.teree.shared.data.scheme.Node;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;

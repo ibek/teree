@@ -1,6 +1,6 @@
 package org.teree.client.event;
 
-import org.teree.shared.data.Scheme;
+import org.teree.shared.data.scheme.Scheme;
 
 import com.google.gwt.event.shared.GwtEvent;
 

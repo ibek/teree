@@ -1,7 +1,7 @@
 package org.teree.client.view.viewer;
 
-import org.teree.shared.data.Link;
-import org.teree.shared.data.Node;
+import org.teree.shared.data.scheme.Link;
+import org.teree.shared.data.scheme.Node;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.user.client.ui.Anchor;

@@ -3,11 +3,11 @@ package org.teree.shared;
 import java.util.List;
 
 import org.jboss.errai.bus.server.annotations.Remote;
-import org.teree.shared.data.Scheme;
-import org.teree.shared.data.SchemeChange;
+import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.scheme.SchemeChange;
 
 @Remote
-public interface SecuredService {
+public interface SecuredSchemeService {
 
 	public List<Scheme> getPrivateSchemesFrom(String from_oid, int limit);
 	
@@ -28,14 +28,5 @@ public interface SecuredService {
      * @param change info
      */
     public void schemeChanged(SchemeChange change);
-    
-    public enum Command {
-	
-		getAllPrivateSchemes,
-	    getPrivateScheme,
-	    insertPrivateScheme,
-	    updatePrivateScheme;
-	
-    }
     
 }

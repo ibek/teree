@@ -9,7 +9,7 @@ import org.teree.client.scheme.MindMap;
 import org.teree.client.scheme.SchemeType;
 import org.teree.client.scheme.Renderer;
 import org.teree.client.view.viewer.NodeWidget;
-import org.teree.shared.data.Node;
+import org.teree.shared.data.scheme.Node;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.user.client.ui.AbsolutePanel;

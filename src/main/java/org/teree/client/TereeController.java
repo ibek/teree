@@ -25,11 +25,11 @@ import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.presenter.SchemeViewer;
 import org.teree.client.presenter.Presenter;
 import org.teree.shared.NodeGenerator;
-import org.teree.shared.GeneralService;
+import org.teree.shared.SchemeService;
 import org.teree.shared.UserService;
 import org.teree.shared.data.AuthType;
-import org.teree.shared.data.Scheme;
 import org.teree.shared.data.UserInfo;
+import org.teree.shared.data.scheme.Scheme;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -49,7 +49,7 @@ public class TereeController implements ValueChangeHandler<String> {
 	private HandlerManager eventBus;
 
 	@Inject
-	private Caller<GeneralService> generalService;
+	private Caller<SchemeService> generalService;
 
 	@Inject
 	private Caller<UserService> userService;

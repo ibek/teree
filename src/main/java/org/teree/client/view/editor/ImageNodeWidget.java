@@ -1,16 +1,21 @@
 package org.teree.client.view.editor;
 
+import org.teree.client.view.editor.event.BrowseItems;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
-import org.teree.shared.data.ImageLink;
-import org.teree.shared.data.Node;
-import org.teree.shared.data.NodeStyle;
+import org.teree.client.view.editor.storage.Browser;
+import org.teree.client.view.editor.storage.ItemType;
+import org.teree.shared.data.scheme.ImageLink;
+import org.teree.shared.data.scheme.Node;
+import org.teree.shared.data.scheme.NodeStyle;
 
+import com.github.gwtbootstrap.client.ui.Modal;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ErrorEvent;
@@ -30,8 +35,6 @@ public class ImageNodeWidget extends NodeWidget {
 
 	private Image content;
 
-	private LinkDialog linkDialog;
-
 	private Resources res = GWT.create(Resources.class);
 
 	public ImageNodeWidget(Node node) {
@@ -46,6 +49,7 @@ public class ImageNodeWidget extends NodeWidget {
 
 	private void init() {
 		content = new Image();
+		content.getElement().getStyle().setPadding(5.0, Unit.PX);
 		content.setUrl(res.noImage().getSafeUri());
 
 		content.addClickHandler(new ClickHandler() {
@@ -101,7 +105,7 @@ public class ImageNodeWidget extends NodeWidget {
 
 	@Override
 	public void edit() {
-		if (linkDialog == null) {
+		/**if (linkDialog == null) {
 			linkDialog = new LinkDialog("Set image link");
 			
 			linkDialog.getOk().addClickHandler(new ClickHandler() {
@@ -122,7 +126,10 @@ public class ImageNodeWidget extends NodeWidget {
 
 		linkDialog.setPopupPosition(getAbsoluteLeft() + content.getWidth()/2 - linkDialog.getOffsetWidth()/2, 
 				getAbsoluteTop() + content.getHeight()/2 - linkDialog.getOffsetHeight()/2);
-		linkDialog.show();
+		linkDialog.show();*/
+		
+		getParent().fireEvent(new BrowseItems(ItemType.Image));
+		
 	}
 
 	/**
@@ -130,9 +137,9 @@ public class ImageNodeWidget extends NodeWidget {
 	 */
     @Override
     public void draw(Context2d context, int x, int y) {
-    	context.save();
+    	/**context.save();
     	context.drawImage(ImageElement.as(content.getElement()), x, y-content.getHeight());
-        context.restore();
+        context.restore();*/
     }
 
 	@Override

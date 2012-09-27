@@ -1,7 +1,7 @@
 package org.teree.client.view.viewer;
 
-import org.teree.shared.data.Node;
-import org.teree.shared.data.NodeStyle;
+import org.teree.shared.data.scheme.Node;
+import org.teree.shared.data.scheme.NodeStyle;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.Style.FontWeight;

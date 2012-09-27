@@ -17,7 +17,7 @@ import org.teree.client.presenter.SchemeViewer;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.client.view.viewer.Scene;
 import org.teree.client.view.viewer.ViewPanel;
-import org.teree.shared.data.Node;
+import org.teree.shared.data.scheme.Node;
 
 public class Viewer extends TemplateScene implements SchemeViewer.Display {
 

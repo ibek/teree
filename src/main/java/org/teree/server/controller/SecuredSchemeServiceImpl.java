@@ -13,15 +13,15 @@ import org.jboss.errai.bus.client.framework.RequestDispatcher;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.teree.server.auth.RequireAuthentication;
 import org.teree.server.dao.SchemeManager;
-import org.teree.shared.SecuredService;
+import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.UserService;
-import org.teree.shared.data.Scheme;
-import org.teree.shared.data.SchemeChange;
+import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.scheme.SchemeChange;
 
 @ApplicationScoped
 @Service
 @RequireAuthentication
-public class SecuredServiceImpl implements SecuredService {
+public class SecuredSchemeServiceImpl implements SecuredSchemeService {
 
     @Inject
     private Logger _log;

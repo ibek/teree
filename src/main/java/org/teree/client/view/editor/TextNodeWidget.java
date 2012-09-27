@@ -3,8 +3,8 @@ package org.teree.client.view.editor;
 import org.teree.client.Settings;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
-import org.teree.shared.data.Node;
-import org.teree.shared.data.NodeStyle;
+import org.teree.shared.data.scheme.Node;
+import org.teree.shared.data.scheme.NodeStyle;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.Scheduler;

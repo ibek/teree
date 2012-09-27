@@ -2,7 +2,7 @@ package org.teree.client.view.viewer;
 
 import org.teree.client.view.NodeInterface;
 import org.teree.client.view.resource.NodeCssStyle;
-import org.teree.shared.data.Node;
+import org.teree.shared.data.scheme.Node;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;

@@ -1,6 +1,6 @@
 package org.teree.client.view;
 
-import org.teree.shared.data.Node;
+import org.teree.shared.data.scheme.Node;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 

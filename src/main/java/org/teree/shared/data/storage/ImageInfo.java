@@ -1,24 +1,16 @@
-package org.teree.shared.data;
+package org.teree.shared.data.storage;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
 
 @Portable
-public class Link {
+public class ImageInfo {
 
-	private String text;
+	private String name;
 	
 	private String url;
-	
-	public Link() {
-		
-	}
 
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
+	public String getName() {
+		return name;
 	}
 
 	public String getUrl() {
@@ -27,6 +19,7 @@ public class Link {
 
 	public void setUrl(String url) {
 		this.url = url;
+		name = url.substring(url.lastIndexOf('/')+1);
 	}
 	
 }

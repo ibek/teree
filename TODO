@@ -2,12 +2,18 @@
 0.4:
 
 DBAuth sifrovani hesla
-export obrazku
-obrazky pridavat jako adresu - upravit + zprovoznit getImageData
+export mapy jako obrazek (mel by se exportovat vcetne obrazku a url adres a mel by se ulozit jako scheme.png)
+
+obrazky
+ - upload obrazku, limit 10MB / uzivatel
+ - vyber a odstraneni obrazku
+ - soukrome/verejne
+ - povolit CORS
+
 umoznit tagovani map
 zobrazit tagy u map v explore
+vyber map obsahujici dany tag(y)
 umoznit presouvat mapu nebo minimalne pridat posuvnik vlevo-vpravo
-resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
 
 0.5:
 
@@ -17,6 +23,7 @@ IconTextNodeWidget
 import a export z/do freemindmap
 tvorba map z templates
 vytvorit stranku pro nastaveni uzivatele - jmeno, email, zmena hesla apod
+resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
 
 -------- alpha release --------
 

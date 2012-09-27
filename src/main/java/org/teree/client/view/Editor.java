@@ -1,5 +1,7 @@
 package org.teree.client.view;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import com.google.gwt.core.client.GWT;
@@ -13,8 +15,10 @@ import com.google.gwt.user.client.ui.Widget;
 import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.view.editor.EditPanel;
 import org.teree.client.view.editor.Scene;
+import org.teree.client.view.editor.storage.BrowserLoadRequestHandler;
+import org.teree.client.view.editor.storage.ItemType;
 import org.teree.client.view.resource.PageStyle;
-import org.teree.shared.data.Node;
+import org.teree.shared.data.scheme.Node;
 
 public class Editor extends TemplateScene implements SchemeEditor.Display {
 	
@@ -146,6 +150,16 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
 	@Override
 	public void bold() {
 		scene.changeBoldOfSelectedNode();
+	}
+
+	@Override
+	public void setBrowserItems(List<?> items, ItemType type) {
+		scene.setBrowserItems(items, type);
+	}
+
+	@Override
+	public void setBrowserLoadRequestHandler(BrowserLoadRequestHandler handler) {
+		scene.setBrowserLoadRequestHandler(handler);
 	}
 
 }
