@@ -16,6 +16,11 @@
         <servlet-class>org.teree.server.auth.OAuthServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>org.teree.server.UploadServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>ErraiServlet</servlet-name>
         <url-pattern>*.erraiBus</url-pattern>
@@ -24,6 +29,11 @@
     <servlet-mapping>
         <servlet-name>OAuthServlet</servlet-name>
         <url-pattern>/oauth</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/upload</url-pattern>
     </servlet-mapping>
     
     <session-config>

@@ -32,7 +32,11 @@ public class SecuredStorageServiceImpl implements SecuredStorageService {
 		return _sm.getImages(prefix, _us.getUserInfo());
 	}
 
-	@Override
+	/**
+	 * Upload is performed by UploadServet.
+	 * @param path
+	 * @param input
+	 */
 	public void uploadImage(String path, byte[] data) {
 		_sm.uploadImage(path, data, _us.getUserInfo());
 	}

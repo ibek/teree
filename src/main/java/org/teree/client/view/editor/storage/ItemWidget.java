@@ -50,6 +50,10 @@ public abstract class ItemWidget extends Composite {
 		initWidget(panel);
 	}
 	
+	public abstract String getUrl();
+	
+	public abstract String getItemTitle();
+	
 	protected void loaded() {
 		String t = getItemTitle();
 		if (t.length() > MAX_TITLE_LENGTH) {
@@ -57,7 +61,5 @@ public abstract class ItemWidget extends Composite {
 		}
 		title.setText(t);
 	}
-	
-	public abstract String getItemTitle();
 
 }

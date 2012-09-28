@@ -139,42 +139,7 @@ public class TextNodeWidget extends NodeWidget {
 	        });
 	        
 	        content.getElement().setDraggable(Element.DRAGGABLE_TRUE);
-	        
-	        content.addDragStartHandler(new DragStartHandler() {
-				@Override
-				public void onDragStart(DragStartEvent event) {
-					dragData(event);
-				}
-			});
-	        
-	        content.addDragOverHandler(new DragOverHandler() {
-				@Override
-				public void onDragOver(DragOverEvent event) {
-					
-				}
-			});
-	        
-	        content.addDragEnterHandler(new DragEnterHandler() {
-				@Override
-				public void onDragEnter(DragEnterEvent event) {
-					content.getElement().getStyle().setBackgroundColor("#ffa");
-				}
-			});
-	        
-	        content.addDragLeaveHandler(new DragLeaveHandler() {
-				@Override
-				public void onDragLeave(DragLeaveEvent event) {
-					content.getElement().getStyle().setBackgroundColor("white");
-				}
-			});
-	        
-	        content.addDropHandler(new DropHandler() {
-				@Override
-				public void onDrop(DropEvent event) {
-			        content.getElement().getStyle().setBackgroundColor("white");
-	                dropData(event);
-				}
-			});
+	        initDragging(content);
 	        
 	        content.setStylePrimaryName(resources.css().node());
 	        content.addStyleName(resources.css().nodeView());
@@ -193,16 +158,6 @@ public class TextNodeWidget extends NodeWidget {
         
         container.add(content);
         
-    }
-    
-    private void dragData(DragStartEvent event) {
-    	if (node.getParent() == null) { // cannot drag root
-    		event.stopPropagation();
-    		return;
-    	}
-    	event.setData("id", String.valueOf(((AbsolutePanel)getParent()).getWidgetIndex(this)));
-        
-        event.getDataTransfer().setDragImage(content.getElement(), 10, 10);
     }
     
     private void fireSelect() {

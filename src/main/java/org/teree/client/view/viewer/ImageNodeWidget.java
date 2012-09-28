@@ -1,5 +1,6 @@
 package org.teree.client.view.viewer;
 
+import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Node;
 
@@ -10,6 +11,8 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Image;
@@ -40,7 +43,7 @@ public class ImageNodeWidget extends NodeWidget {
 
 	private void init() {
 		content = new Image();
-		
+		content.getElement().setAttribute("crossorigin", "anonymous");
 		content.getElement().getStyle().setPadding(5.0, Unit.PX);
 
 		content.addErrorHandler(new ErrorHandler() {
@@ -48,6 +51,13 @@ public class ImageNodeWidget extends NodeWidget {
 			public void onError(ErrorEvent event) {
 				((ImageLink) node.getContent()).setUrl(null);
 				content.setResource(res.noImage());
+			}
+		});
+		
+		content.addLoadHandler(new LoadHandler() {
+			@Override
+			public void onLoad(LoadEvent event) {
+				getParent().fireEvent(new NodeChanged(null)); // null because nothing was inserted
 			}
 		});
 		
@@ -62,7 +72,9 @@ public class ImageNodeWidget extends NodeWidget {
 
     @Override
     public void draw(Context2d context, int x, int y) {
-        //context.drawImage(ImageElement.as(content.getElement()), x, y);
+    	context.save();
+    	context.drawImage(ImageElement.as(content.getElement()), x, y-content.getHeight());
+        context.restore();
     }
 
 }

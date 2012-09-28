@@ -9,7 +9,5 @@ import org.teree.shared.data.storage.ImageInfo;
 public interface SecuredStorageService {
 
 	public List<ImageInfo> getImages(String prefix);
-	
-	public void uploadImage(String path, byte[] data);
     
 }

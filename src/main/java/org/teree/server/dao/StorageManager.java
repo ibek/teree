@@ -96,14 +96,14 @@ public class StorageManager {
 			return;
 		}
 
-	    Long contentLength = Long.valueOf(data.length);
+	    /**Long contentLength = Long.valueOf(data.length);
 
 	    ObjectMetadata metadata = new ObjectMetadata();
 	    metadata.setContentLength(contentLength);
 
 		// TODO: catch exceptions
 		PutObjectResult result = getStorage().putObject(new PutObjectRequest(bucketName, ui.getUserId()+"/"+path, new ByteArrayInputStream(data), metadata));
-		
+		*/
 	}
 	
 	public void deleteImage(String path, UserInfo ui) {

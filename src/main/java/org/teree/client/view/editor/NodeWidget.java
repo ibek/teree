@@ -2,11 +2,22 @@ package org.teree.client.view.editor;
 
 import org.teree.client.view.NodeInterface;
 import org.teree.client.view.editor.event.NodeChanged;
+import org.teree.client.view.editor.storage.ItemWidget;
 import org.teree.client.view.resource.NodeCssStyle;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
 
+import com.google.gwt.event.dom.client.DragEnterEvent;
+import com.google.gwt.event.dom.client.DragEnterHandler;
+import com.google.gwt.event.dom.client.DragLeaveEvent;
+import com.google.gwt.event.dom.client.DragLeaveHandler;
+import com.google.gwt.event.dom.client.DragOverEvent;
+import com.google.gwt.event.dom.client.DragOverHandler;
+import com.google.gwt.event.dom.client.DragStartEvent;
+import com.google.gwt.event.dom.client.DragStartHandler;
 import com.google.gwt.event.dom.client.DropEvent;
+import com.google.gwt.event.dom.client.DropHandler;
+import com.google.gwt.event.dom.client.HasAllDragAndDropHandlers;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -46,6 +57,44 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
     public NodeWidget unselect() {
         selected = false;
         return null;
+    }
+    
+    protected void initDragging(HasAllDragAndDropHandlers content) {
+        content.addDragStartHandler(new DragStartHandler() {
+			@Override
+			public void onDragStart(DragStartEvent event) {
+				dragData(event);
+			}
+		});
+        
+        content.addDragOverHandler(new DragOverHandler() {
+			@Override
+			public void onDragOver(DragOverEvent event) {
+				
+			}
+		});
+        
+        content.addDragEnterHandler(new DragEnterHandler() {
+			@Override
+			public void onDragEnter(DragEnterEvent event) {
+				container.getElement().getStyle().setBackgroundColor("#ffa");
+			}
+		});
+        
+        content.addDragLeaveHandler(new DragLeaveHandler() {
+			@Override
+			public void onDragLeave(DragLeaveEvent event) {
+				container.getElement().getStyle().setBackgroundColor("white");
+			}
+		});
+        
+        content.addDropHandler(new DropHandler() {
+			@Override
+			public void onDrop(DropEvent event) {
+				container.getElement().getStyle().setBackgroundColor("white");
+                dropData(event);
+			}
+		});
     }
     
     public void dropData(DropEvent event) {
@@ -94,5 +143,18 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 	public int getWidgetHeight() {
 		return getWidget().getOffsetHeight();
 	}
+
+	public void setBrowserItem(ItemWidget iw) {
+		// nothing to do
+	}
+    
+    private void dragData(DragStartEvent event) {
+    	if (node.getParent() == null) { // cannot drag root
+    		event.stopPropagation();
+    		return;
+    	}
+    	event.setData("id", String.valueOf(((AbsolutePanel)getParent()).getWidgetIndex(this)));
+        event.getDataTransfer().setDragImage(container.getElement(), 10, 10);
+    }
 
 }

@@ -16,8 +16,13 @@ import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
 import org.teree.client.view.editor.storage.Browser;
+import org.teree.client.view.editor.storage.BrowserItemSelected;
+import org.teree.client.view.editor.storage.BrowserItemSelectedHandler;
 import org.teree.client.view.editor.storage.BrowserLoadRequestHandler;
+import org.teree.client.view.editor.storage.BrowserRefreshRequestHandler;
+import org.teree.client.view.editor.storage.FileUpload;
 import org.teree.client.view.editor.storage.ItemType;
+import org.teree.client.view.editor.storage.ItemWidget;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
 import org.teree.shared.data.scheme.Node;
@@ -25,6 +30,7 @@ import org.teree.shared.data.scheme.NodeStyle;
 import org.teree.shared.data.scheme.Node.NodeLocation;
 
 import com.github.gwtbootstrap.client.ui.Modal;
+import com.github.gwtbootstrap.client.ui.ModalFooter;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.ImageData;
@@ -51,6 +57,7 @@ public class Scene extends Composite {
     
     private Browser browser;
     private Modal browserWindow;
+    private FileUpload fileUpload;
     private BrowserLoadRequestHandler browserLoadRequestHandler;
     
     public Scene() {
@@ -67,6 +74,10 @@ public class Scene extends Composite {
 		browserWindow.setTitle("Choose image");
 		browser = new Browser();
 		browserWindow.add(browser);
+		ModalFooter mf = new ModalFooter();
+		fileUpload = new FileUpload();
+		mf.add(fileUpload);
+		browserWindow.add(mf);
         
         bind();
         
@@ -91,6 +102,21 @@ public class Scene extends Composite {
 				browserLoadRequestHandler.loadRequest(event.getType());
 			}
 		}, BrowseItems.TYPE);
+    	
+    	browser.addHandler(new BrowserItemSelectedHandler() {
+			@Override
+			public void selected(BrowserItemSelected event) {
+				browserWindow.hide();
+				browserItemSelected(event.getItem());
+			}
+		}, BrowserItemSelected.TYPE);
+    	
+    	fileUpload.setBrowserRefreshRequestHandler(new BrowserRefreshRequestHandler() {
+			@Override
+			public void refresh() {
+				browserLoadRequestHandler.loadRequest(browser.getType());
+			}
+		});
         
         canvas.addClickHandler(new ClickHandler() {
             @Override
@@ -503,6 +529,10 @@ public class Scene extends Composite {
         } else {
             selected = null;
         }
+    }
+    
+    private void browserItemSelected(ItemWidget iw) {
+    	selected.setBrowserItem(iw);
     }
     
 }

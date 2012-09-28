@@ -5,6 +5,7 @@ import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.storage.Browser;
 import org.teree.client.view.editor.storage.ItemType;
+import org.teree.client.view.editor.storage.ItemWidget;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
@@ -14,6 +15,7 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -49,8 +51,12 @@ public class ImageNodeWidget extends NodeWidget {
 
 	private void init() {
 		content = new Image();
+		content.getElement().setAttribute("crossorigin", "anonymous");
 		content.getElement().getStyle().setPadding(5.0, Unit.PX);
 		content.setUrl(res.noImage().getSafeUri());
+        
+        content.getElement().setDraggable(Element.DRAGGABLE_TRUE);
+        initDragging(content);
 
 		content.addClickHandler(new ClickHandler() {
 			@Override
@@ -105,46 +111,25 @@ public class ImageNodeWidget extends NodeWidget {
 
 	@Override
 	public void edit() {
-		/**if (linkDialog == null) {
-			linkDialog = new LinkDialog("Set image link");
-			
-			linkDialog.getOk().addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					((ImageLink)node.getContent()).setUrl(linkDialog.getUrl());
-					Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-			            @Override
-			            public void execute() {
-							update();
-			            }
-			        });
-					linkDialog.hide();
-				}
-			});
-			
-		}
-
-		linkDialog.setPopupPosition(getAbsoluteLeft() + content.getWidth()/2 - linkDialog.getOffsetWidth()/2, 
-				getAbsoluteTop() + content.getHeight()/2 - linkDialog.getOffsetHeight()/2);
-		linkDialog.show();*/
-		
 		getParent().fireEvent(new BrowseItems(ItemType.Image));
-		
 	}
 
-	/**
-	 * TODO: try to enable on remote server or try to fix the security exception with crossorigin attribute somehow
-	 */
     @Override
     public void draw(Context2d context, int x, int y) {
-    	/**context.save();
+    	context.save();
     	context.drawImage(ImageElement.as(content.getElement()), x, y-content.getHeight());
-        context.restore();*/
+        context.restore();
     }
 
 	@Override
 	public void changeStyle(NodeStyle style) {
 		// nothing to be set
+	}
+
+	@Override
+	public void setBrowserItem(ItemWidget iw) {
+		content.setUrl(iw.getUrl());
+		((ImageLink) node.getContent()).setUrl(iw.getUrl());
 	}
 
 }

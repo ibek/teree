@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 public class Browser extends Composite {
 
 	private FlowPanel container;
+	private ItemType type;
 	
 	public Browser() {
 		
@@ -23,7 +24,12 @@ public class Browser extends Composite {
 		
 	}
 	
+	public ItemType getType() {
+		return type;
+	}
+	
 	public void setBrowserItems(List<?> items, ItemType type) {
+		this.type = type;
 		switch (type) {
 			case Image: {
 				loadImages((List<ImageInfo>) items);
