@@ -1,5 +1,7 @@
 package org.teree.client.view.editor.storage;
 
+import org.teree.client.view.editor.storage.event.BrowserRefreshRequestHandler;
+
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Form;
 import com.github.gwtbootstrap.client.ui.Form.SubmitCompleteHandler;

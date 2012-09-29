@@ -11,6 +11,9 @@ public class UserInfo {
 	private String username;
 	private String name;
 	private String email;
+
+	private long memUsed = 0;
+	private long memLimit = 0;
 	
 	public void clear() {
 		setUsername(null);
@@ -47,6 +50,22 @@ public class UserInfo {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public long getMemUsed() {
+		return memUsed;
+	}
+
+	public void setMemUsed(long memUsed) {
+		this.memUsed = memUsed;
+	}
+
+	public long getMemLimit() {
+		return memLimit;
+	}
+
+	public void setMemLimit(long memLimit) {
+		this.memLimit = memLimit;
 	}
 
 	public void set(UserInfo ui) {

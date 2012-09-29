@@ -186,14 +186,14 @@ public class SchemeManager {
     public void update(Scheme s) {
     	DBCollection coll = getCollection();
         DBObject updateById = new BasicDBObject("_id", new ObjectId(s.getOid()));
-        coll.update(updateById, toSchemeDBObject(s));
+        coll.update(updateById, new BasicDBObject("$set", toSchemeDBObject(s)));
     }
     
     public void updatePrivate(Scheme s, UserInfo ui) {
     	DBCollection coll = getCollection();
         DBObject updateById = new BasicDBObject("_id", new ObjectId(s.getOid()));
         updateById.put("owner", ui.getUserId());
-        coll.update(updateById, toSchemeDBObject(s));
+        coll.update(updateById, new BasicDBObject("$set", toSchemeDBObject(s)));
     }
     
     private BasicDBObject toSchemeDBObject(Scheme s) {

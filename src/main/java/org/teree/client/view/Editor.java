@@ -15,8 +15,9 @@ import com.google.gwt.user.client.ui.Widget;
 import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.view.editor.EditPanel;
 import org.teree.client.view.editor.Scene;
-import org.teree.client.view.editor.storage.BrowserLoadRequestHandler;
 import org.teree.client.view.editor.storage.ItemType;
+import org.teree.client.view.editor.storage.event.BrowserItemDeleteRequestHandler;
+import org.teree.client.view.editor.storage.event.BrowserLoadRequestHandler;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.scheme.Node;
 
@@ -160,6 +161,12 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
 	@Override
 	public void setBrowserLoadRequestHandler(BrowserLoadRequestHandler handler) {
 		scene.setBrowserLoadRequestHandler(handler);
+	}
+
+	@Override
+	public void setBrowserItemDeleteRequestHandler(
+			BrowserItemDeleteRequestHandler handler) {
+		scene.setBrowserItemDeleteRequestHandler(handler);
 	}
 
 }

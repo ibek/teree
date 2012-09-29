@@ -1,14 +1,16 @@
 
 0.4:
 
-DBAuth sifrovani hesla
 export mapy jako obrazek (mel by se exportovat vcetne obrazku a url adres a mel by se ulozit jako scheme.png)
 
 obrazky
- - upload obrazku, limit 10MB / uzivatel
- - odstraneni obrazku
- - soukrome/verejne
- - povolit CORS
+ - zkontrolovat limit pri uploadu - limit 10MB / uzivatel
+
+upravit privateHome aby obsahoval informace o uzivateli
+ - obsazeni pameti (ProgressBar)
+ - pocet soukromych a verejnych map (po kliknuti zobrazi verejne mapy patrici danemu uzivateli)
+ 
+zkus pouzit thumbnails z gwtbootstrap pro zobrazeni seznamu map a obrazku
 
 umoznit tagovani map
 zobrazit tagy u map v explore
@@ -26,6 +28,7 @@ vytvorit stranku pro nastaveni uzivatele - jmeno, email, zmena hesla apod
 resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
 
 nastavit a napojit na amazon storage
+ - povolit CORS
 
 -------- alpha release --------
 
@@ -47,3 +50,7 @@ undo-redo funkce
 vyhledavani - pomoci tagu + fulltext
 MathNodeWidget
 DBAuth pres SSL
+
+known issues:
+
+the scheme is broken when size of window is changed

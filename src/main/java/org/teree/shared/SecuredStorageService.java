@@ -9,5 +9,9 @@ import org.teree.shared.data.storage.ImageInfo;
 public interface SecuredStorageService {
 
 	public List<ImageInfo> getImages(String prefix);
+
+	public List<ImageInfo> getPublicImages(String prefix);
+	
+	public void deleteImage(String path);
     
 }

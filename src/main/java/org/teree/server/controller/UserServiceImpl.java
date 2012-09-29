@@ -30,8 +30,7 @@ public class UserServiceImpl implements UserService {
 	        switch(AuthType.valueOf(auth)) {
 		        case Database: {
 		            String username = (String)session.getAttribute("username");
-		    		String password = (String)session.getAttribute("password");
-		    		ui = _uim.select(username, password);
+		    		ui = _uim.select(username);
 		    		break;
 		        }
 		        case OAuth: {

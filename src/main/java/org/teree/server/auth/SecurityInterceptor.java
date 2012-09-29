@@ -32,7 +32,7 @@ public class SecurityInterceptor implements Serializable {
     	
         HttpSession session = RpcContext.getHttpSession();
         if (session != null && session.getAttribute("auth")!=null && 
-        		((session.getAttribute("username")!=null && session.getAttribute("password")!=null) || 
+        		((session.getAttribute("username")!=null) || 
         		 (session.getAttribute("token")!=null && session.getAttribute("googleid")!=null))) {
         	return invocationContext.proceed();
         } else {

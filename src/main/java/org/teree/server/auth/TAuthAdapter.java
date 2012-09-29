@@ -8,6 +8,7 @@ import org.jboss.errai.bus.client.protocols.SecurityCommands;
 import org.jboss.errai.bus.client.protocols.SecurityParts;
 import org.jboss.errai.bus.server.security.auth.AuthenticationAdapter;
 import org.jboss.errai.common.client.protocols.Resources;
+import org.mindrot.jbcrypt.BCrypt;
 import org.scribe.model.Token;
 import org.teree.server.dao.UserInfoManager;
 import org.teree.shared.data.AuthType;
@@ -46,9 +47,9 @@ public class TAuthAdapter implements AuthenticationAdapter {
 	            final String username = message.get(String.class, SecurityParts.Name);
 	            final String password = message.get(String.class, SecurityParts.Password);
 	            
-	            UserInfo ui = uim.select(username, password);
+	            String hashed = uim.getHashedPassword(username);
 	            
-	            if (ui == null) { // authentication failed
+	            if (!BCrypt.checkpw(password, hashed)) { // authentication failed
 	            	MessageBuilder.createConversation(message)
 	                .subjectProvided()
 	                .command(SecurityCommands.FailedAuth)
@@ -56,7 +57,9 @@ public class TAuthAdapter implements AuthenticationAdapter {
 	                .noErrorHandling().sendNowWith(bus);
 	            } else {
 	            	
-	            	addAuthenticationCredentials(message, username, password);
+		            UserInfo ui = uim.select(username);
+	            	
+	            	addDBAuthenticationCredentials(message, username);
 	            	
 	    	        MessageBuilder.createConversation(message)
 	    	                .subjectProvided()
@@ -78,7 +81,7 @@ public class TAuthAdapter implements AuthenticationAdapter {
 	        		return;
 	        	}
 	        	String googleid = uif.fetch(accessToken);
-	        	addAuthenticationCredentials(message, googleid);
+	        	addGoogleAuthenticationCredentials(message, googleid);
 	        	UserInfo ui = uim.selectByGoogleId(googleid);
 	        	if (ui == null) { // register if the user is not in database
 	        		ui = uif.fetchUserInfo(accessToken);
@@ -95,15 +98,15 @@ public class TAuthAdapter implements AuthenticationAdapter {
         }
     }
 
-    private void addAuthenticationCredentials(Message message, String username, String password) {
+    private void addDBAuthenticationCredentials(Message message, String username) {
         QueueSession queueSession = message.getResource(QueueSession.class, Resources.Session.name());
         final HttpSession session = queueSession.getAttribute(HttpSession.class, HttpSession.class.getName());
         session.setAttribute("auth", AuthType.Database.name());
         session.setAttribute("username", username);
-        session.setAttribute("password", password);
+        //session.setAttribute("password", password);
     }
 
-    private void addAuthenticationCredentials(Message message, String googleid) {
+    private void addGoogleAuthenticationCredentials(Message message, String googleid) {
         QueueSession queueSession = message.getResource(QueueSession.class, Resources.Session.name());
         final HttpSession session = queueSession.getAttribute(HttpSession.class, HttpSession.class.getName());
         session.setAttribute("auth", AuthType.OAuth.name());
@@ -125,7 +128,7 @@ public class TAuthAdapter implements AuthenticationAdapter {
     	QueueSession queueSession = message.getResource(QueueSession.class, Resources.Session.name());
         final HttpSession session = (queueSession==null)?null:queueSession.getAttribute(HttpSession.class, HttpSession.class.getName());
         return session != null && session.getAttribute("auth")!=null && 
-        		((session.getAttribute("username")!=null && session.getAttribute("password")!=null) || 
+        		((session.getAttribute("username")!=null) || 
         		 (session.getAttribute("token")!=null && session.getAttribute("googleid")!=null));
     }
 
@@ -137,7 +140,6 @@ public class TAuthAdapter implements AuthenticationAdapter {
             final HttpSession session = (queueSession==null)?null:queueSession.getAttribute(HttpSession.class, HttpSession.class.getName());
             session.removeAttribute("auth");
             session.removeAttribute("username");
-            session.removeAttribute("password");
             session.removeAttribute("token");
             session.removeAttribute("googleid");
             return true;

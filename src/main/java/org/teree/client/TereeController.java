@@ -15,6 +15,7 @@ import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
 import org.jboss.errai.common.client.protocols.MessageParts;
+import org.teree.client.event.GlobalKeyUp;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.presenter.HomePage;
 import org.teree.client.presenter.JoinPage;
@@ -35,6 +36,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 
@@ -54,7 +56,6 @@ public class TereeController implements ValueChangeHandler<String> {
 	@Inject
 	private Caller<UserService> userService;
 
-	@Inject
 	private Keyboard keyboard;
 	
 	@Inject @Named("currentUser")
@@ -73,6 +74,12 @@ public class TereeController implements ValueChangeHandler<String> {
 	 * Bind handlers to eventBus.
 	 */
 	public void bind() {
+		keyboard = new Keyboard() {
+			@Override
+			public void onKeyUp(Event event) {
+		    	eventBus.fireEvent(new GlobalKeyUp(event));
+			}
+		};
 		keyboard.init();
 		History.addValueChangeHandler(this);
 
@@ -86,7 +93,7 @@ public class TereeController implements ValueChangeHandler<String> {
 						currentUser.set(message.get(UserInfo.class, UserInfo.PART));
 						
 						if (tmpPresenter != null) {
-							setPresenter(tmpPresenter);
+							setPresenter(tmpPresenter); // TODO: change to History.newItem(Settings.CREATE_LINK)
 							tmpPresenter = null;
 						} else {
 							History.newItem(Settings.HOME_LINK);

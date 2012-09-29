@@ -1,4 +1,6 @@
-package org.teree.client.view.editor.storage;
+package org.teree.client.view.editor.storage.event;
+
+import org.teree.client.view.editor.storage.ItemWidget;
 
 import com.google.gwt.event.shared.GwtEvent;
 

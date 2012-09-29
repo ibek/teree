@@ -1,5 +1,6 @@
 package org.teree.client.view.editor.storage;
 
+import org.teree.client.view.editor.storage.event.BrowserItemSelected;
 import org.teree.shared.data.storage.ImageInfo;
 
 import com.google.gwt.dom.client.Style.Cursor;
@@ -29,6 +30,11 @@ public class ImageWidget extends ItemWidget {
 				getParent().getParent().fireEvent(new BrowserItemSelected(ImageWidget.this));
 			}
 		});
+	}
+
+	@Override
+	public ItemType getItemType() {
+		return ItemType.Image;
 	}
 
 	public ImageInfo getImageInfo() {

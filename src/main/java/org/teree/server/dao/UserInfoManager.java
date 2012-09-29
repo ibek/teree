@@ -3,6 +3,7 @@ package org.teree.server.dao;
 import javax.inject.Inject;
 
 import org.bson.types.ObjectId;
+import org.mindrot.jbcrypt.BCrypt;
 import org.teree.shared.data.UserInfo;
 
 import com.mongodb.BasicDBObject;
@@ -30,7 +31,7 @@ public class UserInfoManager {
         doc.put("username", ui.getUsername());
         doc.put("name", ui.getName());
         doc.put("email", ui.getEmail());
-        doc.put("password", password);
+        doc.put("password", BCrypt.hashpw(password, BCrypt.gensalt(12)));
         
         DBCollection coll = getCollection();
         coll.insert(doc);
@@ -47,7 +48,7 @@ public class UserInfoManager {
         coll.insert(doc);
     }
     
-    public void update(UserInfo ui, String password) {
+    public void update(UserInfo ui) {
     	
     }
     
@@ -55,11 +56,19 @@ public class UserInfoManager {
     	
     }
     
-    public UserInfo select(String username, String password) {
+    public String getHashedPassword(String username) {
     	DBCollection coll = getCollection();
         DBObject search = new BasicDBObject();
         search.put("username", username);
-        search.put("password", password);
+        DBObject found = coll.findOne(search, new BasicDBObject("password", 1));
+    	return (String)found.get("password");
+    }
+    
+    public UserInfo select(String username) {
+    	DBCollection coll = getCollection();
+        DBObject search = new BasicDBObject();
+        search.put("username", username);
+        //search.put("password", password);
         DBObject found = coll.findOne(search);
     	return fromUserInfoDBObject(found);
     }

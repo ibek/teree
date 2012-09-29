@@ -16,8 +16,10 @@ import org.teree.client.event.GlobalKeyUpHandler;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.event.SchemeReceivedHandler;
 import org.teree.client.view.KeyAction;
-import org.teree.client.view.editor.storage.BrowserLoadRequestHandler;
 import org.teree.client.view.editor.storage.ItemType;
+import org.teree.client.view.editor.storage.ItemWidget;
+import org.teree.client.view.editor.storage.event.BrowserItemDeleteRequestHandler;
+import org.teree.client.view.editor.storage.event.BrowserLoadRequestHandler;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.SecuredStorageService;
 import org.teree.shared.data.scheme.Node;
@@ -43,6 +45,7 @@ public class SchemeEditor implements Presenter {
         String getSchemeSamplePicture();
         void setBrowserItems(List<?> items, ItemType type);
         void setBrowserLoadRequestHandler(BrowserLoadRequestHandler handler);
+        void setBrowserItemDeleteRequestHandler(BrowserItemDeleteRequestHandler handler);
     }
     
     @Inject @Named(value="eventBus")
@@ -73,7 +76,6 @@ public class SchemeEditor implements Presenter {
 			public void onKeyUp(GlobalKeyUp event) {
 				Event e = event.getEvent();
 				int key = e.getKeyCode();
-				//System.out.println("key="+key);
 				
 				if (key == 113)  // #F2
 				{
@@ -132,8 +134,26 @@ public class SchemeEditor implements Presenter {
         
         display.setBrowserLoadRequestHandler(new BrowserLoadRequestHandler() {
 			@Override
-			public void loadRequest(ItemType type) {
-				loadBrowserItems(type);
+			public void loadRequest(ItemType type, boolean publicStorage) {
+				loadBrowserItems(type, publicStorage);
+			}
+		});
+        
+        display.setBrowserItemDeleteRequestHandler(new BrowserItemDeleteRequestHandler() {
+			@Override
+			public void deleteItemRequest(final ItemWidget iw) {
+				securedStorage.call(new RemoteCallback<Void>() {
+		            @Override
+		            public void callback(Void response) {
+		            	iw.removeFromParent();
+		            }
+		        }, new ErrorCallback() {
+					@Override
+					public boolean error(Message message, Throwable throwable) {
+						display.error(message.toString());
+						return false;
+					}
+				}).deleteImage(iw.getUrl());
 			}
 		});
         
@@ -182,10 +202,10 @@ public class SchemeEditor implements Presenter {
     	}
     }
     
-    public void loadBrowserItems(ItemType type) {
+    public void loadBrowserItems(ItemType type, boolean publicStorage) {
     	switch (type) {
 	    	case Image: {
-	    		securedStorage.call(new RemoteCallback<List<ImageInfo>>() {
+	    		SecuredStorageService sss = securedStorage.call(new RemoteCallback<List<ImageInfo>>() {
 		            @Override
 		            public void callback(List<ImageInfo> response) {
 		                display.setBrowserItems(response, ItemType.Image);
@@ -196,7 +216,13 @@ public class SchemeEditor implements Presenter {
 						display.error(message.toString());
 						return false;
 					}
-				}).getImages("/"); // TODO: make prefix changeable
+				});
+	    		
+	    		if (publicStorage) {
+	    			sss.getPublicImages("/"); // TODO: make prefix changeable
+	    		} else {
+	    			sss.getImages("/");
+	    		}
 	    		break;
 	    	}
     	}

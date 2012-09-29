@@ -53,7 +53,6 @@ public class ImageNodeWidget extends NodeWidget {
 		content = new Image();
 		content.getElement().setAttribute("crossorigin", "anonymous");
 		content.getElement().getStyle().setPadding(5.0, Unit.PX);
-		content.setUrl(res.noImage().getSafeUri());
         
         content.getElement().setDraggable(Element.DRAGGABLE_TRUE);
         initDragging(content);
@@ -84,6 +83,8 @@ public class ImageNodeWidget extends NodeWidget {
 			}
 		});
 		
+		content.setUrl(res.noImage().getSafeUri());
+		
 	}
 
 	public void update() {
@@ -111,7 +112,7 @@ public class ImageNodeWidget extends NodeWidget {
 
 	@Override
 	public void edit() {
-		getParent().fireEvent(new BrowseItems(ItemType.Image));
+		getParent().fireEvent(new BrowseItems(ItemType.Image, this));
 	}
 
     @Override

@@ -1,6 +1,7 @@
 package org.teree.client.view.editor.storage;
 
 import org.teree.client.Settings;
+import org.teree.client.view.editor.storage.event.BrowserItemDelete;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Label;
@@ -9,6 +10,8 @@ import com.github.gwtbootstrap.client.ui.Well;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 
@@ -30,8 +33,8 @@ public abstract class ItemWidget extends Composite {
 		ps.setMarginRight(5, Unit.PX);
 		ps.setMarginBottom(-10, Unit.PX);
 		container = new Well();
-		panel.setWidth(165+"px");
-		container.setHeight(120+"px");
+		panel.setWidth(160+"px");
+		container.setHeight(110+"px");
 		
 		title = new Label();
 		Style ts = title.getElement().getStyle();
@@ -48,11 +51,27 @@ public abstract class ItemWidget extends Composite {
         panel.add(container);
 		
 		initWidget(panel);
+		
+		bind();
+		
 	}
 	
 	public abstract String getUrl();
 	
 	public abstract String getItemTitle();
+	
+	public abstract ItemType getItemType();
+	
+	private void bind() {
+        
+        delete.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				getParent().getParent().fireEvent(new BrowserItemDelete(ItemWidget.this));
+			}
+		});
+        
+	}
 	
 	protected void loaded() {
 		String t = getItemTitle();

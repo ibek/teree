@@ -65,13 +65,45 @@ public class StorageManager {
 		
 		for (S3ObjectSummary objectSummary: list.getObjectSummaries()) {
 		    String key = objectSummary.getKey();
-		    Image i = new Image();
+		    ImageInfo i = new ImageInfo();
 		    String url = "http://"+bucketName+".s3.amazonaws.com/"+key;
 		    i.setUrl(url);
 		    res.add(i);
 		}*/
 		
 		loadTestImages(res);
+		
+		return res;
+	}
+
+	public List<ImageInfo> getPublicImages(String prefix) {
+		if (prefix == null) {
+			prefix = "";
+		}
+		List<ImageInfo> res = new ArrayList<ImageInfo>();
+		
+		/**ListObjectsRequest req = new ListObjectsRequest()
+			.withBucketName(bucketName)
+			.withPrefix("public/"+prefix)
+			.withDelimiter("/");
+
+		// TODO: catch exceptions
+		ObjectListing list = getStorage().listObjects(req);
+		
+		for (S3ObjectSummary objectSummary: list.getObjectSummaries()) {
+		    String key = objectSummary.getKey();
+		    ImageInfo i = new ImageInfo();
+		    String url = "http://"+bucketName+".s3.amazonaws.com/"+key;
+		    i.setUrl(url);
+		    res.add(i);
+		}*/
+		
+		ImageInfo i1 = new ImageInfo();
+		i1.setUrl("http://www.heppnetz.de/ontologies/goodrelations/goodrelations-UML-mini.png");
+		res.add(i1);
+		ImageInfo i2 = new ImageInfo();
+		i2.setUrl("http://rdfs.org/images/back.gif");
+		res.add(i2);
 		
 		return res;
 	}
@@ -112,7 +144,7 @@ public class StorageManager {
 		}
 		
 		// TODO: catch exceptions
-		getStorage().deleteObject(new DeleteObjectRequest(bucketName, ui.getUserId()+"/"+path));
+		//getStorage().deleteObject(new DeleteObjectRequest(bucketName, ui.getUserId()+"/"+path));
 		
 	}
     

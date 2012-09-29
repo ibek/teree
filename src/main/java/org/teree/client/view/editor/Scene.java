@@ -15,22 +15,16 @@ import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
-import org.teree.client.view.editor.storage.Browser;
-import org.teree.client.view.editor.storage.BrowserItemSelected;
-import org.teree.client.view.editor.storage.BrowserItemSelectedHandler;
-import org.teree.client.view.editor.storage.BrowserLoadRequestHandler;
-import org.teree.client.view.editor.storage.BrowserRefreshRequestHandler;
-import org.teree.client.view.editor.storage.FileUpload;
 import org.teree.client.view.editor.storage.ItemType;
-import org.teree.client.view.editor.storage.ItemWidget;
+import org.teree.client.view.editor.storage.ModalBrowser;
+import org.teree.client.view.editor.storage.event.BrowserItemDeleteRequestHandler;
+import org.teree.client.view.editor.storage.event.BrowserLoadRequestHandler;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
 import org.teree.shared.data.scheme.Node.NodeLocation;
 
-import com.github.gwtbootstrap.client.ui.Modal;
-import com.github.gwtbootstrap.client.ui.ModalFooter;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.ImageData;
@@ -38,6 +32,10 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DragStartEvent;
+import com.google.gwt.event.dom.client.DragStartHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
@@ -55,10 +53,7 @@ public class Scene extends Composite {
     private NodeWidget selected;
     private Node copied;
     
-    private Browser browser;
-    private Modal browserWindow;
-    private FileUpload fileUpload;
-    private BrowserLoadRequestHandler browserLoadRequestHandler;
+    private ModalBrowser browser;
     
     public Scene() {
         
@@ -69,23 +64,16 @@ public class Scene extends Composite {
         if (canvas == null) { // canvas is not supported
             // deal with it
         }
-        
-		browserWindow = new Modal(false);
-		browserWindow.setTitle("Choose image");
-		browser = new Browser();
-		browserWindow.add(browser);
-		ModalFooter mf = new ModalFooter();
-		fileUpload = new FileUpload();
-		mf.add(fileUpload);
-		browserWindow.add(mf);
-        
-        bind();
+		
+        browser = new ModalBrowser();
         
         initWidget(container);
         
+        bind();
+        
     }
     
-    public void bind() {
+    private void bind() {
         
     	container.addHandler(new SelectNodeHandler() {
             @Override
@@ -98,25 +86,10 @@ public class Scene extends Composite {
     	container.addHandler(new BrowseItemsHandler() {
 			@Override
 			public void browse(BrowseItems event) {
-				browserWindow.show();
-				browserLoadRequestHandler.loadRequest(event.getType());
+				browser.setEditedNodeWidget(event.getType(), event.getEditedNodeWidget());
+				browser.show();
 			}
 		}, BrowseItems.TYPE);
-    	
-    	browser.addHandler(new BrowserItemSelectedHandler() {
-			@Override
-			public void selected(BrowserItemSelected event) {
-				browserWindow.hide();
-				browserItemSelected(event.getItem());
-			}
-		}, BrowserItemSelected.TYPE);
-    	
-    	fileUpload.setBrowserRefreshRequestHandler(new BrowserRefreshRequestHandler() {
-			@Override
-			public void refresh() {
-				browserLoadRequestHandler.loadRequest(browser.getType());
-			}
-		});
         
         canvas.addClickHandler(new ClickHandler() {
             @Override
@@ -375,11 +348,19 @@ public class Scene extends Composite {
     }
     
     public void setBrowserItems(List<?> items, ItemType type) {
-    	browser.setBrowserItems(items, type);
+    	if (items == null) {
+    		browser.hide();
+    	} else {
+    		browser.setBrowserItems(items, type);
+    	}
     }
     
     public void setBrowserLoadRequestHandler(BrowserLoadRequestHandler handler) {
-		browserLoadRequestHandler = handler;
+		browser.setBrowserLoadRequestHandler(handler);
+	}
+    
+    public void setBrowserItemDeleteRequestHandler(BrowserItemDeleteRequestHandler handler) {
+    	browser.setBrowserItemDeleteRequestHandler(handler);
 	}
     
     /**======================================================*/
@@ -529,10 +510,6 @@ public class Scene extends Composite {
         } else {
             selected = null;
         }
-    }
-    
-    private void browserItemSelected(ItemWidget iw) {
-    	selected.setBrowserItem(iw);
     }
     
 }
