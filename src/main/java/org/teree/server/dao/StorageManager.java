@@ -18,11 +18,13 @@ import com.amazonaws.auth.PropertiesCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 @Stateless
@@ -123,28 +125,42 @@ public class StorageManager {
 		list.add(i4);
 	}
 	
-	public void uploadImage(String path, byte[] data, UserInfo ui) {
+	public void uploadImage(String path, byte[] data, UserInfo ui) throws Exception {
 		if (ui == null) {
 			return;
 		}
 
-	    /**Long contentLength = Long.valueOf(data.length);
+	    Long contentLength = Long.valueOf(data.length);
+	    Long memUsed = ui.getMemUsed() + contentLength;
+	    
+	    if (memUsed > ui.getUserPackage().getMemLimit()) {
+	    	throw new Exception("exceeds memory limit for user");
+	    }
 
 	    ObjectMetadata metadata = new ObjectMetadata();
 	    metadata.setContentLength(contentLength);
-
+	    
+	    /**
 		// TODO: catch exceptions
 		PutObjectResult result = getStorage().putObject(new PutObjectRequest(bucketName, ui.getUserId()+"/"+path, new ByteArrayInputStream(data), metadata));
 		*/
+	    
+    	ui.setMemUsed(memUsed);
 	}
 	
 	public void deleteImage(String path, UserInfo ui) {
 		if (ui == null) {
 			return;
 		}
+
+		/**GetObjectRequest getReq = new GetObjectRequest(bucketName, path);
+		S3Object obj = getStorage().getObject(getReq);
+		Long contentLength = obj.getObjectMetadata().getContentLength();
 		
 		// TODO: catch exceptions
-		//getStorage().deleteObject(new DeleteObjectRequest(bucketName, ui.getUserId()+"/"+path));
+		getStorage().deleteObject(new DeleteObjectRequest(bucketName, ui.getUserId()+"/"+path));
+		
+	    ui.setMemUsed(ui.getMemUsed() - contentLength);*/
 		
 	}
     

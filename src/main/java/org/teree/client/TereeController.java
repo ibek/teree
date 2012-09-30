@@ -16,6 +16,8 @@ import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
 import org.jboss.errai.common.client.protocols.MessageParts;
 import org.teree.client.event.GlobalKeyUp;
+import org.teree.client.event.RefreshUserInfo;
+import org.teree.client.event.RefreshUserInfoHandler;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.presenter.HomePage;
 import org.teree.client.presenter.JoinPage;
@@ -118,6 +120,14 @@ public class TereeController implements ValueChangeHandler<String> {
 				}
 			}
 		});
+		
+		eventBus.addHandler(RefreshUserInfo.TYPE, new RefreshUserInfoHandler() {
+			@Override
+			public void refresh(RefreshUserInfo event) {
+				loadUserInfoData();
+			}
+		});
+		
 	}
 
 	/**

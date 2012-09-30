@@ -30,14 +30,21 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.ImageData;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DragStartEvent;
 import com.google.gwt.event.dom.client.DragStartHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Scene extends Composite {
@@ -60,6 +67,10 @@ public class Scene extends Composite {
         setSchemeType(Settings.DEFAULT_SCHEME_TYPE);
         
         container = new AbsolutePanel();
+        Style style = container.getElement().getStyle();
+        style.setProperty("margin", "0 auto");
+        style.setProperty("textAlign", "center");
+        
         canvas = Canvas.createIfSupported();
         if (canvas == null) { // canvas is not supported
             // deal with it
@@ -67,7 +78,18 @@ public class Scene extends Composite {
 		
         browser = new ModalBrowser();
         
-        initWidget(container);
+        final ScrollPanel sp = new ScrollPanel(container);
+        sp.setAlwaysShowScrollBars(true);
+        sp.setWidth(Window.getClientWidth()+"px");
+        sp.setHeight((Window.getClientHeight()-Settings.SCENE_HEIGHT_LESS)+"px");
+        Window.addResizeHandler(new ResizeHandler() {
+            public void onResize(ResizeEvent event) {
+                sp.setWidth(event.getWidth() + "px");
+                sp.setHeight((event.getHeight()-Settings.SCENE_HEIGHT_LESS) + "px");
+            }
+		});
+        sp.getElement().getStyle().setOverflow(Overflow.SCROLL);
+        initWidget(sp);
         
         bind();
         
@@ -347,21 +369,9 @@ public class Scene extends Composite {
         return canvasTmp.toDataUrl();
     }
     
-    public void setBrowserItems(List<?> items, ItemType type) {
-    	if (items == null) {
-    		browser.hide();
-    	} else {
-    		browser.setBrowserItems(items, type);
-    	}
+    public ModalBrowser getBrowser() {
+    	return browser;
     }
-    
-    public void setBrowserLoadRequestHandler(BrowserLoadRequestHandler handler) {
-		browser.setBrowserLoadRequestHandler(handler);
-	}
-    
-    public void setBrowserItemDeleteRequestHandler(BrowserItemDeleteRequestHandler handler) {
-    	browser.setBrowserItemDeleteRequestHandler(handler);
-	}
     
     /**======================================================*/
 

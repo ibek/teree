@@ -68,7 +68,7 @@ public class SchemeManager {
         return fromSchemeDBObject(found);
     }
     
-    public String insertPrivate(Scheme s, UserInfo ui) {
+    public String insert(Scheme s, UserInfo ui) {
     	if (ui == null) {
     		return null;
     	}
@@ -179,21 +179,14 @@ public class SchemeManager {
         return coll.remove(removeBy).getN() == 1;
     }
     
-    /**
-     * Update scheme identified by oid.
-     * @param s
-     */
-    public void update(Scheme s) {
+    public void update(Scheme s, UserInfo ui) {
     	DBCollection coll = getCollection();
-        DBObject updateById = new BasicDBObject("_id", new ObjectId(s.getOid()));
-        coll.update(updateById, new BasicDBObject("$set", toSchemeDBObject(s)));
-    }
-    
-    public void updatePrivate(Scheme s, UserInfo ui) {
-    	DBCollection coll = getCollection();
-        DBObject updateById = new BasicDBObject("_id", new ObjectId(s.getOid()));
-        updateById.put("owner", ui.getUserId());
-        coll.update(updateById, new BasicDBObject("$set", toSchemeDBObject(s)));
+        DBObject updateBy = new BasicDBObject("_id", new ObjectId(s.getOid()));
+        BasicDBList list = new BasicDBList();
+        list.add(new BasicDBObject("owner", ui.getUserId()));
+        list.add(new BasicDBObject("author", ui.getUserId()));
+        updateBy.put("$or", list);
+        coll.update(updateBy, new BasicDBObject("$set", toSchemeDBObject(s)));
     }
     
     private BasicDBObject toSchemeDBObject(Scheme s) {

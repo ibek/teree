@@ -13,7 +13,8 @@ public class UserInfo {
 	private String email;
 
 	private long memUsed = 0;
-	private long memLimit = 0;
+	
+	private UserPackage userPackage;
 	
 	public void clear() {
 		setUsername(null);
@@ -57,21 +58,26 @@ public class UserInfo {
 	}
 
 	public void setMemUsed(long memUsed) {
+		if (memUsed < 0) {
+			memUsed = 0L;
+		}
 		this.memUsed = memUsed;
 	}
 
-	public long getMemLimit() {
-		return memLimit;
+	public UserPackage getUserPackage() {
+		return userPackage;
 	}
 
-	public void setMemLimit(long memLimit) {
-		this.memLimit = memLimit;
+	public void setUserPackage(UserPackage userPackage) {
+		this.userPackage = userPackage;
 	}
 
 	public void set(UserInfo ui) {
 		if (ui != null) {
 			username = ui.username;
 			name = ui.name;
+			memUsed = ui.memUsed;
+			userPackage = ui.userPackage;
 		}
 	}
 	

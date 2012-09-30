@@ -51,12 +51,12 @@ public class SecuredSchemeServiceImpl implements SecuredSchemeService {
 
     @Override
 	public String insertScheme(Scheme s) {
-        return _sm.insertPrivate(s, _us.getUserInfo());
+        return _sm.insert(s, _us.getUserInfo());
     }
 
 	@Override
 	public void updateScheme(Scheme s) {
-		_sm.updatePrivate(s, _us.getUserInfo());
+		_sm.update(s, _us.getUserInfo());
 	}
 	
 	@Override

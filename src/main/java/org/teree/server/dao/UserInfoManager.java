@@ -1,11 +1,14 @@
 package org.teree.server.dao;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import org.bson.types.ObjectId;
+import org.jboss.errai.bus.server.api.RpcContext;
 import org.mindrot.jbcrypt.BCrypt;
 import org.teree.shared.data.UserInfo;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -15,6 +18,9 @@ public class UserInfoManager {
 
 	@Inject
     MongoDB mdb;
+	
+	@Inject
+	UserPackageManager upm;
     
     private DBCollection getCollection() {
     	DB db = mdb.getDatabase();
@@ -26,34 +32,45 @@ public class UserInfoManager {
     }
     
     public void insert(UserInfo ui, String password) {
-        BasicDBObject doc = new BasicDBObject();
+        DBObject doc = toUserInfoDBObject(ui);
 
         doc.put("username", ui.getUsername());
-        doc.put("name", ui.getName());
-        doc.put("email", ui.getEmail());
         doc.put("password", BCrypt.hashpw(password, BCrypt.gensalt(12)));
+        doc.put("package", upm.getFreePackage().getName());
         
         DBCollection coll = getCollection();
         coll.insert(doc);
     }
     
     public void insertWithGoogleId(UserInfo ui, String googleid) {
-        BasicDBObject doc = new BasicDBObject();
-
-        doc.put("name", ui.getName());
-        doc.put("email", ui.getEmail());
+        DBObject doc = toUserInfoDBObject(ui);
+        
         doc.put("googleid", googleid);
+        doc.put("package", upm.getFreePackage().getName());
         
         DBCollection coll = getCollection();
         coll.insert(doc);
     }
     
     public void update(UserInfo ui) {
-    	
+    	DBCollection coll = getCollection();
+        DBObject updateBy = getUpdateBy(ui);
+        coll.update(updateBy, new BasicDBObject("$set", toUserInfoDBObject(ui)));
     }
     
-    public void updateWithGoogleId(UserInfo ui, String googleid) {
-    	
+    private DBObject getUpdateBy(UserInfo ui) {
+        DBObject updateBy = null;
+        
+        HttpSession session = RpcContext.getHttpSession();
+        String googleid = (String)session.getAttribute("googleid");
+        
+        if (ui.getUsername() != null) {
+        	updateBy = new BasicDBObject("username", ui.getUsername());
+        } else if (googleid != null) {
+        	updateBy = new BasicDBObject("googleid", googleid);
+        }
+        
+        return updateBy;
     }
     
     public String getHashedPassword(String username) {
@@ -92,8 +109,20 @@ public class UserInfoManager {
         ui.setUsername((String)userinfo.get("username"));
         ui.setName((String)userinfo.get("name"));
         ui.setEmail((String)userinfo.get("email"));
+        ui.setMemUsed((Long)userinfo.get("memUsed"));
+        ui.setUserPackage(upm.select((String)userinfo.get("package")));
         
         return ui;
+    }
+    
+    private DBObject toUserInfoDBObject(UserInfo ui) {
+    	BasicDBObject doc = new BasicDBObject();
+
+        doc.put("name", ui.getName());
+        doc.put("email", ui.getEmail());
+        doc.put("memUsed", ui.getMemUsed());
+        
+        return doc;
     }
     
 }

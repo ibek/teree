@@ -11,6 +11,7 @@ import org.teree.server.auth.RequireAuthentication;
 import org.teree.server.dao.StorageManager;
 import org.teree.shared.SecuredStorageService;
 import org.teree.shared.UserService;
+import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.storage.ImageInfo;
 
 @ApplicationScoped
@@ -46,9 +47,12 @@ public class SecuredStorageServiceImpl implements SecuredStorageService {
 	 * Upload is performed by UploadServet.
 	 * @param path
 	 * @param input
+	 * @throws Exception 
 	 */
-	public void uploadImage(String path, byte[] data) {
-		_sm.uploadImage(path, data, _us.getUserInfo());
+	public void uploadImage(String path, byte[] data) throws Exception {
+		UserInfo ui = _us.getUserInfo();
+		_sm.uploadImage(path, data, ui);
+		_us.update(ui);
 	}
     
 }

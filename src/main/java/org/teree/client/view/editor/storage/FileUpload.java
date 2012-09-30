@@ -1,6 +1,7 @@
 package org.teree.client.view.editor.storage;
 
 import org.teree.client.view.editor.storage.event.BrowserRefreshRequestHandler;
+import org.teree.shared.data.UserInfo;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Form;
@@ -8,10 +9,12 @@ import com.github.gwtbootstrap.client.ui.Form.SubmitCompleteHandler;
 import com.github.gwtbootstrap.client.ui.Form.SubmitEvent;
 import com.github.gwtbootstrap.client.ui.Form.SubmitHandler;
 import com.github.gwtbootstrap.client.ui.Label;
-import com.github.gwtbootstrap.client.ui.SubmitButton;
+import com.github.gwtbootstrap.client.ui.ProgressBar;
 import com.github.gwtbootstrap.client.ui.Form.SubmitCompleteEvent;
+import com.github.gwtbootstrap.client.ui.base.ProgressBarBase.Color;
+import com.github.gwtbootstrap.client.ui.constants.FormType;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
@@ -25,6 +28,8 @@ public class FileUpload extends Composite {
 
 	private FlowPanel container;
 	
+	private ProgressBar memory;
+	
 	private Form form;
 	private com.github.gwtbootstrap.client.ui.FileUpload file;
 	private Label info;
@@ -36,7 +41,12 @@ public class FileUpload extends Composite {
 		
 		container = new FlowPanel();
 		
+		memory = new ProgressBar();
+		memory.setColor(Color.DEFAULT);
+		container.add(memory);
+		
 		form = new Form();
+		form.setType(FormType.INLINE);
 		form.setAction(UPLOAD_TARGET);
 		form.setEncoding(FormPanel.ENCODING_MULTIPART);
 		form.setMethod(FormPanel.METHOD_POST);
@@ -50,6 +60,7 @@ public class FileUpload extends Composite {
 		form.add(info);
 		
 		upload = new Button("Upload", IconType.UPLOAD_ALT);
+		upload.getElement().getStyle().setFloat(Style.Float.RIGHT);
 		form.add(upload);
 		
 		container.add(form);
@@ -60,20 +71,17 @@ public class FileUpload extends Composite {
 		
 	}
 	
-	public void setBrowserRefreshRequestHandler(BrowserRefreshRequestHandler handler) {
-		this.handler = handler;
-	}
-	
 	private void bind() {
 		
 		form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
 			@Override
 			public void onSubmitComplete(final SubmitCompleteEvent event) {
 				
-				if (event.getResults() == null || event.getResults().isEmpty()) {
+				boolean uploaded;
+				if (uploaded = (event.getResults() == null || event.getResults().isEmpty())) {
 					info.setText("uploaded");
 				} else {
-					info.setText("exceeds maximum size 1MB");
+					info.setText("exceeds maximum file size or storage limit");
 				}
 				info.setVisible(true);
 				
@@ -86,7 +94,9 @@ public class FileUpload extends Composite {
 		        };
 		        t.schedule(5000);
 		        
-		        handler.refresh();
+		        if (uploaded) {
+		        	handler.refresh();
+		        }
 		        
 			}
 		});
@@ -107,6 +117,19 @@ public class FileUpload extends Composite {
 			}
 		});
 		
+	}
+	
+	public void setBrowserRefreshRequestHandler(BrowserRefreshRequestHandler handler) {
+		this.handler = handler;
+	}
+	
+	public void setUserInfo(UserInfo ui) {
+		if (ui == null || ui.getUserPackage() == null) {
+			return;
+		}
+		double toMB = 1024*1024;
+		memory.setPercent((int)(((double)ui.getMemUsed()/ui.getUserPackage().getMemLimit())*100));
+		memory.setText(""+Math.round(ui.getMemUsed()/toMB*100)/100.0+"MB / "+Math.round(ui.getUserPackage().getMemLimit()/toMB*100)/100.0+"MB");
 	}
 	
 }

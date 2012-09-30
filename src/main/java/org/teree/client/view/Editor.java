@@ -19,6 +19,7 @@ import org.teree.client.view.editor.storage.ItemType;
 import org.teree.client.view.editor.storage.event.BrowserItemDeleteRequestHandler;
 import org.teree.client.view.editor.storage.event.BrowserLoadRequestHandler;
 import org.teree.client.view.resource.PageStyle;
+import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Node;
 
 public class Editor extends TemplateScene implements SchemeEditor.Display {
@@ -152,21 +153,31 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
 	public void bold() {
 		scene.changeBoldOfSelectedNode();
 	}
-
+	
 	@Override
 	public void setBrowserItems(List<?> items, ItemType type) {
-		scene.setBrowserItems(items, type);
+		if (items == null) {
+			scene.getBrowser().hide();
+		} else {
+			scene.getBrowser().setBrowserItems(items, type);
+		}
 	}
 
 	@Override
 	public void setBrowserLoadRequestHandler(BrowserLoadRequestHandler handler) {
-		scene.setBrowserLoadRequestHandler(handler);
+		scene.getBrowser().setBrowserLoadRequestHandler(handler);
 	}
 
 	@Override
 	public void setBrowserItemDeleteRequestHandler(
 			BrowserItemDeleteRequestHandler handler) {
-		scene.setBrowserItemDeleteRequestHandler(handler);
+		scene.getBrowser().setBrowserItemDeleteRequestHandler(handler);
+	}
+	
+	@Override
+	public void setCurrentUser(UserInfo user) {
+		super.setCurrentUser(user);
+		scene.getBrowser().setUserInfo(user);
 	}
 
 }

@@ -153,11 +153,12 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		    rw.draw(context, maxlw, max_y / 2 - 5);
 		    
 		} else {
+    		AbsolutePanel panel = (AbsolutePanel) rw.getParent();
+    		panel.setWidth((maxlw+maxrw+rw.getOffsetWidth())+"px"); // to enable scrolling with horizontal scrollbar
 			
 			this.left = canvas.getAbsoluteLeft() - canvas.getParent().getAbsoluteLeft(); // getRelativeLeft
 			this.top = canvas.getAbsoluteTop() - canvas.getParent().getAbsoluteTop(); // getRelativeTop
 			
-    		AbsolutePanel panel = (AbsolutePanel) rw.getParent();
     		panel.setWidgetPosition(rw, this.left + maxlw, this.top + max_y / 2 - rw.getOffsetHeight()); // set root node into middle of scene
     		DOM.setStyleAttribute(rw.getElement(), "visibility", "visible");
     		

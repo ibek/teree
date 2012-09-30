@@ -2,29 +2,28 @@
 0.4:
 
 export mapy jako obrazek (mel by se exportovat vcetne obrazku a url adres a mel by se ulozit jako scheme.png)
-
-obrazky
- - zkontrolovat limit pri uploadu - limit 10MB / uzivatel
-
-upravit privateHome aby obsahoval informace o uzivateli
- - obsazeni pameti (ProgressBar)
- - pocet soukromych a verejnych map (po kliknuti zobrazi verejne mapy patrici danemu uzivateli)
- 
-zkus pouzit thumbnails z gwtbootstrap pro zobrazeni seznamu map a obrazku
+export do freemind
 
 umoznit tagovani map
-zobrazit tagy u map v explore
+zobrazit tagy a autora u map v explore
 vyber map obsahujici dany tag(y)
-umoznit presouvat mapu nebo minimalne pridat posuvnik vlevo-vpravo
 
 0.5:
 
 podpora collapse node
 upravit pom.xml - aby mel mene zavislosti a verze byly jen na jednom miste
 IconTextNodeWidget
-import a export z/do freemindmap
+import z freemindmap bude v privateHome
+
 tvorba map z templates
+
+upravit explore a privateHome
+ - zobrazit pocet soukromych a verejnych map (po kliknuti zobrazi verejne mapy patrici danemu uzivateli)
+ - zkus pouzit thumbnails z gwtbootstrap pro zobrazeni seznamu map a obrazku
+ - zobrazit seznam nejpouzivanejsich tagu
+ - misto tlacitek pro strankovani pouzit Pagination z gwtbootstrap
 vytvorit stranku pro nastaveni uzivatele - jmeno, email, zmena hesla apod
+
 resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
 
 nastavit a napojit na amazon storage
@@ -50,6 +49,11 @@ undo-redo funkce
 vyhledavani - pomoci tagu + fulltext
 MathNodeWidget
 DBAuth pres SSL
+pridat hodnoceni mapy
+management console/app - napr pro upravu balicku, zmena limitu apod 
+
+edit public scheme muze provest pouze autor ale bude si moci vytvorit klon
+ - misto tlacitka edit zobrazit pro ostatni uzivatele clone (ktery bude odkazovat na to ze byl vytvoren z predka?)
 
 known issues:
 

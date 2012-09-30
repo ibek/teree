@@ -13,6 +13,7 @@ import org.jboss.errai.ioc.client.api.Caller;
 import org.teree.client.Text;
 import org.teree.client.event.GlobalKeyUp;
 import org.teree.client.event.GlobalKeyUpHandler;
+import org.teree.client.event.RefreshUserInfo;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.event.SchemeReceivedHandler;
 import org.teree.client.view.KeyAction;
@@ -22,6 +23,7 @@ import org.teree.client.view.editor.storage.event.BrowserItemDeleteRequestHandle
 import org.teree.client.view.editor.storage.event.BrowserLoadRequestHandler;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.SecuredStorageService;
+import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Scheme;
 import org.teree.shared.data.storage.ImageInfo;
@@ -146,6 +148,7 @@ public class SchemeEditor implements Presenter {
 		            @Override
 		            public void callback(Void response) {
 		            	iw.removeFromParent();
+		            	eventBus.fireEvent(new RefreshUserInfo());
 		            }
 		        }, new ErrorCallback() {
 					@Override
@@ -209,6 +212,7 @@ public class SchemeEditor implements Presenter {
 		            @Override
 		            public void callback(List<ImageInfo> response) {
 		                display.setBrowserItems(response, ItemType.Image);
+		            	eventBus.fireEvent(new RefreshUserInfo()); // TODO: find better place where I could refresh userinfo because of upload
 		            }
 		        }, new ErrorCallback() {
 					@Override

@@ -10,6 +10,7 @@ import org.teree.client.view.editor.storage.event.BrowserItemSelected;
 import org.teree.client.view.editor.storage.event.BrowserItemSelectedHandler;
 import org.teree.client.view.editor.storage.event.BrowserLoadRequestHandler;
 import org.teree.client.view.editor.storage.event.BrowserRefreshRequestHandler;
+import org.teree.shared.data.UserInfo;
 
 import com.github.gwtbootstrap.client.ui.Modal;
 import com.github.gwtbootstrap.client.ui.ModalFooter;
@@ -161,6 +162,10 @@ public class ModalBrowser extends Composite {
     public void setBrowserItemDeleteRequestHandler(BrowserItemDeleteRequestHandler handler) {
 		browserItemDeleteRequestHandler = handler;
 	}
+    
+    public void setUserInfo(UserInfo ui) {
+    	fileUpload.setUserInfo(ui);
+    }
     
     private void browserItemSelected(ItemWidget iw) {
     	edited.setBrowserItem(iw);

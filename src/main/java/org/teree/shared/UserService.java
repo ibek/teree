@@ -12,4 +12,6 @@ public interface UserService {
 	
 	public void registerWithGoogle(UserInfo ui, String googleid);
 	
+	public void update(UserInfo ui);
+	
 }
