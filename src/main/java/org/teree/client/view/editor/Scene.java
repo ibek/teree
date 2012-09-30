@@ -79,7 +79,6 @@ public class Scene extends Composite {
         browser = new ModalBrowser();
         
         final ScrollPanel sp = new ScrollPanel(container);
-        sp.setAlwaysShowScrollBars(true);
         sp.setWidth(Window.getClientWidth()+"px");
         sp.setHeight((Window.getClientHeight()-Settings.SCENE_HEIGHT_LESS)+"px");
         Window.addResizeHandler(new ResizeHandler() {
@@ -88,7 +87,6 @@ public class Scene extends Composite {
                 sp.setHeight((event.getHeight()-Settings.SCENE_HEIGHT_LESS) + "px");
             }
 		});
-        sp.getElement().getStyle().setOverflow(Overflow.SCROLL);
         initWidget(sp);
         
         bind();

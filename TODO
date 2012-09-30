@@ -54,7 +54,3 @@ management console/app - napr pro upravu balicku, zmena limitu apod
 
 edit public scheme muze provest pouze autor ale bude si moci vytvorit klon
  - misto tlacitka edit zobrazit pro ostatni uzivatele clone (ktery bude odkazovat na to ze byl vytvoren z predka?)
-
-known issues:
-
-the scheme is broken when size of window is changed
