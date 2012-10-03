@@ -21,6 +21,11 @@
         <servlet-class>org.teree.server.UploadServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>DownloadServlet</servlet-name>
+        <servlet-class>org.teree.server.DownloadServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>ErraiServlet</servlet-name>
         <url-pattern>*.erraiBus</url-pattern>
@@ -32,8 +37,8 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>UploadServlet</servlet-name>
-        <url-pattern>/upload</url-pattern>
+        <servlet-name>DownloadServlet</servlet-name>
+        <url-pattern>/download</url-pattern>
     </servlet-mapping>
     
     <session-config>

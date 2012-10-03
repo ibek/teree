@@ -77,6 +77,10 @@ public class Scene extends Composite {
         scheme.renderViewer(canvas, getNodeWidgets(), root);
     }
     
+    public Node getRoot() {
+    	return root;
+    }
+    
     public String getSchemePicture() {
         Canvas canvas = Canvas.createIfSupported();
         canvas.setCoordinateSpaceHeight(this.canvas.getOffsetHeight());
