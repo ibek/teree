@@ -13,6 +13,7 @@ import org.teree.client.presenter.SchemeViewer;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.client.view.viewer.Scene;
 import org.teree.client.view.viewer.ViewPanel;
+import org.teree.client.view.viewer.format.FreeMind;
 import org.teree.shared.data.scheme.Node;
 
 public class Viewer extends TemplateScene implements SchemeViewer.Display {
@@ -44,6 +45,13 @@ public class Viewer extends TemplateScene implements SchemeViewer.Display {
 			@Override
 			public void onClick(ClickEvent event) {
 				view.sendDownloadRequest(scene.getRoot().getContent().toString(), scene.getSchemePicture());
+			}
+		});
+        
+        view.getExportFreeMindButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				view.sendDownloadRequest(scene.getRoot().getContent().toString(), "freemind", new FreeMind().exportScheme(scene.getRoot()));
 			}
 		});
         

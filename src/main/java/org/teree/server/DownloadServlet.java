@@ -48,12 +48,16 @@ public class DownloadServlet extends HttpServlet {
 	                
 	                if (fileType.contains("png")) {
 	                	fileName += ".png";
+	                } else if (fileType.contains("freemind")) {
+	                	fileName += ".mm";
 	                }
 	                
 	        		resp.addHeader("Content-Disposition", "attachment; filename=" + fileName);
 	        		
 	        		byte[] data = item.get();
-	        		data = Base64.decodeBase64(data);
+	        		if (Base64.isArrayByteBase64(data)) {
+	        			data = Base64.decodeBase64(data);
+                	}
 	        		int contentLength = data.length;
 	                resp.setContentLength(contentLength);
 	                

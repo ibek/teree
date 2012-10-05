@@ -58,6 +58,10 @@ public class ViewPanel extends Composite {
 		return exportImage;
 	}
 	
+	public HasClickHandlers getExportFreeMindButton() {
+		return exportFreeMind;
+	}
+	
 	public void sendDownloadRequest(String name, String dataUrl) {
 		String type = dataUrl.substring(0, dataUrl.indexOf(';'));
 		String base64Data = dataUrl.substring(dataUrl.lastIndexOf(',')+1);

@@ -1,11 +1,8 @@
 
 0.4:
 
-export do freemind
-
-umoznit tagovani map
-zobrazit tagy a autora u map v explore
-vyber map obsahujici dany tag(y)
+rozdelit clienta a server do dvou projektu - client bude mit zavislost na serveru
+ - vyhodou bude rychlejsi vyvoj serveru
 
 0.5:
 
@@ -45,7 +42,7 @@ future:
 
 collaboration
 undo-redo funkce
-vyhledavani - pomoci tagu + fulltext
+vyhledavani - pouze v root + fulltext
 MathNodeWidget
 DBAuth pres SSL
 pridat hodnoceni mapy
