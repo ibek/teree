@@ -39,6 +39,7 @@ public abstract class TemplateScene extends Composite implements Template {
 	}
 	
 	private void setStatus(String msg) {
+		status.getElement().getStyle().setZIndex(100); // in front of all elements
 		status.setText(msg);
 		status.setVisible(true);
 		Timer t = new Timer() {

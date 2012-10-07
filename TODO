@@ -1,15 +1,12 @@
 
-0.4:
-
-rozdelit clienta a server do dvou projektu - client bude mit zavislost na serveru
- - vyhodou bude rychlejsi vyvoj serveru
-
 0.5:
 
 podpora collapse node
 upravit pom.xml - aby mel mene zavislosti a verze byly jen na jednom miste
 IconTextNodeWidget
 import z freemindmap bude v privateHome
+upravit dialog pro editaci linku - pouzij gwtbootstrap
+opravit bug s prazdnym nodem
 
 tvorba map z templates
 

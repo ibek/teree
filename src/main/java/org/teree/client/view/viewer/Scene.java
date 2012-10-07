@@ -8,6 +8,8 @@ import org.teree.client.Settings;
 import org.teree.client.scheme.MindMap;
 import org.teree.client.scheme.SchemeType;
 import org.teree.client.scheme.Renderer;
+import org.teree.client.view.editor.event.NodeChanged;
+import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.viewer.NodeWidget;
 import org.teree.shared.data.scheme.Node;
 
@@ -57,6 +59,18 @@ public class Scene extends Composite {
 		});
         
         initWidget(sp);
+        
+        bind();
+        
+    }
+    
+    private void bind() {
+    	container.addHandler(new NodeChangedHandler() {
+			@Override
+			public void changed(NodeChanged event) {
+				scheme.renderViewer(canvas, getNodeWidgets(), root);
+			}
+		}, NodeChanged.TYPE);
     }
     
     public void setSchemeType(SchemeType type) {

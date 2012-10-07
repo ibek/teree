@@ -7,8 +7,8 @@
 
 	<ui:style>
 
-		.alternativeSignIn {
-			margin: 10px;
+		.scene {
+			margin: 20px;
 		}
 
 	</ui:style>
@@ -16,8 +16,23 @@
 	<g:FlowPanel ui:field="panel">
 		<view:Header ui:field="header"/>
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
-		<g:FlowPanel>
+		<g:FlowPanel addStyleNames="{style.scene}">
 			<b:PageHeader subtext="The structured information database with a tree representation.">teree</b:PageHeader>
+			<b:Heading size="2">Features</b:Heading>
+			<b:Paragraph>
+				<b:Badge>-</b:Badge><b:Badge>generates MindMap</b:Badge><br/>
+				<b:Badge>-</b:Badge><b:Badge>uses different type of nodes - text, image or link</b:Badge><br/>
+				<b:Badge>-</b:Badge><b:Badge>exports MindMap as image or FreeMind map</b:Badge><br/>
+				<b:Badge>-</b:Badge><b:Badge>supports drag and drop between nodes</b:Badge><br/>
+				<b:Badge>-</b:Badge><b:Badge>keyboard control</b:Badge>
+			</b:Paragraph>
+			<b:Heading size="2">Bug tracking</b:Heading>
+			<b:Paragraph>
+				For any issue, file a bug in <g:Anchor href='http://www.bugheaven.com/bugzilla/teree/' target='_blank'>bugzilla</g:Anchor>.
+				To log in, use following security credentials: <br/>
+				Username: o1182493@rtrtr.com <br/>
+				Password: anonymous
+			</b:Paragraph>
 		</g:FlowPanel>
 	</g:FlowPanel>
 

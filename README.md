@@ -10,6 +10,8 @@ The structured information database with a tree representation.
 
 ##Features
 
- - supports MindMaps
- - uses MongoDB to store nodes
- - enables cooperation
+ - generates MindMap
+ - uses different type of nodes - text, image or link
+ - exports MindMap as image or FreeMind map
+ - supports drag&drop between nodes
+ - keyboard control
