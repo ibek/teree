@@ -4,13 +4,17 @@ import java.util.List;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
+import org.teree.client.Settings;
 import org.teree.client.Text;
+import org.teree.client.event.SchemeReceived;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
+import org.teree.client.view.explorer.event.ImportSchemeHandler;
 import org.teree.client.view.explorer.event.PublishScheme;
 import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.client.view.explorer.event.RemoveScheme;
@@ -18,9 +22,13 @@ import org.teree.client.view.explorer.event.RemoveSchemeHandler;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.data.scheme.Scheme;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -35,7 +43,11 @@ public class PrivateHome implements Presenter {
         HasSchemeHandlers getScene();
         String getFirstOid();
         String getLastOid();
+        void setImportSchemeHandler(ImportSchemeHandler handler);
     }
+	
+    @Inject @Named(value="eventBus")
+    private HandlerManager eventBus;
 	
 	@Inject
 	private Caller<SecuredSchemeService> securedService;
@@ -105,6 +117,20 @@ public class PrivateHome implements Presenter {
 				}).removeScheme(event.getScheme().getOid());
 			}
 		});
+		
+		display.setImportSchemeHandler(new ImportSchemeHandler() {
+			@Override
+			public void importScheme(final Scheme scheme) {
+				History.newItem(Settings.CREATE_LINK);
+				Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+		            @Override
+		            public void execute() {
+						eventBus.fireEvent(new SchemeReceived(scheme));
+		            }
+		        });
+			}
+		});
+		
 	}
 	
 	@Override

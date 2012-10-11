@@ -66,7 +66,7 @@ public class Login extends TemplateScene implements LoginPage.Display {
 	        .with(MessageParts.ReplyTo, "LoginClient")
 	        .with(AuthType.PART, AuthType.Database)
 	        .with(SecurityParts.Name, username.getText())
-	        .with(SecurityParts.Password, password.getText()) // TODO: encode password
+	        .with(SecurityParts.Password, password.getText())
 	        .done().sendNowWith(ErraiBus.get());
     }
 

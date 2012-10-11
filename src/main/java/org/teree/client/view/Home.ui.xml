@@ -21,7 +21,7 @@
 			<b:Heading size="2">Features</b:Heading>
 			<b:Paragraph>
 				<b:Badge>-</b:Badge><b:Badge>generates MindMap</b:Badge><br/>
-				<b:Badge>-</b:Badge><b:Badge>uses different type of nodes - text, image or link</b:Badge><br/>
+				<b:Badge>-</b:Badge><b:Badge>uses different types of nodes - text, image or link</b:Badge><br/>
 				<b:Badge>-</b:Badge><b:Badge>exports MindMap as image or FreeMind map</b:Badge><br/>
 				<b:Badge>-</b:Badge><b:Badge>supports drag and drop between nodes</b:Badge><br/>
 				<b:Badge>-</b:Badge><b:Badge>keyboard control</b:Badge>

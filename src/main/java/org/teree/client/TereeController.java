@@ -95,8 +95,7 @@ public class TereeController implements ValueChangeHandler<String> {
 						currentUser.set(message.get(UserInfo.class, UserInfo.PART));
 						
 						if (tmpPresenter != null) {
-							setPresenter(tmpPresenter); // TODO: change to History.newItem(Settings.CREATE_LINK)
-							tmpPresenter = null;
+							History.newItem(Settings.CREATE_LINK);
 						} else {
 							History.newItem(Settings.HOME_LINK);
 						}
@@ -174,8 +173,13 @@ public class TereeController implements ValueChangeHandler<String> {
 				IOCBeanDef<SchemeEditor> bean = manager
 						.lookupBean(SchemeEditor.class);
 				if (bean != null) {
-					presenter = bean.getInstance();
-					createScheme = true;
+					if (tmpPresenter != null) {
+						presenter = tmpPresenter;
+						tmpPresenter = null;
+					} else {
+						presenter = bean.getInstance();
+						createScheme = true;
+					}
 				}
 			} else if (token.startsWith(Settings.EDIT_LINK)) {
 				IOCBeanDef<SchemeEditor> bean = manager

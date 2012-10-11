@@ -4,14 +4,19 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import com.github.gwtbootstrap.client.ui.FileUpload;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.teree.client.view.explorer.PrivatePanel;
 import org.teree.client.view.explorer.Scene;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
+import org.teree.client.view.explorer.event.ImportSchemeHandler;
 import org.teree.client.view.explorer.event.PublishScheme;
 import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.client.view.resource.PageStyle;
@@ -30,6 +35,9 @@ public class PrivateHome extends TemplateScene implements org.teree.client.prese
     
     @UiField
     Scene scene;
+    
+    @UiField
+    PrivatePanel privatePanel;
     
     @PostConstruct
     public void init() {
@@ -70,6 +78,11 @@ public class PrivateHome extends TemplateScene implements org.teree.client.prese
 	@Override
 	public HasSchemeHandlers getScene() {
 		return scene;
+	}
+
+	@Override
+	public void setImportSchemeHandler(ImportSchemeHandler handler) {
+		privatePanel.setImportSchemeHandler(handler);
 	}
 
 }

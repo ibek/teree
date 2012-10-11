@@ -5,8 +5,20 @@
 	
 	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
 
+	<ui:style>
+
+		.privatePanel {
+			margin: 0 auto;
+			margin-top: -10px;
+			margin-bottom: 10px;
+			padding-bottom: 5px;
+		}
+
+	</ui:style>
+
 	<g:FlowPanel>
 		<view:Header ui:field="header"/>
+		<exp:PrivatePanel ui:field="privatePanel" addStyleNames="{style.privatePanel}"></exp:PrivatePanel>
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<exp:Scene ui:field="scene" addStyleNames="{res.css.scene}"></exp:Scene>
 	</g:FlowPanel>

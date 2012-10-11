@@ -1,22 +1,20 @@
 package org.teree.client.view.editor;
 
-import org.teree.client.view.resource.DialogStyle;
-
+import com.github.gwtbootstrap.client.ui.Label;
+import com.github.gwtbootstrap.client.ui.TextBox;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class LinkDialog extends DialogBox {
 
-	private DialogStyle res = DialogStyle.INSTANCE;
-
-	private static final int WIDTH = 180;
+	private static final int WIDTH = 186;
 	private static final int HEIGHT = 100;
 	
 	private Button okButton;
@@ -25,22 +23,29 @@ public class LinkDialog extends DialogBox {
 	private TextBox urlField;
 
 	public LinkDialog(String title) {
-		res.css().ensureInjected();
-		addStyleName(res.css().dialog());
+		
+		addStyleName("popover");
+		getElement().getStyle().setDisplay(Display.BLOCK);
+		getElement().getStyle().setPadding(0.0, Unit.PX);
 		
 		setText(title);
+		getCaption().asWidget().addStyleName("popover-title");
+		getCaption().asWidget().getElement().getStyle().setMarginRight(-3.0, Unit.PX);
 		setAutoHideEnabled(true);
 
 		VerticalPanel panel = new VerticalPanel();
+		panel.getElement().getStyle().setMargin(9.0, Unit.PX);
 		panel.setWidth(WIDTH+"px");
 		panel.setHeight(HEIGHT+"px");
 		
 		textField = new TextBox();
+		textField.setPlaceholder("text");
+		textField.setWidth(200+"px");
 		urlField = new TextBox();
+		urlField.setPlaceholder("url");
+		urlField.setWidth(200+"px");
 		
-		panel.add(new Label("text:"));
 		panel.add(textField);
-		panel.add(new Label("url:"));
 		panel.add(urlField);
 		
 		okButton = new Button("Ok");
@@ -75,6 +80,11 @@ public class LinkDialog extends DialogBox {
 	
 	public HasClickHandlers getOk() {
 		return okButton;
+	}
+	
+	@Override
+	public void show() {
+		super.show();
 	}
 	
 	public String getUrl() {

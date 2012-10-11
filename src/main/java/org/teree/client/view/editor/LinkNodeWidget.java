@@ -5,6 +5,7 @@ import org.teree.client.view.editor.event.SelectNode;
 import org.teree.shared.data.scheme.Link;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
+import org.teree.shared.data.scheme.Node.NodeLocation;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.Scheduler;
@@ -96,8 +97,14 @@ public class LinkNodeWidget extends NodeWidget {
 			
 		}
 
-		linkDialog.setPopupPosition(getAbsoluteLeft() + content.getOffsetWidth()/2 - linkDialog.getOffsetWidth()/2, 
-				getAbsoluteTop() + content.getOffsetHeight()/2 - linkDialog.getOffsetHeight()/2);
+		int x = 0;
+		if (node.getLocation() == NodeLocation.LEFT) {
+			x = -linkDialog.getOffsetWidth() - content.getOffsetWidth();
+		} else {
+			x = content.getOffsetWidth();
+		}
+		linkDialog.setPopupPosition(getAbsoluteLeft() + x, 
+				getAbsoluteTop() - content.getOffsetHeight()/2 - linkDialog.getOffsetHeight()/2);
 		linkDialog.show();
 	}
 

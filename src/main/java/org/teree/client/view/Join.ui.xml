@@ -86,7 +86,6 @@
 			</g:FlowPanel>
 			<g:VerticalPanel addStyleNames="{style.alternativeRegister}">
 				<b:Button ui:field='btnGoogle' size="LARGE">Google</b:Button>
-				<b:Button size="LARGE">Twitter</b:Button>
 			</g:VerticalPanel>
 			
 		</g:HorizontalPanel>

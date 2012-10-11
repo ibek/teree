@@ -16,6 +16,8 @@
     
     <inherits name='com.github.gwtbootstrap.Bootstrap' />
     
+    <inherits name="org.vectomatic.libgwtfile" />
+    
 	<extend-property name="locale" values="en"/>
 	<set-property name="locale" value="en"/>
     
