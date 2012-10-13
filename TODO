@@ -1,9 +1,7 @@
 
 0.5:
 
-do konce vykendu:
-IconTextNodeWidget
-* opravit bug s prazdnym nodem
+opravit bug s prazdnym nodem
 
 upravit explore a privateHome
  - zobrazit pocet soukromych a verejnych map (po kliknuti zobrazi verejne mapy patrici danemu uzivateli)
@@ -41,7 +39,8 @@ vyhledavani - pouze v root + fulltext
 MathNodeWidget
 DBAuth pres SSL
 pridat hodnoceni mapy
-management console/app - napr pro upravu balicku, zmena limitu apod 
+management console/app - napr pro upravu balicku, zmena limitu apod
+sepsat use cases (pro studovani ...)
 
 edit public scheme muze provest pouze autor ale bude si moci vytvorit klon
  - misto tlacitka edit zobrazit pro ostatni uzivatele clone (ktery bude odkazovat na to ze byl vytvoren z predka?)

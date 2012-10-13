@@ -90,11 +90,8 @@ public class Node implements Cloneable {
         this.content = content;
         
         // set type
-        if (content instanceof String) {
-        	type = NodeType.String;
-        } 
-        else if (content instanceof IconString) {
-        	type = NodeType.IconString;
+        if (content instanceof IconText) {
+        	type = NodeType.IconText;
         }
         else if (content instanceof Link) {
         	type = NodeType.Link;
@@ -174,8 +171,7 @@ public class Node implements Cloneable {
 
     public enum NodeType {
         None,
-        String,
-        IconString,
+        IconText,
         Link,
         ImageLink;
     }

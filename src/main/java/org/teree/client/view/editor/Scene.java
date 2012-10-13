@@ -19,12 +19,14 @@ import org.teree.client.view.editor.storage.ItemType;
 import org.teree.client.view.editor.storage.ModalBrowser;
 import org.teree.client.view.editor.storage.event.BrowserItemDeleteRequestHandler;
 import org.teree.client.view.editor.storage.event.BrowserLoadRequestHandler;
+import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
 import org.teree.shared.data.scheme.Node.NodeLocation;
 
+import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.ImageData;
@@ -371,6 +373,24 @@ public class Scene extends Composite {
     	return browser;
     }
     
+    public void setSelectedIcon(IconType icon) {
+    	if (selected != null && selected instanceof TextNodeWidget) {
+    		IconText it = (IconText)selected.getNode().getContent();
+    		boolean updateReq = it.getIconType() == null;
+    		if (it.getIconType() != null && (icon == IconType.SIGN_BLANK || icon == IconType.valueOf(it.getIconType()))) {
+       		 	// remove icon
+				it.setIconType(null);
+				updateReq = true;
+			} else {
+    			it.setIconType(icon.name());
+    		}
+			((TextNodeWidget) selected).update();
+			if (updateReq) {
+				update(null);
+			}
+    	}
+    }
+    
     /**======================================================*/
 
     private void selectPrevious() {
@@ -477,7 +497,7 @@ public class Scene extends Composite {
     
     private NodeWidget createNodeWidget(Node node) {
     	switch(node.getType()){
-	        case String: {
+    		case IconText: {
 	            return new TextNodeWidget(node);
 	        }
 	        case ImageLink: {

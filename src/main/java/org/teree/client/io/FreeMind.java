@@ -44,7 +44,7 @@ public class FreeMind {
 			en.setAttribute("POSITION", node.getLocation().name().toLowerCase());
 			setElementStyle(node, doc, en);
 			switch (node.getType()) {
-				case String: {
+				case IconText: {
 					en.setAttribute("TEXT", node.getContent().toString());
 					parent.appendChild(en);
 					break;
@@ -98,9 +98,7 @@ public class FreeMind {
 			Document doc = XMLParser.parse(data);
 			com.google.gwt.xml.client.Node r = getFirstNode(doc.getChildNodes().item(0).getChildNodes());
 			if (r != null) {
-				System.out.println(r.getNodeName());
 				String content = r.getAttributes().getNamedItem("TEXT").getNodeValue();
-				System.out.println(content);
 				root.setContent(content);
 				insertChildNodes(root, r.getChildNodes());
 			}

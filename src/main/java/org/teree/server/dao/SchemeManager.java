@@ -8,7 +8,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.bson.types.ObjectId;
-import org.teree.shared.data.scheme.IconString;
+import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
 import org.teree.shared.data.scheme.Node;
@@ -209,14 +209,10 @@ public class SchemeManager {
         doc.put("type", type.name());
         
         switch(type){
-            case String: {
-                doc.put("text", value);
-                break;
-            }
-            case IconString: {
-                IconString is = (IconString)value;
+            case IconText: {
+                IconText is = (IconText)value;
                 doc.put("text", is.getText());
-                doc.put("icon", is.getIconid());
+                doc.put("icon", is.getIconType());
                 break;
             }
             case Link: {
@@ -264,14 +260,10 @@ public class SchemeManager {
         NodeType type = NodeType.valueOf(root.getString("type"));
         
         switch(type){
-            case String: {
-                node.setContent(root.get("text"));
-                break;
-            }
-            case IconString: {
-                IconString is = new IconString();
+            case IconText: {
+                IconText is = new IconText();
                 is.setText(root.getString("text"));
-                is.setIconid(root.getInt("icon"));
+                is.setIconType(root.getString("icon"));
                 node.setContent(is);
                 break;
             }

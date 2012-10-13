@@ -1,5 +1,6 @@
 package org.teree.shared;
 
+import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Node.NodeLocation;
 
@@ -66,7 +67,9 @@ public class NodeGenerator {
     
     public static Node createTextNode(String text, NodeLocation loc) {
         Node n = new Node();
-        n.setContent(text);
+        IconText it = new IconText();
+        it.setText(text);
+        n.setContent(it);
         n.setLocation(loc);
         return n;
     }

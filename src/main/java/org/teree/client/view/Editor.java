@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -77,6 +78,14 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
 				scene.changeBoldOfSelectedNode();
 			}
 		});
+    	
+    	edit.setSelectIconHandler(new EditPanel.SelectIcon() {
+			@Override
+			public void select(IconType icon) {
+				scene.setSelectedIcon(icon);
+			}
+		});
+    	
     }
     
     @Override

@@ -18,11 +18,13 @@ import com.google.gwt.user.client.ui.Label;
 public class LinkNodeWidget extends NodeWidget {
 
 	private Label content;
-
 	private LinkDialog linkDialog;
+	private Link nodeContent;
 
 	public LinkNodeWidget(Node node) {
 		super(node);
+		
+		nodeContent = (Link)node.getContent();
 
 		init();
 		update();
@@ -49,8 +51,7 @@ public class LinkNodeWidget extends NodeWidget {
 	}
 
 	public void update() {
-		Link link = (Link) node.getContent();
-		String text = link.getText();
+		String text = nodeContent.getText();
 		if (text == null || text.isEmpty()) {
 			text = "link";
 		}
@@ -81,9 +82,8 @@ public class LinkNodeWidget extends NodeWidget {
 			linkDialog.getOk().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					Link link = (Link)node.getContent();
-					link.setText(linkDialog.getTextField());
-					link.setUrl(linkDialog.getUrl());
+					nodeContent.setText(linkDialog.getTextField());
+					nodeContent.setUrl(linkDialog.getUrl());
 					Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 			            @Override
 			            public void execute() {

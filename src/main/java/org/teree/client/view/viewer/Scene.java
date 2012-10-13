@@ -107,7 +107,7 @@ public class Scene extends Composite {
     	
 		NodeWidget nw = null;
 		switch(node.getType()){
-	        case String: {
+	        case IconText: {
 	            nw = new TextNodeWidget(node);
 	            break;
 	        }

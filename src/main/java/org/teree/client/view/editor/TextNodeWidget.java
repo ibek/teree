@@ -3,14 +3,20 @@ package org.teree.client.view.editor;
 import org.teree.client.Settings;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
+import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
 
+import com.github.gwtbootstrap.client.ui.Icon;
+import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -42,13 +48,18 @@ import com.google.gwt.user.client.ui.TextArea;
  *
  */
 public class TextNodeWidget extends NodeWidget {
-
+	
+	private Icon icon;
     private HTML content;
-    
     private TextArea editContent;
+    
+    private IconText nodeContent;
     
     public TextNodeWidget(Node node) {
         super(node);
+
+        nodeContent = (IconText)node.getContent();
+		icon = new Icon();
         
         view();
         
@@ -99,13 +110,19 @@ public class TextNodeWidget extends NodeWidget {
             
         }
         
-        editContent.setText(node.getContent().toString());
+        editContent.setText(content.getText());
         if (getOffsetWidth() <= Settings.MIN_WIDTH) {
         	editContent.setWidth((Settings.MIN_WIDTH+2)+"px");
         } else {
         	editContent.setWidth((getOffsetWidth()+2)+"px");
         }
         editContent.setHeight(getOffsetHeight()+"px");
+        
+        if (nodeContent.getIconType() != null) {
+			editContent.getElement().getStyle().setPaddingLeft(Settings.ICON_WIDTH, Unit.PX);
+        } else {
+			editContent.getElement().getStyle().setPaddingLeft(0.0, Unit.PX);
+        }
         
         // to ensure that the editContent will be focused after all events (key F2)
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
@@ -146,7 +163,7 @@ public class TextNodeWidget extends NodeWidget {
         
     	}
 
-    	content.setText(node.getContent().toString());
+    	update();
     	
     	if(getOffsetWidth() >= Settings.MAX_WIDTH){
             content.setWidth(Settings.MAX_WIDTH+"px");
@@ -178,16 +195,32 @@ public class TextNodeWidget extends NodeWidget {
     
     private void confirmChanges() {
         String newtext = editContent.getText();
-        if(newtext.compareTo(node.getContent().toString()) != 0){
-            node.setContent(newtext);
+        
+        if (newtext.compareTo(nodeContent.getText()) != 0) {
+        	nodeContent.setText(newtext);
             getParent().fireEvent(new NodeChanged(null)); // null because nothing was inserted
         }
+        
         view();
         fireSelect();
     }
     
     public void update() {
-    	content.setText(node.getContent().toString());
+		content.setText(nodeContent.getText());
+		if (nodeContent.getIconType() != null) {
+			
+			icon.setType(IconType.valueOf(nodeContent.getIconType()));
+			
+			if (container.getWidgetIndex(icon) < 0) {
+				container.insert(icon, 0, 0, 0);
+				content.getElement().getStyle().setPaddingLeft(Settings.ICON_WIDTH, Unit.PX);
+			}
+		} else {
+			if (container.getWidgetIndex(icon) >= 0) {
+				container.remove(icon);
+				content.getElement().getStyle().setPaddingLeft(0.0, Unit.PX);
+			}
+		}
     }
 
     @Override
@@ -195,7 +228,11 @@ public class TextNodeWidget extends NodeWidget {
     	context.save();
     	context.setFont("14px monospace");
         context.setFillStyle("#000000");
-        context.fillText(content.getText(), x, y);
+    	if (nodeContent.getIconType() != null) {
+            context.fillText(content.getText(), x+Settings.ICON_WIDTH, y);
+    	} else {
+            context.fillText(content.getText(), x, y);
+    	}
         context.restore();
     }
 

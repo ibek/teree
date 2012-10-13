@@ -3,10 +3,10 @@ package org.teree.shared.data.scheme;
 import org.jboss.errai.common.client.api.annotations.Portable;
 
 @Portable
-public class IconString {
+public class IconText {
 
     private String text;
-    private Integer iconid;
+    private String iconType;
     
     public String getText() {
         return text;
@@ -15,13 +15,18 @@ public class IconString {
     public void setText(String text) {
         this.text = text;
     }
-    
-    public Integer getIconid() {
-        return iconid;
-    }
-    
-    public void setIconid(Integer iconid) {
-        this.iconid = iconid;
-    }
+
+	public String getIconType() {
+		return iconType;
+	}
+
+	public void setIconType(String iconType) {
+		this.iconType = iconType;
+	}
+	
+	@Override
+	public String toString() {
+		return text;
+	}
     
 }

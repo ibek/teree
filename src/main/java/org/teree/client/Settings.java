@@ -26,6 +26,8 @@ public class Settings {
 
     public static final int SCENE_HEIGHT_LESS = 80;
     
+	public static final double ICON_WIDTH = 15.0;
+    
     public static final SchemeType DEFAULT_SCHEME_TYPE = SchemeType.MindMap;
     
 }

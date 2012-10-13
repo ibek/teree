@@ -36,11 +36,13 @@ public class ImageNodeWidget extends NodeWidget {
 	}
 
 	private Image content;
-
 	private Resources res = GWT.create(Resources.class);
+	private ImageLink nodeContent;
 
 	public ImageNodeWidget(Node node) {
 		super(node);
+		
+		nodeContent = (ImageLink)node.getContent();
 
 		init();
 		update();
@@ -71,7 +73,7 @@ public class ImageNodeWidget extends NodeWidget {
 		content.addErrorHandler(new ErrorHandler() {
 			@Override
 			public void onError(ErrorEvent event) {
-				((ImageLink) node.getContent()).setUrl(null);
+				nodeContent.setUrl(null);
 				content.setUrl(res.noImage().getSafeUri());
 			}
 		});
@@ -88,7 +90,7 @@ public class ImageNodeWidget extends NodeWidget {
 	}
 
 	public void update() {
-		String url = ((ImageLink) node.getContent()).getUrl();
+		String url = nodeContent.getUrl();
 		if (url != null) {
 			content.setUrl(url);
 		}
@@ -130,7 +132,7 @@ public class ImageNodeWidget extends NodeWidget {
 	@Override
 	public void setBrowserItem(ItemWidget iw) {
 		content.setUrl(iw.getUrl());
-		((ImageLink) node.getContent()).setUrl(iw.getUrl());
+		nodeContent.setUrl(iw.getUrl());
 	}
 
 }
