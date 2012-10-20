@@ -1,5 +1,9 @@
 package org.teree.client.view.editor;
 
+import java.util.Set;
+
+import org.teree.client.view.resource.IconTypeContent;
+
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.DropdownButton;
 import com.github.gwtbootstrap.client.ui.Tooltip;
@@ -28,17 +32,6 @@ public class EditPanel extends Composite {
 	private static final int ICON_COLUMNS = 7;	
 	private static final int ICON_ROWS = 6;
 	
-	private static final IconType[] ICONS = { IconType.SIGN_BLANK, IconType.ASTERISK, IconType.BAN_CIRCLE, IconType.BELL, IconType.BOLT,
-			IconType.BOOK, IconType.BOOKMARK, IconType.CALENDAR, IconType.CHECK,
-			IconType.CHECK_EMPTY, IconType.COMMENT, IconType.EDIT, IconType.ENVELOPE,
-			IconType.FIRE, IconType.FLAG, IconType.GLOBE, IconType.INFO_SIGN,
-			IconType.KEY, IconType.LEAF, IconType.LOCK,
-			IconType.UNLOCK, IconType.MINUS, IconType.OK, IconType.PICTURE,
-			IconType.PLANE, IconType.PLUS, IconType.PRINT, IconType.PUSHPIN,
-			IconType.REMOVE, IconType.SEARCH, IconType.SHOPPING_CART,
-			IconType.STAR, IconType.TAG, IconType.THUMBS_UP, IconType.THUMBS_DOWN,
-			IconType.TIME, IconType.TRUCK, IconType.WARNING_SIGN, IconType.WRENCH,
-			IconType.CHEVRON_LEFT, IconType.CHEVRON_RIGHT, IconType.PHONE};
 	
 	public EditPanel() {
 		
@@ -88,11 +81,14 @@ public class EditPanel extends Composite {
 	
 	private void loadIcons() {
 		Grid g = new Grid(ICON_ROWS, ICON_COLUMNS);
-		for (int i=0; i<ICONS.length; ++i) {
+		Set<IconType> is = IconTypeContent.ICONS.keySet();
+		IconType[] icons = new IconType[is.size()];
+		icons = is.toArray(icons);
+		for (int i=0; i<icons.length; ++i) {
 			if (i/ICON_COLUMNS > ICON_ROWS-1) {
 				break;
 			}
-			final IconType ic = ICONS[i];
+			final IconType ic = icons[i];
 			Button ib = new Button("", ic);
 			ib.addClickHandler(new ClickHandler() {
 				@Override

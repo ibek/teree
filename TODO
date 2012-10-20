@@ -1,8 +1,6 @@
 
 0.5:
 
-opravit bug s prazdnym nodem
-
 upravit explore a privateHome
  - zobrazit pocet soukromych a verejnych map (po kliknuti zobrazi verejne mapy patrici danemu uzivateli)
  - zkus pouzit thumbnails z gwtbootstrap pro zobrazeni seznamu map a obrazku
@@ -41,6 +39,8 @@ DBAuth pres SSL
 pridat hodnoceni mapy
 management console/app - napr pro upravu balicku, zmena limitu apod
 sepsat use cases (pro studovani ...)
+prirazovat ruzna prava na mapy
+ - zda dany uzivatel (skupina - guests) muze mapu cist, editovat ...
 
 edit public scheme muze provest pouze autor ale bude si moci vytvorit klon
  - misto tlacitka edit zobrazit pro ostatni uzivatele clone (ktery bude odkazovat na to ze byl vytvoren z predka?)

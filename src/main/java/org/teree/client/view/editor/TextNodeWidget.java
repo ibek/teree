@@ -3,6 +3,7 @@ package org.teree.client.view.editor;
 import org.teree.client.Settings;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
+import org.teree.client.view.resource.IconTypeContent;
 import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
@@ -110,7 +111,7 @@ public class TextNodeWidget extends NodeWidget {
             
         }
         
-        editContent.setText(content.getText());
+        editContent.setText(nodeContent.getText());
         if (getOffsetWidth() <= Settings.MIN_WIDTH) {
         	editContent.setWidth((Settings.MIN_WIDTH+2)+"px");
         } else {
@@ -143,7 +144,7 @@ public class TextNodeWidget extends NodeWidget {
     public void view() {
     	if (content == null) {
     		
-	        content = new HTML(node.getContent().toString());
+	        content = new HTML(nodeContent.getText());
 	        content.addClickHandler(new ClickHandler() {
 	            @Override
 	            public void onClick(ClickEvent event) {
@@ -206,7 +207,11 @@ public class TextNodeWidget extends NodeWidget {
     }
     
     public void update() {
-		content.setText(nodeContent.getText());
+		String text = nodeContent.getText();
+		if (text.isEmpty()) {
+			text = "[empty]";
+		}
+		content.setText(text);
 		if (nodeContent.getIconType() != null) {
 			
 			icon.setType(IconType.valueOf(nodeContent.getIconType()));
@@ -229,6 +234,11 @@ public class TextNodeWidget extends NodeWidget {
     	context.setFont("14px monospace");
         context.setFillStyle("#000000");
     	if (nodeContent.getIconType() != null) {
+    		context.setFont("14px FontAwesome");
+        	String c = "";
+        	c += IconTypeContent.get(icon.getIconType());
+        	context.fillText(c, x, y);
+        	context.setFont("14px monospace");
             context.fillText(content.getText(), x+Settings.ICON_WIDTH, y);
     	} else {
             context.fillText(content.getText(), x, y);

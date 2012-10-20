@@ -1,6 +1,7 @@
 package org.teree.client.view.viewer;
 
 import org.teree.client.Settings;
+import org.teree.client.view.resource.IconTypeContent;
 import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
@@ -63,9 +64,11 @@ public class TextNodeWidget extends NodeWidget {
     	context.setFont("14px monospace");
         context.setFillStyle("#000000");
         if (icon.getIconType() != null) {
-    		// FIXME: draw icon as text with FontAwesome
-        	//context.setFont("14px FontAwesome");
-        	//context.fillText(new String(new byte[]{0x04, (byte)0xf0}), x, y);
+        	context.setFont("14px FontAwesome");
+        	String c = "";
+        	c += IconTypeContent.get(icon.getIconType());
+        	context.fillText(c, x, y);
+        	context.setFont("14px monospace");
             context.fillText(content.getText(), x+Settings.ICON_WIDTH, y);
     	} else {
             context.fillText(content.getText(), x, y);

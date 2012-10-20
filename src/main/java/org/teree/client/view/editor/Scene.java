@@ -191,7 +191,9 @@ public class Scene extends Composite {
     
     public void createTextChildNode() {
     	Node child = new Node();
-    	child.setContent("");
+    	IconText content = new IconText();
+    	content.setText("");
+    	child.setContent(content);
     	insertChildNode(child);
     	
     	 // to ensure that the node can be focused after insert
