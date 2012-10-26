@@ -55,7 +55,13 @@ public class UserInfoManager {
     public void update(UserInfo ui) {
     	DBCollection coll = getCollection();
         DBObject updateBy = getUpdateBy(ui);
-        coll.update(updateBy, new BasicDBObject("$set", toUserInfoDBObject(ui)));
+        BasicDBObject doc = new BasicDBObject();
+
+        // only these properties are updated
+        doc.put("name", ui.getName());
+        doc.put("email", ui.getEmail());
+        
+        coll.update(updateBy, new BasicDBObject("$set", doc));
     }
     
     private DBObject getUpdateBy(UserInfo ui) {

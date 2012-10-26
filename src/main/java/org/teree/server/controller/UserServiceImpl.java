@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.jboss.errai.bus.server.annotations.Service;
 import org.jboss.errai.bus.server.api.RpcContext;
+import org.teree.server.auth.RequireAuthentication;
 import org.teree.server.dao.UserInfoManager;
 import org.teree.server.dao.UserPackageManager;
 import org.teree.shared.UserService;
@@ -60,9 +61,10 @@ public class UserServiceImpl implements UserService {
 		_uim.insertWithGoogleId(ui, googleid);
 	}
 
+	@RequireAuthentication
 	@Override
 	public void update(UserInfo ui) {
-		_uim.update(ui);
+        _uim.update(ui);
 	}
 
 }
