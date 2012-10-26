@@ -66,6 +66,10 @@ public class Header extends Composite implements HeaderTemplate {
 		});
 		
     }
+    
+    public UserInfo getCurrentUser() {
+    	return user.getCurrentUser();
+    }
 
 	@Override
 	public void setCurrentUser(UserInfo user) {

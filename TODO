@@ -4,14 +4,10 @@
 upravit explore a privateHome
  - zobrazit pocet soukromych a verejnych map (po kliknuti zobrazi verejne mapy patrici danemu uzivateli)
  - zkus pouzit thumbnails z gwtbootstrap pro zobrazeni seznamu map a obrazku
- - zobrazit seznam nejpouzivanejsich tagu
  - misto tlacitek pro strankovani pouzit Pagination z gwtbootstrap
-vytvorit stranku pro nastaveni uzivatele - jmeno, email, zmena hesla apod
+pridat kontaktni informace na home - email apod
 
 resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
-
-nastavit a napojit na amazon storage
- - povolit CORS
 
 -------- alpha release --------
 
@@ -20,14 +16,23 @@ nastavit a napojit na amazon storage
 podpora collapse node
 tvorba map z templates
 
-direct explore - novy typ generovani mapy, nejspis pro to bude stacit mindmapa protoze leva strana se zajisti uz na serveru pri cteni 
-service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
-ConnectorNodeWidget (to connect another map)
-funkce pro rozdeleni mapy na dve - z nodu vytvorit novou mapu a propojit connectorNodeWidgetem
+nastavit a napojit na amazon storage
+ - povolit CORS
+
+obrazky budou nacitany pres cache server (storage.teree.org) ktery vezme obrazek z cache nebo stahne z amazonu
+ - vytvorit WS s operaci boolean existFile(String path);
+ - uchovavat hierarchii souboru na amazonu v databazi, pro lepsi prochazeni slozkami, vyhlevani a kontrolu zda existuje dany soubor
+ - u ziskanych obrazku z amazonu se upravi host na umisteni cache serveru
+ - v mapach uz budou ulozeny adresy obrazku s umistenim na cache server (storage.teree.org/path/img.png)
 
 0.7:
 
 udelat testovani podle nalezenych chyb z alpha release + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
+ 
+direct explore - novy typ generovani mapy, nejspis pro to bude stacit mindmapa protoze leva strana se zajisti uz na serveru pri cteni 
+service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
+ConnectorNodeWidget (to connect another map)
+funkce pro rozdeleni mapy na dve - z nodu vytvorit novou mapu a propojit connectorNodeWidgetem
 
 future:
 

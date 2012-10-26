@@ -1,0 +1,110 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:view="urn:import:org.teree.client.view"
+	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
+
+	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
+	
+	<ui:style>
+
+		.settingsTab {
+			text-align: left;
+		}
+
+	</ui:style>
+
+	<g:FlowPanel ui:field="panel">
+		<view:Header ui:field="header"/>
+		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
+		<g:FlowPanel addStyleNames="{res.css.scene}">
+			<b:TabPanel tabPosition="left" ui:field="tabPanel">
+				<b:Tab icon="USER" heading="Profile" active="true">
+					<b:WellForm ui:field="profileForm" type="HORIZONTAL" addStyleNames="{style.settingsTab}">
+					<b:Fieldset>
+                        <b:Legend>
+                            Profile
+                        </b:Legend>
+                        
+						<b:ControlGroup ui:field="nameControlGroup">
+                            <b:ControlLabel for="name">
+                                Name
+                            </b:ControlLabel>
+                            <b:Controls>
+                                <b:TextBox b:id="name"
+                                    ui:field="name" placeholder="Name" />
+                                <b:HelpInline ui:field="nameHelpInline" />
+                            </b:Controls>
+                        </b:ControlGroup>
+                        
+                        <b:ControlGroup ui:field="emailControlGroup">
+                            <b:ControlLabel for="email">
+                                Email
+                            </b:ControlLabel>
+                            <b:Controls>
+                                <b:TextBox b:id="email"
+                                    ui:field="email" placeholder="Email" />
+                                <b:HelpInline ui:field="emailHelpInline" />
+                            </b:Controls>
+                        </b:ControlGroup>
+                        
+                        <b:FormActions>
+							<b:SubmitButton type="PRIMARY" ui:field="updateProfile">Update</b:SubmitButton>
+							<b:Button ui:field="resetPForm">Reset</b:Button>
+						</b:FormActions>
+                    </b:Fieldset>
+                    </b:WellForm>
+				</b:Tab>
+				<b:Tab icon="WRENCH" heading="Account Settings">
+					<b:WellForm ui:field="changePasswordForm" type="HORIZONTAL" addStyleNames="{style.settingsTab}">
+					<b:Fieldset>
+                        <b:Legend>
+                            Change Password
+                        </b:Legend>
+                        
+						<b:ControlGroup ui:field="passwordControlGroup">
+                            <b:ControlLabel for="oldPassword">
+                                Old password
+                            </b:ControlLabel>
+                            <b:Controls>
+								<b:PasswordTextBox b:id="oldPassword" ui:field="oldPassword"
+									placeholder="Old password" />
+                                <b:HelpInline ui:field="oldPasswordHelpInline" />
+                            </b:Controls>
+                            <b:ControlLabel for="password">
+                                Password
+                            </b:ControlLabel>
+                            <b:Controls>
+								<b:PasswordTextBox b:id="password" ui:field="password"
+									placeholder="Password" />
+                                <b:HelpInline ui:field="passwordHelpInline" />
+                            </b:Controls>
+                            <b:ControlLabel for="confirmPassword">
+                                Confirm password
+                            </b:ControlLabel>
+                            <b:Controls>
+								<b:PasswordTextBox b:id="confirmPassword" ui:field="confirmPassword"
+									placeholder="Confirm password" />
+                                <b:HelpInline ui:field="confirmPasswordHelpInline" />
+                            </b:Controls>
+                        </b:ControlGroup>
+                        
+                        <b:FormActions>
+							<b:SubmitButton type="PRIMARY" ui:field="changePassword">Change</b:SubmitButton>
+							<b:Button ui:field="resetCPForm">Reset</b:Button>
+						</b:FormActions>
+                    </b:Fieldset>
+                    </b:WellForm>
+                    
+                    <b:Well>
+                    	<b:Legend>
+                            Delete Account
+                        </b:Legend>
+                    	<b:Button type="DANGER" ui:field="deleteAccount">Delete Account</b:Button>
+                    </b:Well>
+                    
+				</b:Tab>
+			</b:TabPanel>
+		</g:FlowPanel>
+	</g:FlowPanel>
+
+</ui:UiBinder> 

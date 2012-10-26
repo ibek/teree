@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.jboss.errai.bus.server.annotations.Service;
 import org.jboss.errai.bus.server.api.RpcContext;
+import org.mindrot.jbcrypt.BCrypt;
 import org.teree.server.auth.RequireAuthentication;
 import org.teree.server.dao.UserInfoManager;
 import org.teree.server.dao.UserPackageManager;
@@ -64,7 +65,16 @@ public class UserServiceImpl implements UserService {
 	@RequireAuthentication
 	@Override
 	public void update(UserInfo ui) {
-        _uim.update(ui);
+		_uim.update(ui);
+	}
+
+	@RequireAuthentication
+	@Override
+	public void updatePassword(String oldPassword, String newPassword) {
+		UserInfo ui = getUserInfo();
+		if (BCrypt.checkpw(oldPassword, _uim.getHashedPassword(ui.getUsername()))) {
+			_uim.updatePassword(ui, newPassword);
+		}
 	}
 
 }

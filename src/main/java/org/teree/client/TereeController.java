@@ -27,6 +27,7 @@ import org.teree.client.presenter.SchemeExplorer;
 import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.presenter.SchemeViewer;
 import org.teree.client.presenter.Presenter;
+import org.teree.client.presenter.SettingsPage;
 import org.teree.shared.NodeGenerator;
 import org.teree.shared.SchemeService;
 import org.teree.shared.UserService;
@@ -95,7 +96,7 @@ public class TereeController implements ValueChangeHandler<String> {
 						currentUser.set(message.get(UserInfo.class, UserInfo.PART));
 						
 						if (tmpPresenter != null) {
-							History.newItem(Settings.CREATE_LINK);
+							History.back();
 						} else {
 							History.newItem(Settings.HOME_LINK);
 						}
@@ -107,7 +108,6 @@ public class TereeController implements ValueChangeHandler<String> {
 						break;
 					}
 					case SecurityChallenge: {
-						System.out.println("auth is required");
 						tmpPresenter = presenter;
 						History.newItem(Settings.LOGIN_LINK);
 						break;
@@ -208,6 +208,22 @@ public class TereeController implements ValueChangeHandler<String> {
 						.lookupBean(PrivateHome.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
+					if (currentUser.getUserId() == null) { // the user has to be logged to access this page
+						tmpPresenter = presenter;
+						loadUserInfoData();
+						return;
+					}
+				}
+			} else if (token.startsWith(Settings.SETTINGS_LINK)) {
+				IOCBeanDef<SettingsPage> bean = manager
+						.lookupBean(SettingsPage.class);
+				if (bean != null) {
+					presenter = bean.getInstance();
+					if (currentUser.getUserId() == null) { // the user has to be logged to access this page
+						tmpPresenter = presenter;
+						loadUserInfoData();
+						return;
+					}
 				}
 			} else if (token.startsWith(Settings.TAUTH_LINK)) {
 				MessageBuilder.createMessage("AuthenticationService")
@@ -238,8 +254,6 @@ public class TereeController implements ValueChangeHandler<String> {
 		String sessionId = Cookies.getCookie(Settings.COOKIE_SESSION_ID);
 		if (sessionId == null) {
 			currentUser.clear();
-		} else if (currentUser.getName() == null) {
-			loadUserInfoData();
 		}
 		presenter.getTemplate().setCurrentUser(currentUser);
 	}
@@ -265,7 +279,14 @@ public class TereeController implements ValueChangeHandler<String> {
 			@Override
 			public void callback(UserInfo response) {
 				currentUser.set(response);
-				presenter.getTemplate().setCurrentUser(currentUser);
+				if (currentUser.getUserId() == null) {
+					History.newItem(Settings.LOGIN_LINK);
+				}else if (tmpPresenter != null) {
+					setPresenter(tmpPresenter);
+					tmpPresenter = null;
+				} else {
+					presenter.getTemplate().setCurrentUser(currentUser);
+				}
 			}
 		}, new ErrorCallback() {
 			@Override

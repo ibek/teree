@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.teree.server.auth.RequireAuthentication;
 import org.teree.server.dao.StorageManager;
+import org.teree.server.dao.UserInfoManager;
 import org.teree.shared.SecuredStorageService;
 import org.teree.shared.UserService;
 import org.teree.shared.data.UserInfo;
@@ -24,6 +25,9 @@ public class SecuredStorageServiceImpl implements SecuredStorageService {
     
     @Inject
     private UserService _us;
+    
+    @Inject
+    private UserInfoManager _uim;
     
     @Inject
     private StorageManager _sm;
@@ -52,7 +56,7 @@ public class SecuredStorageServiceImpl implements SecuredStorageService {
 	public void uploadImage(String path, byte[] data) throws Exception {
 		UserInfo ui = _us.getUserInfo();
 		_sm.uploadImage(path, data, ui);
-		_us.update(ui);
+		_uim.updateMemUsed(ui);
 	}
     
 }

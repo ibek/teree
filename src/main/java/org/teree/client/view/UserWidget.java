@@ -80,7 +80,7 @@ public class UserWidget extends Composite {
 		settings.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				// TODO: settings for user
+				History.newItem(Settings.SETTINGS_LINK);
 			}
 		});
 		
@@ -99,6 +99,10 @@ public class UserWidget extends Composite {
 				History.newItem(Settings.PRIVATE_LINK);
 			}
 		});
+	}
+	
+	public UserInfo getCurrentUser() {
+		return user;
 	}
 	
 	public void setCurrentUser(UserInfo ui) {

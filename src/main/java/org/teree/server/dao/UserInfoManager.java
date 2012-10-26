@@ -64,6 +64,31 @@ public class UserInfoManager {
         coll.update(updateBy, new BasicDBObject("$set", doc));
     }
     
+    public void updateMemUsed(UserInfo ui) {
+    	DBCollection coll = getCollection();
+        DBObject updateBy = getUpdateBy(ui);
+        BasicDBObject doc = new BasicDBObject();
+
+        // only these properties are updated
+        doc.put("memUsed", ui.getMemUsed());
+        
+        coll.update(updateBy, new BasicDBObject("$set", doc));
+    }
+    
+    public void updatePassword(UserInfo ui, String newPassword) {
+    	if (ui.getUsername() == null) {
+    		return;
+    	}
+    	DBCollection coll = getCollection();
+        DBObject updateBy = getUpdateBy(ui);
+        BasicDBObject doc = new BasicDBObject();
+
+        // only these properties are updated
+        doc.put("password", BCrypt.hashpw(newPassword, BCrypt.gensalt(12)));
+        
+        coll.update(updateBy, new BasicDBObject("$set", doc));
+    }
+    
     private DBObject getUpdateBy(UserInfo ui) {
         DBObject updateBy = null;
         

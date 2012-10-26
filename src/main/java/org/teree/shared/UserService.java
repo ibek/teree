@@ -14,4 +14,6 @@ public interface UserService {
 	
 	public void update(UserInfo ui);
 	
+	public void updatePassword(String oldPassword, String newPassword);
+	
 }

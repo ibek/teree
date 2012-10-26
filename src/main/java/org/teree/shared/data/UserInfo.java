@@ -74,8 +74,10 @@ public class UserInfo {
 
 	public void set(UserInfo ui) {
 		if (ui != null) {
+			userId = ui.userId;
 			username = ui.username;
 			name = ui.name;
+			email = ui.email;
 			memUsed = ui.memUsed;
 			userPackage = ui.userPackage;
 		}
