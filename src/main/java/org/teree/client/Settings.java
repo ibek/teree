@@ -18,9 +18,9 @@ public class Settings {
 	
 	public static final String COOKIE_SESSION_ID = "JSESSIONID";
 
-    public static final int MIN_WIDTH = 50;
-    public static final int MAX_WIDTH = 400;
-    public static final int MIN_HEIGHT = 18;
+    public static final int NODE_MIN_WIDTH = 50;
+    public static final int NODE_MAX_WIDTH = 400;
+    public static final int NODE_MIN_HEIGHT = 18;
 
     public static final int SAMPLE_MAX_WIDTH = 300;
     public static final int SAMPLE_MAX_HEIGHT = 200;
@@ -28,6 +28,8 @@ public class Settings {
     public static final int SCENE_HEIGHT_LESS = 80;
     
 	public static final double ICON_WIDTH = 15.0;
+	
+	public static final int SCHEME_COUNT_IN_EXPLORER = 10;
     
     public static final SchemeType DEFAULT_SCHEME_TYPE = SchemeType.MindMap;
     

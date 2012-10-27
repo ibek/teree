@@ -10,6 +10,9 @@ import org.teree.client.view.explorer.event.RemoveSchemeHandler;
 import org.teree.shared.data.scheme.Scheme;
 
 import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.Pager;
+import com.github.gwtbootstrap.client.ui.Thumbnails;
+import com.github.gwtbootstrap.client.ui.Well;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -20,13 +23,14 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class Scene extends Composite implements HasSchemeHandlers {
 
-	private HorizontalPanel container;
-	private FlowPanel schemeContainer;
-	private Button next;
-	private Button previous;
+	private VerticalPanel container;
+	private Thumbnails schemeContainer;
+	private Pager pagerTop;
+	private Pager pagerBottom;
 
 	private HandlerManager publishManager;
 	private HandlerManager removeManager;
@@ -41,24 +45,29 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	
 	public Scene() {
 		
-		container = new HorizontalPanel();
-		schemeContainer = new FlowPanel();
-		schemeContainer.getElement().getStyle().setPaddingLeft(5, Unit.PX);
+		container = new VerticalPanel();
+		schemeContainer = new Thumbnails();
+		schemeContainer.getElement().getStyle().setPaddingLeft(35, Unit.PX);
 		schemeContainer.getElement().getStyle().setPaddingRight(5, Unit.PX);
 
 		publishManager = new HandlerManager(schemeContainer);
 		removeManager = new HandlerManager(schemeContainer);
 		
-		next = new Button("", IconType.CHEVRON_RIGHT);
-		next.setHeight("100%");
-		previous = new Button("", IconType.CHEVRON_LEFT);
-		previous.setHeight("100%");
+		pagerTop = new Pager((char)0xf060+" Back", "Next "+(char)0xf061);
+		pagerTop.getElement().getStyle().setProperty("fontFamily", "FontAwesome");
+		pagerTop.setAligned(true);
 		
-		container.add(previous);
+		pagerBottom = new Pager((char)0xf060+" Back", "Next "+(char)0xf061);
+		pagerBottom.getElement().getStyle().setProperty("fontFamily", "FontAwesome");
+		pagerBottom.setAligned(true);
+
+		container.add(pagerTop);
 		container.add(schemeContainer);
-		container.add(next);
-		
-		initWidget(container);
+		container.add(pagerBottom);
+
+		Well w = new Well();
+		w.add(container);
+		initWidget(w);
 	}
 	
 	public void setData(List<Scheme> slist) {
@@ -76,12 +85,14 @@ public class Scene extends Composite implements HasSchemeHandlers {
 			sw.getPublishButton().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
+					event.stopPropagation();
 					publishManager.fireEvent(new PublishScheme(sw.getScheme()));
 				}
 			});
 			sw.getRemoveButton().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
+					event.stopPropagation();
 					removeManager.fireEvent(new RemoveScheme(sw.getScheme()));
 				}
 			});
@@ -112,11 +123,11 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	}
 
 	public HasClickHandlers getNextButton() {
-		return next;
+		return pagerBottom.getRight();
 	}
 
 	public HasClickHandlers getPreviousButton() {
-		return previous;
+		return pagerBottom.getLeft();
 	}
 	
 	public void enablePublish(boolean state){

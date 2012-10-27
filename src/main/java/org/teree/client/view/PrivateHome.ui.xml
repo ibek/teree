@@ -14,13 +14,44 @@
 			padding-bottom: 5px;
 		}
 
+		.userPanel {
+			height: 100%;
+			margin: 20px;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			text-align: center;
+		}
+		
+		.countBox {
+			padding: 10px;
+			padding-left: 20px;
+			padding-right: 20px;
+			margin: 10px;
+			font-size: 35px;
+			line-height: 70px;
+			cursor: default;
+		}
+
 	</ui:style>
 
 	<g:FlowPanel>
 		<view:Header ui:field="header"/>
 		<exp:PrivatePanel ui:field="privatePanel" addStyleNames="{style.privatePanel}"></exp:PrivatePanel>
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
-		<exp:Scene ui:field="scene" addStyleNames="{res.css.scene}"></exp:Scene>
+		<g:HorizontalPanel addStyleNames="{res.css.scene}">
+			<b:Well addStyleNames="{style.userPanel}">
+				<g:HorizontalPanel>
+					<b:Tooltip text="public">
+						<b:Label ui:field="publicCount" addStyleNames="{style.countBox}"/>
+					</b:Tooltip>
+					<b:Tooltip text="private">
+						<b:Label ui:field="privateCount" addStyleNames="{style.countBox}"/>
+					</b:Tooltip>
+				</g:HorizontalPanel>
+				<b:Heading ui:field="name" size="4"/>
+			</b:Well>
+			<exp:Scene ui:field="scene"></exp:Scene>
+		</g:HorizontalPanel>
 	</g:FlowPanel>
 
 </ui:UiBinder> 

@@ -4,7 +4,11 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.FileUpload;
+import com.github.gwtbootstrap.client.ui.Heading;
+import com.github.gwtbootstrap.client.ui.Label;
+import com.github.gwtbootstrap.client.ui.Well;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -20,6 +24,7 @@ import org.teree.client.view.explorer.event.ImportSchemeHandler;
 import org.teree.client.view.explorer.event.PublishScheme;
 import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.client.view.resource.PageStyle;
+import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Scheme;
 
 public class PrivateHome extends TemplateScene implements org.teree.client.presenter.PrivateHome.Display {
@@ -37,12 +42,30 @@ public class PrivateHome extends TemplateScene implements org.teree.client.prese
     Scene scene;
     
     @UiField
+    Label publicCount;
+    
+    @UiField
+    Label privateCount;
+    
+    @UiField
+    Heading name;
+    
+    @UiField
     PrivatePanel privatePanel;
     
     @PostConstruct
     public void init() {
         initWidget(uiBinder.createAndBindUi(this));
     	scene.enablePublish(true);
+
+    	publicCount.setText("002");
+    	privateCount.setText("009");
+    }
+    
+    @Override
+    public void setCurrentUser(UserInfo user) {
+    	super.setCurrentUser(user);
+    	name.setText(user.getName());
     }
     
     @Override

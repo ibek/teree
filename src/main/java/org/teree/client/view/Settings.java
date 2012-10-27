@@ -54,8 +54,7 @@ public class Settings extends TemplateScene implements SettingsPage.Display {
 	public void setCurrentUser(UserInfo user) {
 		super.setCurrentUser(user);
 		
-    	name.setText(user.getName());
-    	email.setText(user.getEmail());
+		onResetPForm(null);
     	
     	// e.g. Google users cannot change the password
     	changePasswordForm.setVisible(user.getUsername() != null);
@@ -93,7 +92,9 @@ public class Settings extends TemplateScene implements SettingsPage.Display {
 	
 	@UiHandler("resetPForm")
     void onResetPForm(ClickEvent event) {
-		profileForm.reset();
+		UserInfo user = header.getCurrentUser();
+    	name.setText(user.getName());
+    	email.setText(user.getEmail());
     }
 	
 	private boolean validateProfileDetails() {

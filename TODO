@@ -1,13 +1,12 @@
 
 0.5:
 
-upravit explore a privateHome
- - zobrazit pocet soukromych a verejnych map (po kliknuti zobrazi verejne mapy patrici danemu uzivateli)
- - zkus pouzit thumbnails z gwtbootstrap pro zobrazeni seznamu map a obrazku
- - misto tlacitek pro strankovani pouzit Pagination z gwtbootstrap
-pridat kontaktni informace na home - email apod
+pridat do userinfo pocet public a private map, a join date
+ - nachat zobrazit na private home
+ - po kliknuti na pocty se zobrazi verejne/privatni mapy patrici danemu uzivateli
 
 resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
+prevest textove retezce do jazykoveho properties souboru
 
 -------- alpha release --------
 
@@ -24,6 +23,7 @@ obrazky budou nacitany pres cache server (storage.teree.org) ktery vezme obrazek
  - uchovavat hierarchii souboru na amazonu v databazi, pro lepsi prochazeni slozkami, vyhlevani a kontrolu zda existuje dany soubor
  - u ziskanych obrazku z amazonu se upravi host na umisteni cache serveru
  - v mapach uz budou ulozeny adresy obrazku s umistenim na cache server (storage.teree.org/path/img.png)
+ - zmenit storage browser aby pouzival thumbnails
 
 0.7:
 
@@ -46,6 +46,11 @@ management console/app - napr pro upravu balicku, zmena limitu apod
 sepsat use cases (pro studovani ...)
 prirazovat ruzna prava na mapy
  - zda dany uzivatel (skupina - guests) muze mapu cist, editovat ...
+ulozeni ruznych pohledu na mapu
+ - nektere casti nejsou pro dany pohled dulezite a nebudou zobrazeny
+ - jine nody budou collapsed apod
+definovat vlastni format pro import a export
+ - pres xml schema
 
 edit public scheme muze provest pouze autor ale bude si moci vytvorit klon
  - misto tlacitka edit zobrazit pro ostatni uzivatele clone (ktery bude odkazovat na to ze byl vytvoren z predka?)

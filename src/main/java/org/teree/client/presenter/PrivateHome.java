@@ -158,7 +158,7 @@ public class PrivateHome implements Presenter {
 				display.error(Text.LANG.connectionIssue());
 				return false;
 			}
-		}).getPrivateSchemesFrom(from_oid, 3);
+		}).getPrivateSchemesFrom(from_oid, Settings.SCHEME_COUNT_IN_EXPLORER);
 	}
 	
 	private void loadPreviousData(String to_oid) {
@@ -173,7 +173,7 @@ public class PrivateHome implements Presenter {
 				display.error(Text.LANG.connectionIssue());
 				return false;
 			}
-		}).getPrivateSchemesTo(to_oid, 3);
+		}).getPrivateSchemesTo(to_oid, Settings.SCHEME_COUNT_IN_EXPLORER);
 	}
 
 }

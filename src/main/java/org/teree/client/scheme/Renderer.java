@@ -86,11 +86,11 @@ public abstract class Renderer<T extends Widget & NodeInterface> {
     		T node = nodes.get(i);
         	
             // fix for resize minimal and maximal nodes
-            if (node.getOffsetWidth() == Settings.MIN_WIDTH || 
-            	node.getOffsetWidth() == Settings.MAX_WIDTH) {
+            if (node.getOffsetWidth() == Settings.NODE_MIN_WIDTH || 
+            	node.getOffsetWidth() == Settings.NODE_MAX_WIDTH) {
                 node.setWidth("auto");
             }
-            if (node.getOffsetHeight() == Settings.MIN_HEIGHT) {
+            if (node.getOffsetHeight() == Settings.NODE_MIN_HEIGHT) {
                 node.setHeight("auto");
             }
     	}
@@ -102,15 +102,15 @@ public abstract class Renderer<T extends Widget & NodeInterface> {
     	for(int i=0; i<nodes.size(); ++i){
     		T node = nodes.get(i);
     		
-	        if (node.getWidgetWidth() < Settings.MIN_WIDTH) {
-	            node.setWidth(Settings.MIN_WIDTH+"px");
-	        } else if (node.getWidgetWidth() > Settings.MAX_WIDTH) {
+	        if (node.getWidgetWidth() < Settings.NODE_MIN_WIDTH) {
+	            node.setWidth(Settings.NODE_MIN_WIDTH+"px");
+	        } else if (node.getWidgetWidth() > Settings.NODE_MAX_WIDTH) {
 	            succ = false; // to set correct width in next cycle
-	            node.setWidth(Settings.MAX_WIDTH+"px");// fix change from max size to smaller
+	            node.setWidth(Settings.NODE_MAX_WIDTH+"px");// fix change from max size to smaller
 	        }
 	
-	        if (node.getWidgetHeight() < Settings.MIN_HEIGHT) {
-	        	node.setHeight(Settings.MIN_HEIGHT+"px");
+	        if (node.getWidgetHeight() < Settings.NODE_MIN_HEIGHT) {
+	        	node.setHeight(Settings.NODE_MIN_HEIGHT+"px");
 	        }
     	}
     	return succ;

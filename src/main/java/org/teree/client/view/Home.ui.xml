@@ -4,6 +4,8 @@
 	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 
 	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
+	
+	<ui:with field="cres" type="org.teree.client.view.resource.CommonResources" />
 
 	<ui:style>
 
@@ -32,6 +34,11 @@
 				To log in, use following security credentials: <br/>
 				Username: o1182493@rtrtr.com <br/>
 				Password: anonymous
+			</b:Paragraph>
+			<b:Heading size="2">Contact</b:Heading>
+			<b:Paragraph>
+				<b:Heading size="4">Ivo Bek</b:Heading>
+				<b:Image resource="{cres.email}"/>
 			</b:Paragraph>
 		</g:FlowPanel>
 	</g:FlowPanel>

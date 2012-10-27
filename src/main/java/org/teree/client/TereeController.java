@@ -248,6 +248,9 @@ public class TereeController implements ValueChangeHandler<String> {
 	}
 	
 	private void setPresenter(Presenter presenter) {
+		if (this.presenter == null && currentUser.getUserId() == null) { // for page reload
+			loadUserInfoData();
+		}
 		this.presenter = presenter;
 		presenter.go(container);
 		
@@ -279,7 +282,7 @@ public class TereeController implements ValueChangeHandler<String> {
 			@Override
 			public void callback(UserInfo response) {
 				currentUser.set(response);
-				if (currentUser.getUserId() == null) {
+				if (tmpPresenter != null && currentUser.getUserId() == null) {
 					History.newItem(Settings.LOGIN_LINK);
 				}else if (tmpPresenter != null) {
 					setPresenter(tmpPresenter);

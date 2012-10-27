@@ -9,6 +9,7 @@ import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
+import org.teree.client.Settings;
 import org.teree.client.Text;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.RemoveScheme;
@@ -115,7 +116,7 @@ public class SchemeExplorer implements Presenter {
 				display.error(Text.LANG.connectionIssue());
 				return false;
 			}
-		}).getAllFrom(from_oid, 3);
+		}).getAllFrom(from_oid, Settings.SCHEME_COUNT_IN_EXPLORER);
 	}
 	
 	private void loadPreviousData(String to_oid) {
@@ -130,7 +131,7 @@ public class SchemeExplorer implements Presenter {
 				display.error(Text.LANG.connectionIssue());
 				return false;
 			}
-		}).getAllTo(to_oid, 3);
+		}).getAllTo(to_oid, Settings.SCHEME_COUNT_IN_EXPLORER);
 	}
 
 }

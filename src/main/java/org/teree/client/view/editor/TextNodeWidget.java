@@ -112,8 +112,8 @@ public class TextNodeWidget extends NodeWidget {
         }
         
         editContent.setText(nodeContent.getText());
-        if (getOffsetWidth() <= Settings.MIN_WIDTH) {
-        	editContent.setWidth((Settings.MIN_WIDTH+2)+"px");
+        if (getOffsetWidth() <= Settings.NODE_MIN_WIDTH) {
+        	editContent.setWidth((Settings.NODE_MIN_WIDTH+2)+"px");
         } else {
         	editContent.setWidth((getOffsetWidth()+2)+"px");
         }
@@ -166,8 +166,8 @@ public class TextNodeWidget extends NodeWidget {
 
     	update();
     	
-    	if(getOffsetWidth() >= Settings.MAX_WIDTH){
-            content.setWidth(Settings.MAX_WIDTH+"px");
+    	if(getOffsetWidth() >= Settings.NODE_MAX_WIDTH){
+            content.setWidth(Settings.NODE_MAX_WIDTH+"px");
         }
         
         if (editContent != null) {
