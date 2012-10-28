@@ -3,18 +3,14 @@ package org.teree.client.view.editor;
 import org.teree.client.view.editor.event.BrowseItems;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
-import org.teree.client.view.editor.storage.Browser;
 import org.teree.client.view.editor.storage.ItemType;
 import org.teree.client.view.editor.storage.ItemWidget;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
 
-import com.github.gwtbootstrap.client.ui.Modal;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Style.Unit;

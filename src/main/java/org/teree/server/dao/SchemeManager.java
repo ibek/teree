@@ -31,6 +31,9 @@ public class SchemeManager {
 	@Inject
     MongoDB mdb;
     
+	@Inject
+	UserInfoManager _uim;
+    
     private DBCollection getCollection() {
     	DB db = mdb.getDatabase();
         DBCollection coll = db.getCollection("scheme");
@@ -76,7 +79,15 @@ public class SchemeManager {
         dbo.put("owner", ui.getUserId());
         DBCollection coll = getCollection();
         coll.insert(dbo);
-        return ((ObjectId)dbo.get("_id")).toStringMongod();
+        String oid = ((ObjectId)dbo.get("_id")).toStringMongod();
+
+        // update userinfo
+
+    	ui.setPrivateCount(ui.getPrivateCount() + 1);
+        _uim.updateCount(ui);
+        
+        return oid;
+        
     }
     
     /**
@@ -85,7 +96,7 @@ public class SchemeManager {
      */
     public List<Scheme> allPublicFrom(String from_oid, int limit) {
     	DBObject keys = new BasicDBObject();
-    	keys.put("screen", 1);
+    	keys.put("root", 0);
     	DBObject ref = new BasicDBObject("owner", new BasicDBObject("$exists", false));
     	if (from_oid != null) {
     		ref.put("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
@@ -95,7 +106,7 @@ public class SchemeManager {
     
     public List<Scheme> allPublicTo(String to_oid, int limit) {
     	DBObject keys = new BasicDBObject();
-    	keys.put("screen", 1);
+    	keys.put("root", 0);
     	DBObject ref = new BasicDBObject("owner", new BasicDBObject("$exists", false));
     	if (to_oid != null) {
     		ref.put("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
@@ -105,7 +116,7 @@ public class SchemeManager {
     
     public List<Scheme> allPrivateFrom(UserInfo ui, String from_oid, int limit) {
     	DBObject keys = new BasicDBObject();
-    	keys.put("screen", 1);
+    	keys.put("root", 0);
     	DBObject ref = new BasicDBObject("owner", ui.getUserId());
     	if (from_oid != null) {
     		ref.put("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
@@ -115,7 +126,7 @@ public class SchemeManager {
     
     public List<Scheme> allPrivateTo(UserInfo ui, String to_oid, int limit) {
     	DBObject keys = new BasicDBObject();
-    	keys.put("screen", 1);
+    	keys.put("root", 0);
     	DBObject ref = new BasicDBObject("owner", ui.getUserId());
     	if (to_oid != null) {
     		ref.put("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
@@ -131,10 +142,7 @@ public class SchemeManager {
         		.limit(limit);
         while(found.hasNext()) {
         	DBObject dbo = found.next();
-        	Scheme s = new Scheme();
-        	s.setOid(((ObjectId)dbo.get("_id")).toStringMongod());
-        	s.setSchemePicture((String)dbo.get("screen"));
-        	res.add(s);
+        	res.add(fromSchemeDBObjectInfo(dbo));
         }
         return res;
     }
@@ -147,10 +155,7 @@ public class SchemeManager {
         		.limit(limit);
         while(found.hasNext()) {
         	DBObject dbo = found.next();
-        	Scheme s = new Scheme();
-        	s.setOid(((ObjectId)dbo.get("_id")).toStringMongod());
-        	s.setSchemePicture((String)dbo.get("screen"));
-        	res.add(0, s);
+        	res.add(0, fromSchemeDBObjectInfo(dbo));
         }
         return res;
     }
@@ -162,12 +167,20 @@ public class SchemeManager {
         DBObject update = new BasicDBObject("$set", new BasicDBObject("author", ui.getUserId()));
         update.put("$unset", new BasicDBObject("owner", 1));
         coll.update(updateById, update);
+        
+        // update userinfo
+
+		ui.setPublicCount(ui.getPublicCount() + 1);
+    	ui.setPrivateCount(ui.getPrivateCount() - 1);
+        _uim.updateCount(ui);
+        
     }
     
     /**
      * Only owner or author can remove scheme.
      * @param oid
      * @param ui
+     * @return
      */
     public boolean remove(String oid, UserInfo ui) {
     	DBCollection coll = getCollection();
@@ -176,7 +189,23 @@ public class SchemeManager {
         list.add(new BasicDBObject("owner", ui.getUserId()));
         list.add(new BasicDBObject("author", ui.getUserId()));
         removeBy.put("$or", list);
-        return coll.remove(removeBy).getN() == 1;
+        Scheme rs = fromSchemeDBObject(removeBy);
+        boolean removed = coll.remove(removeBy).getN() == 1;
+        if (!removed) {
+        	return removed;
+        }
+        
+        // update userinfo
+        
+        if (rs.getAuthor() != null) { // public scheme
+    		ui.setPublicCount(ui.getPublicCount() - 1);
+        } else if (rs.getOwner() != null) { // private scheme
+        	ui.setPrivateCount(ui.getPrivateCount() - 1);
+        }
+        
+        _uim.updateCount(ui);
+        
+        return removed;
     }
     
     public void update(Scheme s, UserInfo ui) {
@@ -246,11 +275,20 @@ public class SchemeManager {
     }
     
     private Scheme fromSchemeDBObject(DBObject scheme) {
-        Scheme s = new Scheme();
-        
+        Scheme s = fromSchemeDBObjectInfo(scheme);
+
         s.setRoot(fromNodeDBObject((BasicDBObject)scheme.get("root")));
+        
+        return s;
+    }
+    
+    private Scheme fromSchemeDBObjectInfo(DBObject scheme) {
+    	Scheme s = new Scheme();
+        
         s.setSchemePicture((String)scheme.get("screen"));
         s.setOid(((ObjectId)scheme.get("_id")).toStringMongod());
+        s.setAuthor(_uim.selectByOid((String)scheme.get("author")));
+        s.setOwner(_uim.selectByOid((String)scheme.get("owner")));
         
         return s;
     }

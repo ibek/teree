@@ -69,7 +69,7 @@ public class TereeController implements ValueChangeHandler<String> {
 	 */
 	private Presenter presenter;
 	
-	private Presenter tmpPresenter;
+	private Presenter tmpPresenter = null;
 
 	private HasWidgets container;
 

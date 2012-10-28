@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.framework.MessageBus;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
-import org.jboss.errai.bus.client.protocols.SecurityParts;
 import org.jboss.errai.bus.server.api.RpcContext;
 
 @RequireAuthentication

@@ -33,7 +33,7 @@ public class FormValidator {
 			cg.setType(ControlGroupType.ERROR);
 			hi.setText("Name should have at least 4 characters.");
 			hasError = true;
-		} else if (!name.matches("^[A-Za-z]+")) {
+		} else if (!name.matches("^[A-Za-z]+([ ]?[A-Za-z]+)*")) {
 			cg.setType(ControlGroupType.ERROR);
 			hi.setText("Allowed characters are letters only.");
 			hasError = true;

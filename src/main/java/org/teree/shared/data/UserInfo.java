@@ -12,6 +12,11 @@ public class UserInfo {
 	private String name;
 	private String email;
 
+	private int publicCount = 0;
+	private int privateCount = 0;
+	
+	private String joined;
+
 	private long memUsed = 0;
 	
 	private UserPackage userPackage;
@@ -72,12 +77,39 @@ public class UserInfo {
 		this.userPackage = userPackage;
 	}
 
+	public int getPublicCount() {
+		return publicCount;
+	}
+
+	public void setPublicCount(int publicCount) {
+		this.publicCount = publicCount;
+	}
+
+	public int getPrivateCount() {
+		return privateCount;
+	}
+
+	public void setPrivateCount(int privateCount) {
+		this.privateCount = privateCount;
+	}
+
+	public String getJoined() {
+		return joined;
+	}
+
+	public void setJoined(String joined) {
+		this.joined = joined;
+	}
+
 	public void set(UserInfo ui) {
 		if (ui != null) {
 			userId = ui.userId;
 			username = ui.username;
 			name = ui.name;
 			email = ui.email;
+			publicCount = ui.publicCount;
+			privateCount = ui.privateCount;
+			joined = ui.joined;
 			memUsed = ui.memUsed;
 			userPackage = ui.userPackage;
 		}

@@ -13,6 +13,7 @@ public class NodeStyle implements Cloneable {
 		
 	}
 	
+	@Override
 	public NodeStyle clone() {
 		NodeStyle ns = new NodeStyle();
 		ns.setBold(bold);

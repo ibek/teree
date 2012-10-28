@@ -59,6 +59,9 @@ public class IconTypeContent {
 	}
 
 	public static char get(IconType icon) {
+		if (ICONS.isEmpty()) {
+			setIcons();
+		}
 		return ICONS.get(icon);
 	}
 	

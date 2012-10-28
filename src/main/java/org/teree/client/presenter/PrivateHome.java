@@ -12,6 +12,7 @@ import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
 import org.teree.client.Settings;
 import org.teree.client.Text;
+import org.teree.client.event.RefreshUserInfo;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.ImportSchemeHandler;
@@ -73,6 +74,12 @@ public class PrivateHome implements Presenter {
 					@Override
 					public void callback(Void response) {
 						display.info(Text.LANG.schemePublished(event.getScheme().getOid()));
+						Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+				            @Override
+				            public void execute() {
+								eventBus.fireEvent(new RefreshUserInfo());
+				            }
+				        });
 						loadData(null);
 					}
 				}, new ErrorCallback() {
@@ -103,6 +110,12 @@ public class PrivateHome implements Presenter {
 					public void callback(Boolean response) {
 						if (response) {
 							display.info(Text.LANG.schemeRemoved(event.getScheme().getOid()));
+							Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+					            @Override
+					            public void execute() {
+									eventBus.fireEvent(new RefreshUserInfo());
+					            }
+					        });
 							loadData(null);
 						} else {
 							display.error("You are not owner or author of the scheme.");

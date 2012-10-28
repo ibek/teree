@@ -15,7 +15,6 @@ import org.teree.shared.data.scheme.Node;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
@@ -52,7 +51,8 @@ public class Scene extends Composite {
         sp.setWidth(Window.getClientWidth()+"px");
         sp.setHeight((Window.getClientHeight()-Settings.SCENE_HEIGHT_LESS)+"px");
         Window.addResizeHandler(new ResizeHandler() {
-            public void onResize(ResizeEvent event) {
+            @Override
+			public void onResize(ResizeEvent event) {
                 sp.setWidth(event.getWidth() + "px");
                 sp.setHeight((event.getHeight()-Settings.SCENE_HEIGHT_LESS) + "px");
             }

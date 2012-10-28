@@ -17,6 +17,12 @@
 		<view:Header ui:field="header"/>
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<g:HorizontalPanel addStyleNames="{res.css.scene}">
+		
+			<g:cell width="50%">
+			<g:FlowPanel/>
+			</g:cell>
+			
+			<g:cell>
 			<g:FlowPanel>
 				<b:WellForm ui:field="form" type="HORIZONTAL">
 					<b:Fieldset>
@@ -84,9 +90,17 @@
                     </b:Fieldset>
 				</b:WellForm>
 			</g:FlowPanel>
+			</g:cell>
+			
+			<g:cell>
 			<g:VerticalPanel addStyleNames="{style.alternativeRegister}">
 				<b:Button ui:field='btnGoogle' size="LARGE">Google</b:Button>
 			</g:VerticalPanel>
+			</g:cell>
+			
+			<g:cell width="50%">
+			<g:FlowPanel/>
+			</g:cell>
 			
 		</g:HorizontalPanel>
 	</g:FlowPanel>

@@ -9,7 +9,6 @@ import org.jboss.errai.bus.server.api.RpcContext;
 import org.mindrot.jbcrypt.BCrypt;
 import org.teree.server.auth.RequireAuthentication;
 import org.teree.server.dao.UserInfoManager;
-import org.teree.server.dao.UserPackageManager;
 import org.teree.shared.UserService;
 import org.teree.shared.data.AuthType;
 import org.teree.shared.data.UserInfo;

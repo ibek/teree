@@ -16,6 +16,7 @@ public class Node implements Cloneable {
     private NodeLocation location;
     private NodeStyle style;
     
+	@Override
 	public Node clone() {
         Node root = new Node();
         root.setContent(content);

@@ -1,10 +1,11 @@
 package org.teree.shared.data.scheme;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
+import org.teree.shared.data.UserInfo;
 
 /**
  * 
- * TODO: add details for scheme - (author, owner), created, lastEdit 
+ * TODO: add details for scheme - created, lastEdit 
  *
  */
 @Portable
@@ -13,6 +14,9 @@ public class Scheme {
 	private String oid;
 	private String schemePicture;
 	private Node root;
+	
+	private UserInfo author; // for public scheme
+	private UserInfo owner; // for private scheme
 
 	public String getSchemePicture() {
         return schemePicture;
@@ -36,6 +40,22 @@ public class Scheme {
 
 	public void setOid(String oid) {
 		this.oid = oid;
+	}
+
+	public UserInfo getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(UserInfo author) {
+		this.author = author;
+	}
+
+	public UserInfo getOwner() {
+		return owner;
+	}
+
+	public void setOwner(UserInfo owner) {
+		this.owner = owner;
 	}
 	
 }

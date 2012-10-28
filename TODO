@@ -1,9 +1,7 @@
 
 0.5:
 
-pridat do userinfo pocet public a private map, a join date
- - nachat zobrazit na private home
- - po kliknuti na pocty se zobrazi verejne/privatni mapy patrici danemu uzivateli
+po kliknuti na pocty se zobrazi verejne/privatni mapy patrici danemu uzivateli
 
 resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
 prevest textove retezce do jazykoveho properties souboru
@@ -38,7 +36,7 @@ future:
 
 collaboration
 undo-redo funkce
-vyhledavani - pouze v root + fulltext
+vyhledavani - pouze v root a klicovych slovech + (fulltext?)
 MathNodeWidget
 DBAuth pres SSL
 pridat hodnoceni mapy
@@ -51,6 +49,9 @@ ulozeni ruznych pohledu na mapu
  - jine nody budou collapsed apod
 definovat vlastni format pro import a export
  - pres xml schema
+ruzne typy nodu z hlediska vyznamu
+ - klicove slovo (bude mozne ho najit ve vyhledavani, a lze tento podstrom oddelit od mapy), definice, priklad, ...
+PercentNodeWidget - zobrazi graficky 0-100%, pri editaci se vlozi cislo 0-100 do integerboxu
 
 edit public scheme muze provest pouze autor ale bude si moci vytvorit klon
  - misto tlacitka edit zobrazit pro ostatni uzivatele clone (ktery bude odkazovat na to ze byl vytvoren z predka?)

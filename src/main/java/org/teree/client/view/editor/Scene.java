@@ -15,10 +15,7 @@ import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
-import org.teree.client.view.editor.storage.ItemType;
 import org.teree.client.view.editor.storage.ModalBrowser;
-import org.teree.client.view.editor.storage.event.BrowserItemDeleteRequestHandler;
-import org.teree.client.view.editor.storage.event.BrowserLoadRequestHandler;
 import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
@@ -33,14 +30,8 @@ import com.google.gwt.canvas.dom.client.ImageData;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DragStartEvent;
-import com.google.gwt.event.dom.client.DragStartHandler;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
@@ -84,7 +75,8 @@ public class Scene extends Composite {
         sp.setWidth(Window.getClientWidth()+"px");
         sp.setHeight((Window.getClientHeight()-Settings.SCENE_HEIGHT_LESS)+"px");
         Window.addResizeHandler(new ResizeHandler() {
-            public void onResize(ResizeEvent event) {
+            @Override
+			public void onResize(ResizeEvent event) {
                 sp.setWidth(event.getWidth() + "px");
                 sp.setHeight((event.getHeight()-Settings.SCENE_HEIGHT_LESS) + "px");
             }

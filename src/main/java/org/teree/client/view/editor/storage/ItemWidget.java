@@ -1,6 +1,5 @@
 package org.teree.client.view.editor.storage;
 
-import org.teree.client.Settings;
 import org.teree.client.view.editor.storage.event.BrowserItemDelete;
 
 import com.github.gwtbootstrap.client.ui.Button;

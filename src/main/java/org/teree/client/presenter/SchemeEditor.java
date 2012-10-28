@@ -23,7 +23,6 @@ import org.teree.client.view.editor.storage.event.BrowserItemDeleteRequestHandle
 import org.teree.client.view.editor.storage.event.BrowserLoadRequestHandler;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.SecuredStorageService;
-import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Scheme;
 import org.teree.shared.data.storage.ImageInfo;
@@ -181,6 +180,7 @@ public class SchemeEditor implements Presenter {
 	            public void callback(String response) {
 	                scheme.setOid(response);
 	                display.info(Text.LANG.schemeCreated(scheme.getOid()));
+	                eventBus.fireEvent(new RefreshUserInfo());
 	            }
 	        }, new ErrorCallback() {
 				@Override

@@ -3,9 +3,11 @@ package org.teree.client.view.explorer;
 import org.teree.client.Settings;
 import org.teree.shared.data.scheme.Scheme;
 
+import com.github.gwtbootstrap.client.ui.Badge;
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.ThumbnailLink;
 import com.github.gwtbootstrap.client.ui.Tooltip;
+import com.github.gwtbootstrap.client.ui.constants.BadgeType;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
@@ -21,6 +23,7 @@ public class SchemeWidget extends Composite {
 	private ThumbnailLink th;
 	
 	private Image screen;
+	private Badge author;
 	private Button publish;
 	private Button remove;
 	private Button edit;
@@ -37,9 +40,10 @@ public class SchemeWidget extends Composite {
 				History.newItem(Settings.VIEW_LINK + scheme.getOid());
 			}
 		});
-		th.setSize(Settings.SAMPLE_MAX_WIDTH+"px", Settings.SAMPLE_MAX_HEIGHT+"px");
+		th.setSize(Settings.SAMPLE_MAX_WIDTH+"px", (Settings.SAMPLE_MAX_HEIGHT+40)+"px");
 		th.getElement().getStyle().setMargin(5.0, Unit.PX);
 		th.getAnchor().getElement().getStyle().setBackgroundColor("white");
+		th.getAnchor().getElement().getStyle().setProperty("textAlign", "center");
 		
 		
 		screen = new Image();
@@ -52,6 +56,7 @@ public class SchemeWidget extends Composite {
 				History.newItem(Settings.EDIT_LINK + scheme.getOid());
 			}
 		});
+		edit.getElement().getStyle().setFloat(Style.Float.LEFT);
 		
 		view = new Button("View");
 		view.addClickHandler(new ClickHandler() {
@@ -69,6 +74,11 @@ public class SchemeWidget extends Composite {
 		publish.setVisible(false);
 		publish.getElement().getStyle().setFloat(Style.Float.LEFT);
 		
+		author = new Badge();
+		author.setType(BadgeType.INFO);
+		author.getElement().getStyle().setProperty("lineHeight", "30px");
+		//author.getElement().getStyle().setFloat(Style.Float.RIGHT);
+		
 		remove = new Button("", IconType.TRASH);
 		Style rs = remove.getElement().getStyle();
 		rs.setFloat(Style.Float.RIGHT);
@@ -83,6 +93,7 @@ public class SchemeWidget extends Composite {
         th.add(rt);
 		th.add(screen);
 		th.add(edit);
+        th.add(author);
 		th.add(view);
 		
 		initWidget(th);
@@ -96,6 +107,13 @@ public class SchemeWidget extends Composite {
 	public void setScheme(Scheme scheme) {
 		this.scheme = scheme;
 		screen.setUrl(scheme.getSchemePicture());
+		System.out.println(scheme.getAuthor());
+		System.out.println(scheme.getOwner());
+		if (scheme.getAuthor() != null) {
+			author.setText(scheme.getAuthor().getName());
+		} else if (scheme.getOwner() != null) {
+			author.setText(scheme.getOwner().getName());
+		}
 	}
 	
 	public HasClickHandlers getPublishButton() {

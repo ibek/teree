@@ -1,5 +1,8 @@
 package org.teree.server.dao;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
@@ -8,7 +11,6 @@ import org.jboss.errai.bus.server.api.RpcContext;
 import org.mindrot.jbcrypt.BCrypt;
 import org.teree.shared.data.UserInfo;
 
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -37,6 +39,7 @@ public class UserInfoManager {
         doc.put("username", ui.getUsername());
         doc.put("password", BCrypt.hashpw(password, BCrypt.gensalt(12)));
         doc.put("package", upm.getFreePackage().getName());
+        doc.put("joined", DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date(System.currentTimeMillis())));
         
         DBCollection coll = getCollection();
         coll.insert(doc);
@@ -71,6 +74,18 @@ public class UserInfoManager {
 
         // only these properties are updated
         doc.put("memUsed", ui.getMemUsed());
+        
+        coll.update(updateBy, new BasicDBObject("$set", doc));
+    }
+    
+    public void updateCount(UserInfo ui) {
+    	DBCollection coll = getCollection();
+        DBObject updateBy = getUpdateBy(ui);
+        BasicDBObject doc = new BasicDBObject();
+
+        // only these properties are updated
+        doc.put("publicCount", ui.getPublicCount());
+        doc.put("privateCount", ui.getPrivateCount());
         
         coll.update(updateBy, new BasicDBObject("$set", doc));
     }
@@ -112,6 +127,17 @@ public class UserInfoManager {
     	return (String)found.get("password");
     }
     
+    // TODO return only public informations (not mem used and so)
+    public UserInfo selectByOid(String oid) {
+    	if (oid == null) {
+    		return null;
+    	}
+    	DBCollection coll = getCollection();
+        DBObject search = new BasicDBObject("_id", new ObjectId(oid));
+        DBObject found = coll.findOne(search);
+    	return fromUserInfoDBObject(found);
+    }
+    
     public UserInfo select(String username) {
     	DBCollection coll = getCollection();
         DBObject search = new BasicDBObject();
@@ -140,6 +166,9 @@ public class UserInfoManager {
         ui.setUsername((String)userinfo.get("username"));
         ui.setName((String)userinfo.get("name"));
         ui.setEmail((String)userinfo.get("email"));
+        ui.setJoined((String)userinfo.get("joined"));
+        ui.setPublicCount((Integer)userinfo.get("publicCount"));
+        ui.setPrivateCount((Integer)userinfo.get("privateCount"));
         ui.setMemUsed((Long)userinfo.get("memUsed"));
         ui.setUserPackage(upm.select((String)userinfo.get("package")));
         
@@ -151,6 +180,8 @@ public class UserInfoManager {
 
         doc.put("name", ui.getName());
         doc.put("email", ui.getEmail());
+        doc.put("publicCount", ui.getPublicCount());
+        doc.put("privateCount", ui.getPrivateCount());
         doc.put("memUsed", ui.getMemUsed());
         
         return doc;

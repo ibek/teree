@@ -4,25 +4,18 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import com.github.gwtbootstrap.client.ui.Button;
-import com.github.gwtbootstrap.client.ui.FileUpload;
 import com.github.gwtbootstrap.client.ui.Heading;
 import com.github.gwtbootstrap.client.ui.Label;
-import com.github.gwtbootstrap.client.ui.Well;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.view.explorer.PrivatePanel;
 import org.teree.client.view.explorer.Scene;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.ImportSchemeHandler;
-import org.teree.client.view.explorer.event.PublishScheme;
-import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Scheme;
@@ -51,21 +44,25 @@ public class PrivateHome extends TemplateScene implements org.teree.client.prese
     Heading name;
     
     @UiField
+    com.google.gwt.user.client.ui.Label joined;
+    
+    @UiField
     PrivatePanel privatePanel;
     
     @PostConstruct
     public void init() {
         initWidget(uiBinder.createAndBindUi(this));
     	scene.enablePublish(true);
-
-    	publicCount.setText("002");
-    	privateCount.setText("009");
     }
     
     @Override
     public void setCurrentUser(UserInfo user) {
     	super.setCurrentUser(user);
+    	
     	name.setText(user.getName());
+    	publicCount.setText(String.valueOf(user.getPublicCount()));
+    	privateCount.setText(String.valueOf(user.getPrivateCount()));
+    	joined.setText(user.getJoined());
     }
     
     @Override

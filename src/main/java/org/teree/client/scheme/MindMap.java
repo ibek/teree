@@ -9,6 +9,7 @@ import org.teree.shared.data.scheme.Node.NodeLocation;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -147,6 +148,9 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		// support content
 		context.setFillStyle("white");
 		context.fillRect(0, 0, max_x, max_y);
+
+		context.setLineWidth(2.0);
+		context.setStrokeStyle(CssColor.make(0,0,0));
 		
 		if (makePicture) {
 
@@ -167,7 +171,11 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 
 		// underline root
 		drawLine(context, maxlw, max_y / 2, maxlw
-				+ rw.getOffsetWidth(), max_y / 2);
+		+ rw.getOffsetWidth(), max_y / 2);
+		/**drawCover(context, maxlw, max_y / 2, maxlw
+				+ rw.getOffsetWidth(), max_y / 2, rw.getOffsetHeight());*/
+		
+		
 
 		int lh = 0, rh = 0;
 
@@ -329,6 +337,16 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 			}
 		}
 		return bounds;
+	}
+	
+	private void drawCover(Context2d context, int x1, int y1, int x2, int y2, int height) {
+		/**context.moveTo(x1 - 2, y1);
+		context.lineTo(x1 + 3, y1 - height/2);
+		context.lineTo(x2 - 3, y1 - height/2);
+		context.lineTo(x2 + 2, y2);
+		context.lineTo(x2 - 3, y1 + height/2);
+		context.lineTo(x1 + 3, y1 + height/2);
+		context.lineTo(x1 - 2, y1);*/
 	}
 
 	private void drawCurve(Context2d context, int x1, int y1, int x2, int y2,
