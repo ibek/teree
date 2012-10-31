@@ -62,7 +62,7 @@ public class ImageNodeWidget extends NodeWidget {
 		
 		String url = ((ImageLink) node.getContent()).getUrl();
 		if (url != null) {
-			content.setUrl(url);
+			content.setUrl(GWT.getHostPageBaseURL() + "getImage?url=" + url);
 		} else {
 			content.setResource(res.noImage());
 		}

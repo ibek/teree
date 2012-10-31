@@ -1,0 +1,44 @@
+package org.teree.server;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class ImageServlet extends HttpServlet {
+
+	private static final long serialVersionUID = 8986265394903799751L;
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getHeader("Origin").equals("http://localhost:8080") ||
+				request.getHeader("Origin").equals("http://teree.org")) {
+			
+			response.setHeader("Access-Control-Allow-Origin", "*");
+			response.setContentType("image/png");
+			try {
+				URL url = new URL(request.getParameter("url"));
+				URLConnection conn = url.openConnection();
+			    InputStream input = conn.getInputStream();
+				byte[] buffer = new byte[16384];
+			    int bytesRead;
+			    OutputStream output = response.getOutputStream();
+			    while ((bytesRead = input.read(buffer)) != -1)
+			    {
+			        output.write(buffer, 0, bytesRead);
+			    }
+			} catch (Exception ex) {
+				
+			}
+		}
+	}
+	
+}

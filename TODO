@@ -6,22 +6,14 @@ po kliknuti na pocty se zobrazi verejne/privatni mapy patrici danemu uzivateli
 resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
 prevest textove retezce do jazykoveho properties souboru
 
+FIXME: po pridani noveho nodu vpravo nakonec ma tento node nejmensi velikost nezavisle na mnozstvi textu
+
 -------- alpha release --------
 
 0.6:
 
 podpora collapse node
 tvorba map z templates
-
-nastavit a napojit na amazon storage
- - povolit CORS
-
-obrazky budou nacitany pres cache server (storage.teree.org) ktery vezme obrazek z cache nebo stahne z amazonu
- - vytvorit WS s operaci boolean existFile(String path);
- - uchovavat hierarchii souboru na amazonu v databazi, pro lepsi prochazeni slozkami, vyhlevani a kontrolu zda existuje dany soubor
- - u ziskanych obrazku z amazonu se upravi host na umisteni cache serveru
- - v mapach uz budou ulozeny adresy obrazku s umistenim na cache server (storage.teree.org/path/img.png)
- - zmenit storage browser aby pouzival thumbnails
 
 0.7:
 
@@ -52,6 +44,7 @@ definovat vlastni format pro import a export
 ruzne typy nodu z hlediska vyznamu
  - klicove slovo (bude mozne ho najit ve vyhledavani, a lze tento podstrom oddelit od mapy), definice, priklad, ...
 PercentNodeWidget - zobrazi graficky 0-100%, pri editaci se vlozi cislo 0-100 do integerboxu
+moznost obarveni nodu dedicne - tzn i potomci budou mit danou barvu pokud nebude nastaven styl
 
 edit public scheme muze provest pouze autor ale bude si moci vytvorit klon
  - misto tlacitka edit zobrazit pro ostatni uzivatele clone (ktery bude odkazovat na to ze byl vytvoren z predka?)

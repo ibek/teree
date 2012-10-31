@@ -107,8 +107,6 @@ public class SchemeWidget extends Composite {
 	public void setScheme(Scheme scheme) {
 		this.scheme = scheme;
 		screen.setUrl(scheme.getSchemePicture());
-		System.out.println(scheme.getAuthor());
-		System.out.println(scheme.getOwner());
 		if (scheme.getAuthor() != null) {
 			author.setText(scheme.getAuthor().getName());
 		} else if (scheme.getOwner() != null) {

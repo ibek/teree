@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.Label;
 public class LinkNodeWidget extends NodeWidget {
 
 	private Label content;
-	private LinkDialog linkDialog;
+	private ContentDialog linkDialog;
 	private Link nodeContent;
 
 	public LinkNodeWidget(Node node) {
@@ -77,7 +77,7 @@ public class LinkNodeWidget extends NodeWidget {
 	@Override
 	public void edit() {
 		if (linkDialog == null) {
-			linkDialog = new LinkDialog("Set link");
+			linkDialog = new ContentDialog("Set link");
 			
 			linkDialog.getOk().addClickHandler(new ClickHandler() {
 				@Override

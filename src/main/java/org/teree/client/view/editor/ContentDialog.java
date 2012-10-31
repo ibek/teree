@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class LinkDialog extends DialogBox {
+public class ContentDialog extends DialogBox {
 
 	private static final int WIDTH = 186;
 	private static final int HEIGHT = 100;
@@ -21,7 +21,7 @@ public class LinkDialog extends DialogBox {
 	private TextBox textField;
 	private TextBox urlField;
 
-	public LinkDialog(String title) {
+	public ContentDialog(String title) {
 		
 		addStyleName("popover");
 		getElement().getStyle().setDisplay(Display.BLOCK);
@@ -53,7 +53,7 @@ public class LinkDialog extends DialogBox {
 		cancel.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				LinkDialog.this.hide();
+				ContentDialog.this.hide();
 			}
 		});
 		
@@ -92,6 +92,10 @@ public class LinkDialog extends DialogBox {
 			url = "http://"+url;
 		}
 		return url;
+	}
+	
+	public void setTextFieldVisible(boolean visible) {
+		textField.setVisible(visible);
 	}
 	
 	public String getTextField() {

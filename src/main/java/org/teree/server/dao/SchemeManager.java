@@ -189,7 +189,7 @@ public class SchemeManager {
         list.add(new BasicDBObject("owner", ui.getUserId()));
         list.add(new BasicDBObject("author", ui.getUserId()));
         removeBy.put("$or", list);
-        Scheme rs = fromSchemeDBObject(removeBy);
+        Scheme rs = fromSchemeDBObject(coll.findOne(removeBy));
         boolean removed = coll.remove(removeBy).getN() == 1;
         if (!removed) {
         	return removed;
@@ -275,6 +275,9 @@ public class SchemeManager {
     }
     
     private Scheme fromSchemeDBObject(DBObject scheme) {
+    	if (scheme == null) {
+    		return null;
+    	}
         Scheme s = fromSchemeDBObjectInfo(scheme);
 
         s.setRoot(fromNodeDBObject((BasicDBObject)scheme.get("root")));
@@ -294,6 +297,9 @@ public class SchemeManager {
     }
     
     private Node fromNodeDBObject(BasicDBObject root) {
+    	if (root == null) {
+    		return null;
+    	}
         Node node = new Node();
         NodeType type = NodeType.valueOf(root.getString("type"));
         

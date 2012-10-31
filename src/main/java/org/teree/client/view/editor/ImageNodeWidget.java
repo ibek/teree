@@ -1,16 +1,16 @@
 package org.teree.client.view.editor;
 
-import org.teree.client.view.editor.event.BrowseItems;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
-import org.teree.client.view.editor.storage.ItemType;
-import org.teree.client.view.editor.storage.ItemWidget;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
+import org.teree.shared.data.scheme.Node.NodeLocation;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Style.Unit;
@@ -34,6 +34,7 @@ public class ImageNodeWidget extends NodeWidget {
 	private Image content;
 	private Resources res = GWT.create(Resources.class);
 	private ImageLink nodeContent;
+	private ContentDialog contentDialog;
 
 	public ImageNodeWidget(Node node) {
 		super(node);
@@ -88,7 +89,7 @@ public class ImageNodeWidget extends NodeWidget {
 	public void update() {
 		String url = nodeContent.getUrl();
 		if (url != null) {
-			content.setUrl(url);
+			content.setUrl(GWT.getHostPageBaseURL() + "getImage?url=" + url);
 		}
 	}
 	
@@ -110,7 +111,30 @@ public class ImageNodeWidget extends NodeWidget {
 
 	@Override
 	public void edit() {
-		getParent().fireEvent(new BrowseItems(ItemType.Image, this));
+		if (contentDialog == null) {
+			contentDialog = new ContentDialog("Set image url");
+			contentDialog.setTextFieldVisible(false);
+			
+			contentDialog.getOk().addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					nodeContent.setUrl(contentDialog.getUrl());
+	            	update();
+					contentDialog.hide();
+				}
+			});
+			
+		}
+
+		int x = 0;
+		if (node.getLocation() == NodeLocation.LEFT) {
+			x = -contentDialog.getOffsetWidth() - content.getOffsetWidth();
+		} else {
+			x = content.getOffsetWidth();
+		}
+		contentDialog.setPopupPosition(getAbsoluteLeft() + x, 
+				getAbsoluteTop() - content.getOffsetHeight()/2 - contentDialog.getOffsetHeight()/2);
+		contentDialog.show();
 	}
 
     @Override
@@ -123,12 +147,6 @@ public class ImageNodeWidget extends NodeWidget {
 	@Override
 	public void changeStyle(NodeStyle style) {
 		// nothing to be set
-	}
-
-	@Override
-	public void setBrowserItem(ItemWidget iw) {
-		content.setUrl(iw.getUrl());
-		nodeContent.setUrl(iw.getUrl());
 	}
 
 }

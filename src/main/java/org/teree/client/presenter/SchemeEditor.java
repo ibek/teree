@@ -17,15 +17,9 @@ import org.teree.client.event.RefreshUserInfo;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.event.SchemeReceivedHandler;
 import org.teree.client.view.KeyAction;
-import org.teree.client.view.editor.storage.ItemType;
-import org.teree.client.view.editor.storage.ItemWidget;
-import org.teree.client.view.editor.storage.event.BrowserItemDeleteRequestHandler;
-import org.teree.client.view.editor.storage.event.BrowserLoadRequestHandler;
 import org.teree.shared.SecuredSchemeService;
-import org.teree.shared.SecuredStorageService;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Scheme;
-import org.teree.shared.data.storage.ImageInfo;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -44,9 +38,6 @@ public class SchemeEditor implements Presenter {
         Widget asWidget();
         void setRoot(Node root);
         String getSchemeSamplePicture();
-        void setBrowserItems(List<?> items, ItemType type);
-        void setBrowserLoadRequestHandler(BrowserLoadRequestHandler handler);
-        void setBrowserItemDeleteRequestHandler(BrowserItemDeleteRequestHandler handler);
     }
     
     @Inject @Named(value="eventBus")
@@ -54,9 +45,6 @@ public class SchemeEditor implements Presenter {
     
 	@Inject
 	private Caller<SecuredSchemeService> securedScheme;
-    
-	@Inject
-	private Caller<SecuredStorageService> securedStorage;
     
     @Inject
     private Display display;
@@ -133,32 +121,6 @@ public class SchemeEditor implements Presenter {
             }
         });
         
-        display.setBrowserLoadRequestHandler(new BrowserLoadRequestHandler() {
-			@Override
-			public void loadRequest(ItemType type, boolean publicStorage) {
-				loadBrowserItems(type, publicStorage);
-			}
-		});
-        
-        display.setBrowserItemDeleteRequestHandler(new BrowserItemDeleteRequestHandler() {
-			@Override
-			public void deleteItemRequest(final ItemWidget iw) {
-				securedStorage.call(new RemoteCallback<Void>() {
-		            @Override
-		            public void callback(Void response) {
-		            	iw.removeFromParent();
-		            	eventBus.fireEvent(new RefreshUserInfo());
-		            }
-		        }, new ErrorCallback() {
-					@Override
-					public boolean error(Message message, Throwable throwable) {
-						display.error(message.toString());
-						return false;
-					}
-				}).deleteImage(iw.getUrl());
-			}
-		});
-        
     }
     
     @Override
@@ -202,33 +164,6 @@ public class SchemeEditor implements Presenter {
 					return false;
 				}
 			}).updateScheme(scheme);
-    	}
-    }
-    
-    public void loadBrowserItems(ItemType type, boolean publicStorage) {
-    	switch (type) {
-	    	case Image: {
-	    		SecuredStorageService sss = securedStorage.call(new RemoteCallback<List<ImageInfo>>() {
-		            @Override
-		            public void callback(List<ImageInfo> response) {
-		                display.setBrowserItems(response, ItemType.Image);
-		            	eventBus.fireEvent(new RefreshUserInfo()); // TODO: find better place where I could refresh userinfo because of upload
-		            }
-		        }, new ErrorCallback() {
-					@Override
-					public boolean error(Message message, Throwable throwable) {
-						display.error(message.toString());
-						return false;
-					}
-				});
-	    		
-	    		if (publicStorage) {
-	    			sss.getPublicImages("/"); // TODO: make prefix changeable
-	    		} else {
-	    			sss.getImages("/");
-	    		}
-	    		break;
-	    	}
     	}
     }
 

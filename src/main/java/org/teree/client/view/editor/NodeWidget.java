@@ -2,7 +2,6 @@ package org.teree.client.view.editor;
 
 import org.teree.client.view.NodeInterface;
 import org.teree.client.view.editor.event.NodeChanged;
-import org.teree.client.view.editor.storage.ItemWidget;
 import org.teree.client.view.resource.NodeCssStyle;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
@@ -142,10 +141,6 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 	@Override
 	public int getWidgetHeight() {
 		return getWidget().getOffsetHeight();
-	}
-
-	public void setBrowserItem(ItemWidget iw) {
-		// nothing to do
 	}
     
     private void dragData(DragStartEvent event) {

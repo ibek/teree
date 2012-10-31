@@ -17,13 +17,13 @@
     </servlet>
 
     <servlet>
-        <servlet-name>UploadServlet</servlet-name>
-        <servlet-class>org.teree.server.UploadServlet</servlet-class>
+        <servlet-name>DownloadServlet</servlet-name>
+        <servlet-class>org.teree.server.DownloadServlet</servlet-class>
     </servlet>
 
     <servlet>
-        <servlet-name>DownloadServlet</servlet-name>
-        <servlet-class>org.teree.server.DownloadServlet</servlet-class>
+        <servlet-name>ImageServlet</servlet-name>
+        <servlet-class>org.teree.server.ImageServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -37,13 +37,13 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>UploadServlet</servlet-name>
-        <url-pattern>/upload</url-pattern>
+        <servlet-name>DownloadServlet</servlet-name>
+        <url-pattern>/download</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>DownloadServlet</servlet-name>
-        <url-pattern>/download</url-pattern>
+        <servlet-name>ImageServlet</servlet-name>
+        <url-pattern>/getImage</url-pattern>
     </servlet-mapping>
     
     <session-config>

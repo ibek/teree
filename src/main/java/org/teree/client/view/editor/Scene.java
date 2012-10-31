@@ -9,13 +9,10 @@ import org.teree.client.scheme.MindMap;
 import org.teree.client.scheme.SchemeType;
 import org.teree.client.scheme.Renderer;
 import org.teree.client.view.editor.NodeWidget;
-import org.teree.client.view.editor.event.BrowseItems;
-import org.teree.client.view.editor.event.BrowseItemsHandler;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
-import org.teree.client.view.editor.storage.ModalBrowser;
 import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
@@ -53,8 +50,6 @@ public class Scene extends Composite {
     private NodeWidget selected;
     private Node copied;
     
-    private ModalBrowser browser;
-    
     public Scene() {
         
         setSchemeType(Settings.DEFAULT_SCHEME_TYPE);
@@ -68,8 +63,6 @@ public class Scene extends Composite {
         if (canvas == null) { // canvas is not supported
             // deal with it
         }
-		
-        browser = new ModalBrowser();
         
         final ScrollPanel sp = new ScrollPanel(container);
         sp.setWidth(Window.getClientWidth()+"px");
@@ -96,14 +89,6 @@ public class Scene extends Composite {
             }
             
         }, SelectNode.TYPE);
-        
-    	container.addHandler(new BrowseItemsHandler() {
-			@Override
-			public void browse(BrowseItems event) {
-				browser.setEditedNodeWidget(event.getType(), event.getEditedNodeWidget());
-				browser.show();
-			}
-		}, BrowseItems.TYPE);
         
         canvas.addClickHandler(new ClickHandler() {
             @Override
@@ -361,10 +346,6 @@ public class Scene extends Composite {
         context.putImageData(data, 0, 0);
         
         return canvasTmp.toDataUrl();
-    }
-    
-    public ModalBrowser getBrowser() {
-    	return browser;
     }
     
     public void setSelectedIcon(IconType icon) {
