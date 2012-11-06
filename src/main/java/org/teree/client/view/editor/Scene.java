@@ -58,6 +58,7 @@ public class Scene extends Composite {
         Style style = container.getElement().getStyle();
         style.setProperty("margin", "0 auto");
         style.setProperty("textAlign", "center");
+        //style.setBackgroundColor("red");
         
         canvas = Canvas.createIfSupported();
         if (canvas == null) { // canvas is not supported

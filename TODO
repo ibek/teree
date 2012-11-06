@@ -6,8 +6,6 @@ po kliknuti na pocty se zobrazi verejne/privatni mapy patrici danemu uzivateli
 resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
 prevest textove retezce do jazykoveho properties souboru
 
-FIXME: po pridani noveho nodu vpravo nakonec ma tento node nejmensi velikost nezavisle na mnozstvi textu
-
 -------- alpha release --------
 
 0.6:

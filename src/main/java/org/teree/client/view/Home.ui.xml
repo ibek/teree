@@ -21,25 +21,33 @@
 		<g:FlowPanel addStyleNames="{style.scene}">
 			<b:PageHeader subtext="The structured information database with a tree representation.">teree</b:PageHeader>
 			<b:Heading size="2">Features</b:Heading>
-			<b:Paragraph>
-				<b:Badge>-</b:Badge><b:Badge>generates MindMap</b:Badge><br/>
-				<b:Badge>-</b:Badge><b:Badge>uses different types of nodes - text, image or link</b:Badge><br/>
-				<b:Badge>-</b:Badge><b:Badge>exports MindMap as image or FreeMind map</b:Badge><br/>
-				<b:Badge>-</b:Badge><b:Badge>supports drag and drop between nodes</b:Badge><br/>
-				<b:Badge>-</b:Badge><b:Badge>keyboard control</b:Badge>
-			</b:Paragraph>
+				<b:Paragraph>
+					<b:Badge>-</b:Badge><b:Badge>generates MindMap</b:Badge><br/>
+					<b:Badge>-</b:Badge><b:Badge>uses different types of nodes - text, image or link</b:Badge><br/>
+					<b:Badge>-</b:Badge><b:Badge>exports MindMap as image or FreeMind map</b:Badge><br/>
+					<b:Badge>-</b:Badge><b:Badge>supports drag and drop between nodes</b:Badge><br/>
+					<b:Badge>-</b:Badge><b:Badge>keyboard control</b:Badge>
+				</b:Paragraph>
 			<b:Heading size="2">Bug tracking</b:Heading>
-			<b:Paragraph>
-				For any issue, file a bug in <g:Anchor href='http://www.bugheaven.com/bugzilla/teree/' target='_blank'>bugzilla</g:Anchor>.
-				To log in, use following security credentials: <br/>
-				Username: o1182493@rtrtr.com <br/>
-				Password: anonymous
-			</b:Paragraph>
-			<b:Heading size="2">Contact</b:Heading>
-			<b:Paragraph>
+				<b:Paragraph>
+					For any issue, file a bug in <g:Anchor href='http://www.bugheaven.com/bugzilla/teree/' target='_blank'>bugzilla</g:Anchor>.
+					To log in, use following security credentials: <br/>
+					Username: o1182493@rtrtr.com <br/>
+					Password: anonymous
+				</b:Paragraph>
+			<b:Heading size="2">Teree details</b:Heading>
+				<b:NavList width="400px">
+					<b:NavHeader>Technical</b:NavHeader>
+					<b:NavLink>Based on Java EE (server side) and GWT (client side)</b:NavLink>
+					<b:NavLink>Runs on JBoss AS7 provided by Openshift PaaS</b:NavLink>
+					<b:NavLink>Uses NoSQL database MongoDB</b:NavLink>
+				</b:NavList>
+			<b:Heading size="2">Contact and Feedback</b:Heading>
 				<b:Heading size="4">Ivo Bek</b:Heading>
-				<b:Image resource="{cres.email}"/>
-			</b:Paragraph>
+				<b:Paragraph>
+					If you have any questions, problems or ideas, contact me at:
+					<b:Image resource="{cres.email}"/>
+				</b:Paragraph>
 		</g:FlowPanel>
 	</g:FlowPanel>
 

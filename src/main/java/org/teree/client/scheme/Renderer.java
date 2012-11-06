@@ -101,7 +101,7 @@ public abstract class Renderer<T extends Widget & NodeInterface> {
     	boolean succ = true;
     	for(int i=0; i<nodes.size(); ++i){
     		T node = nodes.get(i);
-    		
+
 	        if (node.getWidgetWidth() < Settings.NODE_MIN_WIDTH) {
 	            node.setWidth(Settings.NODE_MIN_WIDTH+"px");
 	        } else if (node.getWidgetWidth() > Settings.NODE_MAX_WIDTH) {

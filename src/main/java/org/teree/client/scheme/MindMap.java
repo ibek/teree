@@ -3,6 +3,7 @@ package org.teree.client.scheme;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.teree.client.Settings;
 import org.teree.client.view.NodeInterface;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Node.NodeLocation;
@@ -11,6 +12,8 @@ import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -123,7 +126,7 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 			}
 		}
 		
-		T rw = nodes.get(0); // root widget
+		final T rw = nodes.get(0); // root widget
 
 		maxlw += left_level * MARGIN;
 		maxrw += right_level * MARGIN;
@@ -157,8 +160,13 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		    rw.draw(context, maxlw, max_y / 2 - 5);
 		    
 		} else {
-    		AbsolutePanel panel = (AbsolutePanel) rw.getParent();
-    		panel.setWidth((maxlw+maxrw+rw.getOffsetWidth())+"px"); // to enable scrolling with horizontal scrollbar
+			AbsolutePanel panel = (AbsolutePanel) rw.getParent();
+    		int pw = maxlw+maxrw+rw.getOffsetWidth() + Settings.NODE_MAX_WIDTH; // the NODE_MAX_WIDTH fixes bug that last node had minimal width because of panel.setWidth (there wasn't any place for new node)
+    		if (pw >= Window.getClientWidth()) {
+    			panel.setWidth(pw+"px"); // to enable scrolling with horizontal scrollbar
+    		} else {
+    			panel.setWidth("auto");
+    		}
 			
 			this.left = canvas.getAbsoluteLeft() - canvas.getParent().getAbsoluteLeft(); // getRelativeLeft
 			this.top = canvas.getAbsoluteTop() - canvas.getParent().getAbsoluteTop(); // getRelativeTop
@@ -200,6 +208,7 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 				+ rw.getOffsetWidth(), max_y / 2, 0, rh, id);
 
 		context.stroke(); // draw the lines
+		
 	}
 
 	@Override
