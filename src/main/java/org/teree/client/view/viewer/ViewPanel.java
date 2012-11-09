@@ -25,6 +25,8 @@ public class ViewPanel extends Composite {
 	private Button exportImage;
 	private Button exportFreeMind;
 	
+	private org.teree.client.text.ViewPanel TEXT = org.teree.client.text.ViewPanel.LANG;
+	
 	public ViewPanel() {
 		
 		container = new HorizontalPanel();
@@ -40,12 +42,12 @@ public class ViewPanel extends Composite {
 		form.setEncoding(FormPanel.ENCODING_MULTIPART);
 		form.setMethod(FormPanel.METHOD_POST);
 		
-		exportAs = new DropdownButton("Export as...");
+		exportAs = new DropdownButton(TEXT.export_as());
 
-		exportImage = new Button("Image", IconType.PICTURE);
+		exportImage = new Button(TEXT.image(), IconType.PICTURE);
 		exportAs.add(exportImage);
 
-		exportFreeMind = new Button("FreeMind map");
+		exportFreeMind = new Button(TEXT.freemind_map());
 		exportAs.add(exportFreeMind);
 		
 		container.add(exportAs);

@@ -15,6 +15,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+import com.mongodb.WriteConcern;
+import com.mongodb.WriteResult;
 
 public class UserInfoManager {
 
@@ -29,11 +31,12 @@ public class UserInfoManager {
         DBCollection coll = db.getCollection("user");
         if(coll == null){
             coll = db.createCollection("user", null);
+            coll.ensureIndex(new BasicDBObject("username", 1), new BasicDBObject("unique", true));
         }
         return coll;
     }
     
-    public void insert(UserInfo ui, String password) {
+    public boolean insert(UserInfo ui, String password) {
         DBObject doc = toUserInfoDBObject(ui);
 
         doc.put("username", ui.getUsername());
@@ -42,7 +45,8 @@ public class UserInfoManager {
         doc.put("joined", DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date(System.currentTimeMillis())));
         
         DBCollection coll = getCollection();
-        coll.insert(doc);
+        WriteResult wr = coll.insert(doc);
+        return wr.getLastError().ok() && doc.get("_id") != null; // FIXME: has to return false when username already exists
     }
     
     public void insertWithGoogleId(UserInfo ui, String googleid) {

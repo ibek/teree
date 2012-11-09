@@ -7,12 +7,14 @@ import org.teree.client.Settings;
 import org.teree.shared.data.UserInfo;
 
 import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.DropdownButton;
 import com.github.gwtbootstrap.client.ui.Nav;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.constants.Alignment;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.github.gwtbootstrap.client.ui.constants.Placement;
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
@@ -27,17 +29,21 @@ public class UserWidget extends Composite {
 	private Button settings;
 	private Button logout;
 	private NavLink userHome;
+	private DropdownButton lang;
 	
 	private UserInfo user;
+	
+	private org.teree.client.text.UserWidget TEXT = org.teree.client.text.UserWidget.LANG;
 
 	public UserWidget() {
 		container = new Nav();
 		container.setAlignment(Alignment.RIGHT);
+		
 		userHome = new NavLink("User");
 		container.add(userHome);
 
-		signIn = new Button("Sign in");
-		join = new Button("Join");
+		signIn = new Button(TEXT.sign_in());
+		join = new Button(TEXT.join());
 
 		settings = new Button("", IconType.WRENCH);
 		
@@ -45,15 +51,40 @@ public class UserWidget extends Composite {
 		container.add(signIn);
 		container.add(join);
 
-        Tooltip ts = new Tooltip("Settings");
+        Tooltip ts = new Tooltip(TEXT.settings());
         ts.setPlacement(Placement.BOTTOM);
         ts.add(settings);
 		container.add(ts);
 		
-        Tooltip tl = new Tooltip("Logout");
+        Tooltip tl = new Tooltip(TEXT.logout());
         tl.setPlacement(Placement.BOTTOM);
         tl.add(logout);
 		container.add(tl);
+		
+		lang = new DropdownButton();
+		lang.getElement().getStyle().setFloat(Float.RIGHT);
+		lang.setIcon(IconType.FLAG);
+		NavLink cs = new NavLink("Czech");
+		cs.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				changeLocale("cs");
+			}
+		});
+		lang.add(cs);
+		NavLink en = new NavLink("English");
+		en.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				changeLocale("en");
+			}
+		});
+		lang.add(en);
+		
+		Tooltip lt = new Tooltip(TEXT.set_language());
+		lt.setPlacement(Placement.LEFT);
+		lt.add(lang);
+		container.add(lang);
 
 		initWidget(container);
 		
@@ -100,6 +131,26 @@ public class UserWidget extends Composite {
 			}
 		});
 	}
+	
+    private native void changeLocale(String newLocale)/*-{
+        var currLocation = $wnd.location.toString();
+        var noHistoryCurrLocArray = currLocation.split("#");
+        var noHistoryCurrLoc = noHistoryCurrLocArray[0];
+        var page = ""
+        if (noHistoryCurrLocArray.length > 1) {
+        	page = "#" + noHistoryCurrLocArray[1];
+        }
+        if (noHistoryCurrLoc.indexOf("?") >= 0) {
+        	if (noHistoryCurrLoc.indexOf("locale=") >= 0) {
+        		$wnd.location.href = noHistoryCurrLoc.replace(/locale=([^&#]*)/g, "locale=" + newLocale) + page; 
+        	} else {
+        		$wnd.location.href = noHistoryCurrLoc + "&locale=" + newLocale + page;
+        	} 
+        } else {
+        	$wnd.location.href = noHistoryCurrLoc + "?locale=" + newLocale + page; 
+        }
+        
+    }-*/;
 	
 	public UserInfo getCurrentUser() {
 		return user;

@@ -2,6 +2,7 @@ package org.teree.client.view.explorer;
 
 import java.util.List;
 
+import org.teree.client.text.Explorer;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.PublishScheme;
 import org.teree.client.view.explorer.event.PublishSchemeHandler;
@@ -41,6 +42,8 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	private int page = 0;
 	private boolean lastPage = false;
 	
+	private Explorer TEXT = Explorer.LANG;
+	
 	public Scene() {
 		
 		container = new VerticalPanel();
@@ -51,15 +54,15 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		publishManager = new HandlerManager(schemeContainer);
 		removeManager = new HandlerManager(schemeContainer);
 		
-		pagerTop = new Pager((char)0xf060+" Back", "Next "+(char)0xf061);
+		pagerTop = new Pager((char)0xf060+" "+TEXT.back(), TEXT.next()+" "+(char)0xf061);
 		pagerTop.getElement().getStyle().setProperty("fontFamily", "FontAwesome");
 		pagerTop.setAligned(true);
 		
-		pagerBottom = new Pager((char)0xf060+" Back", "Next "+(char)0xf061);
+		pagerBottom = new Pager((char)0xf060+" "+TEXT.back(), TEXT.next()+" "+(char)0xf061);
 		pagerBottom.getElement().getStyle().setProperty("fontFamily", "FontAwesome");
 		pagerBottom.setAligned(true);
 		
-		empty = new Heading(4, "No scheme to be displayed.");
+		empty = new Heading(4, TEXT.no_scheme());
 		
 		setComponents(false);
 

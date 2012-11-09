@@ -49,8 +49,8 @@ public class UserServiceImpl implements UserService {
 	 * TODO: should throw some exceptions (user exists...)
 	 */
 	@Override
-	public void register(UserInfo ui, String password) {
-		_uim.insert(ui, password);
+	public boolean register(UserInfo ui, String password) {
+		return _uim.insert(ui, password);
 	}
 
 	/**

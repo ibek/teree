@@ -1,6 +1,7 @@
 package org.teree.client.view.explorer;
 
 import org.teree.client.io.FreeMind;
+import org.teree.client.text.PrivateHome;
 import org.teree.client.view.explorer.event.ImportSchemeHandler;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Scheme;
@@ -29,6 +30,8 @@ public class PrivatePanel extends Composite {
 	private FileReader reader;
 	
 	private ImportSchemeHandler handler;
+	
+	private PrivateHome TEXT = PrivateHome.LANG;
 
 	public PrivatePanel() {
 
@@ -41,7 +44,7 @@ public class PrivatePanel extends Composite {
 
 		container.add(file);
 
-		importScheme = new DropdownButton("Import from...");
+		importScheme = new DropdownButton(TEXT.import_from());
 
 		importFreeMind = new Button("FreeMind");
 		importScheme.add(importFreeMind);

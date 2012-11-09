@@ -4,6 +4,7 @@
 	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 
 	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
+	<ui:with field="text" type="org.teree.client.text.Join" />
 
 	<ui:style>
 
@@ -27,65 +28,64 @@
 				<b:WellForm ui:field="form" type="HORIZONTAL">
 					<b:Fieldset>
                         <b:Legend>
-                            Register new user
-                            <small>all fields are required</small>
+                        	<g:Label text="{text.register_user}" /><small><g:Label text="{text.required}" /></small>
                         </b:Legend>
                         
 						<b:ControlGroup ui:field="usernameControlGroup">
                             <b:ControlLabel for="username">
-                                Username
+                                <g:Label text="{text.username}" />
                             </b:ControlLabel>
                             <b:Controls>
                                 <b:TextBox b:id="username"
-                                    ui:field="username" placeholder="Username" />
+                                    ui:field="username" placeholder="{text.username}" />
                                 <b:HelpInline ui:field="usernameHelpInline" />
                             </b:Controls>
                         </b:ControlGroup>
                         
 						<b:ControlGroup ui:field="nameControlGroup">
                             <b:ControlLabel for="name">
-                                Name
+                                <g:Label text="{text.name}" />
                             </b:ControlLabel>
                             <b:Controls>
                                 <b:TextBox b:id="name"
-                                    ui:field="name" placeholder="Name" />
+                                    ui:field="name" placeholder="{text.name}" />
                                 <b:HelpInline ui:field="nameHelpInline" />
                             </b:Controls>
                         </b:ControlGroup>
                         
 						<b:ControlGroup ui:field="passwordControlGroup">
                             <b:ControlLabel for="password">
-                                Password
+                                <g:Label text="{text.password}" />
                             </b:ControlLabel>
                             <b:Controls>
 								<b:PasswordTextBox b:id="password" ui:field="password"
-									placeholder="Password" />
+									placeholder="{text.password}" />
                                 <b:HelpInline ui:field="passwordHelpInline" />
                             </b:Controls>
                             <b:ControlLabel for="confirmPassword">
-                                Confirm password
+                                <g:Label text="{text.confirm_password}" />
                             </b:ControlLabel>
                             <b:Controls>
 								<b:PasswordTextBox b:id="confirmPassword" ui:field="confirmPassword"
-									placeholder="Confirm password" />
+									placeholder="{text.confirm_password}" />
                                 <b:HelpInline ui:field="confirmPasswordHelpInline" />
                             </b:Controls>
                         </b:ControlGroup>
 						
 						<b:ControlGroup ui:field="emailControlGroup">
                             <b:ControlLabel for="email">
-                                Email
+                                <g:Label text="{text.email}" />
                             </b:ControlLabel>
                             <b:Controls>
                                 <b:TextBox b:id="email"
-                                    ui:field="email" placeholder="Email" />
+                                    ui:field="email" placeholder="{text.email}" />
                                 <b:HelpInline ui:field="emailHelpInline" />
                             </b:Controls>
                         </b:ControlGroup>
                         
 						<b:FormActions>
-							<b:SubmitButton type="PRIMARY" ui:field="register">Register</b:SubmitButton>
-							<b:Button ui:field="cancel">Cancel</b:Button>
+							<b:SubmitButton type="PRIMARY" ui:field="register" text="{text.register}" />
+							<b:Button ui:field="clear" text="{text.clear}" />
 						</b:FormActions>
                     </b:Fieldset>
 				</b:WellForm>

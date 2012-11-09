@@ -86,7 +86,7 @@ public class Join extends TemplateScene implements JoinPage.Display {
     SubmitButton register;
     
     @UiField
-    Button cancel;
+    Button clear;
     
     @UiField
     Button btnGoogle;
@@ -117,8 +117,8 @@ public class Join extends TemplateScene implements JoinPage.Display {
 		return register;
 	}
 	
-	@UiHandler("cancel")
-    void onCancel(ClickEvent event) {
+	@UiHandler("clear")
+    void onClear(ClickEvent event) {
 		form.reset();
     }
 

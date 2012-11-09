@@ -10,12 +10,12 @@ import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
-import org.teree.client.Text;
 import org.teree.client.event.GlobalKeyUp;
 import org.teree.client.event.GlobalKeyUpHandler;
 import org.teree.client.event.RefreshUserInfo;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.event.SchemeReceivedHandler;
+import org.teree.client.text.General;
 import org.teree.client.view.KeyAction;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.data.scheme.Node;
@@ -141,7 +141,7 @@ public class SchemeEditor implements Presenter {
 	            @Override
 	            public void callback(String response) {
 	                scheme.setOid(response);
-	                display.info(Text.LANG.schemeCreated(scheme.getOid()));
+	                display.info(General.LANG.schemeCreated(scheme.getOid()));
 	                eventBus.fireEvent(new RefreshUserInfo());
 	            }
 	        }, new ErrorCallback() {
@@ -155,7 +155,7 @@ public class SchemeEditor implements Presenter {
     		securedScheme.call(new RemoteCallback<Void>() {
 	            @Override
 	            public void callback(Void response) {
-	                display.info(Text.LANG.schemeUpdated(scheme.getOid()));
+	                display.info(General.LANG.schemeUpdated(scheme.getOid()));
 	            }
 	        }, new ErrorCallback() {
 				@Override

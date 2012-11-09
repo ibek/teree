@@ -17,7 +17,7 @@ public class Home extends TemplateScene implements HomePage.Display {
     }
     
 	static {
-		PageStyle.INSTANCE.css().ensureInjected(); 
+		PageStyle.INSTANCE.css().ensureInjected();
 	}
 	
 	@PostConstruct

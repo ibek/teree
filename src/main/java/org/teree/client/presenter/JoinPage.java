@@ -41,10 +41,14 @@ public class JoinPage implements Presenter {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (display.validate()) {
-					userService.call(new RemoteCallback<Void>() {
+					userService.call(new RemoteCallback<Boolean>() {
 						@Override
-						public void callback(Void response) {
-							History.newItem(Settings.LOGIN_LINK);
+						public void callback(Boolean response) {
+							if (response) {
+								History.newItem(Settings.LOGIN_LINK);
+							} else {
+								display.error("Cannot create user, try another username");
+							}
 						}
 					}, new ErrorCallback() {
 						@Override

@@ -4,7 +4,7 @@
 	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 
 	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
-	
+	<ui:with field="text" type="org.teree.client.text.Home" />
 	<ui:with field="cres" type="org.teree.client.view.resource.CommonResources" />
 
 	<ui:style>
@@ -19,30 +19,31 @@
 		<view:Header ui:field="header"/>
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<g:FlowPanel addStyleNames="{style.scene}">
-			<b:PageHeader subtext="The structured information database with a tree representation.">teree</b:PageHeader>
-			<b:Heading size="2">Features</b:Heading>
+			<b:PageHeader subtext="{text.subtitle}">teree</b:PageHeader>
+			<b:AlertBlock width="500px" type="ERROR" heading="{text.attention}" text="{text.attention_testing}" />
+			<b:Heading size="2" text="{text.features}" />
 				<b:Paragraph>
-					<b:Badge>-</b:Badge><b:Badge>generates MindMap</b:Badge><br/>
-					<b:Badge>-</b:Badge><b:Badge>uses different types of nodes - text, image or link</b:Badge><br/>
-					<b:Badge>-</b:Badge><b:Badge>exports MindMap as image or FreeMind map</b:Badge><br/>
-					<b:Badge>-</b:Badge><b:Badge>supports drag and drop between nodes</b:Badge><br/>
-					<b:Badge>-</b:Badge><b:Badge>keyboard control</b:Badge>
+					<b:Badge>-</b:Badge><b:Badge text="{text.feature1}" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="{text.feature2}" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="{text.feature3}" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="{text.feature4}" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="{text.feature5}" />
 				</b:Paragraph>
-			<b:Heading size="2">Bug tracking</b:Heading>
+			<b:Heading size="2" text="{text.bug_tracking}" />
 				<b:Paragraph>
 					For any issue, file a bug in <g:Anchor href='http://www.bugheaven.com/bugzilla/teree/' target='_blank'>bugzilla</g:Anchor>.
 					To log in, use following security credentials: <br/>
 					Username: o1182493@rtrtr.com <br/>
 					Password: anonymous
 				</b:Paragraph>
-			<b:Heading size="2">Teree details</b:Heading>
+			<b:Heading size="2" text="{text.teree_details}" />
 				<b:NavList width="400px">
-					<b:NavHeader>Technical</b:NavHeader>
-					<b:NavLink>Based on Java EE (server side) and GWT (client side)</b:NavLink>
-					<b:NavLink>Runs on JBoss AS7 provided by Openshift PaaS</b:NavLink>
-					<b:NavLink>Uses NoSQL database MongoDB</b:NavLink>
+					<b:NavHeader text="{text.technical}" />
+					<b:NavLink text="{text.technical_detail1}" />
+					<b:NavLink text="{text.technical_detail2}" />
+					<b:NavLink text="{text.technical_detail3}" />
 				</b:NavList>
-			<b:Heading size="2">Contact and Feedback</b:Heading>
+			<b:Heading size="2" text="{text.contact_and_feedback}" />
 				<b:Heading size="4">Ivo Bek</b:Heading>
 				<b:Paragraph>
 					If you have any questions, problems or ideas, contact me at:

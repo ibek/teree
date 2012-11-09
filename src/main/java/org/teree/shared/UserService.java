@@ -8,7 +8,7 @@ public interface UserService {
 	
 	public UserInfo getUserInfo();
 	
-	public void register(UserInfo ui, String password);
+	public boolean register(UserInfo ui, String password);
 	
 	public void registerWithGoogle(UserInfo ui, String googleid);
 	

@@ -4,9 +4,9 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.teree.client.Text;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.event.SchemeReceivedHandler;
+import org.teree.client.text.General;
 import org.teree.shared.data.scheme.Node;
 
 import com.google.gwt.event.shared.HandlerManager;
@@ -33,7 +33,7 @@ public class SchemeViewer implements Presenter {
 			@Override
 			public void received(SchemeReceived event) {
 				display.setRoot(event.getScheme().getRoot());
-				display.info(Text.LANG.schemeReceived(event.getScheme().getOid()));
+				display.info(General.LANG.schemeReceived(event.getScheme().getOid()));
 			}
 		});
         

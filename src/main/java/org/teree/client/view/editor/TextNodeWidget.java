@@ -186,17 +186,11 @@ public class TextNodeWidget extends NodeWidget {
         
         if (newtext.compareTo(nodeContent.getText()) != 0) {
         	nodeContent.setText(newtext);
+			getParent().fireEvent(new NodeChanged(null)); // null because nothing was inserted
         }
         
         view();
         fireSelect();
-        
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-				getParent().fireEvent(new NodeChanged(null)); // null because nothing was inserted
-            }
-        });
     }
     
     public void update() {

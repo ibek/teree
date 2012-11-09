@@ -2,7 +2,8 @@ package org.teree.client.presenter;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import org.teree.client.Text;
+
+import org.teree.client.text.General;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -40,7 +41,7 @@ public class LoginPage implements Presenter {
     }
     
     public void fail() {
-    	display.error(Text.LANG.loginFailed());
+    	display.error(General.LANG.loginFailed());
     }
     
     @Override

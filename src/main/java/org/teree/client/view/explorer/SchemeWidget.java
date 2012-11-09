@@ -1,6 +1,7 @@
 package org.teree.client.view.explorer;
 
 import org.teree.client.Settings;
+import org.teree.client.text.Explorer;
 import org.teree.shared.data.scheme.Scheme;
 
 import com.github.gwtbootstrap.client.ui.Badge;
@@ -31,6 +32,8 @@ public class SchemeWidget extends Composite {
 	
 	private Scheme scheme;
 	
+	private Explorer TEXT = Explorer.LANG;
+	
 	public SchemeWidget() {
 		
 		th = new ThumbnailLink();
@@ -48,7 +51,7 @@ public class SchemeWidget extends Composite {
 		
 		screen = new Image();
 		
-		edit = new Button("Edit");
+		edit = new Button(TEXT.edit());
 		edit.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -58,7 +61,7 @@ public class SchemeWidget extends Composite {
 		});
 		edit.getElement().getStyle().setFloat(Style.Float.LEFT);
 		
-		view = new Button("View");
+		view = new Button(TEXT.view());
 		view.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -83,10 +86,10 @@ public class SchemeWidget extends Composite {
 		Style rs = remove.getElement().getStyle();
 		rs.setFloat(Style.Float.RIGHT);
 
-		Tooltip pt = new Tooltip("Publish scheme");
+		Tooltip pt = new Tooltip(TEXT.publish());
         pt.add(publish);
 		
-        Tooltip rt = new Tooltip("Remove scheme");
+        Tooltip rt = new Tooltip(TEXT.remove());
         rt.add(remove);
 
         th.add(pt);

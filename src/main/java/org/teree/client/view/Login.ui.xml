@@ -4,6 +4,7 @@
 	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 
 	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
+	<ui:with field="text" type="org.teree.client.text.Login" />
 
 	<ui:style>
 
@@ -25,13 +26,13 @@
 			<g:cell>
 			<g:FlowPanel>
 				<b:WellForm ui:field="form">
-					<b:ControlLabel>Username</b:ControlLabel>
-					<b:TextBox ui:field="username" placeholder="Username" />
-					<b:ControlLabel>Password</b:ControlLabel>
+					<b:ControlLabel><g:Label text="{text.username}" /></b:ControlLabel>
+					<b:TextBox ui:field="username" placeholder="{text.username}" />
+					<b:ControlLabel><g:Label text="{text.password}" /></b:ControlLabel>
 					<b:PasswordTextBox ui:field="password"
-						placeholder="Password" />
+						placeholder="{text.password}" />
 					<b:FormActions>
-						<b:SubmitButton type="PRIMARY" ui:field="signin">Sign in</b:SubmitButton>
+						<b:SubmitButton type="PRIMARY" ui:field="signin" text="{text.sign_in}" />
 					</b:FormActions>
 				</b:WellForm>
 			</g:FlowPanel>

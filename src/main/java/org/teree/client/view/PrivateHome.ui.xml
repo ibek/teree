@@ -4,6 +4,7 @@
 	xmlns:view="urn:import:org.teree.client.view" xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 	
 	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
+	<ui:with field="text" type="org.teree.client.text.PrivateHome" />
 
 	<ui:style>
 
@@ -41,15 +42,15 @@
 			<g:cell>
 				<b:Well addStyleNames="{style.userPanel}">
 					<g:HorizontalPanel>
-						<b:Tooltip text="public">
+						<b:Tooltip text="{text.public_schemes}">
 							<b:Label ui:field="publicCount" addStyleNames="{style.countBox}"/>
 						</b:Tooltip>
-						<b:Tooltip text="private">
+						<b:Tooltip text="{text.private_schemes}">
 							<b:Label ui:field="privateCount" addStyleNames="{style.countBox}"/>
 						</b:Tooltip>
 					</g:HorizontalPanel>
 					<b:Heading ui:field="name" size="4"/>
-					<g:Label text="Joined on "/><g:Label ui:field="joined"/>
+					<g:Label text="{text.joined_on} "/><g:Label ui:field="joined"/>
 				</b:Well>
 			</g:cell>
 			<g:cell width="100%">
