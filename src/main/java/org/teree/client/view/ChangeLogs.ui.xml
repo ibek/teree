@@ -1,0 +1,38 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:view="urn:import:org.teree.client.view"
+	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
+
+	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
+	<ui:with field="text" type="org.teree.client.text.ChangeLogs" />
+	<ui:with field="cres" type="org.teree.client.view.resource.CommonResources" />
+
+	<ui:style>
+
+		.scene {
+			margin: 20px;
+		}
+
+	</ui:style>
+
+	<g:FlowPanel ui:field="panel">
+		<view:Header ui:field="header"/>
+		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
+		<g:FlowPanel addStyleNames="{style.scene}">
+			<b:Heading size="2" text="{text.change_logs}" />
+			<b:Heading size="4" text="v0.5 2012-11-12" />
+				<b:Paragraph>
+					<b:Badge>-</b:Badge><b:Badge text="Internationalization - Czech and English support" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Public/Private maps - without any specific permisions" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Thumbnails of maps in explorer" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Text node can be extended with icon" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="New types of nodes - text, image and link" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="New types of exports - image and FreeMind map" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="New types of imports - FreeMind map" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Drag and drop support" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Keyboard control - arrows, F2(edit), Insert(add text child node), Delete(remove selected node), ..." />
+				</b:Paragraph>
+		</g:FlowPanel>
+	</g:FlowPanel>
+
+</ui:UiBinder> 

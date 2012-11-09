@@ -15,6 +15,7 @@ public class Settings {
 	public static final String TAUTH_LINK = "tauth";
 	public static final String PRIVATE_LINK = "private";
 	public static final String SETTINGS_LINK = "settings";
+	public static final String CHANGE_LOGS_LINK = "changeLogs";
 	
 	public static final String COOKIE_SESSION_ID = "JSESSIONID";
 

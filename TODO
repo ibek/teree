@@ -1,45 +1,50 @@
 
-0.5:
-
-resit vsechny mozne specialni pripady chyb (upozornovat uzivatele pres Alerty - status)
-
--------- alpha release --------
-
 0.6:
 
-podpora collapse node
+udelat testovani podle nalezenych chyb z testing release 0.5 + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
+
 tvorba map z templates
+
+edit public scheme muze provest pouze autor ale bude si moci vytvorit klon
+ - misto tlacitka edit zobrazit pro ostatni uzivatele clone (ktery bude odkazovat na to ze byl vytvoren z predka?)
+
+prirazovat ruzna prava na mapy
+ - zda dany uzivatel (skupina - guests) muze mapu cist, editovat ...
+
+definovat vlastni format pro import a export
+ - pres xml schema
+ - umoznit export vsech map daneho uzivatele (pro zalohovani)
 
 0.7:
 
-udelat testovani podle nalezenych chyb z alpha release + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
+uzivatelsky privetive statusy a chybove hlasky
+MathNodeWidget
  
+podpora collapse node
+
 direct explore - novy typ generovani mapy, nejspis pro to bude stacit mindmapa protoze leva strana se zajisti uz na serveru pri cteni 
 service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
 ConnectorNodeWidget (to connect another map)
 funkce pro rozdeleni mapy na dve - z nodu vytvorit novou mapu a propojit connectorNodeWidgetem
+ 
+0.8:
+
+PercentNodeWidget - zobrazi graficky 0-100%, pri editaci se vlozi cislo 0-100 do integerboxu
+pridat hodnoceni mapy
+
+vyhledavani - pouze v root a klicovych slovech + (fulltext?)
 
 future:
 
 collaboration
 undo-redo funkce
-vyhledavani - pouze v root a klicovych slovech + (fulltext?)
-MathNodeWidget
 DBAuth pres SSL
-pridat hodnoceni mapy
 management console/app - napr pro upravu balicku, zmena limitu apod
 sepsat use cases (pro studovani ...)
-prirazovat ruzna prava na mapy
- - zda dany uzivatel (skupina - guests) muze mapu cist, editovat ...
 ulozeni ruznych pohledu na mapu
  - nektere casti nejsou pro dany pohled dulezite a nebudou zobrazeny
  - jine nody budou collapsed apod
-definovat vlastni format pro import a export
- - pres xml schema
 ruzne typy nodu z hlediska vyznamu
  - klicove slovo (bude mozne ho najit ve vyhledavani, a lze tento podstrom oddelit od mapy), definice, priklad, ...
-PercentNodeWidget - zobrazi graficky 0-100%, pri editaci se vlozi cislo 0-100 do integerboxu
 moznost obarveni nodu dedicne - tzn i potomci budou mit danou barvu pokud nebude nastaven styl
 
-edit public scheme muze provest pouze autor ale bude si moci vytvorit klon
- - misto tlacitka edit zobrazit pro ostatni uzivatele clone (ktery bude odkazovat na to ze byl vytvoren z predka?)

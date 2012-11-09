@@ -26,7 +26,7 @@ public class UserInfoManager {
 	@Inject
 	UserPackageManager upm;
     
-    private DBCollection getCollection() {
+    protected DBCollection getCollection() {
     	DB db = mdb.getDatabase();
         DBCollection coll = db.getCollection("user");
         if(coll == null){
@@ -36,17 +36,22 @@ public class UserInfoManager {
         return coll;
     }
     
+    protected UserPackageManager getUserPackageManager() {
+    	return upm;
+    }
+    
     public boolean insert(UserInfo ui, String password) {
         DBObject doc = toUserInfoDBObject(ui);
 
         doc.put("username", ui.getUsername());
         doc.put("password", BCrypt.hashpw(password, BCrypt.gensalt(12)));
-        doc.put("package", upm.getFreePackage().getName());
+        doc.put("package", getUserPackageManager().getFreePackage().getName());
         doc.put("joined", DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date(System.currentTimeMillis())));
         
         DBCollection coll = getCollection();
-        WriteResult wr = coll.insert(doc);
-        return wr.getLastError().ok() && doc.get("_id") != null; // FIXME: has to return false when username already exists
+        coll.insert(doc);
+        UserInfo inserted = selectByOid(((ObjectId)doc.get("_id")).toStringMongod());
+        return inserted != null && inserted.getUsername().equals(ui.getUsername());
     }
     
     public void insertWithGoogleId(UserInfo ui, String googleid) {
@@ -174,7 +179,7 @@ public class UserInfoManager {
         ui.setPublicCount((Integer)userinfo.get("publicCount"));
         ui.setPrivateCount((Integer)userinfo.get("privateCount"));
         ui.setMemUsed((Long)userinfo.get("memUsed"));
-        ui.setUserPackage(upm.select((String)userinfo.get("package")));
+        ui.setUserPackage(getUserPackageManager().select((String)userinfo.get("package")));
         
         return ui;
     }

@@ -19,6 +19,7 @@ import org.teree.client.event.GlobalKeyUp;
 import org.teree.client.event.RefreshUserInfo;
 import org.teree.client.event.RefreshUserInfoHandler;
 import org.teree.client.event.SchemeReceived;
+import org.teree.client.presenter.ChangeLogsPage;
 import org.teree.client.presenter.HomePage;
 import org.teree.client.presenter.JoinPage;
 import org.teree.client.presenter.LoginPage;
@@ -231,6 +232,11 @@ public class TereeController implements ValueChangeHandler<String> {
 			        .with(MessageParts.ReplyTo, "LoginClient")
 			        .with(AuthType.PART, AuthType.OAuth)
 			        .done().sendNowWith(ErraiBus.get());
+			} else if (token.equals(Settings.CHANGE_LOGS_LINK)) {
+				IOCBeanDef<ChangeLogsPage> bean = manager.lookupBean(ChangeLogsPage.class);
+				if (bean != null) { 
+					presenter = bean.getInstance();
+				}
 			}
 
 			if (presenter != null) {

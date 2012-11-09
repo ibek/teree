@@ -14,6 +14,8 @@ public interface Home extends Messages{
     String attention();
     String attention_testing();
     
+    String change_logs();
+    
     String features();
     String feature1();
     String feature2();

@@ -20,7 +20,7 @@ public class UserPackageManager {
 	@Inject
     MongoDB mdb;
     
-    private DBCollection getCollection() {
+    protected DBCollection getCollection() {
     	DB db = mdb.getDatabase();
         DBCollection coll = db.getCollection("package");
         if(coll == null){

@@ -12,6 +12,11 @@
 		.scene {
 			margin: 20px;
 		}
+		
+		.link {
+			font-size: 20px;
+			cursor: Pointer;
+		}
 
 	</ui:style>
 
@@ -21,6 +26,7 @@
 		<g:FlowPanel addStyleNames="{style.scene}">
 			<b:PageHeader subtext="{text.subtitle}">teree</b:PageHeader>
 			<b:AlertBlock width="500px" type="ERROR" heading="{text.attention}" text="{text.attention_testing}" />
+			<g:Anchor ui:field="changeLogs" text="{text.change_logs}" addStyleNames="{style.link}" />
 			<b:Heading size="2" text="{text.features}" />
 				<b:Paragraph>
 					<b:Badge>-</b:Badge><b:Badge text="{text.feature1}" /><br/>
