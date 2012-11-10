@@ -115,7 +115,11 @@ public class TereeController implements ValueChangeHandler<String> {
 					}
 					case EndSession: {
 						currentUser.clear();
-						History.newItem(Settings.HOME_LINK);
+						if (History.getToken().equals(Settings.HOME_LINK)) {
+							History.fireCurrentHistoryState(); // TODO: check that homepage is reloaded after logout on homepage
+						} else {
+							History.newItem(Settings.HOME_LINK);
+						}
 					}
 				}
 			}

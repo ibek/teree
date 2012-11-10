@@ -62,7 +62,7 @@ public class UserWidget extends Composite {
 		container.add(tl);
 		
 		lang = new DropdownButton();
-		lang.getElement().getStyle().setFloat(Float.RIGHT);
+		//lang.getElement().getStyle().setFloat(Float.RIGHT);
 		lang.setIcon(IconType.FLAG);
 		NavLink cs = new NavLink("Czech");
 		cs.addClickHandler(new ClickHandler() {
@@ -81,10 +81,10 @@ public class UserWidget extends Composite {
 		});
 		lang.add(en);
 		
-		Tooltip lt = new Tooltip(TEXT.set_language());
-		lt.setPlacement(Placement.LEFT);
-		lt.add(lang);
-		container.add(lang);
+		//Tooltip lt = new Tooltip(TEXT.set_language());
+		//lt.setPlacement(Placement.LEFT);
+		//lt.add(lang);
+		//container.add(lt);
 
 		initWidget(container);
 		

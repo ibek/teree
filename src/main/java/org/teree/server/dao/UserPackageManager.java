@@ -18,22 +18,24 @@ public class UserPackageManager {
 	private static final int COUNT_OF_PARAMETERS = 1; // "primary" key name is not counted
 
 	@Inject
-    MongoDB mdb;
+    protected MongoDB mdb;
     
     protected DBCollection getCollection() {
     	DB db = mdb.getDatabase();
-        DBCollection coll = db.getCollection("package");
-        if(coll == null){
+        DBCollection coll = null;
+        if(db.getCollectionNames().contains("package")){
+        	coll = db.getCollection("package");
+        } else {
             coll = db.createCollection("package", null);
             initDB(coll);
         }
         return coll;
     }
     
-    private void initDB(DBCollection coll) {
+    protected void initDB(DBCollection coll) {
     	try {
         	Properties prop = new Properties();
-        	prop.load(UserPackageManager.class.getResourceAsStream("UserPackages.properties"));
+        	prop.load(getClass().getResourceAsStream("/UserPackages.properties"));
         	Iterator<Object> iter = prop.keySet().iterator();
         	while (iter.hasNext()) {
         		Object key = iter.next();
@@ -67,7 +69,7 @@ public class UserPackageManager {
     	UserPackage up = new UserPackage();
     	
     	up.setName((String)userPackage.get("name"));
-    	up.setMemLimit((Long)userPackage.get("memLimit"));
+    	up.setMemLimit((String)userPackage.get("memLimit"));
     	
     	return up;
     }

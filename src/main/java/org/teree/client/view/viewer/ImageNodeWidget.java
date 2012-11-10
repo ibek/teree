@@ -1,11 +1,14 @@
 package org.teree.client.view.viewer;
 
+import org.teree.client.Settings;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Node;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ErrorEvent;
@@ -42,7 +45,6 @@ public class ImageNodeWidget extends NodeWidget {
 
 	private void init() {
 		content = new Image();
-		content.getElement().setAttribute("crossorigin", "anonymous");
 		content.getElement().getStyle().setPadding(5.0, Unit.PX);
 
 		content.addErrorHandler(new ErrorHandler() {
@@ -60,9 +62,15 @@ public class ImageNodeWidget extends NodeWidget {
 			}
 		});
 		
-		String url = ((ImageLink) node.getContent()).getUrl();
+		
+		final String url = ((ImageLink) node.getContent()).getUrl();
 		if (url != null) {
-			content.setUrl(GWT.getHostPageBaseURL() + "getImage?url=" + url);
+			Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+	            @Override
+	            public void execute() {
+	    			content.setUrl(Settings.HOST + "getImage?url=" + url);
+	            }
+	        });
 		} else {
 			content.setResource(res.noImage());
 		}

@@ -86,20 +86,28 @@ public class ContentDialog extends DialogBox {
 		super.show();
 	}
 	
-	public String getUrl() {
-		String url = urlField.getText();
-		if (!url.startsWith("http://") && !url.startsWith("https://")) {
-			url = "http://"+url;
-		}
-		return url;
-	}
-	
 	public void setTextFieldVisible(boolean visible) {
 		textField.setVisible(visible);
 	}
 	
 	public String getTextField() {
 		return textField.getText();
+	}
+
+	public String getUrlField() {
+		String url = urlField.getText();
+		if (!url.startsWith("http://") && !url.startsWith("https://")) {
+			url = "http://"+url;
+		}
+		return url;
+	}
+
+	public void setUrlField(String urlField) {
+		this.urlField.setText(urlField);
+	}
+
+	public void setTextField(String textField) {
+		this.textField.setText(textField);
 	}
 
 }

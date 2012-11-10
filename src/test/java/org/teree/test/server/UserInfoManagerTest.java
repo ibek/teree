@@ -1,41 +1,28 @@
 package org.teree.test.server;
 
-import java.net.UnknownHostException;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.teree.server.dao.MongoDB;
 import org.teree.shared.data.UserInfo;
+import org.teree.test.server.object.MockMongoDB;
 import org.teree.test.server.object.MockUserInfoManager;
-
-import com.mongodb.DB;
-import com.mongodb.Mongo;
-import com.mongodb.MongoException;
 
 public class UserInfoManagerTest {
 
 	private static MockUserInfoManager uim;
-	private static DB db = null;
+	private static MongoDB mdb;
 	
 	@BeforeClass
 	public static void init() {
-		try {
-		    Mongo mongodb = new Mongo("127.0.0.1");
-		    db = mongodb.getDB("teree_testdb");
-		    db.dropDatabase();
-		} catch (UnknownHostException e) {
-		    e.printStackTrace();
-		} catch (MongoException e) {
-			e.printStackTrace();
-		}
-		
-		uim = new MockUserInfoManager(db);
+		mdb = new MockMongoDB();
+		uim = new MockUserInfoManager(mdb);
 	}
 	
 	@After
 	public void clearDB() {
-		db.dropDatabase();
+		mdb.getDatabase().dropDatabase();
 	}
 	
 	@Test

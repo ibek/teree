@@ -4,6 +4,9 @@ import org.teree.client.scheme.SchemeType;
 
 public class Settings {
 
+	public static final String HOST = "http://www.teree.org/"; // for Openshift
+	//public static final String HOST = "http://127.0.0.1:8080/teree/"; // for localhost
+
 	public static final String HOME_LINK = "home";
 	public static final String EXPLORE_LINK = "explore";
 	public static final String VIEW_LINK = "view/oid=";

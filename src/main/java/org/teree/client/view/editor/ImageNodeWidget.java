@@ -1,5 +1,6 @@
 package org.teree.client.view.editor;
 
+import org.teree.client.Settings;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.shared.data.scheme.ImageLink;
@@ -50,7 +51,6 @@ public class ImageNodeWidget extends NodeWidget {
 
 	private void init() {
 		content = new Image();
-		content.getElement().setAttribute("crossorigin", "anonymous");
 		content.getElement().getStyle().setPadding(5.0, Unit.PX);
         
         content.getElement().setDraggable(Element.DRAGGABLE_TRUE);
@@ -87,9 +87,9 @@ public class ImageNodeWidget extends NodeWidget {
 	}
 
 	public void update() {
-		String url = nodeContent.getUrl();
+		final String url = nodeContent.getUrl();
 		if (url != null) {
-			content.setUrl(GWT.getHostPageBaseURL() + "getImage?url=" + url);
+			content.setUrl(Settings.HOST + "getImage?url=" + url);
 		}
 	}
 	
@@ -118,7 +118,7 @@ public class ImageNodeWidget extends NodeWidget {
 			contentDialog.getOk().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					nodeContent.setUrl(contentDialog.getUrl());
+					nodeContent.setUrl(contentDialog.getUrlField());
 	            	update();
 					contentDialog.hide();
 				}
@@ -134,6 +134,9 @@ public class ImageNodeWidget extends NodeWidget {
 		}
 		contentDialog.setPopupPosition(getAbsoluteLeft() + x, 
 				getAbsoluteTop() - content.getOffsetHeight()/2 - contentDialog.getOffsetHeight()/2);
+		
+		contentDialog.setUrlField(nodeContent.getUrl());
+		
 		contentDialog.show();
 	}
 

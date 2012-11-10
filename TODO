@@ -3,7 +3,9 @@
 
 udelat testovani podle nalezenych chyb z testing release 0.5 + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
 
+pridat panel na homepage - bude obsahovat changelogs, tlacitko pro zmenu jazyka ...
 tvorba map z templates
+MathNodeWidget
 
 edit public scheme muze provest pouze autor ale bude si moci vytvorit klon
  - misto tlacitka edit zobrazit pro ostatni uzivatele clone (ktery bude odkazovat na to ze byl vytvoren z predka?)
@@ -18,7 +20,6 @@ definovat vlastni format pro import a export
 0.7:
 
 uzivatelsky privetive statusy a chybove hlasky
-MathNodeWidget
  
 podpora collapse node
 
@@ -27,17 +28,19 @@ service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
 ConnectorNodeWidget (to connect another map)
 funkce pro rozdeleni mapy na dve - z nodu vytvorit novou mapu a propojit connectorNodeWidgetem
  
+vyhledavani - pouze v root
+ - je nutne pro ConnectorNodeWidget
+
 0.8:
 
 PercentNodeWidget - zobrazi graficky 0-100%, pri editaci se vlozi cislo 0-100 do integerboxu
 pridat hodnoceni mapy
 
-vyhledavani - pouze v root a klicovych slovech + (fulltext?)
-
 future:
 
 collaboration
 undo-redo funkce
+fulltextove vyhledavani
 DBAuth pres SSL
 management console/app - napr pro upravu balicku, zmena limitu apod
 sepsat use cases (pro studovani ...)

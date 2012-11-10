@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +20,8 @@ public class ImageServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getHeader("Origin").equals("http://localhost:8080") ||
-				request.getHeader("Origin").equals("http://teree.org")) {
+		if (request.getHeader("host").equals("127.0.0.1:8080") ||
+				request.getHeader("host").equals("www.teree.org")) {
 			
 			response.setHeader("Access-Control-Allow-Origin", "*");
 			response.setContentType("image/png");

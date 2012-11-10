@@ -7,7 +7,7 @@ public class UserPackage {
 
 	private String name;
 	
-	private Long memLimit;
+	private String memLimit;
 
 	public String getName() {
 		return name;
@@ -17,11 +17,11 @@ public class UserPackage {
 		this.name = name;
 	}
 
-	public Long getMemLimit() {
+	public String getMemLimit() {
 		return memLimit;
 	}
 
-	public void setMemLimit(Long memLimit) {
+	public void setMemLimit(String memLimit) {
 		this.memLimit = memLimit;
 	}
 	

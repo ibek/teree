@@ -21,15 +21,17 @@ import com.mongodb.WriteResult;
 public class UserInfoManager {
 
 	@Inject
-    MongoDB mdb;
+    protected MongoDB mdb;
 	
 	@Inject
-	UserPackageManager upm;
+	protected UserPackageManager upm;
     
     protected DBCollection getCollection() {
     	DB db = mdb.getDatabase();
-        DBCollection coll = db.getCollection("user");
-        if(coll == null){
+        DBCollection coll = null;
+        if(db.getCollectionNames().contains("user")){
+        	coll = db.getCollection("user");
+        } else {
             coll = db.createCollection("user", null);
             coll.ensureIndex(new BasicDBObject("username", 1), new BasicDBObject("unique", true));
         }

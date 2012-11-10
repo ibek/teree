@@ -83,7 +83,7 @@ public class LinkNodeWidget extends NodeWidget {
 				@Override
 				public void onClick(ClickEvent event) {
 					nodeContent.setText(linkDialog.getTextField());
-					nodeContent.setUrl(linkDialog.getUrl());
+					nodeContent.setUrl(linkDialog.getUrlField());
 					Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 			            @Override
 			            public void execute() {
@@ -105,6 +105,10 @@ public class LinkNodeWidget extends NodeWidget {
 		}
 		linkDialog.setPopupPosition(getAbsoluteLeft() + x, 
 				getAbsoluteTop() - content.getOffsetHeight()/2 - linkDialog.getOffsetHeight()/2);
+
+		linkDialog.setUrlField(nodeContent.getUrl());
+		linkDialog.setTextField(nodeContent.getText());
+		
 		linkDialog.show();
 	}
 

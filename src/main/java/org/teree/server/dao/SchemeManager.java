@@ -36,8 +36,10 @@ public class SchemeManager {
     
     private DBCollection getCollection() {
     	DB db = mdb.getDatabase();
-        DBCollection coll = db.getCollection("scheme");
-        if(coll == null){
+        DBCollection coll = null;
+        if(db.getCollectionNames().contains("scheme")){
+        	coll = db.getCollection("scheme");
+        } else {
             coll = db.createCollection("scheme", null);
         }
         return coll;
