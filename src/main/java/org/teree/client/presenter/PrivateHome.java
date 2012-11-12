@@ -134,11 +134,11 @@ public class PrivateHome implements Presenter {
 		display.setImportSchemeHandler(new ImportSchemeHandler() {
 			@Override
 			public void importScheme(final Scheme scheme) {
-				History.newItem(Settings.CREATE_LINK);
 				Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 		            @Override
 		            public void execute() {
-						eventBus.fireEvent(new SchemeReceived(scheme));
+		            	History.newItem(Settings.CREATE_LINK);
+		            	eventBus.fireEvent(new SchemeReceived(scheme));
 		            }
 		        });
 			}

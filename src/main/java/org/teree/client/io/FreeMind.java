@@ -2,6 +2,7 @@ package org.teree.client.io;
 
 import java.util.List;
 
+import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
 import org.teree.shared.data.scheme.Node;
@@ -99,7 +100,9 @@ public class FreeMind {
 			com.google.gwt.xml.client.Node r = getFirstNode(doc.getChildNodes().item(0).getChildNodes());
 			if (r != null) {
 				String content = r.getAttributes().getNamedItem("TEXT").getNodeValue();
-				root.setContent(content);
+				IconText it = new IconText();
+				it.setText(content);
+				root.setContent(it);
 				insertChildNodes(root, r.getChildNodes());
 			}
 		} catch(Exception ex) {
@@ -124,9 +127,13 @@ public class FreeMind {
 					}
 					cn.setContent(link);
 				} else if ((content = attr.getNamedItem("TEXT")) != null) {
-					cn.setContent(content.getNodeValue());
+					IconText it = new IconText();
+					it.setText(content.getNodeValue());
+					cn.setContent(it);
 				} else {
-					cn.setContent("unidentified");
+					IconText it = new IconText();
+					it.setText("unidentified");
+					cn.setContent(it);
 				}
 				
 				if ((content = attr.getNamedItem("POSITION")) != null && content.getNodeValue().compareTo("left") == 0) {

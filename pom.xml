@@ -19,7 +19,7 @@
 		<version.org.mongodb>2.7.2</version.org.mongodb>
 		<version.org.codehaus.mojo.gwt.maven.plugin>${version.com.google.gwt}</version.org.codehaus.mojo.gwt.maven.plugin>
 		<version.junit>4.10</version.junit>
-		<version.org.scribe>1.3.0</version.org.scribe>
+		<version.org.scribe>1.3.2</version.org.scribe>
 		<version.com.github.gwtbootstrap>2.1.0.0-SNAPSHOT</version.com.github.gwtbootstrap>
 		<version.org.mindrot>0.3m</version.org.mindrot>
 		<version.com.google.code.gson>2.2.2</version.com.google.code.gson>
@@ -361,7 +361,7 @@
 					<!-- We must exclude GWT client local classes from the deployment, or 
 						classpath scanners such as Hibernate and Weld get confused when the webapp 
 						is bootstrapping. -->
-					<packagingExcludes>**/javax/**/*.*,**/client/local/**/*.class</packagingExcludes>
+					<packagingExcludes>**/javax/**/*.*,**/client/local/**/*.class, **/teree/test/*.*</packagingExcludes>
 
 					<archive>
 						<manifestEntries>

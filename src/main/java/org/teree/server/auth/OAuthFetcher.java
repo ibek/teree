@@ -20,8 +20,10 @@ public class OAuthFetcher {
 
 	public Response fetch(OAuthRequest request, Token accessToken) {
 
-		OAuthService service = new ServiceBuilder().provider(GoogleApi.class)
-				.apiKey("anonymous").apiSecret("anonymous")
+		OAuthService service = new ServiceBuilder()
+				.provider(GoogleApi.class)
+				.apiKey("www.teree.org")
+				.apiSecret("SgYJtCunHJHLy3z79apifsv8")
 				.scope(SCOPES).build();
 
 		service.signRequest(accessToken, request);

@@ -158,7 +158,7 @@ public class Scene extends Composite {
     }
     
     public void removeSelectedNode() {
-    	if (selected != null) {
+    	if (selected != null && selected.getNode().getParent() != null) {
     		removeNodeWidget(selected);
     		selected.getNode().remove();
     		selected = null;

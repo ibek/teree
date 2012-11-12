@@ -3,7 +3,7 @@
 
 udelat testovani podle nalezenych chyb z testing release 0.5 + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
 
-pridat panel na homepage - bude obsahovat changelogs, tlacitko pro zmenu jazyka ...
+automaticka zmena jazyka
 tvorba map z templates
 MathNodeWidget
 

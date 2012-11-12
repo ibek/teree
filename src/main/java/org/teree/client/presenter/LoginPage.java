@@ -5,6 +5,7 @@ import javax.inject.Inject;
 
 import org.teree.client.text.General;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -28,13 +29,7 @@ public class LoginPage implements Presenter {
         display.getGoogleButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				String path = Window.Location.getPath();
-				int ls = path.lastIndexOf('/');
-				if (ls > 0) {
-					path = path.substring(0, ls);
-				}
-				System.out.println(path);
-				Window.Location.replace(path+"/oauth");
+				Window.Location.replace(GWT.getHostPageBaseURL()+"/oauth?callback=teree.html#home");
 			}
 		});
         

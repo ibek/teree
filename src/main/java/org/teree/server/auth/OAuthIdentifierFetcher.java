@@ -32,7 +32,6 @@ public class OAuthIdentifierFetcher {
 
 		if (response != null) {
 			String body = response.getBody();
-			System.out.println(body);
 			JsonObject obj = new JsonParser().parse(body).getAsJsonObject();
 			googleid = obj.get("id").getAsString();
 		}
@@ -48,7 +47,6 @@ public class OAuthIdentifierFetcher {
 
 		if (response != null) {
 			String body = response.getBody();
-			System.out.println(body);
 			JsonObject obj = new JsonParser().parse(body).getAsJsonObject();
 			ui.setName(obj.get("name").getAsString());
 			ui.setEmail(obj.get("email").getAsString());

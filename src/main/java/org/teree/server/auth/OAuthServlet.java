@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.GoogleApi;
+import org.scribe.exceptions.OAuthException;
 import org.scribe.model.Token;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
@@ -29,7 +30,8 @@ public class OAuthServlet extends HttpServlet {
 
 	private static final String AUTHORIZE_URL = "https://www.google.com/accounts/OAuthAuthorizeToken?oauth_token=";
 
-	private static final String TAUTH_LOGIN = "/teree/teree.html#tauth";
+	private static final String TAUTH_LOGIN = "/teree.html#tauth";
+	private static final String LOGIN = "/teree.html#login";
 	
 	private static final Map<String, String> tokens = new HashMap<String, String>();
 	
@@ -38,8 +40,11 @@ public class OAuthServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String callback = req.getRequestURL().toString();
 
-		OAuthService service = new ServiceBuilder().provider(GoogleApi.class)
-				.apiKey("anonymous").apiSecret("anonymous").scope(OAuthFetcher.SCOPES)
+		OAuthService service = new ServiceBuilder()
+				.provider(GoogleApi.class)
+				.apiKey("www.teree.org")
+				.apiSecret("SgYJtCunHJHLy3z79apifsv8")
+				.scope(OAuthFetcher.SCOPES)
 				.callback(callback).build();
 
 		String oAuthToken = req.getParameter("oauth_token");
@@ -54,9 +59,15 @@ public class OAuthServlet extends HttpServlet {
 			return;
 		}
 
-		Verifier verifier = new Verifier(oAuthVerifier);
-		Token token = new Token(oAuthToken, oAuthSecret);
-		Token accessToken = service.getAccessToken(token, verifier);
+		Token accessToken = null;
+		try {
+			Verifier verifier = new Verifier(oAuthVerifier);
+			Token token = new Token(oAuthToken, oAuthSecret);
+			accessToken = service.getAccessToken(token, verifier);
+		} catch(OAuthException ex) {
+			resp.sendRedirect(LOGIN);
+			return;
+		}
 		
 		tokens.remove(oAuthToken);
 

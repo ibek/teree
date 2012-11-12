@@ -7,6 +7,8 @@ import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Scheme;
 import org.vectomatic.file.FileReader;
 import org.vectomatic.file.FileUploadExt;
+import org.vectomatic.file.events.ErrorEvent;
+import org.vectomatic.file.events.ErrorHandler;
 import org.vectomatic.file.events.LoadEndEvent;
 import org.vectomatic.file.events.LoadEndHandler;
 
@@ -75,6 +77,13 @@ public class PrivatePanel extends Composite {
 					scheme.setRoot(root);
 					handler.importScheme(scheme);
 				}
+			}
+		});
+		
+		reader.addErrorHandler(new ErrorHandler() {
+			@Override
+			public void onError(ErrorEvent event) {
+				
 			}
 		});
 

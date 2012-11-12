@@ -44,25 +44,12 @@ public class UserWidget extends Composite {
 
 		signIn = new Button(TEXT.sign_in());
 		join = new Button(TEXT.join());
-
-		settings = new Button("", IconType.WRENCH);
 		
-		logout = new Button("", IconType.SIGNOUT);
 		container.add(signIn);
 		container.add(join);
-
-        Tooltip ts = new Tooltip(TEXT.settings());
-        ts.setPlacement(Placement.BOTTOM);
-        ts.add(settings);
-		container.add(ts);
-		
-        Tooltip tl = new Tooltip(TEXT.logout());
-        tl.setPlacement(Placement.BOTTOM);
-        tl.add(logout);
-		container.add(tl);
 		
 		lang = new DropdownButton();
-		//lang.getElement().getStyle().setFloat(Float.RIGHT);
+		lang.getElement().getStyle().setFloat(Float.RIGHT);
 		lang.setIcon(IconType.FLAG);
 		NavLink cs = new NavLink("Czech");
 		cs.addClickHandler(new ClickHandler() {
@@ -81,10 +68,26 @@ public class UserWidget extends Composite {
 		});
 		lang.add(en);
 		
-		//Tooltip lt = new Tooltip(TEXT.set_language());
-		//lt.setPlacement(Placement.LEFT);
-		//lt.add(lang);
-		//container.add(lt);
+		Tooltip lt = new Tooltip(TEXT.set_language());
+		lt.setPlacement(Placement.LEFT);
+		lt.add(lang);
+		container.add(lt);
+		
+		logout = new Button("", IconType.SIGNOUT);
+		logout.getElement().getStyle().setFloat(Float.RIGHT);
+		
+        Tooltip tl = new Tooltip(TEXT.logout());
+        tl.setPlacement(Placement.BOTTOM);
+        tl.add(logout);
+		container.add(tl);
+
+		settings = new Button("", IconType.WRENCH);
+		settings.getElement().getStyle().setFloat(Float.RIGHT);
+
+        Tooltip ts = new Tooltip(TEXT.settings());
+        ts.setPlacement(Placement.BOTTOM);
+        ts.add(settings);
+		container.add(ts);
 
 		initWidget(container);
 		

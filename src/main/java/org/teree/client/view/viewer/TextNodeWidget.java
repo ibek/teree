@@ -26,7 +26,8 @@ public class TextNodeWidget extends NodeWidget {
     }
     
     public void init() {
-        content = new HTML(node.getContent().toString());
+        content = new HTML();
+        content.setText(node.getContent().toString());
         content.setStylePrimaryName(resources.css().node());
         content.setStyleDependentName("view", true);
         

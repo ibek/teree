@@ -56,6 +56,7 @@ public class SchemeEditor implements Presenter {
 			@Override
 			public void received(SchemeReceived event) {
 				scheme = event.getScheme();
+            	System.out.println("p3:"+scheme.getRoot().getContent());
 				display.setRoot(scheme.getRoot());
 			}
 		});
