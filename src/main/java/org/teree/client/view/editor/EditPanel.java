@@ -48,6 +48,7 @@ public class EditPanel extends Composite {
 		bold = new Button("", IconType.BOLD);
 		
 		icon = new DropdownButton("icon");
+		icon.getElement().getStyle().setZIndex(-100);
 		loadIcons();
 
 		container.add(save);

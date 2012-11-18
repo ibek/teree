@@ -135,6 +135,7 @@ public class TextNodeWidget extends NodeWidget {
 	        content.addClickHandler(new ClickHandler() {
 	            @Override
 	            public void onClick(ClickEvent event) {
+	            	event.stopPropagation();
 	                if (selected) { // second click - edit this node
 	                    edit();
 	                } else { // first click - select this node

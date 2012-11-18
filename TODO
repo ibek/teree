@@ -4,7 +4,6 @@
 udelat testovani podle nalezenych chyb z testing release 0.5 + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
 
 automaticka zmena jazyka
-tvorba map z templates
 MathNodeWidget
 
 edit public scheme muze provest pouze autor ale bude si moci vytvorit klon
@@ -20,8 +19,7 @@ definovat vlastni format pro import a export
 0.7:
 
 uzivatelsky privetive statusy a chybove hlasky
- 
-podpora collapse node
+tvorba map z templates
 
 direct explore - novy typ generovani mapy, nejspis pro to bude stacit mindmapa protoze leva strana se zajisti uz na serveru pri cteni 
 service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector

@@ -151,5 +151,10 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
     	event.setData("id", String.valueOf(((AbsolutePanel)getParent()).getWidgetIndex(this)));
         event.getDataTransfer().setDragImage(container.getElement(), 10, 10);
     }
+	
+	@Override
+	public boolean isCollapsed() {
+		return false;
+	}
 
 }

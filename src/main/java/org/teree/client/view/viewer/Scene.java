@@ -15,11 +15,24 @@ import org.teree.shared.data.scheme.Node;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseEvent;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.i18n.client.Messages.Select;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -30,6 +43,9 @@ public class Scene extends Composite {
     private AbsolutePanel container;
     private Canvas canvas;
     private Node root;
+    private boolean move = false;
+    private Integer lastx;
+    private Integer lasty;
     
     public Scene() {
     	
@@ -55,12 +71,43 @@ public class Scene extends Composite {
 			public void onResize(ResizeEvent event) {
                 sp.setWidth(event.getWidth() + "px");
                 sp.setHeight((event.getHeight()-Settings.SCENE_HEIGHT_LESS) + "px");
+                scheme.renderViewer(canvas, getNodeWidgets(), root);
             }
 		});
         
         initWidget(sp);
         
         bind();
+        
+        container.addDomHandler(new MouseDownHandler() {
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				move = true;
+				lastx = null;
+				lasty = null;
+			}
+		}, MouseDownEvent.getType());
+    	
+        container.addDomHandler(new MouseUpHandler() {
+			@Override
+			public void onMouseUp(MouseUpEvent event) {
+				move = false;
+			}
+		}, MouseUpEvent.getType());
+    	
+        container.addDomHandler(new MouseMoveHandler() {
+			@Override
+			public void onMouseMove(MouseMoveEvent event) {
+				if (move) {
+					if (lastx != null && lasty != null) {
+						sp.setHorizontalScrollPosition(sp.getHorizontalScrollPosition() - (event.getX() - lastx));
+						sp.setVerticalScrollPosition(sp.getVerticalScrollPosition() - (event.getY() - lasty));
+					}
+					lastx = event.getX();
+					lasty = event.getY();
+				}
+			}
+		}, MouseMoveEvent.getType());
         
     }
     
@@ -109,6 +156,15 @@ public class Scene extends Composite {
 		switch(node.getType()){
 	        case IconText: {
 	            nw = new TextNodeWidget(node);
+	            nw.addDomHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent event) {
+						Object src = event.getSource();
+						if (src instanceof TextNodeWidget) {
+							changeCollapseNode((TextNodeWidget) src);
+						}
+					}
+				}, ClickEvent.getType());
 	            break;
 	        }
 	        case ImageLink: {
@@ -127,6 +183,11 @@ public class Scene extends Composite {
     		Node n = cn.get(i);
     		init(n);
     	}
+    }
+    
+    private void changeCollapseNode(TextNodeWidget nw) {
+    	nw.setCollapsed(!nw.isCollapsed());
+        scheme.renderViewer(canvas, getNodeWidgets(), root);
     }
     
     private List<NodeWidget> getNodeWidgets() {

@@ -66,9 +66,12 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 
 			if (n.getLocation() == NodeLocation.LEFT
 					&& n.getChildNodes() != null) {
-				max_width = 0; // for this node n, it is set in setBounds method!!
+				max_width = nc.getOffsetWidth(); // for this node n, it is set in setBounds method!!
 				level = 1;
-				int h = setBounds(nodes, n.getChildNodes(), left, nc.getOffsetWidth(), level, id+1); // don't worry, the current node is set in setBounds
+				int h = 0;
+				if (!nc.isCollapsed()) {
+					h = setBounds(nodes, n.getChildNodes(), left, nc.getOffsetWidth(), level, id+1); // don't worry, the current node is set in setBounds
+				}
 				if (nc.getOffsetHeight() > h) {
 					h = nc.getOffsetHeight();
 				}
@@ -79,9 +82,12 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 					left_level = level+1;
 				}
 			} else if (n.getChildNodes() != null) {
-				max_width = 0;
+				max_width = nc.getOffsetWidth();
 				level = 1;
-				int h = setBounds(nodes, n.getChildNodes(), right, nc.getOffsetWidth(), level, id+1); // don't worry, the current node is set in setBounds
+				int h = 0;
+				if (!nc.isCollapsed()) {
+					h = setBounds(nodes, n.getChildNodes(), right, nc.getOffsetWidth(), level, id+1); // don't worry, the current node is set in setBounds
+				}
 				if (nc.getOffsetHeight() > h) {
 					h = nc.getOffsetHeight();
 				}
@@ -261,6 +267,7 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		for (int i = 0; i < cn.size(); ++i) {
 			Node n = cn.get(i);
 			T nw = nodes.get(id);
+			
 			AbsolutePanel panel = (AbsolutePanel) nw.getParent();
 			
 			int x = (loc == NodeLocation.LEFT) ? start_x - nw.getOffsetWidth() : start_x;
@@ -286,7 +293,7 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 					  y + nw.getOffsetHeight() / 2, curveness);
 			// drawLine(context, start_x, start_y, x+((loc ==NodeLocation.LEFT)?n.getContent().getWidth():0), y+n.getContent().getHeight()/2);
 
-			if (n.getChildNodes() != null && n.getChildNodes().size() > 0) {
+			if (!nw.isCollapsed() && n.getChildNodes() != null && n.getChildNodes().size() > 0) {
 				// generate child nodes
 				x = (loc == NodeLocation.RIGHT) ? start_x
 						+ nw.getOffsetWidth() : x;
@@ -294,12 +301,23 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 							  x + ((loc == NodeLocation.LEFT) ? 0 : margin), 
 							  y + nw.getOffsetHeight() / 2, 
 							  level + 1, py, id);
+			} else if (nw.isCollapsed()) {
+				hideChildNodes(nw, nodes);
+				id += n.getNumberOfChildNodes();
 			}
 			py += lvl * 2; // for next row, increase py
 		}
 
 		return id;
 
+	}
+	
+	private void hideChildNodes(T root, List<T> nodes) {
+		int id = nodes.indexOf(root);
+		int nocn = root.getNode().getNumberOfChildNodes();
+		for (int i=0; i<nocn; ++i) {
+			DOM.setStyleAttribute(nodes.get(id + i + 1).getElement(), "visibility", "hidden");
+		}
 	}
 
 	/**
@@ -315,6 +333,9 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 	private int setBounds(List<T> nodes, List<Node> cn, List<List<Integer>> level_bounds,
 			int current_width, int level, int id) {
 		int bounds = 0;
+		while (level_bounds.size() <= level) {
+			level_bounds.add(new ArrayList<Integer>());
+		}
 		for (int i = 0; i < cn.size(); ++i) {
 			Node n = cn.get(i);
 			T nw = nodes.get(id);
@@ -322,7 +343,10 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 			List<Node> fcn = n.getChildNodes();
 			if (fcn != null && !fcn.isEmpty()) {
 				// recursively get height
-				int h = setBounds(nodes, fcn, level_bounds, current_width + nw.getOffsetWidth(), level + 1, id+1);
+				int h = 0;
+				if (!nw.isCollapsed()) {
+					h = setBounds(nodes, fcn, level_bounds, current_width + nw.getOffsetWidth(), level + 1, id+1);
+				}
 				h = (nw.getOffsetHeight() > h) ? nw.getOffsetHeight() : h;
 				bounds += h;
 				id += n.getNumberOfChildNodes()+1;
@@ -331,17 +355,14 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 			} else { // leaf
 				bounds += nw.getOffsetHeight();
 				id++;
-				while (level_bounds.size() <= level) {
-					level_bounds.add(new ArrayList<Integer>());
-				}
 				// add height of the node which is leaf
 				level_bounds.get(level).add(nw.getOffsetHeight());
-				
-				// !!! this part set maximal width
-				if (max_width < current_width + nw.getOffsetWidth()) {
-					max_width = current_width + nw.getOffsetWidth();
-					this.level = level;
-				}
+			}
+			
+			// !!! this part set maximal width
+			if (max_width < current_width + nw.getOffsetWidth()) {
+				max_width = current_width + nw.getOffsetWidth();
+				this.level = level;
 			}
 		}
 		return bounds;

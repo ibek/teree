@@ -13,12 +13,15 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.ui.HTML;
 
 public class TextNodeWidget extends NodeWidget {
 
 	private Icon icon;
     private HTML content;
+    private boolean collapsed;
     
     protected TextNodeWidget(Node node) {
         super(node);
@@ -39,6 +42,13 @@ public class TextNodeWidget extends NodeWidget {
 			content.getElement().getStyle().setPaddingLeft(Settings.ICON_WIDTH, Unit.PX);
     	}
     	
+    	content.addMouseDownHandler(new MouseDownHandler() {
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				event.stopPropagation(); // it prevents map moving
+			}
+		});
+    	
         content.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -53,6 +63,11 @@ public class TextNodeWidget extends NodeWidget {
 			getElement().getStyle().setFontWeight(FontWeight.BOLD);
 		} else {
 			getElement().getStyle().setFontWeight(FontWeight.NORMAL);
+		}
+		
+		// at start all nodes are collapsed
+		if (node.getParent() != null && node.getParent().getParent() == null && node.getNumberOfChildNodes() > 0) {
+			setCollapsed(true);
 		}
         
         container.add(content);
@@ -75,5 +90,19 @@ public class TextNodeWidget extends NodeWidget {
     	}
         context.restore();
     }
+	
+	@Override
+	public boolean isCollapsed() {
+		return collapsed;
+	}
+
+	public void setCollapsed(boolean collapsed) {
+		if (collapsed) {
+			content.setText("+ "+node.getContent().toString());
+		} else {
+			content.setText(node.getContent().toString());
+		}
+		this.collapsed = collapsed;
+	}
 
 }

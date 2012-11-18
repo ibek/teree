@@ -19,9 +19,7 @@
     <inherits name="org.vectomatic.libgwtfile" />
     
 	<extend-property name="locale" values="en"/>
-	<extend-property name="locale" values="cs"/>
-	
-	<!-- <set-property name="locale" value="en"/>  --> <!-- only for testing purposes ... the other languages won't be permuted -->
+	<!-- <extend-property name="locale" values="cs"/>  -->
 	    
     <replace-with
         class="org.teree.client.viewer.TereeValidatorFactory">

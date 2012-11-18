@@ -44,5 +44,10 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 	public int getWidgetHeight() {
 		return getWidget().getOffsetHeight();
 	}
+	
+	@Override
+	public boolean isCollapsed() {
+		return false;
+	}
 
 }

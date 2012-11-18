@@ -59,6 +59,7 @@ public class ImageNodeWidget extends NodeWidget {
 		content.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				event.stopPropagation();
 				if (selected) {
 					edit();
 				} else { // first click - select this node

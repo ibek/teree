@@ -14,4 +14,6 @@ public interface NodeInterface {
 	
 	public void draw(Context2d context, int x, int y);
 	
+	public boolean isCollapsed();
+	
 }

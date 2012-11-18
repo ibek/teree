@@ -76,6 +76,13 @@ public class Scene extends Composite {
 		});
         initWidget(sp);
         
+        sp.getParent().addDomHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				selectNode(null);
+			}
+		}, ClickEvent.getType());
+        
         bind();
         
     }
@@ -89,13 +96,6 @@ public class Scene extends Composite {
             }
             
         }, SelectNode.TYPE);
-        
-        canvas.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                selectNode(null);
-            }
-        });
         
         container.addHandler(new NodeChangedHandler() {
 			@Override
