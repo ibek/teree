@@ -16,7 +16,7 @@ public class Settings {
 	public static final String FAILED_LOGIN_LINK = "login?failed";
 	public static final String JOIN_LINK = "join";
 	public static final String TAUTH_LINK = "tauth";
-	public static final String PRIVATE_LINK = "private";
+	public static final String USERHOME_LINK = "user/id=";
 	public static final String SETTINGS_LINK = "settings";
 	public static final String CHANGE_LOGS_LINK = "changeLogs";
 	

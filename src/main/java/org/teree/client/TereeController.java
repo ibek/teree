@@ -23,7 +23,7 @@ import org.teree.client.presenter.ChangeLogsPage;
 import org.teree.client.presenter.HomePage;
 import org.teree.client.presenter.JoinPage;
 import org.teree.client.presenter.LoginPage;
-import org.teree.client.presenter.PrivateHome;
+import org.teree.client.presenter.UserHome;
 import org.teree.client.presenter.SchemeExplorer;
 import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.presenter.SchemeViewer;
@@ -208,16 +208,12 @@ public class TereeController implements ValueChangeHandler<String> {
 				if (bean != null) {
 					presenter = bean.getInstance();
 				}
-			} else if (token.startsWith(Settings.PRIVATE_LINK)) {
-				IOCBeanDef<PrivateHome> bean = manager
-						.lookupBean(PrivateHome.class);
+			} else if (token.startsWith(Settings.USERHOME_LINK)) {
+				IOCBeanDef<UserHome> bean = manager
+						.lookupBean(UserHome.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
-					if (currentUser.getUserId() == null) { // the user has to be logged to access this page
-						tmpPresenter = presenter;
-						loadUserInfoData();
-						return;
-					}
+					((UserHome)presenter).setUser(token.substring(Settings.USERHOME_LINK.length()));
 				}
 			} else if (token.startsWith(Settings.SETTINGS_LINK)) {
 				IOCBeanDef<SettingsPage> bean = manager

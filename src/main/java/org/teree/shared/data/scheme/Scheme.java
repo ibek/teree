@@ -16,7 +16,9 @@ public class Scheme {
 	private Node root;
 	
 	private UserInfo author; // for public scheme
-	private UserInfo owner; // for private scheme
+	//private UserInfo owner; // for private scheme
+	
+	private Permissions permissions;
 
 	public String getSchemePicture() {
         return schemePicture;
@@ -50,12 +52,12 @@ public class Scheme {
 		this.author = author;
 	}
 
-	public UserInfo getOwner() {
-		return owner;
+	public Permissions getPermissions() {
+		return permissions;
 	}
 
-	public void setOwner(UserInfo owner) {
-		this.owner = owner;
+	public void setPermissions(Permissions permissions) {
+		this.permissions = permissions;
 	}
 	
 }

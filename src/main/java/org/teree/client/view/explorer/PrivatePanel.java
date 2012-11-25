@@ -1,7 +1,7 @@
 package org.teree.client.view.explorer;
 
 import org.teree.client.io.FreeMind;
-import org.teree.client.text.PrivateHome;
+import org.teree.client.text.UserHome;
 import org.teree.client.view.explorer.event.ImportSchemeHandler;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Scheme;
@@ -33,7 +33,7 @@ public class PrivatePanel extends Composite {
 	
 	private ImportSchemeHandler handler;
 	
-	private PrivateHome TEXT = PrivateHome.LANG;
+	private UserHome TEXT = UserHome.LANG;
 
 	public PrivatePanel() {
 

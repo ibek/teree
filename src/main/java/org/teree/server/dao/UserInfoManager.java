@@ -89,18 +89,6 @@ public class UserInfoManager {
         coll.update(updateBy, new BasicDBObject("$set", doc));
     }
     
-    public void updateCount(UserInfo ui) {
-    	DBCollection coll = getCollection();
-        DBObject updateBy = getUpdateBy(ui);
-        BasicDBObject doc = new BasicDBObject();
-
-        // only these properties are updated
-        doc.put("publicCount", ui.getPublicCount());
-        doc.put("privateCount", ui.getPrivateCount());
-        
-        coll.update(updateBy, new BasicDBObject("$set", doc));
-    }
-    
     public void updatePassword(UserInfo ui, String newPassword) {
     	if (ui.getUsername() == null) {
     		return;
@@ -178,8 +166,6 @@ public class UserInfoManager {
         ui.setName((String)userinfo.get("name"));
         ui.setEmail((String)userinfo.get("email"));
         ui.setJoined((String)userinfo.get("joined"));
-        ui.setPublicCount((Integer)userinfo.get("publicCount"));
-        ui.setPrivateCount((Integer)userinfo.get("privateCount"));
         ui.setMemUsed((Long)userinfo.get("memUsed"));
         ui.setUserPackage(getUserPackageManager().select((String)userinfo.get("package")));
         
@@ -191,8 +177,6 @@ public class UserInfoManager {
 
         doc.put("name", ui.getName());
         doc.put("email", ui.getEmail());
-        doc.put("publicCount", ui.getPublicCount());
-        doc.put("privateCount", ui.getPrivateCount());
         doc.put("memUsed", ui.getMemUsed());
         
         return doc;

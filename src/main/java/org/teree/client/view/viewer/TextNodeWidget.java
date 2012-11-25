@@ -49,13 +49,6 @@ public class TextNodeWidget extends NodeWidget {
 			}
 		});
     	
-        content.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                // TODO: add support for collapse
-            }
-        });
-    	
         // set node style
 		NodeStyle ns = node.getStyleOrCreate();
 		

@@ -20,6 +20,7 @@ import org.teree.client.view.explorer.event.PublishScheme;
 import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
+import org.teree.shared.SchemeService;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.data.scheme.Scheme;
 
@@ -34,7 +35,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 @Dependent
-public class PrivateHome implements Presenter {
+public class UserHome implements Presenter {
 
 	public interface Display extends Template {
         Widget asWidget();
@@ -45,6 +46,7 @@ public class PrivateHome implements Presenter {
         String getFirstOid();
         String getLastOid();
         void setImportSchemeHandler(ImportSchemeHandler handler);
+        void setUser(String userid);
     }
 	
     @Inject @Named(value="eventBus")
@@ -52,9 +54,14 @@ public class PrivateHome implements Presenter {
 	
 	@Inject
 	private Caller<SecuredSchemeService> securedService;
+	
+	@Inject
+	private Caller<SchemeService> generalService;
     
     @Inject
     private Display display;
+    
+    private String userid;
 	
 	public void bind() {
 		display.getNextButton().addClickHandler(new ClickHandler() {
@@ -64,31 +71,6 @@ public class PrivateHome implements Presenter {
 				if (from != null) {
 					loadData(from);
 				}
-			}
-		});
-		
-		display.getScene().addPublishHandler(new PublishSchemeHandler() {
-			@Override
-			public void publish(final PublishScheme event) {
-				securedService.call(new RemoteCallback<Void>() {
-					@Override
-					public void callback(Void response) {
-						display.info(General.LANG.schemePublished(event.getScheme().getOid()));
-						Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-				            @Override
-				            public void execute() {
-								eventBus.fireEvent(new RefreshUserInfo());
-				            }
-				        });
-						loadData(null);
-					}
-				}, new ErrorCallback() {
-					@Override
-					public boolean error(Message message, Throwable throwable) {
-						// TODO Auto-generated method stub
-						return false;
-					}
-				}).publishScheme(event.getScheme().getOid());
 			}
 		});
 		
@@ -159,8 +141,13 @@ public class PrivateHome implements Presenter {
 		return display;
 	}
 	
+	public void setUser(String userid) {
+		this.userid = userid;
+		display.setUser(userid);
+	}
+	
 	private void loadData(String from_oid) {
-		securedService.call(new RemoteCallback<List<Scheme>>() {
+		generalService.call(new RemoteCallback<List<Scheme>>() {
             @Override
             public void callback(List<Scheme> response) {
                 display.setData(response);
@@ -171,11 +158,11 @@ public class PrivateHome implements Presenter {
 				display.error(General.LANG.connectionIssue());
 				return false;
 			}
-		}).getPrivateSchemesFrom(from_oid, Settings.SCHEME_COUNT_IN_EXPLORER);
+		}).getAllFromUser(from_oid, Settings.SCHEME_COUNT_IN_EXPLORER, userid);
 	}
 	
 	private void loadPreviousData(String to_oid) {
-		securedService.call(new RemoteCallback<List<Scheme>>() {
+		generalService.call(new RemoteCallback<List<Scheme>>() {
             @Override
             public void callback(List<Scheme> response) {
                 display.setData(response);
@@ -186,7 +173,7 @@ public class PrivateHome implements Presenter {
 				display.error(General.LANG.connectionIssue());
 				return false;
 			}
-		}).getPrivateSchemesTo(to_oid, Settings.SCHEME_COUNT_IN_EXPLORER);
+		}).getAllToUser(to_oid, Settings.SCHEME_COUNT_IN_EXPLORER, userid);
 	}
 
 }

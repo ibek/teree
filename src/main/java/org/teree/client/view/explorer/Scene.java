@@ -31,10 +31,7 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	private Pager pagerTop;
 	private Pager pagerBottom;
 
-	private HandlerManager publishManager;
 	private HandlerManager removeManager;
-	
-	private boolean enablePublish = false;
 	
 	/**
 	 * To prevent unnecessary calls for next and previous page.
@@ -51,7 +48,6 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		schemeContainer.getElement().getStyle().setPaddingLeft(35, Unit.PX);
 		schemeContainer.getElement().getStyle().setPaddingRight(5, Unit.PX);
 
-		publishManager = new HandlerManager(schemeContainer);
 		removeManager = new HandlerManager(schemeContainer);
 		
 		pagerTop = new Pager((char)0xf060+" "+TEXT.back(), TEXT.next()+" "+(char)0xf061);
@@ -91,15 +87,7 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		for(int i=0; i<slist.size(); ++i) {
 			Scheme s = slist.get(i);
 			final SchemeWidget sw = new SchemeWidget();
-			sw.enablePublish(enablePublish);
 			sw.setScheme(s);
-			sw.getPublishButton().addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					event.stopPropagation();
-					publishManager.fireEvent(new PublishScheme(sw.getScheme()));
-				}
-			});
 			sw.getRemoveButton().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
@@ -146,15 +134,6 @@ public class Scene extends Composite implements HasSchemeHandlers {
 
 	public HasClickHandlers getPreviousButton() {
 		return pagerBottom.getLeft();
-	}
-	
-	public void enablePublish(boolean state){
-		this.enablePublish = state;
-	}
-
-	@Override
-	public HandlerRegistration addPublishHandler(PublishSchemeHandler handler) {
-		return publishManager.addHandler(PublishScheme.TYPE, handler);
 	}
 
 	@Override

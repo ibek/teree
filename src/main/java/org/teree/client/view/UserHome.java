@@ -5,7 +5,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import com.github.gwtbootstrap.client.ui.Heading;
-import com.github.gwtbootstrap.client.ui.Label;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -20,11 +19,11 @@ import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Scheme;
 
-public class PrivateHome extends TemplateScene implements org.teree.client.presenter.PrivateHome.Display {
+public class UserHome extends TemplateScene implements org.teree.client.presenter.UserHome.Display {
 
 	private static ExplorerBinder uiBinder = GWT.create(ExplorerBinder.class);
 
-    interface ExplorerBinder extends UiBinder<Widget, PrivateHome> {
+    interface ExplorerBinder extends UiBinder<Widget, UserHome> {
     }
     
 	static {
@@ -35,12 +34,6 @@ public class PrivateHome extends TemplateScene implements org.teree.client.prese
     Scene scene;
     
     @UiField
-    Label publicCount;
-    
-    @UiField
-    Label privateCount;
-    
-    @UiField
     Heading name;
     
     @UiField
@@ -49,19 +42,21 @@ public class PrivateHome extends TemplateScene implements org.teree.client.prese
     @UiField
     PrivatePanel privatePanel;
     
+    private String userid;
+    
     @PostConstruct
     public void init() {
+    	privatePanel.setVisible(false);
         initWidget(uiBinder.createAndBindUi(this));
-    	scene.enablePublish(true);
     }
     
     @Override
     public void setCurrentUser(UserInfo user) {
     	super.setCurrentUser(user);
     	
+    	privatePanel.setVisible(userid.equals(user.getUserId()));
+    	
     	name.setText(user.getName());
-    	publicCount.setText(String.valueOf(user.getPublicCount()));
-    	privateCount.setText(String.valueOf(user.getPrivateCount()));
     	joined.setText(user.getJoined());
     }
     
@@ -103,6 +98,11 @@ public class PrivateHome extends TemplateScene implements org.teree.client.prese
 	@Override
 	public void setImportSchemeHandler(ImportSchemeHandler handler) {
 		privatePanel.setImportSchemeHandler(handler);
+	}
+	
+	@Override
+	public void setUser(String userid) {
+		this.userid = userid;
 	}
 
 }

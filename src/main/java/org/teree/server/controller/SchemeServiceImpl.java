@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.teree.server.dao.SchemeManager;
 import org.teree.shared.SchemeService;
+import org.teree.shared.UserService;
 import org.teree.shared.data.scheme.Scheme;
 
 @ApplicationScoped
@@ -21,19 +22,32 @@ public class SchemeServiceImpl implements SchemeService {
     @Inject
     private SchemeManager _sm;
 
+    @Inject
+    private UserService _us;
+    
 	@Override
 	public List<Scheme> getAllFrom(String from_oid, int limit) {
-		return _sm.allPublicFrom(from_oid, limit);
+		return _sm.allFrom(from_oid, limit, _us.getUserInfo());
 	}
 	
 	@Override
 	public List<Scheme> getAllTo(String to_oid, int limit) {
-		return _sm.allPublicTo(to_oid, limit);
+		return _sm.allTo(to_oid, limit, _us.getUserInfo());
+	}
+
+	@Override
+	public List<Scheme> getAllFromUser(String from_oid, int limit, String userid) {
+		return _sm.allFromUser(from_oid, limit, userid, _us.getUserInfo());
+	}
+
+	@Override
+	public List<Scheme> getAllToUser(String to_oid, int limit, String userid) {
+		return _sm.allToUser(to_oid, limit, userid, _us.getUserInfo());
 	}
 
     @Override
     public Scheme getScheme(String oid) {
-        return _sm.select(oid);
+        return _sm.select(oid, _us.getUserInfo());
     }
     
 }

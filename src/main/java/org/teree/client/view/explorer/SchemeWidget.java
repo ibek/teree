@@ -25,7 +25,6 @@ public class SchemeWidget extends Composite {
 	
 	private Image screen;
 	private Badge author;
-	private Button publish;
 	private Button remove;
 	private Button edit;
 	private Button view;
@@ -73,26 +72,25 @@ public class SchemeWidget extends Composite {
 		Style vs = view.getElement().getStyle();
 		vs.setFloat(Style.Float.RIGHT);
 		
-		publish = new Button("", IconType.GLOBE);
-		publish.setVisible(false);
-		publish.getElement().getStyle().setFloat(Style.Float.LEFT);
-		
 		author = new Badge();
 		author.setType(BadgeType.INFO);
 		author.getElement().getStyle().setProperty("lineHeight", "30px");
+		author.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				event.stopPropagation();
+				History.newItem(Settings.USERHOME_LINK + author.getText());
+			}
+		});
 		//author.getElement().getStyle().setFloat(Style.Float.RIGHT);
 		
 		remove = new Button("", IconType.TRASH);
 		Style rs = remove.getElement().getStyle();
 		rs.setFloat(Style.Float.RIGHT);
-
-		Tooltip pt = new Tooltip(TEXT.publish());
-        pt.add(publish);
 		
         Tooltip rt = new Tooltip(TEXT.remove());
         rt.add(remove);
 
-        th.add(pt);
         th.add(rt);
 		th.add(screen);
 		th.add(edit);
@@ -110,23 +108,11 @@ public class SchemeWidget extends Composite {
 	public void setScheme(Scheme scheme) {
 		this.scheme = scheme;
 		screen.setUrl(scheme.getSchemePicture());
-		if (scheme.getAuthor() != null) {
-			author.setText(scheme.getAuthor().getName());
-		} else if (scheme.getOwner() != null) {
-			author.setText(scheme.getOwner().getName());
-		}
-	}
-	
-	public HasClickHandlers getPublishButton() {
-		return publish;
+		author.setText(scheme.getAuthor().getName());
 	}
 	
 	public HasClickHandlers getRemoveButton() {
 		return remove;
-	}
-	
-	public void enablePublish(boolean state) {
-		publish.setVisible(state);
 	}
 	
 }

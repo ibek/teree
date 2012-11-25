@@ -1,6 +1,5 @@
 package org.teree.server.controller;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,21 +33,6 @@ public class SecuredSchemeServiceImpl implements SecuredSchemeService {
     
     private RequestDispatcher _dispatcher = ErraiBus.getDispatcher();
 
-	@Override
-	public List<Scheme> getPrivateSchemesFrom(String from_oid, int limit) {
-		return _sm.allPrivateFrom(_us.getUserInfo(), from_oid, limit);
-	}
-
-	@Override
-	public List<Scheme> getPrivateSchemesTo(String to_oid, int limit) {
-		return _sm.allPrivateTo(_us.getUserInfo(), to_oid, limit);
-	}
-
-    @Override
-	public Scheme getPrivateScheme(String oid) {
-        return _sm.selectPrivate(oid, _us.getUserInfo());
-    }
-
     @Override
 	public String insertScheme(Scheme s) {
         return _sm.insert(s, _us.getUserInfo());
@@ -57,11 +41,6 @@ public class SecuredSchemeServiceImpl implements SecuredSchemeService {
 	@Override
 	public void updateScheme(Scheme s) {
 		_sm.update(s, _us.getUserInfo());
-	}
-	
-	@Override
-	public void publishScheme(String oid) {
-		_sm.publish(oid, _us.getUserInfo());
 	}
 	
 	@Override

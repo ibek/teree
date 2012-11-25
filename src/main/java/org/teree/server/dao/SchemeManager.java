@@ -13,9 +13,11 @@ import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
+import org.teree.shared.data.scheme.Permissions;
 import org.teree.shared.data.scheme.Scheme;
 import org.teree.shared.data.scheme.Node.NodeLocation;
 import org.teree.shared.data.scheme.Node.NodeType;
+import org.teree.shared.data.scheme.UserPermissions;
 import org.teree.shared.data.UserInfo;
 
 import com.mongodb.BasicDBList;
@@ -50,26 +52,14 @@ public class SchemeManager {
      * @param oid
      * @return node
      */
-    public Scheme select(String oid) {
+    public Scheme select(String oid, UserInfo ui) {
     	if (oid == null) {
     		return null;
     	}
         DBObject searchById = new BasicDBObject("_id", new ObjectId(oid));
-        return select(searchById);
-    }
-    
-    public Scheme selectPrivate(String oid, UserInfo ui) {
-    	if (oid == null || ui == null) {
-    		return null;
-    	}
-        DBObject searchBy = new BasicDBObject("_id", new ObjectId(oid));
-        searchBy.put("owner", ui.getUserId());
-        return select(searchBy);
-    }
-    
-    private Scheme select(DBObject searchBy) {
+        putSelectSecurityConditions(searchById, ui);
         DBCollection coll = getCollection();
-        DBObject found = coll.findOne(searchBy);
+        DBObject found = coll.findOne(searchById);
         return fromSchemeDBObject(found);
     }
     
@@ -78,65 +68,60 @@ public class SchemeManager {
     		return null;
     	}
         DBObject dbo = toSchemeDBObject(s);
-        dbo.put("owner", ui.getUserId());
+        dbo.put("author", ui.getUserId());
+        
+        Permissions permissions = new Permissions();
+        dbo.put("permissions", toPermissionsDBObject(permissions));
+        
         DBCollection coll = getCollection();
         coll.insert(dbo);
         String oid = ((ObjectId)dbo.get("_id")).toStringMongod();
-
-        // update userinfo
-
-    	ui.setPrivateCount(ui.getPrivateCount() + 1);
-        _uim.updateCount(ui);
         
         return oid;
         
     }
-    
-    /**
-     * Get all public schemes.
-     * @return
-     */
-    public List<Scheme> allPublicFrom(String from_oid, int limit) {
+
+	public List<Scheme> allFrom(String from_oid, int limit, UserInfo ui) {
     	DBObject keys = new BasicDBObject();
     	keys.put("root", 0);
-    	DBObject ref = new BasicDBObject("owner", new BasicDBObject("$exists", false));
+    	DBObject ref = null; 
     	if (from_oid != null) {
-    		ref.put("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
+    		ref = new BasicDBObject("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
     	}
-    	return allFrom(ref, keys, limit);
+    	return allFrom(ref, keys, limit, ui);
     }
     
-    public List<Scheme> allPublicTo(String to_oid, int limit) {
+    public List<Scheme> allTo(String to_oid, int limit, UserInfo ui) {
     	DBObject keys = new BasicDBObject();
     	keys.put("root", 0);
-    	DBObject ref = new BasicDBObject("owner", new BasicDBObject("$exists", false));
+    	DBObject ref = null;
     	if (to_oid != null) {
-    		ref.put("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
+    		ref = new BasicDBObject("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
     	}
-    	return allTo(ref, keys, limit); 
-    }
-    
-    public List<Scheme> allPrivateFrom(UserInfo ui, String from_oid, int limit) {
-    	DBObject keys = new BasicDBObject();
-    	keys.put("root", 0);
-    	DBObject ref = new BasicDBObject("owner", ui.getUserId());
-    	if (from_oid != null) {
-    		ref.put("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
-    	}
-    	return allFrom(ref, keys, limit);
-    }
-    
-    public List<Scheme> allPrivateTo(UserInfo ui, String to_oid, int limit) {
-    	DBObject keys = new BasicDBObject();
-    	keys.put("root", 0);
-    	DBObject ref = new BasicDBObject("owner", ui.getUserId());
-    	if (to_oid != null) {
-    		ref.put("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
-    	}
-    	return allTo(ref, keys, limit);
+    	return allTo(ref, keys, limit, ui);
     }
 
-    private List<Scheme> allFrom(DBObject ref, DBObject keys, int limit) {
+	public List<Scheme> allFromUser(String from_oid, int limit, String userid, UserInfo ui) {
+    	DBObject keys = new BasicDBObject();
+    	keys.put("root", 0);
+    	DBObject ref = new BasicDBObject("author", userid);
+    	if (from_oid != null) {
+    		ref = new BasicDBObject("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
+    	}
+    	return allFrom(ref, keys, limit, ui);
+    }
+    
+    public List<Scheme> allToUser(String to_oid, int limit, String userid, UserInfo ui) {
+    	DBObject keys = new BasicDBObject();
+    	keys.put("root", 0);
+    	DBObject ref = new BasicDBObject("author", userid);
+    	if (to_oid != null) {
+    		ref = new BasicDBObject("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
+    	}
+    	return allTo(ref, keys, limit, ui);
+    }
+
+    private List<Scheme> allFrom(DBObject ref, DBObject keys, int limit, UserInfo ui) {
     	List<Scheme> res = new ArrayList<Scheme>();
     	DBCollection coll = getCollection();
         DBCursor found = coll.find(ref, keys)
@@ -144,12 +129,12 @@ public class SchemeManager {
         		.limit(limit);
         while(found.hasNext()) {
         	DBObject dbo = found.next();
-        	res.add(fromSchemeDBObjectInfo(dbo));
+        	res.add(fromSchemeDBObjectInfo(dbo, ui));
         }
         return res;
     }
 
-    private List<Scheme> allTo(DBObject ref, DBObject keys, int limit) {
+    private List<Scheme> allTo(DBObject ref, DBObject keys, int limit, UserInfo ui) {
     	List<Scheme> res = new ArrayList<Scheme>();
     	DBCollection coll = getCollection();
         DBCursor found = coll.find(ref, keys)
@@ -157,25 +142,9 @@ public class SchemeManager {
         		.limit(limit);
         while(found.hasNext()) {
         	DBObject dbo = found.next();
-        	res.add(0, fromSchemeDBObjectInfo(dbo));
+        	res.add(0, fromSchemeDBObjectInfo(dbo, ui));
         }
         return res;
-    }
-    
-    public void publish(String oid, UserInfo ui) {
-    	DBCollection coll = getCollection();
-        DBObject updateById = new BasicDBObject("_id", new ObjectId(oid));
-        updateById.put("owner", ui.getUserId());
-        DBObject update = new BasicDBObject("$set", new BasicDBObject("author", ui.getUserId()));
-        update.put("$unset", new BasicDBObject("owner", 1));
-        coll.update(updateById, update);
-        
-        // update userinfo
-
-		ui.setPublicCount(ui.getPublicCount() + 1);
-    	ui.setPrivateCount(ui.getPrivateCount() - 1);
-        _uim.updateCount(ui);
-        
     }
     
     /**
@@ -187,25 +156,12 @@ public class SchemeManager {
     public boolean remove(String oid, UserInfo ui) {
     	DBCollection coll = getCollection();
         DBObject removeBy = new BasicDBObject("_id", new ObjectId(oid));
-        BasicDBList list = new BasicDBList();
-        list.add(new BasicDBObject("owner", ui.getUserId()));
-        list.add(new BasicDBObject("author", ui.getUserId()));
-        removeBy.put("$or", list);
-        Scheme rs = fromSchemeDBObject(coll.findOne(removeBy));
-        boolean removed = coll.remove(removeBy).getN() == 1;
+        removeBy.put("author", ui.getUserId()); // only author can remove scheme
+        fromSchemeDBObject(coll.findOne(removeBy));
+        boolean removed = coll.remove(removeBy).getLastError().ok();
         if (!removed) {
         	return removed;
         }
-        
-        // update userinfo
-        
-        if (rs.getAuthor() != null) { // public scheme
-    		ui.setPublicCount(ui.getPublicCount() - 1);
-        } else if (rs.getOwner() != null) { // private scheme
-        	ui.setPrivateCount(ui.getPrivateCount() - 1);
-        }
-        
-        _uim.updateCount(ui);
         
         return removed;
     }
@@ -213,11 +169,26 @@ public class SchemeManager {
     public void update(Scheme s, UserInfo ui) {
     	DBCollection coll = getCollection();
         DBObject updateBy = new BasicDBObject("_id", new ObjectId(s.getOid()));
-        BasicDBList list = new BasicDBList();
-        list.add(new BasicDBObject("owner", ui.getUserId()));
-        list.add(new BasicDBObject("author", ui.getUserId()));
-        updateBy.put("$or", list);
+        putUpdateSecurityConditions(updateBy, ui);
         coll.update(updateBy, new BasicDBObject("$set", toSchemeDBObject(s)));
+    }
+    
+    private DBObject putSelectSecurityConditions(DBObject req, UserInfo ui) {
+    	BasicDBObject perm = new BasicDBObject();
+    	perm.put("author", ui.getUserId());
+    	perm.put("permissions.users.userid", ui.getUserId());
+    	req.put("$or", perm);
+    	return req;
+    }
+    
+    private DBObject putUpdateSecurityConditions(DBObject req, UserInfo ui) {
+    	BasicDBObject c = new BasicDBObject();
+    	c.put("userid", ui.getUserId());
+    	c.put("write", true);
+    	BasicDBObject perm = new BasicDBObject("permissions.users", new BasicDBObject("$elemMatch", c));
+    	perm.put("author", ui.getUserId());
+    	req.put("$or", perm);
+    	return req;
     }
     
     private BasicDBObject toSchemeDBObject(Scheme s) {
@@ -280,20 +251,23 @@ public class SchemeManager {
     	if (scheme == null) {
     		return null;
     	}
-        Scheme s = fromSchemeDBObjectInfo(scheme);
+        Scheme s = fromSchemeDBObjectInfo(scheme, null);
 
         s.setRoot(fromNodeDBObject((BasicDBObject)scheme.get("root")));
         
         return s;
     }
     
-    private Scheme fromSchemeDBObjectInfo(DBObject scheme) {
+    private Scheme fromSchemeDBObjectInfo(DBObject scheme, UserInfo ui) {
     	Scheme s = new Scheme();
         
         s.setSchemePicture((String)scheme.get("screen"));
         s.setOid(((ObjectId)scheme.get("_id")).toStringMongod());
         s.setAuthor(_uim.selectByOid((String)scheme.get("author")));
-        s.setOwner(_uim.selectByOid((String)scheme.get("owner")));
+        
+        if (ui != null && s.getAuthor().getUserId() == ui.getUserId()) {
+        	s.setPermissions(fromPermissionsDBObject((DBObject)scheme.get("permissions")));
+        }
         
         return s;
     }
@@ -343,6 +317,45 @@ public class SchemeManager {
         
         return node;
     }
+    
+    private Permissions fromPermissionsDBObject(DBObject permissions) {
+    	Permissions p = new Permissions();
+    	
+    	p.setWrite((Boolean)permissions.get("write"));
+    	BasicDBList list = (BasicDBList)permissions.get("users");
+    	if (list != null) {
+        	List<UserPermissions> users = new ArrayList<UserPermissions>();
+	    	Iterator<Object> it = list.iterator();
+	        while(it.hasNext()){
+	        	DBObject upo = (BasicDBObject)it.next();
+	        	UserPermissions up = new UserPermissions();
+	        	up.setWrite((Boolean)upo.get("write"));
+	        	up.setUser(_uim.selectByOid((String)upo.get("userid")));
+	            users.add(up);
+	        }
+	    	p.setUsers(users);
+    	}
+    	
+    	return p;
+    }
+    
+    private Object toPermissionsDBObject(Permissions permissions) {
+    	BasicDBObject doc = new BasicDBObject();
+        
+        doc.put("write", permissions.getWrite());
+        
+        BasicDBList users = new BasicDBList();
+        List<UserPermissions> up = permissions.getUsers();
+        for (UserPermissions u:up) {
+        	DBObject user = new BasicDBObject();
+        	user.put("userid", u.getUser().getUserId());
+        	user.put("write", u.getWrite());
+        	users.add(user);
+        }
+        doc.put("users", users);
+        
+        return doc;
+	}
     
     private BasicDBList toDBList(List<Node> childNodes) {
         BasicDBList doc = new BasicDBList();

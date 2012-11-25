@@ -130,7 +130,7 @@ public class UserWidget extends Composite {
 		userHome.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				History.newItem(Settings.PRIVATE_LINK);
+				History.newItem(Settings.USERHOME_LINK + user.getUserId());
 			}
 		});
 	}

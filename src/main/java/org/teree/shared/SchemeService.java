@@ -17,6 +17,10 @@ public interface SchemeService {
 	public List<Scheme> getAllFrom(String from_oid, int limit);
 	
 	public List<Scheme> getAllTo(String to_oid, int limit);
+
+	public List<Scheme> getAllFromUser(String from_oid, int limit, String userid);
+	
+	public List<Scheme> getAllToUser(String to_oid, int limit, String userid);
     
     public Scheme getScheme(String oid);
     

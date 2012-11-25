@@ -5,12 +5,10 @@ import com.google.gwt.i18n.client.Messages;
 import com.google.gwt.i18n.client.LocalizableResource.DefaultLocale;
 
 @DefaultLocale("en")
-public interface PrivateHome extends Messages{
+public interface UserHome extends Messages{
     
-    public static PrivateHome LANG = GWT.create(PrivateHome.class);
+    public static UserHome LANG = GWT.create(UserHome.class);
 
-    String public_schemes();
-    String private_schemes();
     String joined_on();
     String import_from();
     
