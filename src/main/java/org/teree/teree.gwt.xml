@@ -20,6 +20,8 @@
     
 	<extend-property name="locale" values="en"/>
 	<!-- <extend-property name="locale" values="cs"/>  -->
+	
+	<set-property name="user.agent" value="safari"/>
 	    
     <replace-with
         class="org.teree.client.viewer.TereeValidatorFactory">

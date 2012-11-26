@@ -5,12 +5,10 @@ udelat testovani podle nalezenych chyb z testing release 0.5 + vytvorit mockobje
 
 automaticka zmena jazyka
 MathNodeWidget
-delete rootu zpusobi odstraneni vsech potomku
-bug5 - vytvorit metodu v Node - isChildNode pro kontrolu pri Drag&Drop
 
 prirazovat ruzna prava na mapy
- - zda dany uzivatel (skupina - guests) muze mapu cist, editovat ...
- - db.scheme.find({"permissions.users" : {$elemMatch : {"userid":"321","write":true}}})
+ - vytvorit dialog pro nastaveni
+ - podle prav zobrazovat tlacitka pro smazani (pouze autor) a upraveni
 
 definovat vlastni format pro import a export
  - pres xml schema

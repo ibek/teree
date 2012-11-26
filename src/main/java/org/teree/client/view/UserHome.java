@@ -46,8 +46,8 @@ public class UserHome extends TemplateScene implements org.teree.client.presente
     
     @PostConstruct
     public void init() {
-    	privatePanel.setVisible(false);
         initWidget(uiBinder.createAndBindUi(this));
+    	privatePanel.setVisible(false);
     }
     
     @Override

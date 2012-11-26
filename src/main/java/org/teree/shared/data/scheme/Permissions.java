@@ -12,7 +12,7 @@ import org.jboss.errai.common.client.api.annotations.Portable;
 @Portable
 public class Permissions {
 
-	private Boolean write; // global permissions
+	private Boolean write; // global permissions, null means that the scheme is not globally readable
 	private List<UserPermissions> users;
 	// TODO: create GroupPermissions
 	

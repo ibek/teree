@@ -106,6 +106,9 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
             	if (nw.getNode() == node) { // don't move the dragged node to the same node
             		return;
             	}
+            	if (nw.getNode().isChildNode(node)) { // cannot move a node to its child node (bug5)
+            		return;
+            	}
                 Node child = nw.getNode().clone();
                 if (node.getLocation() != null) {
                 	child.setLocation(node.getLocation());

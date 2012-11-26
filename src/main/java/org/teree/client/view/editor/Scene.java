@@ -158,10 +158,12 @@ public class Scene extends Composite {
     }
     
     public void removeSelectedNode() {
-    	if (selected != null && selected.getNode().getParent() != null) {
+    	if (selected != null) {
     		removeNodeWidget(selected);
     		selected.getNode().remove();
-    		selected = null;
+    		if (selected.getNode().getParent() != null) {
+    			selected = null;
+    		}
     		update(null);
     	}
     }
@@ -429,12 +431,15 @@ public class Scene extends Composite {
     }
     
     private void removeNodeWidget(NodeWidget nw) {
-    	if (nw.getNode() == root) { // root cannot be removed
-    		return;
-    	}
     	int id = container.getWidgetIndex(nw);
     	int count = nw.getNode().getNumberOfChildNodes();
-    	for (int i=-1; i<count; ++i) {
+    	int i = -1; 
+    	if (nw.getNode() == root) {
+    		// skip root
+    		i++;
+    		id++;
+    	}
+    	for (; i<count; ++i) {
     		container.remove(id);
     	}
     }

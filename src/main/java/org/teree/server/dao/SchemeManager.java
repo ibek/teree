@@ -69,9 +69,7 @@ public class SchemeManager {
     	}
         DBObject dbo = toSchemeDBObject(s);
         dbo.put("author", ui.getUserId());
-        
-        Permissions permissions = new Permissions();
-        dbo.put("permissions", toPermissionsDBObject(permissions));
+        dbo.put("permissions", toPermissionsDBObject(new Permissions()));
         
         DBCollection coll = getCollection();
         coll.insert(dbo);
@@ -84,7 +82,8 @@ public class SchemeManager {
 	public List<Scheme> allFrom(String from_oid, int limit, UserInfo ui) {
     	DBObject keys = new BasicDBObject();
     	keys.put("root", 0);
-    	DBObject ref = null; 
+    	DBObject ref = new BasicDBObject();
+    	putSelectSecurityConditions(ref, ui);
     	if (from_oid != null) {
     		ref = new BasicDBObject("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
     	}
@@ -94,7 +93,8 @@ public class SchemeManager {
     public List<Scheme> allTo(String to_oid, int limit, UserInfo ui) {
     	DBObject keys = new BasicDBObject();
     	keys.put("root", 0);
-    	DBObject ref = null;
+    	DBObject ref = new BasicDBObject();
+    	putSelectSecurityConditions(ref, ui);
     	if (to_oid != null) {
     		ref = new BasicDBObject("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
     	}
@@ -105,6 +105,7 @@ public class SchemeManager {
     	DBObject keys = new BasicDBObject();
     	keys.put("root", 0);
     	DBObject ref = new BasicDBObject("author", userid);
+    	putSelectSecurityConditions(ref, ui);
     	if (from_oid != null) {
     		ref = new BasicDBObject("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
     	}
@@ -115,6 +116,7 @@ public class SchemeManager {
     	DBObject keys = new BasicDBObject();
     	keys.put("root", 0);
     	DBObject ref = new BasicDBObject("author", userid);
+    	putSelectSecurityConditions(ref, ui);
     	if (to_oid != null) {
     		ref = new BasicDBObject("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
     	}
@@ -174,19 +176,25 @@ public class SchemeManager {
     }
     
     private DBObject putSelectSecurityConditions(DBObject req, UserInfo ui) {
-    	BasicDBObject perm = new BasicDBObject();
-    	perm.put("author", ui.getUserId());
-    	perm.put("permissions.users.userid", ui.getUserId());
+    	BasicDBList perm = new BasicDBList();
+    	if (ui != null) {
+    		perm.add(new BasicDBObject("author", ui.getUserId()));
+    	}
+    	perm.add(new BasicDBObject("permissions.write", new BasicDBObject("$exists", true)));
+    	perm.add(new BasicDBObject("permissions.users.userid", ui.getUserId()));
     	req.put("$or", perm);
     	return req;
     }
     
     private DBObject putUpdateSecurityConditions(DBObject req, UserInfo ui) {
+    	BasicDBList perm = new BasicDBList();
+    	
     	BasicDBObject c = new BasicDBObject();
     	c.put("userid", ui.getUserId());
-    	c.put("write", true);
-    	BasicDBObject perm = new BasicDBObject("permissions.users", new BasicDBObject("$elemMatch", c));
-    	perm.put("author", ui.getUserId());
+    	c.put("permissions.write", true);
+    	perm.add(new BasicDBObject("permissions.users", new BasicDBObject("$elemMatch", c)));
+    	
+    	perm.add(new BasicDBObject("author", ui.getUserId()));
     	req.put("$or", perm);
     	return req;
     }
@@ -342,15 +350,21 @@ public class SchemeManager {
     private Object toPermissionsDBObject(Permissions permissions) {
     	BasicDBObject doc = new BasicDBObject();
         
-        doc.put("write", permissions.getWrite());
+    	if (permissions.getWrite() != null) {
+    		doc.put("write", permissions.getWrite());
+    	}
         
         BasicDBList users = new BasicDBList();
         List<UserPermissions> up = permissions.getUsers();
-        for (UserPermissions u:up) {
-        	DBObject user = new BasicDBObject();
-        	user.put("userid", u.getUser().getUserId());
-        	user.put("write", u.getWrite());
-        	users.add(user);
+        if (up != null) {
+	        for (UserPermissions u:up) {
+	        	DBObject user = new BasicDBObject();
+	        	user.put("userid", u.getUser().getUserId());
+	        	if (u.getWrite() != null) {
+	        		user.put("write", u.getWrite());
+	        	}
+	        	users.add(user);
+	        }
         }
         doc.put("users", users);
         

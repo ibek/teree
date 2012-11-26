@@ -149,6 +149,16 @@ public class Node implements Cloneable {
     	return noc;
     }
     
+    public boolean isChildNode(Node node) {
+    	for(int i=0; childNodes != null && i < childNodes.size(); ++i){
+    		Node n = childNodes.get(i);
+    		if (n == node || n.isChildNode(node)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
     public NodeLocation getLocation() {
         return location;
     }

@@ -15,6 +15,10 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
@@ -79,7 +83,21 @@ public class SchemeWidget extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				event.stopPropagation();
-				History.newItem(Settings.USERHOME_LINK + author.getText());
+				if (scheme != null) {
+					History.newItem(Settings.USERHOME_LINK + scheme.getAuthor().getUserId());
+				}
+			}
+		});
+		author.addMouseOutHandler(new MouseOutHandler() {
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				author.getElement().getStyle().setColor("white");
+			}
+		});
+		author.addMouseOverHandler(new MouseOverHandler() {
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				author.getElement().getStyle().setColor("black");
 			}
 		});
 		//author.getElement().getStyle().setFloat(Style.Float.RIGHT);
