@@ -11,6 +11,7 @@ public interface Explorer extends Messages{
 
     String publish();
     String remove();
+    String permissions();
     String edit();
     String view();
     String next();

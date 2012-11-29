@@ -22,6 +22,8 @@ import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
 import org.teree.shared.SchemeService;
 import org.teree.shared.SecuredSchemeService;
+import org.teree.shared.UserService;
+import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Scheme;
 
 import com.google.gwt.core.client.Scheduler;
@@ -46,7 +48,7 @@ public class UserHome implements Presenter {
         String getFirstOid();
         String getLastOid();
         void setImportSchemeHandler(ImportSchemeHandler handler);
-        void setUser(String userid);
+        void setUser(UserInfo ui);
     }
 	
     @Inject @Named(value="eventBus")
@@ -57,6 +59,9 @@ public class UserHome implements Presenter {
 	
 	@Inject
 	private Caller<SchemeService> generalService;
+	
+	@Inject
+	private Caller<UserService> userService;
     
     @Inject
     private Display display;
@@ -143,7 +148,22 @@ public class UserHome implements Presenter {
 	
 	public void setUser(String userid) {
 		this.userid = userid;
-		display.setUser(userid);
+		loadUserInfo();
+	}
+	
+	private void loadUserInfo() {
+		userService.call(new RemoteCallback<UserInfo>() {
+			@Override
+			public void callback(UserInfo response) {
+				display.setUser(response);
+			}
+		}, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		}).getUserInfo(userid);
 	}
 	
 	private void loadData(String from_oid) {

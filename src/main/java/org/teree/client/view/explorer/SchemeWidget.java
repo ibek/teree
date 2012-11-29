@@ -2,6 +2,7 @@ package org.teree.client.view.explorer;
 
 import org.teree.client.Settings;
 import org.teree.client.text.Explorer;
+import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Scheme;
 
 import com.github.gwtbootstrap.client.ui.Badge;
@@ -32,8 +33,10 @@ public class SchemeWidget extends Composite {
 	private Button remove;
 	private Button edit;
 	private Button view;
+	private Button permissions;
 	
 	private Scheme scheme;
+	private PermissionsDialog pdialog;
 	
 	private Explorer TEXT = Explorer.LANG;
 	
@@ -50,7 +53,6 @@ public class SchemeWidget extends Composite {
 		th.getElement().getStyle().setMargin(5.0, Unit.PX);
 		th.getAnchor().getElement().getStyle().setBackgroundColor("white");
 		th.getAnchor().getElement().getStyle().setProperty("textAlign", "center");
-		
 		
 		screen = new Image();
 		
@@ -100,15 +102,42 @@ public class SchemeWidget extends Composite {
 				author.getElement().getStyle().setColor("black");
 			}
 		});
-		//author.getElement().getStyle().setFloat(Style.Float.RIGHT);
+		
+		pdialog = new PermissionsDialog();
+		pdialog.getOk().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO: set the permissions on server
+				pdialog.hide();
+			}
+		});
+
+		permissions = new Button("", IconType.LOCK);
+		permissions.setVisible(false);
+		permissions.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				event.stopPropagation();
+				
+				pdialog.setPopupPosition(getAbsoluteLeft(), getAbsoluteTop());
+				pdialog.show();
+			}
+		});
+		Style ps = permissions.getElement().getStyle();
+		ps.setFloat(Style.Float.LEFT);
+		
+        Tooltip pt = new Tooltip(TEXT.permissions());
+        pt.add(permissions);
 		
 		remove = new Button("", IconType.TRASH);
+		remove.setVisible(false);
 		Style rs = remove.getElement().getStyle();
 		rs.setFloat(Style.Float.RIGHT);
 		
         Tooltip rt = new Tooltip(TEXT.remove());
         rt.add(remove);
 
+        th.add(pt);
         th.add(rt);
 		th.add(screen);
 		th.add(edit);
@@ -127,6 +156,11 @@ public class SchemeWidget extends Composite {
 		this.scheme = scheme;
 		screen.setUrl(scheme.getSchemePicture());
 		author.setText(scheme.getAuthor().getName());
+		if (scheme.getPermissions() != null) {
+			permissions.setVisible(true);
+			remove.setVisible(true);
+			pdialog.setPermissions(scheme.getPermissions());
+		}
 	}
 	
 	public HasClickHandlers getRemoveButton() {

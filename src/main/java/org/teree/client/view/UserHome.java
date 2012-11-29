@@ -42,7 +42,7 @@ public class UserHome extends TemplateScene implements org.teree.client.presente
     @UiField
     PrivatePanel privatePanel;
     
-    private String userid;
+    private UserInfo ui;
     
     @PostConstruct
     public void init() {
@@ -53,11 +53,6 @@ public class UserHome extends TemplateScene implements org.teree.client.presente
     @Override
     public void setCurrentUser(UserInfo user) {
     	super.setCurrentUser(user);
-    	
-    	privatePanel.setVisible(userid.equals(user.getUserId()));
-    	
-    	name.setText(user.getName());
-    	joined.setText(user.getJoined());
     }
     
     @Override
@@ -101,8 +96,17 @@ public class UserHome extends TemplateScene implements org.teree.client.presente
 	}
 	
 	@Override
-	public void setUser(String userid) {
-		this.userid = userid;
+	public void setUser(UserInfo ui) {
+		this.ui = ui;
+    	
+		if (ui != null) {
+	    	name.setText(ui.getName());
+	    	joined.setText(ui.getJoined());
+	    	
+			if (header.getCurrentUser() != null) {
+				privatePanel.setVisible(ui.getUserId().equals(header.getCurrentUser().getUserId()));
+			}
+		}
 	}
 
 }

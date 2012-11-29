@@ -44,6 +44,11 @@ public class UserServiceImpl implements UserService {
         }
 		return ui;
 	}
+	
+	@Override
+	public UserInfo getUserInfo(String userid) {
+		return _uim.selectByOid(userid);
+	}
 
 	/**
 	 * TODO: should throw some exceptions (user exists...)

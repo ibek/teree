@@ -273,7 +273,7 @@ public class SchemeManager {
         s.setOid(((ObjectId)scheme.get("_id")).toStringMongod());
         s.setAuthor(_uim.selectByOid((String)scheme.get("author")));
         
-        if (ui != null && s.getAuthor().getUserId() == ui.getUserId()) {
+        if (ui != null && s.getAuthor().getUserId().equals(ui.getUserId())) {
         	s.setPermissions(fromPermissionsDBObject((DBObject)scheme.get("permissions")));
         }
         
