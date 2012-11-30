@@ -11,6 +11,7 @@ import org.bson.types.ObjectId;
 import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
+import org.teree.shared.data.scheme.MathExpression;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
 import org.teree.shared.data.scheme.Permissions;
@@ -243,6 +244,11 @@ public class SchemeManager {
                 doc.put("url", link.getUrl());
                 break;
             }
+            case MathExpression: {
+            	MathExpression me = (MathExpression)value;
+            	doc.put("mathexpr", me.getExpression());
+            	break;
+            }
         }
         
         if (root.getLocation() != null) {
@@ -314,6 +320,12 @@ public class SchemeManager {
             	link.setUrl(root.getString("url"));
                 node.setContent(link);
                 break;
+            }
+            case MathExpression: {
+            	MathExpression me = new MathExpression();
+            	me.setExpression(root.getString("mathexpr"));
+            	node.setContent(me);
+            	break;
             }
         }
         

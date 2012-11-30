@@ -13,9 +13,11 @@ import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
+import org.teree.client.view.resource.MathExpressionTools;
 import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
+import org.teree.shared.data.scheme.MathExpression;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
 import org.teree.shared.data.scheme.Node.NodeLocation;
@@ -173,42 +175,38 @@ public class Scene extends Composite {
     	IconText content = new IconText();
     	content.setText("");
     	child.setContent(content);
-    	insertChildNode(child);
-    	
-    	 // to ensure that the node can be focused after insert
-    	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-        		editSelectedNode();
-            }
-        });
+    	createChildNode(child);
     }
     
     public void createImageChildNode() {
     	Node child = new Node();
     	child.setContent(new ImageLink());
-    	insertChildNode(child);
-    	
-    	 // to ensure that the node can be focused after insert
-    	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-        		editSelectedNode();
-            }
-        });
+    	createChildNode(child);
     }
     
     public void createLinkChildNode() {
     	Node child = new Node();
     	child.setContent(new Link());
+    	createChildNode(child);
+    }
+    
+    public void createMathExpressionChildNode() {
+    	Node child = new Node();
+    	MathExpression me = new MathExpression();
+    	me.setExpression("");
+    	child.setContent(me);
+    	createChildNode(child);
+    }
+    
+    private void createChildNode(Node child) {
     	insertChildNode(child);
     	
-    	 // to ensure that the node can be focused after insert
-    	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-        		editSelectedNode();
-            }
+	   	 // to ensure that the node can be focused after insert
+	   	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+	        @Override
+	        public void execute() {
+	   			editSelectedNode();
+	        }
         });
     }
     
@@ -475,6 +473,7 @@ public class Scene extends Composite {
     	return nodes;
     }
     
+    private boolean initMathScript = true;
     private NodeWidget createNodeWidget(Node node) {
     	switch(node.getType()){
     		case IconText: {
@@ -485,6 +484,13 @@ public class Scene extends Composite {
 	        }
 	        case Link: {
 	        	return new LinkNodeWidget(node);
+	        }
+	        case MathExpression: {
+	        	if (initMathScript) {
+	        		initMathScript = false;
+	        		MathExpressionTools.initScript();
+	        	}
+	        	return new MathExpressionNodeWidget(node);
 	        }
 	    }
     	

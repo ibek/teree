@@ -69,6 +69,13 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
 			}
 		});
     	
+    	edit.getCreateMathExprButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scene.createMathExpressionChildNode();
+			}
+		});
+    	
     	edit.getBoldButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

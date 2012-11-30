@@ -10,6 +10,7 @@ import org.teree.client.scheme.SchemeType;
 import org.teree.client.scheme.Renderer;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.NodeChangedHandler;
+import org.teree.client.view.resource.MathExpressionTools;
 import org.teree.client.view.viewer.NodeWidget;
 import org.teree.shared.data.scheme.Node;
 
@@ -135,7 +136,7 @@ public class Scene extends Composite {
         
         init(root);
         
-        scheme.renderViewer(canvas, getNodeWidgets(), root);
+        scheme.renderViewer(canvas, getNodeWidgets(), root); // TODO: if there is math expr, render later again
     }
     
     public Node getRoot() {
@@ -149,7 +150,8 @@ public class Scene extends Composite {
         scheme.renderPicture(canvas, getNodeWidgets(), root);
         return canvas.toDataUrl();
     }
-    
+
+    private boolean initMathScript = true;
     private void init(Node node) {
     	
 		NodeWidget nw = null;
@@ -173,6 +175,14 @@ public class Scene extends Composite {
 	        }
 	        case Link: {
 	        	nw = new LinkNodeWidget(node);
+	        	break;
+	        }
+	        case MathExpression: {
+	        	if (initMathScript) {
+	        		initMathScript = false;
+	        		MathExpressionTools.initScript();
+	        	}
+	        	nw = new MathExpressionNodeWidget(node);
 	        	break;
 	        }
 	    }

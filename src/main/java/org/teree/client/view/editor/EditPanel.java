@@ -24,6 +24,7 @@ public class EditPanel extends Composite {
 	private Button createText;
 	private Button createImg;
 	private Button createLink;
+	private Button createMathExpr;
 	private Button bold;
 	private DropdownButton icon;
 	
@@ -43,6 +44,7 @@ public class EditPanel extends Composite {
 		createText = new Button("", IconType.PLUS);
 		createImg = new Button("", IconType.PICTURE);
 		createLink = new Button("", IconType.LINK);
+		createMathExpr = new Button("", IconType.PENCIL);
 		Label space2 = new Label("");
 		space2.getElement().getStyle().setMarginRight(20, Unit.PX);
 		bold = new Button("", IconType.BOLD);
@@ -65,6 +67,10 @@ public class EditPanel extends Composite {
         Tooltip tcl = new Tooltip("Create link child node");
         tcl.add(createLink);
 		container.add(tcl);
+
+        Tooltip tcme = new Tooltip("Create math expression child node");
+        tcme.add(createMathExpr);
+		container.add(tcme);
 		
 		container.add(space2);
 
@@ -120,6 +126,10 @@ public class EditPanel extends Composite {
 	
 	public HasClickHandlers getCreateLinkButton() {
 		return createLink;
+	}
+	
+	public HasClickHandlers getCreateMathExprButton() {
+		return createMathExpr;
 	}
 	
 	public HasClickHandlers getBoldButton() {

@@ -5,6 +5,7 @@ import java.util.List;
 import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
+import org.teree.shared.data.scheme.MathExpression;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
 import org.teree.shared.data.scheme.Node.NodeLocation;
@@ -45,7 +46,8 @@ public class FreeMind {
 			en.setAttribute("POSITION", node.getLocation().name().toLowerCase());
 			setElementStyle(node, doc, en);
 			switch (node.getType()) {
-				case IconText: {
+				case IconText:
+				case MathExpression: {
 					en.setAttribute("TEXT", node.getContent().toString());
 					parent.appendChild(en);
 					break;
