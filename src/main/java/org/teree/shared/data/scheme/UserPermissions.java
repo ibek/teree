@@ -9,6 +9,18 @@ public class UserPermissions {
 	private UserInfo user;
 	private Boolean write;
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof UserPermissions)) {
+			return false;
+		}
+		UserPermissions up = (UserPermissions)obj;
+		if (write != up.write || !user.equals(up.user)) {
+			return false;
+		}
+		return true;
+	}
+	
 	public UserInfo getUser() {
 		return user;
 	}

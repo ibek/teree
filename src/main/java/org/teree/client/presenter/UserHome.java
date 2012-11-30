@@ -20,6 +20,8 @@ import org.teree.client.view.explorer.event.PublishScheme;
 import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
+import org.teree.client.view.explorer.event.UpdateSchemePermissions;
+import org.teree.client.view.explorer.event.UpdateSchemePermissionsHandler;
 import org.teree.shared.SchemeService;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.UserService;
@@ -118,6 +120,25 @@ public class UserHome implements Presenter {
 			}
 		});
 		
+		display.getScene().addUpdatePermissionsHandler(new UpdateSchemePermissionsHandler() {
+			@Override
+			public void updatePermissions(UpdateSchemePermissions event) {
+				System.out.println("update permissions");
+				securedService.call(new RemoteCallback<Void>() {
+		            @Override
+		            public void callback(Void response) {
+		                display.info("Scheme permissions updated");
+		            }
+		        }, new ErrorCallback() {
+					@Override
+					public boolean error(Message message, Throwable throwable) {
+						display.error(General.LANG.connectionIssue());
+						return false;
+					}
+				}).updateSchemePermissions(event.getScheme());
+			}
+		});
+		
 		display.setImportSchemeHandler(new ImportSchemeHandler() {
 			@Override
 			public void importScheme(final Scheme scheme) {
@@ -160,7 +181,7 @@ public class UserHome implements Presenter {
 		}, new ErrorCallback() {
 			@Override
 			public boolean error(Message message, Throwable throwable) {
-				// TODO Auto-generated method stub
+				display.error(General.LANG.connectionIssue());
 				return false;
 			}
 		}).getUserInfo(userid);

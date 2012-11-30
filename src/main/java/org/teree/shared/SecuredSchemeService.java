@@ -11,6 +11,8 @@ public interface SecuredSchemeService {
     
     public void updateScheme(Scheme s);
     
+    public void updateSchemePermissions(Scheme s);
+    
     public boolean removeScheme(String oid);
     
     /**

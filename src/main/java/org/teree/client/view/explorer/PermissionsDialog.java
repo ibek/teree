@@ -16,10 +16,15 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SourcesTableEvents;
+import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class PermissionsDialog extends DialogBox {
@@ -28,9 +33,12 @@ public class PermissionsDialog extends DialogBox {
 	private static final int HEIGHT = 100;
 	private static final int WIDGET_WIDTH = 90;
 	
+	private VerticalPanel panel;
 	private Button okButton;
 	private ListBox global;
-	private Grid usergrid;
+	private FlexTable userft;
+	
+	private int selectedRow = -1;
 
 	public PermissionsDialog() {
 		
@@ -40,14 +48,21 @@ public class PermissionsDialog extends DialogBox {
 		
 		setText("Set Permissions");
 		getCaption().asWidget().addStyleName("popover-title");
-		getCaption().asWidget().getElement().getStyle().setMarginRight(-3.0, Unit.PX);
+		getCaption().asWidget().getElement().getStyle().setMarginRight(2.0, Unit.PX);
 		setAutoHideEnabled(true);
 
-		VerticalPanel panel = new VerticalPanel();
+		panel = new VerticalPanel();
 		panel.getElement().getStyle().setMargin(9.0, Unit.PX);
 		panel.setWidth(WIDTH+"px");
 		panel.setHeight(HEIGHT+"px");
 		
+		init();
+		
+		setWidget(panel);
+
+	}
+	
+	private void init() {
 		HorizontalPanel hp = new HorizontalPanel();
 		hp.add(new Label("Global: "));
 		global = new ListBox();
@@ -72,11 +87,9 @@ public class PermissionsDialog extends DialogBox {
 		hp.add(removeUser);
 		panel.add(hp);
 		
-		usergrid = new Grid(1, 2);
-		usergrid.setWidget(0, 0, new Label("Email"));
-		usergrid.setWidget(0, 1, new Label("Permissions"));
-		usergrid.setWidth(WIDTH + "px");
-		panel.add(usergrid);
+		userft = new FlexTable();
+		userft.setWidth(WIDTH + "px");
+		panel.add(userft);
 		
 		okButton = new Button("Ok");
 		
@@ -88,14 +101,53 @@ public class PermissionsDialog extends DialogBox {
 			}
 		});
 		
+		addUser.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				int row = userft.getRowCount();
+				if (row == 0) {
+					row++;
+				}
+				addUserPermissions(null, row);
+			}
+		});
+		
+		userft.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				int sr = userft.getCellForEvent(event).getRowIndex();
+				if (sr == 0) { // cannot select header
+					return;
+				}
+				if (selectedRow > 0) {
+					userft.getRowFormatter().getElement(selectedRow).getStyle().setBackgroundColor("white");
+				}
+				selectedRow = sr; 
+				userft.getRowFormatter().getElement(selectedRow).getStyle().setBackgroundColor("#0081c2");
+			}
+		});
+		
+		removeUser.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if (selectedRow > 0) {
+					userft.removeRow(selectedRow);
+					if (userft.getRowCount() == 1) {
+						userft.removeAllRows();
+					}
+					selectedRow--;
+					if (selectedRow > 0) {
+						userft.getRowFormatter().getElement(selectedRow).getStyle().setBackgroundColor("#0081c2");
+					}
+				}
+			}
+		});
+		
 		HorizontalPanel buttons = new HorizontalPanel();
 		buttons.add(okButton);
 		buttons.add(cancel);
 		
 		panel.add(buttons);
-		
-		setWidget(panel);
-
 	}
 	
 	@Override
@@ -134,14 +186,14 @@ public class PermissionsDialog extends DialogBox {
 			}
 		}
 		List<UserPermissions> lup = new ArrayList<UserPermissions>();
-		for (int i=0; i<usergrid.getRowCount(); ++i) {
+		for (int i=1; i<userft.getRowCount(); ++i) {
 			UserPermissions up = new UserPermissions();
 			UserInfo ui = new UserInfo();
 			
-			TextBox tb = (TextBox)usergrid.getWidget(i, 0);
+			TextBox tb = (TextBox)userft.getWidget(i, 0);
 			ui.setEmail(tb.getText());
 			
-			ListBox lb = (ListBox)usergrid.getWidget(i, 1);
+			ListBox lb = (ListBox)userft.getWidget(i, 1);
 			switch (lb.getSelectedIndex()) {
 				case 0: {
 					up.setWrite(null);
@@ -164,6 +216,9 @@ public class PermissionsDialog extends DialogBox {
 	}
 	
 	public void setPermissions(Permissions permissions) {
+		if (permissions == null) {
+			return;
+		}
 		if (permissions.getWrite() == null) {
 			global.setSelectedIndex(0);
 		} else if (!permissions.getWrite()) {
@@ -171,22 +226,33 @@ public class PermissionsDialog extends DialogBox {
 		} else {
 			global.setSelectedIndex(2);
 		}
-		usergrid.clear();
-		usergrid.setWidget(0, 0, new Label("Email"));
-		usergrid.setWidget(0, 1, new Label("Permissions"));
+		userft.removeAllRows();
 		List<UserPermissions> up = permissions.getUsers();
 		int upsize = up.size();
 		for (int i=0; up != null && i < upsize; ++i) {
-			UserPermissions u = up.get(i);
-			TextBox tb = new TextBox();
-			tb.setWidth(WIDGET_WIDTH + "px");
+			addUserPermissions(up.get(i), i+1);
+		}
+	}
+	
+	private void addUserPermissions(UserPermissions u, int row) {
+		if (userft.getRowCount() == 0) {
+			userft.setWidget(0, 0, new Label("Email"));
+			userft.setWidget(0, 1, new Label("Permissions"));
+		}
+		TextBox tb = new TextBox();
+		tb.getElement().getStyle().setMargin(5, Unit.PX);
+		tb.setWidth(WIDGET_WIDTH + "px");
+		if (u != null) {
 			tb.setText(u.getUser().getEmail());
-			usergrid.setWidget(i, 0, tb);
-			ListBox lb = new ListBox();
-			lb.setWidth(WIDGET_WIDTH + "px");
-			lb.addItem("None", "None");
-			lb.addItem("Read", "Read");
-			lb.addItem("Write", "Write");
+		}
+		userft.setWidget(row, 0, tb);
+		ListBox lb = new ListBox();
+		lb.getElement().getStyle().setMargin(5, Unit.PX);
+		lb.setWidth(WIDGET_WIDTH + "px");
+		lb.addItem("None", "None");
+		lb.addItem("Read", "Read");
+		lb.addItem("Write", "Write");
+		if (u != null) {
 			if (u.getWrite() == null) {
 				lb.setSelectedIndex(0);
 			} else if (!u.getWrite()) {
@@ -194,8 +260,8 @@ public class PermissionsDialog extends DialogBox {
 			} else {
 				lb.setSelectedIndex(2);
 			}
-			usergrid.setWidget(i, 1, lb);
 		}
+		userft.setWidget(row, 1, lb);
 	}
 
 }

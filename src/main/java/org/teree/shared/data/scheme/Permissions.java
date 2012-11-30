@@ -16,6 +16,18 @@ public class Permissions {
 	private List<UserPermissions> users;
 	// TODO: create GroupPermissions
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Permissions)) {
+			return false;
+		}
+		Permissions p = (Permissions)obj;
+		if (write != p.write || !users.equals(p.users)) {
+			return false;
+		}
+		return true;
+	}
+	
 	public Boolean getWrite() {
 		return write;
 	}

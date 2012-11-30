@@ -137,6 +137,17 @@ public class UserInfoManager {
     	return fromUserInfoDBObject(found);
     }
     
+    // TODO return only public informations (not mem used and so)
+    public UserInfo selectByEmail(String email) {
+    	if (email == null) {
+    		return null;
+    	}
+    	DBCollection coll = getCollection();
+        DBObject search = new BasicDBObject("email", email);
+        DBObject found = coll.findOne(search);
+    	return fromUserInfoDBObject(found);
+    }
+    
     public UserInfo select(String username) {
     	DBCollection coll = getCollection();
         DBObject search = new BasicDBObject();

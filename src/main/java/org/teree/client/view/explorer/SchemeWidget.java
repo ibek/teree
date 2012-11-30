@@ -3,6 +3,7 @@ package org.teree.client.view.explorer;
 import org.teree.client.Settings;
 import org.teree.client.text.Explorer;
 import org.teree.shared.data.UserInfo;
+import org.teree.shared.data.scheme.Permissions;
 import org.teree.shared.data.scheme.Scheme;
 
 import com.github.gwtbootstrap.client.ui.Badge;
@@ -121,6 +122,7 @@ public class SchemeWidget extends Composite {
 				
 				pdialog.setPopupPosition(getAbsoluteLeft(), getAbsoluteTop());
 				pdialog.show();
+				pdialog.setPermissions(scheme.getPermissions());
 			}
 		});
 		Style ps = permissions.getElement().getStyle();
@@ -152,6 +154,10 @@ public class SchemeWidget extends Composite {
 		return scheme;
 	}
 	
+	public Permissions getPermissions() {
+		return pdialog.getPermissions();
+	}
+	
 	public void setScheme(Scheme scheme) {
 		this.scheme = scheme;
 		screen.setUrl(scheme.getSchemePicture());
@@ -159,12 +165,15 @@ public class SchemeWidget extends Composite {
 		if (scheme.getPermissions() != null) {
 			permissions.setVisible(true);
 			remove.setVisible(true);
-			pdialog.setPermissions(scheme.getPermissions());
 		}
 	}
 	
 	public HasClickHandlers getRemoveButton() {
 		return remove;
+	}
+	
+	public HasClickHandlers getUpdatePermissionsButton() {
+		return pdialog.getOk();
 	}
 	
 }

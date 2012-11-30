@@ -175,13 +175,20 @@ public class SchemeManager {
         coll.update(updateBy, new BasicDBObject("$set", toSchemeDBObject(s)));
     }
     
+    public void updatePermissions(Scheme s, UserInfo ui) {
+    	DBCollection coll = getCollection();
+        DBObject updateBy = new BasicDBObject("_id", new ObjectId(s.getOid()));
+        updateBy.put("author", ui.getUserId()); // only author can update permissions
+        coll.update(updateBy, new BasicDBObject("$set", new BasicDBObject("permissions", toPermissionsDBObject(s.getPermissions()))));
+    }
+    
     private DBObject putSelectSecurityConditions(DBObject req, UserInfo ui) {
     	BasicDBList perm = new BasicDBList();
     	if (ui != null) {
     		perm.add(new BasicDBObject("author", ui.getUserId()));
+    	   perm.add(new BasicDBObject("permissions.users.userid", ui.getUserId()));
     	}
     	perm.add(new BasicDBObject("permissions.write", new BasicDBObject("$exists", true)));
-    	perm.add(new BasicDBObject("permissions.users.userid", ui.getUserId()));
     	req.put("$or", perm);
     	return req;
     }
@@ -359,11 +366,16 @@ public class SchemeManager {
         if (up != null) {
 	        for (UserPermissions u:up) {
 	        	DBObject user = new BasicDBObject();
-	        	user.put("userid", u.getUser().getUserId());
-	        	if (u.getWrite() != null) {
-	        		user.put("write", u.getWrite());
+	        	if (u.getUser() != null && (u.getUser().getUserId() == null || u.getUser().getUserId().isEmpty())) {
+	        		u.setUser(_uim.selectByEmail(u.getUser().getEmail()));
 	        	}
-	        	users.add(user);
+	        	if (u.getUser() != null) {
+		        	user.put("userid", u.getUser().getUserId());
+		        	if (u.getWrite() != null) {
+		        		user.put("write", u.getWrite());
+		        	}
+		        	users.add(user);
+	        	}
 	        }
         }
         doc.put("users", users);

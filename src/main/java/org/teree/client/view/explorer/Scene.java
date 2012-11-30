@@ -8,6 +8,8 @@ import org.teree.client.view.explorer.event.PublishScheme;
 import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
+import org.teree.client.view.explorer.event.UpdateSchemePermissions;
+import org.teree.client.view.explorer.event.UpdateSchemePermissionsHandler;
 import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Scheme;
 
@@ -33,6 +35,7 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	private Pager pagerBottom;
 
 	private HandlerManager removeManager;
+	private HandlerManager updatePermissionsManager;
 	
 	/**
 	 * To prevent unnecessary calls for next and previous page.
@@ -50,6 +53,7 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		schemeContainer.getElement().getStyle().setPaddingRight(5, Unit.PX);
 
 		removeManager = new HandlerManager(schemeContainer);
+		updatePermissionsManager = new HandlerManager(schemeContainer);
 		
 		pagerTop = new Pager((char)0xf060+" "+TEXT.back(), TEXT.next()+" "+(char)0xf061);
 		pagerTop.getElement().getStyle().setProperty("fontFamily", "FontAwesome");
@@ -96,6 +100,16 @@ public class Scene extends Composite implements HasSchemeHandlers {
 					removeManager.fireEvent(new RemoveScheme(sw.getScheme()));
 				}
 			});
+			sw.getUpdatePermissionsButton().addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					event.stopPropagation();
+					if (!sw.getScheme().getPermissions().equals(sw.getPermissions())) {
+						sw.getScheme().setPermissions(sw.getPermissions());
+						updatePermissionsManager.fireEvent(new UpdateSchemePermissions(sw.getScheme()));
+					}
+				}
+			});
 			schemeContainer.add(sw);
 		}
 		setComponents(true);
@@ -140,6 +154,12 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	@Override
 	public HandlerRegistration addRemoveHandler(RemoveSchemeHandler handler) {
 		return removeManager.addHandler(RemoveScheme.TYPE, handler);
+	}
+
+	@Override
+	public HandlerRegistration addUpdatePermissionsHandler(
+			UpdateSchemePermissionsHandler handler) {
+		return updatePermissionsManager.addHandler(UpdateSchemePermissions.TYPE, handler);
 	}
 	
 }

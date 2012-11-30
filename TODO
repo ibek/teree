@@ -6,9 +6,8 @@ udelat testovani podle nalezenych chyb z testing release 0.5 + vytvorit mockobje
 automaticka zmena jazyka
 MathNodeWidget
 
-prirazovat ruzna prava na mapy
- - vytvorit dialog pro nastaveni
- - podle prav zobrazovat tlacitka pro smazani (pouze autor) a upraveni
+zajistit moznost existence pouze 1 uzivatele s danym emailem
+podle prav zobrazovat tlacitka pro upraveni
 
 definovat vlastni format pro import a export
  - pres xml schema

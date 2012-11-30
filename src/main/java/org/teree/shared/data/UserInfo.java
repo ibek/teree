@@ -22,6 +22,18 @@ public class UserInfo {
 		setUsername(null);
 		setName(null);
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof UserInfo)) {
+			return false;
+		}
+		UserInfo ui = (UserInfo)obj;
+		if (!userId.equals(ui.userId)) {
+			return false;
+		}
+		return true;
+	}
 
 	public String getUserId() {
 		return userId;

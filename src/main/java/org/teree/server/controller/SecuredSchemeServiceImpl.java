@@ -44,6 +44,11 @@ public class SecuredSchemeServiceImpl implements SecuredSchemeService {
 	}
 	
 	@Override
+	public void updateSchemePermissions(Scheme s) {
+		_sm.updatePermissions(s, _us.getUserInfo());
+	}
+	
+	@Override
 	public boolean removeScheme(String oid) {
 		return _sm.remove(oid, _us.getUserInfo());
 	}
