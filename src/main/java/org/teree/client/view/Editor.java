@@ -48,6 +48,14 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
     }
     
     private void bind() {
+    	
+    	edit.getRefreshButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scene.update(null);
+			}
+		});
+    	
     	edit.getCreateTextButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

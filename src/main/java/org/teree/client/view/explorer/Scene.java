@@ -1,7 +1,9 @@
 package org.teree.client.view.explorer;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.teree.client.Settings;
 import org.teree.client.text.Explorer;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.PublishScheme;
@@ -21,6 +23,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
@@ -31,8 +34,11 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	private VerticalPanel container;
 	private Thumbnails schemeContainer;
 	private Heading empty;
+	
 	private Pager pagerTop;
 	private Pager pagerBottom;
+	private MultipleButtonHandler next;
+	private MultipleButtonHandler prev;
 
 	private HandlerManager removeManager;
 	private HandlerManager updatePermissionsManager;
@@ -63,6 +69,13 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		pagerBottom.getElement().getStyle().setProperty("fontFamily", "FontAwesome");
 		pagerBottom.setAligned(true);
 		
+		next = new MultipleButtonHandler();
+		next.addButton(pagerTop.getRight());
+		next.addButton(pagerBottom.getRight());
+		prev = new MultipleButtonHandler();
+		prev.addButton(pagerTop.getLeft());
+		prev.addButton(pagerBottom.getLeft());
+		
 		empty = new Heading(4, TEXT.no_scheme());
 		
 		setComponents(false);
@@ -82,13 +95,19 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	}
 	
 	public void setData(List<Scheme> slist) {
-		schemeContainer.clear();
 		if (slist == null || slist.size() == 0) {
-			setComponents(false);
+			if (page == 0) {
+				setComponents(false);
+			} else {
+				page--;
+			}
 			lastPage = true;
 			// TODO: inform user that it's last page
+			pagerTop.getRight().setVisible(false);
+			pagerBottom.getRight().setVisible(false);
 			return;
 		}
+		schemeContainer.clear();
 		for(int i=0; i<slist.size(); ++i) {
 			Scheme s = slist.get(i);
 			final SchemeWidget sw = new SchemeWidget();
@@ -118,6 +137,10 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	private void setComponents(boolean display) {
 		pagerTop.setVisible(display);
 		pagerBottom.setVisible(display);
+		pagerTop.getLeft().setVisible(page != 0);
+		pagerBottom.getLeft().setVisible(page != 0);
+		pagerTop.getRight().setVisible(!lastPage && schemeContainer.getWidgetCount() == Settings.SCHEME_COUNT_IN_EXPLORER);
+		pagerBottom.getRight().setVisible(!lastPage && schemeContainer.getWidgetCount() == Settings.SCHEME_COUNT_IN_EXPLORER);
 		empty.setVisible(!display);
 	}
 	
@@ -144,11 +167,11 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	}
 
 	public HasClickHandlers getNextButton() {
-		return pagerBottom.getRight();
+		return next;
 	}
 
 	public HasClickHandlers getPreviousButton() {
-		return pagerBottom.getLeft();
+		return prev;
 	}
 
 	@Override
@@ -161,5 +184,36 @@ public class Scene extends Composite implements HasSchemeHandlers {
 			UpdateSchemePermissionsHandler handler) {
 		return updatePermissionsManager.addHandler(UpdateSchemePermissions.TYPE, handler);
 	}
+	
+	private class MultipleButtonHandler implements HasClickHandlers {
+		
+		List<HasClickHandlers> handlers = new ArrayList<HasClickHandlers>(); 
+		private ClickHandler ch;
+		
+		@Override
+		public void fireEvent(GwtEvent<?> event) {
+			for (HasClickHandlers h: handlers) {
+				h.fireEvent(event);
+			}
+		}
+		
+		public void addButton(HasClickHandlers button) {
+			button.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					if (ch != null) {
+						ch.onClick(event);
+					}
+				}
+			});
+			handlers.add(button);
+		}
+		
+		@Override
+		public HandlerRegistration addClickHandler(ClickHandler handler) {
+			ch = handler;
+			return null;
+		}
+	};
 	
 }

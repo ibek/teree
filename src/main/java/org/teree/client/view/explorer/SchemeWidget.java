@@ -105,13 +105,6 @@ public class SchemeWidget extends Composite {
 		});
 		
 		pdialog = new PermissionsDialog();
-		pdialog.getOk().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO: set the permissions on server
-				pdialog.hide();
-			}
-		});
 
 		permissions = new Button("", IconType.LOCK);
 		permissions.setVisible(false);

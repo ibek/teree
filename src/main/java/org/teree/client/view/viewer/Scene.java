@@ -30,6 +30,7 @@ import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.i18n.client.Messages.Select;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -129,6 +130,7 @@ public class Scene extends Composite {
     	}
     }
     
+    private boolean requiresRender = false;
     public void setRoot(Node root) {
     	this.root = root;
     	container.clear();
@@ -136,7 +138,17 @@ public class Scene extends Composite {
         
         init(root);
         
-        scheme.renderViewer(canvas, getNodeWidgets(), root); // TODO: if there is math expr, render later again
+        scheme.renderViewer(canvas, getNodeWidgets(), root);
+        if (requiresRender) { // to fix size and position of math expressions
+        	requiresRender = false;
+        	Timer t = new Timer() {
+				@Override
+				public void run() {
+					scheme.renderViewer(canvas, getNodeWidgets(), Scene.this.root);
+				}
+        	};
+        	t.schedule(1000);
+        }
     }
     
     public Node getRoot() {
@@ -182,6 +194,7 @@ public class Scene extends Composite {
 	        		initMathScript = false;
 	        		MathExpressionTools.initScript();
 	        	}
+	        	requiresRender = true;
 	        	nw = new MathExpressionNodeWidget(node);
 	        	break;
 	        }

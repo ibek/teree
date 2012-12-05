@@ -21,6 +21,7 @@ public class EditPanel extends Composite {
 
 	private HorizontalPanel container;
 	private Button save;
+	private Button refresh;
 	private Button createText;
 	private Button createImg;
 	private Button createLink;
@@ -41,12 +42,17 @@ public class EditPanel extends Composite {
 		save = new Button("Save", IconType.SAVE);
 		Label space = new Label("");
 		space.getElement().getStyle().setMarginRight(20, Unit.PX);
+		
+		refresh = new Button("", IconType.REFRESH);
+		Label space2 = new Label("");
+		space2.getElement().getStyle().setMarginRight(20, Unit.PX);
+		
 		createText = new Button("", IconType.PLUS);
 		createImg = new Button("", IconType.PICTURE);
 		createLink = new Button("", IconType.LINK);
-		createMathExpr = new Button("", IconType.PENCIL);
-		Label space2 = new Label("");
-		space2.getElement().getStyle().setMarginRight(20, Unit.PX);
+		createMathExpr = new Button("Σ");
+		Label space3 = new Label("");
+		space3.getElement().getStyle().setMarginRight(20, Unit.PX);
 		bold = new Button("", IconType.BOLD);
 		
 		icon = new DropdownButton("icon");
@@ -55,6 +61,11 @@ public class EditPanel extends Composite {
 
 		container.add(save);
 		container.add(space);
+		
+		Tooltip tre = new Tooltip("Refresh scheme");
+		tre.add(refresh);
+		container.add(tre);
+		container.add(space2);
 		
 		Tooltip tct = new Tooltip("Create text child node");
 		tct.add(createText);
@@ -72,7 +83,7 @@ public class EditPanel extends Composite {
         tcme.add(createMathExpr);
 		container.add(tcme);
 		
-		container.add(space2);
+		container.add(space3);
 
         Tooltip tcb = new Tooltip("Bold text node");
         tcb.add(bold);
@@ -114,6 +125,10 @@ public class EditPanel extends Composite {
 	
 	public HasClickHandlers getSaveButton() {
 		return save;
+	}
+	
+	public HasClickHandlers getRefreshButton() {
+		return refresh;
 	}
 	
 	public HasClickHandlers getCreateTextButton() {

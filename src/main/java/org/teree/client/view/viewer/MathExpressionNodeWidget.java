@@ -4,6 +4,10 @@ import org.teree.client.view.resource.MathExpressionTools;
 import org.teree.shared.data.scheme.Node;
 
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -39,11 +43,15 @@ public class MathExpressionNodeWidget extends NodeWidget {
 
     @Override
     public void draw(Context2d context, int x, int y) {
-    	context.save();
-    	context.setFont("14px monospace");
-        context.setFillStyle("#000000");
-        context.fillText(content.getText(), x, y); // TODO: math expression draw doesn't work well
-        context.restore();
+        NodeList<Element> nl = content.getElement().getElementsByTagName("div");
+        if (nl.getLength() > 0) {
+        	Element e = nl.getItem(0);
+	    	context.save();
+	    	context.setFont("14px monospace");
+	        context.setFillStyle("#000000");
+	        context.fillText(e.getInnerText(), x, y);
+	        context.restore();
+        }
     }
 
 }

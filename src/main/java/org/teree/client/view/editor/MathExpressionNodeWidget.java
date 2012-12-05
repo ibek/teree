@@ -16,6 +16,7 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -28,6 +29,7 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TextArea;
 
@@ -181,12 +183,13 @@ public class MathExpressionNodeWidget extends NodeWidget {
         
         view();
         if (needUpdate) {
-        	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                @Override
-                public void execute() {
-        			getParent().fireEvent(new NodeChanged(null)); // null because nothing was inserted
-                }
-            });
+    		Timer t = new Timer() {
+				@Override
+				public void run() {
+					getParent().fireEvent(new NodeChanged(null)); // null because nothing was inserted
+				}
+			};
+			t.schedule(1000);
         }
         fireSelect();
     }
@@ -202,11 +205,15 @@ public class MathExpressionNodeWidget extends NodeWidget {
 
     @Override
     public void draw(Context2d context, int x, int y) {
-    	context.save();
-    	context.setFont("14px monospace");
-        context.setFillStyle("#000000");
-    	context.fillText(content.getText(), x, y); // TODO: math expression draw doesn't work well
-        context.restore();
+        NodeList<Element> nl = content.getElement().getElementsByTagName("div");
+        if (nl.getLength() > 0) {
+        	Element e = nl.getItem(0);
+	    	context.save();
+	    	context.setFont("14px monospace");
+	        context.setFillStyle("#000000");
+	        context.fillText(e.getInnerText(), x, y);
+	        context.restore();
+        }
     }
 
 	@Override
