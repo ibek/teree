@@ -1,5 +1,6 @@
 package org.teree.client.view;
 
+import org.teree.client.CurrentUser;
 import org.teree.client.Settings;
 import org.teree.client.presenter.HeaderTemplate;
 import org.teree.shared.data.UserInfo;
@@ -72,7 +73,7 @@ public class Header extends Composite implements HeaderTemplate {
     }
 
 	@Override
-	public void setCurrentUser(UserInfo user) {
+	public void setCurrentUser(CurrentUser user) {
 		this.user.setCurrentUser(user);
 	}
 

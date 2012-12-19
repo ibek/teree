@@ -3,6 +3,7 @@ package org.teree.client.view;
 import org.jboss.errai.bus.client.ErraiBus;
 import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
+import org.teree.client.CurrentUser;
 import org.teree.client.Settings;
 import org.teree.shared.data.UserInfo;
 
@@ -159,7 +160,8 @@ public class UserWidget extends Composite {
 		return user;
 	}
 	
-	public void setCurrentUser(UserInfo ui) {
+	public void setCurrentUser(CurrentUser user) {
+		UserInfo ui = user.getUserInfo();
 		this.user = ui;
 		boolean logged = ui != null && ui.getName() != null;
 		

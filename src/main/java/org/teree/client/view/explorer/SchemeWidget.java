@@ -1,5 +1,6 @@
 package org.teree.client.view.explorer;
 
+import org.teree.client.CurrentUser;
 import org.teree.client.Settings;
 import org.teree.client.text.Explorer;
 import org.teree.shared.data.UserInfo;
@@ -58,6 +59,7 @@ public class SchemeWidget extends Composite {
 		screen = new Image();
 		
 		edit = new Button(TEXT.edit());
+		edit.setVisible(false);
 		edit.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -151,13 +153,23 @@ public class SchemeWidget extends Composite {
 		return pdialog.getPermissions();
 	}
 	
+	public void closePermissionsDialog() {
+		pdialog.setVisible(false);
+	}
+	
 	public void setScheme(Scheme scheme) {
 		this.scheme = scheme;
 		screen.setUrl(scheme.getSchemePicture());
 		author.setText(scheme.getAuthor().getName());
 		if (scheme.getPermissions() != null) {
-			permissions.setVisible(true);
-			remove.setVisible(true);
+			UserInfo ui = CurrentUser.getInstance().getUserInfo();
+			if (ui != null && scheme.getAuthor().getUserId().equals(ui.getUserId())) {
+				permissions.setVisible(true);
+				remove.setVisible(true);
+				edit.setVisible(true);
+			} else if (scheme.getPermissions().canEdit(ui)) {
+				edit.setVisible(true);
+			}
 		}
 	}
 	

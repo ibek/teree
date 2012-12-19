@@ -61,5 +61,10 @@ public class SecuredSchemeServiceImpl implements SecuredSchemeService {
         .with("coop-change", change)
         .noErrorHandling().sendGlobalWith(_dispatcher);
     }
+
+	@Override
+	public Scheme getScheme(String oid) {
+		return _sm.selectToEdit(oid, _us.getUserInfo());
+	}
     
 }

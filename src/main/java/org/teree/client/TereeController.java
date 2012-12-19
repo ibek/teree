@@ -31,6 +31,7 @@ import org.teree.client.presenter.Presenter;
 import org.teree.client.presenter.SettingsPage;
 import org.teree.shared.NodeGenerator;
 import org.teree.shared.SchemeService;
+import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.UserService;
 import org.teree.shared.data.AuthType;
 import org.teree.shared.data.UserInfo;
@@ -56,14 +57,16 @@ public class TereeController implements ValueChangeHandler<String> {
 
 	@Inject
 	private Caller<SchemeService> generalService;
+	
+	@Inject
+	private Caller<SecuredSchemeService> securedScheme;
 
 	@Inject
 	private Caller<UserService> userService;
 
 	private Keyboard keyboard;
 	
-	@Inject @Named("currentUser")
-	private UserInfo currentUser;
+	private CurrentUser currentUser = CurrentUser.getInstance();
 	
 	/**
 	 * Current presenter.
@@ -94,7 +97,7 @@ public class TereeController implements ValueChangeHandler<String> {
 				switch(SecurityCommands.valueOf(type)) {
 					case SuccessfulAuth: {
 						
-						currentUser.set(message.get(UserInfo.class, UserInfo.PART));
+						currentUser.setUserInfo(message.get(UserInfo.class, UserInfo.PART));
 						
 						if (tmpPresenter != null) {
 							History.back();
@@ -191,7 +194,7 @@ public class TereeController implements ValueChangeHandler<String> {
 						.lookupBean(SchemeEditor.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
-					loadScheme(token.substring(Settings.EDIT_LINK.length()));
+					loadSchemeToEdit(token.substring(Settings.EDIT_LINK.length()));
 				}
 			} else if (token.startsWith(Settings.LOGIN_LINK)) {
 				IOCBeanDef<LoginPage> bean = manager
@@ -220,7 +223,7 @@ public class TereeController implements ValueChangeHandler<String> {
 						.lookupBean(SettingsPage.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
-					if (currentUser.getUserId() == null) { // the user has to be logged to access this page
+					if (currentUser.getUserInfo() == null) { // the user has to be logged to access this page
 						tmpPresenter = presenter;
 						loadUserInfoData();
 						return;
@@ -254,7 +257,7 @@ public class TereeController implements ValueChangeHandler<String> {
 	}
 	
 	private void setPresenter(Presenter presenter) {
-		if (this.presenter == null && currentUser.getUserId() == null) { // for page reload
+		if (this.presenter == null && currentUser.getUserInfo() == null) { // for page reload
 			loadUserInfoData();
 		}
 		this.presenter = presenter;
@@ -271,12 +274,37 @@ public class TereeController implements ValueChangeHandler<String> {
 		generalService.call(new RemoteCallback<Scheme>() {
 			@Override
 			public void callback(Scheme response) {
-				eventBus.fireEvent(new SchemeReceived(response));
+				if (response == null || response.getRoot() == null || response.getRoot().getContent() == null) {
+					History.newItem(Settings.HOME_LINK);
+					presenter.getTemplate().error("The scheme does not exist.");
+				} else {
+					eventBus.fireEvent(new SchemeReceived(response));
+				}
 			}
 		}, new ErrorCallback() {
 			@Override
 			public boolean error(Message message, Throwable throwable) {
-				// TODO inform user about the error - show 404 page
+				presenter.getTemplate().error("Error while getting the respond. Please try reload the page.");
+				return false;
+			}
+		}).getScheme(oid);
+	}
+
+	private void loadSchemeToEdit(final String oid) {
+		securedScheme.call(new RemoteCallback<Scheme>() {
+			@Override
+			public void callback(Scheme response) {
+				if (response == null) {
+					History.newItem(Settings.HOME_LINK);
+					presenter.getTemplate().error("You don't have any rights to edit the scheme");
+				} else {
+					eventBus.fireEvent(new SchemeReceived(response));
+				}
+			}
+		}, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				presenter.getTemplate().error("Error while getting the respond. Please try reload the page.");
 				return false;
 			}
 		}).getScheme(oid);
@@ -287,8 +315,8 @@ public class TereeController implements ValueChangeHandler<String> {
 		userService.call(new RemoteCallback<UserInfo>() {
 			@Override
 			public void callback(UserInfo response) {
-				currentUser.set(response);
-				if (tmpPresenter != null && currentUser.getUserId() == null) {
+				currentUser.setUserInfo(response);
+				if (tmpPresenter != null && currentUser.getUserInfo() == null) {
 					History.newItem(Settings.LOGIN_LINK);
 				}else if (tmpPresenter != null) {
 					setPresenter(tmpPresenter);

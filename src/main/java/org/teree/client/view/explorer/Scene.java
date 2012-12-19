@@ -107,6 +107,7 @@ public class Scene extends Composite implements HasSchemeHandlers {
 			pagerBottom.getRight().setVisible(false);
 			return;
 		}
+		setComponents(true);
 		schemeContainer.clear();
 		for(int i=0; i<slist.size(); ++i) {
 			Scheme s = slist.get(i);
@@ -125,13 +126,13 @@ public class Scene extends Composite implements HasSchemeHandlers {
 					event.stopPropagation();
 					if (!sw.getScheme().getPermissions().equals(sw.getPermissions())) {
 						sw.getScheme().setPermissions(sw.getPermissions());
+						sw.closePermissionsDialog();
 						updatePermissionsManager.fireEvent(new UpdateSchemePermissions(sw.getScheme()));
 					}
 				}
 			});
 			schemeContainer.add(sw);
 		}
-		setComponents(true);
 	}
 	
 	private void setComponents(boolean display) {

@@ -209,8 +209,10 @@ public class Scene extends Composite {
     }
     
     private void changeCollapseNode(TextNodeWidget nw) {
-    	nw.setCollapsed(!nw.isCollapsed());
-        scheme.renderViewer(canvas, getNodeWidgets(), root);
+    	if (nw.getNode().getChildNodes() != null && !nw.getNode().getChildNodes().isEmpty()) { // has child nodes
+	    	nw.setCollapsed(!nw.isCollapsed());
+	        scheme.renderViewer(canvas, getNodeWidgets(), root);
+    	}
     }
     
     private List<NodeWidget> getNodeWidgets() {

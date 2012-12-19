@@ -2,12 +2,14 @@ package org.teree.test.server.object;
 
 import java.net.UnknownHostException;
 
+import org.jboss.errai.ioc.client.api.TestMock;
 import org.teree.server.dao.MongoDB;
 
 import com.mongodb.DB;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 
+@TestMock
 public class MockMongoDB extends MongoDB {
 
 	private DB db;

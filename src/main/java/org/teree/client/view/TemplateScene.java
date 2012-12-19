@@ -1,5 +1,6 @@
 package org.teree.client.view;
 
+import org.teree.client.CurrentUser;
 import org.teree.client.presenter.Template;
 import org.teree.shared.data.UserInfo;
 
@@ -22,7 +23,7 @@ public abstract class TemplateScene extends Composite implements Template {
 	}
 
 	@Override
-	public void setCurrentUser(UserInfo user) {
+	public void setCurrentUser(CurrentUser user) {
 		header.setCurrentUser(user);
 	}
 

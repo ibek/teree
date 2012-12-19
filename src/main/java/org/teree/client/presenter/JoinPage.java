@@ -48,7 +48,7 @@ public class JoinPage implements Presenter {
 							if (response) {
 								History.newItem(Settings.LOGIN_LINK);
 							} else {
-								display.error("Cannot create user, try another username");
+								display.error("Cannot create user, username and email must be unique.");
 							}
 						}
 					}, new ErrorCallback() {

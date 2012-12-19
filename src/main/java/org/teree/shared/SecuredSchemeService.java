@@ -7,6 +7,8 @@ import org.teree.shared.data.scheme.SchemeChange;
 @Remote
 public interface SecuredSchemeService {
     
+    public Scheme getScheme(String oid);
+    
     public String insertScheme(Scheme s);
     
     public void updateScheme(Scheme s);

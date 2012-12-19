@@ -42,17 +42,10 @@ public class UserHome extends TemplateScene implements org.teree.client.presente
     @UiField
     PrivatePanel privatePanel;
     
-    private UserInfo ui;
-    
     @PostConstruct
     public void init() {
         initWidget(uiBinder.createAndBindUi(this));
     	privatePanel.setVisible(false);
-    }
-    
-    @Override
-    public void setCurrentUser(UserInfo user) {
-    	super.setCurrentUser(user);
     }
     
     @Override
@@ -97,8 +90,6 @@ public class UserHome extends TemplateScene implements org.teree.client.presente
 	
 	@Override
 	public void setUser(UserInfo ui) {
-		this.ui = ui;
-    	
 		if (ui != null) {
 	    	name.setText(ui.getName());
 	    	joined.setText(ui.getJoined());

@@ -2,6 +2,7 @@ package org.teree.client.view;
 
 import javax.annotation.PostConstruct;
 
+import org.teree.client.CurrentUser;
 import org.teree.client.presenter.SettingsPage;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.client.view.validate.FormValidator;
@@ -50,13 +51,13 @@ public class Settings extends TemplateScene implements SettingsPage.Display {
     }
 	
 	@Override
-	public void setCurrentUser(UserInfo user) {
+	public void setCurrentUser(CurrentUser user) {
 		super.setCurrentUser(user);
 		
 		onResetPForm(null);
     	
     	// e.g. Google users cannot change the password
-    	changePasswordForm.setVisible(user.getUsername() != null);
+    	changePasswordForm.setVisible(user.getUserInfo().getUsername() != null);
     	
 	}
 	

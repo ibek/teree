@@ -1,13 +1,6 @@
 
 0.6:
 
-udelat testovani podle nalezenych chyb z testing release 0.5 + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
-
-automaticka zmena jazyka
-
-zajistit moznost existence pouze 1 uzivatele s danym emailem
-podle prav zobrazovat tlacitka pro upraveni
-
 definovat vlastni format pro import a export
  - pres xml schema
  - umoznit export vsech map daneho uzivatele (pro zalohovani)
@@ -16,6 +9,8 @@ vraceni nahledu mapy po zadani urcite url pro vlozeni na vlastni externi stranky
 generovat html kod obsahujici tuto url na nahled a s odkazem na skutecnou mapu
 
 0.7:
+
+udelat testovani podle nalezenych chyb z testing release 0.5 + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
 
 uzivatelsky privetive statusy a chybove hlasky
 tvorba map z templates

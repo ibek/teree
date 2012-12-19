@@ -3,6 +3,7 @@ package org.teree.shared.data.scheme;
 import java.util.List;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
+import org.teree.shared.data.UserInfo;
 
 /**
  * Global permissions and the permissions for users.
@@ -26,6 +27,20 @@ public class Permissions {
 			return false;
 		}
 		return true;
+	}
+	
+	public boolean canEdit(UserInfo ui) {
+		if (write != null && write) {
+			return true;
+		}
+		if (users != null) {
+			for (UserPermissions up : users) {
+				if (up.getUser().getUserId().equals(ui.getUserId()) && up.getWrite()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public Boolean getWrite() {

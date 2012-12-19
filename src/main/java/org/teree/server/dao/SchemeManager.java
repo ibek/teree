@@ -57,11 +57,35 @@ public class SchemeManager {
     	if (oid == null) {
     		return null;
     	}
-        DBObject searchById = new BasicDBObject("_id", new ObjectId(oid));
-        putSelectSecurityConditions(searchById, ui);
-        DBCollection coll = getCollection();
-        DBObject found = coll.findOne(searchById);
-        return fromSchemeDBObject(found);
+    	try {
+	        DBObject searchById = new BasicDBObject("_id", new ObjectId(oid));
+	        putSelectSecurityConditions(searchById, ui);
+	        DBCollection coll = getCollection();
+	        DBObject found = coll.findOne(searchById);
+	        return fromSchemeDBObject(found);
+    	} catch (Exception ex) {
+    		return null;
+    	}
+    }
+    
+    /**
+     * Select specific scheme identified by oid.
+     * @param oid
+     * @return node
+     */
+    public Scheme selectToEdit(String oid, UserInfo ui) {
+    	if (oid == null) {
+    		return null;
+    	}
+    	try {
+	        DBObject searchById = new BasicDBObject("_id", new ObjectId(oid));
+	        putEditSecurityConditions(searchById, ui);
+	        DBCollection coll = getCollection();
+	        DBObject found = coll.findOne(searchById);
+	        return fromSchemeDBObject(found);
+    	} catch (Exception ex) {
+    		return null;
+    	}
     }
     
     public String insert(Scheme s, UserInfo ui) {
@@ -172,7 +196,7 @@ public class SchemeManager {
     public void update(Scheme s, UserInfo ui) {
     	DBCollection coll = getCollection();
         DBObject updateBy = new BasicDBObject("_id", new ObjectId(s.getOid()));
-        putUpdateSecurityConditions(updateBy, ui);
+        putEditSecurityConditions(updateBy, ui);
         coll.update(updateBy, new BasicDBObject("$set", toSchemeDBObject(s)));
     }
     
@@ -194,15 +218,15 @@ public class SchemeManager {
     	return req;
     }
     
-    private DBObject putUpdateSecurityConditions(DBObject req, UserInfo ui) {
+    private DBObject putEditSecurityConditions(DBObject req, UserInfo ui) {
     	BasicDBList perm = new BasicDBList();
-    	
-    	BasicDBObject c = new BasicDBObject();
-    	c.put("userid", ui.getUserId());
-    	c.put("permissions.write", true);
-    	perm.add(new BasicDBObject("permissions.users", new BasicDBObject("$elemMatch", c)));
-    	
-    	perm.add(new BasicDBObject("author", ui.getUserId()));
+    	if (ui != null) {
+    		perm.add(new BasicDBObject("author", ui.getUserId()));
+    		BasicDBObject user = new BasicDBObject("permissions.users.userid", ui.getUserId());
+    		user.put("permissions.users.write", true);
+    	    perm.add(user);
+    	}
+    	perm.add(new BasicDBObject("permissions.write", true));
     	req.put("$or", perm);
     	return req;
     }
@@ -285,10 +309,7 @@ public class SchemeManager {
         s.setSchemePicture((String)scheme.get("screen"));
         s.setOid(((ObjectId)scheme.get("_id")).toStringMongod());
         s.setAuthor(_uim.selectByOid((String)scheme.get("author")));
-        
-        if (ui != null && s.getAuthor().getUserId().equals(ui.getUserId())) {
-        	s.setPermissions(fromPermissionsDBObject((DBObject)scheme.get("permissions")));
-        }
+    	s.setPermissions(fromPermissionsDBObject((DBObject)scheme.get("permissions")));
         
         return s;
     }

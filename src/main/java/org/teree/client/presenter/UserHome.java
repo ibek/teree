@@ -123,7 +123,6 @@ public class UserHome implements Presenter {
 		display.getScene().addUpdatePermissionsHandler(new UpdateSchemePermissionsHandler() {
 			@Override
 			public void updatePermissions(UpdateSchemePermissions event) {
-				System.out.println("update permissions");
 				securedService.call(new RemoteCallback<Void>() {
 		            @Override
 		            public void callback(Void response) {

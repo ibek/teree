@@ -1,7 +1,5 @@
 package org.teree.client.presenter;
 
-import java.util.List;
-
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -56,7 +54,6 @@ public class SchemeEditor implements Presenter {
 			@Override
 			public void received(SchemeReceived event) {
 				scheme = event.getScheme();
-            	System.out.println("p3:"+scheme.getRoot().getContent());
 				display.setRoot(scheme.getRoot());
 			}
 		});

@@ -15,8 +15,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
-import com.mongodb.WriteConcern;
-import com.mongodb.WriteResult;
 
 public class UserInfoManager {
 
@@ -34,6 +32,7 @@ public class UserInfoManager {
         } else {
             coll = db.createCollection("user", null);
             coll.ensureIndex(new BasicDBObject("username", 1), new BasicDBObject("unique", true));
+            coll.ensureIndex(new BasicDBObject("email", 1), new BasicDBObject("unique", true));
         }
         return coll;
     }

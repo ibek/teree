@@ -1,9 +1,9 @@
 package org.teree.client.presenter;
 
-import org.teree.shared.data.UserInfo;
+import org.teree.client.CurrentUser;
 
 public interface HeaderTemplate {
 	
-    public void setCurrentUser(UserInfo user);
+    public void setCurrentUser(CurrentUser user);
     
 }
