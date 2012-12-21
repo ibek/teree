@@ -1,9 +1,9 @@
 package org.teree.client.view.explorer.event;
 
-import org.teree.shared.data.scheme.Scheme;
+import org.teree.client.view.explorer.PrivatePanel.ImportType;
 
 public interface ImportSchemeHandler {
 
-	public void importScheme(Scheme scheme); 
+	public void importScheme(String data, ImportType it); 
 	
 }

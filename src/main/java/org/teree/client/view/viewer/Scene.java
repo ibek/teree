@@ -13,6 +13,7 @@ import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.resource.MathExpressionTools;
 import org.teree.client.view.viewer.NodeWidget;
 import org.teree.shared.data.scheme.Node;
+import org.teree.shared.data.scheme.Scheme;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.Style;
@@ -40,11 +41,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class Scene extends Composite {
 	
-	private Renderer<NodeWidget> scheme;
+	private Renderer<NodeWidget> renderer;
 
     private AbsolutePanel container;
     private Canvas canvas;
-    private Node root;
+    private Scheme scheme;
     private boolean move = false;
     private Integer lastx;
     private Integer lasty;
@@ -73,7 +74,7 @@ public class Scene extends Composite {
 			public void onResize(ResizeEvent event) {
                 sp.setWidth(event.getWidth() + "px");
                 sp.setHeight((event.getHeight()-Settings.SCENE_HEIGHT_LESS) + "px");
-                scheme.renderViewer(canvas, getNodeWidgets(), root);
+                renderer.renderViewer(canvas, getNodeWidgets(), scheme.getRoot());
             }
 		});
         
@@ -117,7 +118,7 @@ public class Scene extends Composite {
     	container.addHandler(new NodeChangedHandler() {
 			@Override
 			public void changed(NodeChanged event) {
-				scheme.renderViewer(canvas, getNodeWidgets(), root);
+				renderer.renderViewer(canvas, getNodeWidgets(), scheme.getRoot());
 			}
 		}, NodeChanged.TYPE);
     }
@@ -125,41 +126,41 @@ public class Scene extends Composite {
     public void setSchemeType(SchemeType type) {
     	switch(type) {
 	    	case MindMap: {
-	    		scheme = new MindMap<NodeWidget>();
+	    		renderer = new MindMap<NodeWidget>();
 	    	}
     	}
     }
     
     private boolean requiresRender = false;
-    public void setRoot(Node root) {
-    	this.root = root;
+    public void setScheme(Scheme scheme) {
+    	this.scheme = scheme;
     	container.clear();
         container.add(canvas);
         
-        init(root);
+        init(scheme.getRoot());
         
-        scheme.renderViewer(canvas, getNodeWidgets(), root);
+        renderer.renderViewer(canvas, getNodeWidgets(), scheme.getRoot());
         if (requiresRender) { // to fix size and position of math expressions
         	requiresRender = false;
         	Timer t = new Timer() {
 				@Override
 				public void run() {
-					scheme.renderViewer(canvas, getNodeWidgets(), Scene.this.root);
+					renderer.renderViewer(canvas, getNodeWidgets(), Scene.this.scheme.getRoot());
 				}
         	};
         	t.schedule(1000);
         }
     }
     
-    public Node getRoot() {
-    	return root;
+    public Scheme getScheme() {
+    	return scheme;
     }
     
     public String getSchemePicture() {
         Canvas canvas = Canvas.createIfSupported();
         canvas.setCoordinateSpaceHeight(this.canvas.getOffsetHeight());
         canvas.setCoordinateSpaceWidth(this.canvas.getOffsetWidth());
-        scheme.renderPicture(canvas, getNodeWidgets(), root);
+        renderer.renderPicture(canvas, getNodeWidgets(), scheme.getRoot());
         return canvas.toDataUrl();
     }
 
@@ -211,7 +212,7 @@ public class Scene extends Composite {
     private void changeCollapseNode(TextNodeWidget nw) {
     	if (nw.getNode().getChildNodes() != null && !nw.getNode().getChildNodes().isEmpty()) { // has child nodes
 	    	nw.setCollapsed(!nw.isCollapsed());
-	        scheme.renderViewer(canvas, getNodeWidgets(), root);
+	        renderer.renderViewer(canvas, getNodeWidgets(), scheme.getRoot());
     	}
     }
     

@@ -49,5 +49,15 @@ public class SchemeServiceImpl implements SchemeService {
     public Scheme getScheme(String oid) {
         return _sm.select(oid, _us.getUserInfo());
     }
+
+	@Override
+	public String exportJSON(String oid) {
+		return _sm.exportJSON(oid, _us.getUserInfo());
+	}
+
+	@Override
+	public Scheme importJSON(String json) {
+		return _sm.importJSON(json);
+	}
     
 }

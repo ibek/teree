@@ -24,6 +24,7 @@ public class ViewPanel extends Composite {
 	private DropdownButton exportAs;
 	private Button exportImage;
 	private Button exportFreeMind;
+	private Button exportJSON;
 	
 	private org.teree.client.text.ViewPanel TEXT = org.teree.client.text.ViewPanel.LANG;
 	
@@ -47,6 +48,9 @@ public class ViewPanel extends Composite {
 		exportImage = new Button(TEXT.image(), IconType.PICTURE);
 		exportAs.add(exportImage);
 
+		exportJSON = new Button("JSON");
+		exportAs.add(exportJSON);
+
 		exportFreeMind = new Button(TEXT.freemind_map());
 		exportAs.add(exportFreeMind);
 		
@@ -64,16 +68,20 @@ public class ViewPanel extends Composite {
 		return exportFreeMind;
 	}
 	
+	public HasClickHandlers getExportJSONButton() {
+		return exportJSON;
+	}
+	
 	public void sendDownloadRequest(String name, String dataUrl) {
 		String type = dataUrl.substring(0, dataUrl.indexOf(';'));
 		String base64Data = dataUrl.substring(dataUrl.lastIndexOf(',')+1);
 		sendDownloadRequest(name, type, base64Data);
 	}
 	
-	public void sendDownloadRequest(String name, String type, String base64Data) {
+	public void sendDownloadRequest(String name, String type, String data) {
 		fileName.setValue(name);
 		fileType.setValue(type);
-		file.setValue(base64Data);
+		file.setValue(data);
 		form.submit();
 	}
 	

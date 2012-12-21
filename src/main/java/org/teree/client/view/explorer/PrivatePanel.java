@@ -27,6 +27,7 @@ public class PrivatePanel extends Composite {
 
 	private DropdownButton importScheme;
 	private Button importFreeMind;
+	private Button importJSON;
 
 	private FileUploadExt file;
 	private FileReader reader;
@@ -48,6 +49,9 @@ public class PrivatePanel extends Composite {
 
 		importScheme = new DropdownButton(TEXT.import_from());
 
+		importJSON = new Button("JSON");
+		importScheme.add(importJSON);
+
 		importFreeMind = new Button("FreeMind");
 		importScheme.add(importFreeMind);
 
@@ -59,10 +63,21 @@ public class PrivatePanel extends Composite {
 
 	}
 
+	private ImportType it;
 	private void bind() {
+		
+		importJSON.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				it = ImportType.JSON;
+				file.click();
+			}
+		});
+		
 		importFreeMind.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				it = ImportType.FreeMind;
 				file.click();
 			}
 		});
@@ -72,10 +87,7 @@ public class PrivatePanel extends Composite {
 			public void onLoadEnd(LoadEndEvent event) {
 				if (reader.getError() == null) {
 					String data = reader.getStringResult();
-					Node root = new FreeMind().importScheme(data);
-					Scheme scheme = new Scheme();
-					scheme.setRoot(root);
-					handler.importScheme(scheme);
+					handler.importScheme(data, it);
 				}
 			}
 		});
@@ -101,6 +113,11 @@ public class PrivatePanel extends Composite {
 	
 	public void setImportSchemeHandler(ImportSchemeHandler handler) {
 		this.handler = handler;
+	}
+	
+	public enum ImportType {
+		FreeMind,
+		JSON
 	}
 
 }

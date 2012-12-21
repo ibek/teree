@@ -24,4 +24,8 @@ public interface SchemeService {
     
     public Scheme getScheme(String oid);
     
+    public String exportJSON(String oid);
+    
+    public Scheme importJSON(String json);
+    
 }

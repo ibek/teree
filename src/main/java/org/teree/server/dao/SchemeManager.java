@@ -27,6 +27,7 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 
 @Stateless
 public class SchemeManager {
@@ -205,6 +206,31 @@ public class SchemeManager {
         DBObject updateBy = new BasicDBObject("_id", new ObjectId(s.getOid()));
         updateBy.put("author", ui.getUserId()); // only author can update permissions
         coll.update(updateBy, new BasicDBObject("$set", new BasicDBObject("permissions", toPermissionsDBObject(s.getPermissions()))));
+    }
+    
+    public String exportJSON(String oid, UserInfo ui) {
+    	if (oid == null) {
+    		return null;
+    	}
+    	try {
+	        DBObject searchById = new BasicDBObject("_id", new ObjectId(oid));
+	        putSelectSecurityConditions(searchById, ui);
+	        DBCollection coll = getCollection();
+	        DBObject found = coll.findOne(searchById, new BasicDBObject("screen", -1)); // without preview
+	        String json = JSON.serialize(found);
+	        return json;
+    	} catch (Exception ex) {
+    		return null;
+    	}
+    }
+    
+    public Scheme importJSON(String json) {
+    	try {
+	    	DBObject data = (DBObject)JSON.parse(json);
+	    	return fromSchemeDBObject(data);
+    	} catch (Exception ex) { }
+    	
+    	return null;
     }
     
     private DBObject putSelectSecurityConditions(DBObject req, UserInfo ui) {

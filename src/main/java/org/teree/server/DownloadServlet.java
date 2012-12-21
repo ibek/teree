@@ -50,6 +50,8 @@ public class DownloadServlet extends HttpServlet {
 	                	fileName += ".png";
 	                } else if (fileType.contains("freemind")) {
 	                	fileName += ".mm";
+	                } else if (fileType.contains("json")) {
+	                	fileName += ".json";
 	                }
 	                
 	        		resp.addHeader("Content-Disposition", "attachment; filename=" + fileName);

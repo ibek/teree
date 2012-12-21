@@ -13,7 +13,9 @@ import org.jboss.errai.ioc.client.api.Caller;
 import org.teree.client.Settings;
 import org.teree.client.event.RefreshUserInfo;
 import org.teree.client.event.SchemeReceived;
+import org.teree.client.io.FreeMind;
 import org.teree.client.text.General;
+import org.teree.client.view.explorer.PrivatePanel.ImportType;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.ImportSchemeHandler;
 import org.teree.client.view.explorer.event.PublishScheme;
@@ -26,6 +28,7 @@ import org.teree.shared.SchemeService;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.UserService;
 import org.teree.shared.data.UserInfo;
+import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Scheme;
 
 import com.google.gwt.core.client.Scheduler;
@@ -140,14 +143,20 @@ public class UserHome implements Presenter {
 		
 		display.setImportSchemeHandler(new ImportSchemeHandler() {
 			@Override
-			public void importScheme(final Scheme scheme) {
-				Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-		            @Override
-		            public void execute() {
-		            	History.newItem(Settings.CREATE_LINK);
-		            	eventBus.fireEvent(new SchemeReceived(scheme));
-		            }
-		        });
+			public void importScheme(String data, ImportType it) {
+				switch (it) {
+					case FreeMind: {
+						Node root = new FreeMind().importScheme(data);
+						Scheme scheme = new Scheme();
+						scheme.setRoot(root);
+						UserHome.this.importScheme(scheme);
+						break;
+					}
+					case JSON: {
+						UserHome.this.importJSON(data);
+						break;
+					}
+				}
 			}
 		});
 		
@@ -169,6 +178,35 @@ public class UserHome implements Presenter {
 	public void setUser(String userid) {
 		this.userid = userid;
 		loadUserInfo();
+	}
+	
+	private void importScheme(final Scheme scheme) {
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+            	History.newItem(Settings.CREATE_LINK);
+            	eventBus.fireEvent(new SchemeReceived(scheme));
+            }
+        });
+	}
+	
+	private void importJSON(String json) {
+		generalService.call(new RemoteCallback<Scheme>() {
+            @Override
+            public void callback(Scheme response) {
+            	if (response == null) {
+            		display.error("Cannot import the scheme");
+            	} else {
+            		importScheme(response);
+            	}
+            }
+        }, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				display.error(General.LANG.connectionIssue());
+				return false;
+			}
+		}).importJSON(json);
 	}
 	
 	private void loadUserInfo() {
