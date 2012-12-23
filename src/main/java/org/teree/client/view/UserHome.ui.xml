@@ -4,7 +4,7 @@
 	xmlns:view="urn:import:org.teree.client.view" xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 	
 	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
-	<ui:with field="text" type="org.teree.client.text.UserHome" />
+	<ui:with field="uic" type="org.teree.client.text.UIConstants" />
 
 	<ui:style>
 
@@ -32,7 +32,7 @@
 			<g:cell>
 				<b:Well addStyleNames="{style.userPanel}">
 					<b:Heading ui:field="name" size="4"/>
-					<g:Label text="{text.joined_on} "/><g:Label ui:field="joined"/>
+					<g:Label text="{uic.joined_on} "/><g:Label ui:field="joined"/>
 				</b:Well>
 			</g:cell>
 			<g:cell width="100%">

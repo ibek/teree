@@ -1,7 +1,7 @@
 package org.teree.client.view.explorer;
 
 import org.teree.client.io.FreeMind;
-import org.teree.client.text.UserHome;
+import org.teree.client.text.UIConstants;
 import org.teree.client.view.explorer.event.ImportSchemeHandler;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Scheme;
@@ -33,8 +33,6 @@ public class PrivatePanel extends Composite {
 	private FileReader reader;
 	
 	private ImportSchemeHandler handler;
-	
-	private UserHome TEXT = UserHome.LANG;
 
 	public PrivatePanel() {
 
@@ -47,7 +45,7 @@ public class PrivatePanel extends Composite {
 
 		container.add(file);
 
-		importScheme = new DropdownButton(TEXT.import_from());
+		importScheme = new DropdownButton(UIConstants.LANG.import_from());
 
 		importJSON = new Button("JSON");
 		importScheme.add(importJSON);

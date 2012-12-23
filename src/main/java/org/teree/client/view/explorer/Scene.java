@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.teree.client.Settings;
-import org.teree.client.text.Explorer;
+import org.teree.client.text.UIConstants;
+import org.teree.client.text.UIMessages;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.PublishScheme;
 import org.teree.client.view.explorer.event.PublishSchemeHandler;
@@ -48,8 +49,9 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	 */
 	private int page = 0;
 	private boolean lastPage = false;
-	
-	private Explorer TEXT = Explorer.LANG;
+
+	private UIConstants UIC = UIConstants.LANG;
+	private UIMessages UIM = UIMessages.LANG;
 	
 	public Scene() {
 		
@@ -61,11 +63,11 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		removeManager = new HandlerManager(schemeContainer);
 		updatePermissionsManager = new HandlerManager(schemeContainer);
 		
-		pagerTop = new Pager((char)0xf060+" "+TEXT.back(), TEXT.next()+" "+(char)0xf061);
+		pagerTop = new Pager((char)0xf060+" "+UIC.back(), UIC.next()+" "+(char)0xf061);
 		pagerTop.getElement().getStyle().setProperty("fontFamily", "FontAwesome");
 		pagerTop.setAligned(true);
 		
-		pagerBottom = new Pager((char)0xf060+" "+TEXT.back(), TEXT.next()+" "+(char)0xf061);
+		pagerBottom = new Pager((char)0xf060+" "+UIC.back(), UIC.next()+" "+(char)0xf061);
 		pagerBottom.getElement().getStyle().setProperty("fontFamily", "FontAwesome");
 		pagerBottom.setAligned(true);
 		
@@ -76,7 +78,7 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		prev.addButton(pagerTop.getLeft());
 		prev.addButton(pagerBottom.getLeft());
 		
-		empty = new Heading(4, TEXT.no_scheme());
+		empty = new Heading(4, UIM.no_scheme());
 		
 		setComponents(false);
 

@@ -4,7 +4,7 @@
 	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 
 	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
-	<ui:with field="text" type="org.teree.client.text.ChangeLogs" />
+	<ui:with field="uic" type="org.teree.client.text.UIConstants" />
 	<ui:with field="cres" type="org.teree.client.view.resource.CommonResources" />
 
 	<ui:style>
@@ -19,7 +19,7 @@
 		<view:Header ui:field="header"/>
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<g:FlowPanel addStyleNames="{style.scene}">
-			<b:Heading size="2" text="{text.change_logs}" />
+			<b:Heading size="2" text="{uic.change_logs}" />
 			<b:Heading size="4" text="v0.5 2012-11-12" />
 				<b:Paragraph>
 					<b:Badge>-</b:Badge><b:Badge text="Internationalization - Czech and English support" /><br/>

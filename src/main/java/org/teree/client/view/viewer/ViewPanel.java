@@ -1,5 +1,7 @@
 package org.teree.client.view.viewer;
 
+import org.teree.client.text.UIConstants;
+
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.DropdownButton;
 import com.github.gwtbootstrap.client.ui.Form;
@@ -26,7 +28,7 @@ public class ViewPanel extends Composite {
 	private Button exportFreeMind;
 	private Button exportJSON;
 	
-	private org.teree.client.text.ViewPanel TEXT = org.teree.client.text.ViewPanel.LANG;
+	private UIConstants UIC = UIConstants.LANG;
 	
 	public ViewPanel() {
 		
@@ -43,15 +45,15 @@ public class ViewPanel extends Composite {
 		form.setEncoding(FormPanel.ENCODING_MULTIPART);
 		form.setMethod(FormPanel.METHOD_POST);
 		
-		exportAs = new DropdownButton(TEXT.export_as());
+		exportAs = new DropdownButton(UIC.export_as());
 
-		exportImage = new Button(TEXT.image(), IconType.PICTURE);
+		exportImage = new Button(UIC.image(), IconType.PICTURE);
 		exportAs.add(exportImage);
 
 		exportJSON = new Button("JSON");
 		exportAs.add(exportJSON);
 
-		exportFreeMind = new Button(TEXT.freemind_map());
+		exportFreeMind = new Button(UIC.freemind_map());
 		exportAs.add(exportFreeMind);
 		
 		container.add(exportAs);

@@ -3,7 +3,7 @@ package org.teree.client.presenter;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import org.teree.client.text.General;
+import org.teree.client.text.UIMessages;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -36,7 +36,7 @@ public class LoginPage implements Presenter {
     }
     
     public void fail() {
-    	display.error(General.LANG.loginFailed());
+    	display.error(UIMessages.LANG.loginFailed());
     }
     
     @Override

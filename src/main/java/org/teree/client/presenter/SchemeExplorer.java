@@ -12,7 +12,7 @@ import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
 import org.teree.client.Settings;
 import org.teree.client.event.RefreshUserInfo;
-import org.teree.client.text.General;
+import org.teree.client.text.UIMessages;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
@@ -82,7 +82,7 @@ public class SchemeExplorer implements Presenter {
 					@Override
 					public void callback(Boolean response) {
 						if (response) {
-							display.info(General.LANG.schemeRemoved(event.getScheme().getOid()));
+							display.info(UIMessages.LANG.schemeRemoved(event.getScheme().getOid()));
 							Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 					            @Override
 					            public void execute() {
@@ -127,7 +127,7 @@ public class SchemeExplorer implements Presenter {
         }, new ErrorCallback() {
 			@Override
 			public boolean error(Message message, Throwable throwable) {
-				display.error(General.LANG.connectionIssue());
+				display.error(UIMessages.LANG.connectionIssue());
 				return false;
 			}
 		}).getAllFrom(from_oid, Settings.SCHEME_COUNT_IN_EXPLORER);
@@ -142,7 +142,7 @@ public class SchemeExplorer implements Presenter {
         }, new ErrorCallback() {
 			@Override
 			public boolean error(Message message, Throwable throwable) {
-				display.error(General.LANG.connectionIssue());
+				display.error(UIMessages.LANG.connectionIssue());
 				return false;
 			}
 		}).getAllTo(to_oid, Settings.SCHEME_COUNT_IN_EXPLORER);

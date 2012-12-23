@@ -2,7 +2,8 @@ package org.teree.client.view.explorer;
 
 import org.teree.client.CurrentUser;
 import org.teree.client.Settings;
-import org.teree.client.text.Explorer;
+import org.teree.client.text.UIConstants;
+import org.teree.client.text.UIMessages;
 import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Permissions;
 import org.teree.shared.data.scheme.Scheme;
@@ -40,7 +41,7 @@ public class SchemeWidget extends Composite {
 	private Scheme scheme;
 	private PermissionsDialog pdialog;
 	
-	private Explorer TEXT = Explorer.LANG;
+	private UIConstants UIC = UIConstants.LANG;
 	
 	public SchemeWidget() {
 		
@@ -58,7 +59,7 @@ public class SchemeWidget extends Composite {
 		
 		screen = new Image();
 		
-		edit = new Button(TEXT.edit());
+		edit = new Button(UIC.edit());
 		edit.setVisible(false);
 		edit.addClickHandler(new ClickHandler() {
 			@Override
@@ -69,7 +70,7 @@ public class SchemeWidget extends Composite {
 		});
 		edit.getElement().getStyle().setFloat(Style.Float.LEFT);
 		
-		view = new Button(TEXT.view());
+		view = new Button(UIC.view());
 		view.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -123,7 +124,7 @@ public class SchemeWidget extends Composite {
 		Style ps = permissions.getElement().getStyle();
 		ps.setFloat(Style.Float.LEFT);
 		
-        Tooltip pt = new Tooltip(TEXT.permissions());
+        Tooltip pt = new Tooltip(UIC.set_permissions());
         pt.add(permissions);
 		
 		remove = new Button("", IconType.TRASH);
@@ -131,7 +132,7 @@ public class SchemeWidget extends Composite {
 		Style rs = remove.getElement().getStyle();
 		rs.setFloat(Style.Float.RIGHT);
 		
-        Tooltip rt = new Tooltip(TEXT.remove());
+        Tooltip rt = new Tooltip(UIC.remove_scheme());
         rt.add(remove);
 
         th.add(pt);

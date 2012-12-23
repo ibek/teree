@@ -1,7 +1,5 @@
 package org.teree.client.presenter;
 
-import java.util.List;
-
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -10,13 +8,10 @@ import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
-import org.teree.client.Settings;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.event.SchemeReceivedHandler;
-import org.teree.client.text.General;
-import org.teree.client.view.viewer.ViewPanel;
+import org.teree.client.text.UIMessages;
 import org.teree.shared.SchemeService;
-import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Scheme;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -52,7 +47,7 @@ public class SchemeViewer implements Presenter {
 			@Override
 			public void received(SchemeReceived event) {
 				display.setScheme(event.getScheme());
-				display.info(General.LANG.schemeReceived(event.getScheme().getOid()));
+				display.info(UIMessages.LANG.schemeReceived(event.getScheme().getOid()));
 			}
 		});
         
@@ -82,7 +77,7 @@ public class SchemeViewer implements Presenter {
             @Override
             public void callback(String response) {
             	if (response == null) {
-            		display.error("Cannot export the scheme");
+            		display.error(UIMessages.LANG.cannot_export_scheme());
             	} else {
             		display.sendDownloadRequest(display.getScheme().getRoot().getContent().toString(), "json", response);
             	}
@@ -90,7 +85,7 @@ public class SchemeViewer implements Presenter {
         }, new ErrorCallback() {
 			@Override
 			public boolean error(Message message, Throwable throwable) {
-				display.error(General.LANG.connectionIssue());
+				display.error(UIMessages.LANG.connectionIssue());
 				return false;
 			}
 		}).exportJSON(oid);

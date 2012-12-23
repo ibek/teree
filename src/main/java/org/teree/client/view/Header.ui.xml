@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:view="urn:import:org.teree.client.view"
 	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 	
-	<ui:with field="text" type="org.teree.client.text.Header" />
+	<ui:with field="uic" type="org.teree.client.text.UIConstants" />
 
 	<ui:style>
 
@@ -25,9 +25,9 @@
 		<b:Brand ui:field='home' addStyleNames="{style.brand}">teree <small>beta</small></b:Brand>
 		
 		<b:Nav>
-			<b:NavLink ui:field='create' text="{text.create}" />
-			<b:NavLink ui:field="explore" text="{text.explore}" />
-			<b:NavLink ui:field="help" text="{text.help}"></b:NavLink>
+			<b:NavLink ui:field='create' text="{uic.create}" />
+			<b:NavLink ui:field="explore" text="{uic.explore}" />
+			<b:NavLink ui:field="help" text="{uic.help}"></b:NavLink>
 		</b:Nav>
 		<view:UserWidget ui:field="user" />
 	</b:Navbar>

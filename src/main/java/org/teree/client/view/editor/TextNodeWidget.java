@@ -106,6 +106,11 @@ public class TextNodeWidget extends NodeWidget {
         }
         editContent.setHeight(getOffsetHeight()+"px");
         
+        if (editContent.getText().isEmpty()) {
+        	editContent.setWidth(Settings.NODE_DEFAULT_WIDTH+"px");
+            editContent.setHeight(Settings.NODE_DEFAULT_HEIGHT+"px");
+        }
+        
         if (nodeContent.getIconType() != null) {
 			editContent.getElement().getStyle().setPaddingLeft(Settings.ICON_WIDTH, Unit.PX);
         } else {

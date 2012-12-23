@@ -5,6 +5,7 @@ import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
 import org.teree.client.CurrentUser;
 import org.teree.client.Settings;
+import org.teree.client.text.UIConstants;
 import org.teree.shared.data.UserInfo;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -34,7 +35,7 @@ public class UserWidget extends Composite {
 	
 	private UserInfo user;
 	
-	private org.teree.client.text.UserWidget TEXT = org.teree.client.text.UserWidget.LANG;
+	private UIConstants TEXT = UIConstants.LANG;
 
 	public UserWidget() {
 		container = new Nav();

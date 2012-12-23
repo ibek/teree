@@ -1,9 +1,5 @@
 
 0.6:
-
-definovat vlastni format pro import a export
- - pres xml schema
- - umoznit export vsech map daneho uzivatele (pro zalohovani)
  
 vraceni nahledu mapy po zadani urcite url pro vlozeni na vlastni externi stranky
 generovat html kod obsahujici tuto url na nahled a s odkazem na skutecnou mapu
@@ -14,6 +10,8 @@ udelat testovani podle nalezenych chyb z testing release 0.5 + vytvorit mockobje
 
 uzivatelsky privetive statusy a chybove hlasky
 tvorba map z templates
+
+umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
 
 direct explore - novy typ generovani mapy, nejspis pro to bude stacit mindmapa protoze leva strana se zajisti uz na serveru pri cteni 
 service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector

@@ -13,7 +13,7 @@ import org.teree.client.event.GlobalKeyUpHandler;
 import org.teree.client.event.RefreshUserInfo;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.event.SchemeReceivedHandler;
-import org.teree.client.text.General;
+import org.teree.client.text.UIMessages;
 import org.teree.client.view.KeyAction;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.data.scheme.Node;
@@ -139,7 +139,7 @@ public class SchemeEditor implements Presenter {
 	            @Override
 	            public void callback(String response) {
 	                scheme.setOid(response);
-	                display.info(General.LANG.schemeCreated(scheme.getOid()));
+	                display.info(UIMessages.LANG.schemeCreated(scheme.getOid()));
 	                eventBus.fireEvent(new RefreshUserInfo());
 	            }
 	        }, new ErrorCallback() {
@@ -153,7 +153,7 @@ public class SchemeEditor implements Presenter {
     		securedScheme.call(new RemoteCallback<Void>() {
 	            @Override
 	            public void callback(Void response) {
-	                display.info(General.LANG.schemeUpdated(scheme.getOid()));
+	                display.info(UIMessages.LANG.schemeUpdated(scheme.getOid()));
 	            }
 	        }, new ErrorCallback() {
 				@Override

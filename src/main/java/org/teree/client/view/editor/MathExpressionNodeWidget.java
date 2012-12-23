@@ -102,6 +102,11 @@ public class MathExpressionNodeWidget extends NodeWidget {
         }
         editContent.setHeight(getOffsetHeight()+"px");
         
+        if (editContent.getText().isEmpty()) {
+        	editContent.setWidth(Settings.NODE_DEFAULT_WIDTH+"px");
+            editContent.setHeight(Settings.NODE_DEFAULT_HEIGHT+"px");
+        }
+        
         // to ensure that the editContent will be focused after all events (key F2)
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
