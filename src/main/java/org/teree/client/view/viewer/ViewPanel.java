@@ -5,7 +5,10 @@ import org.teree.client.text.UIConstants;
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.DropdownButton;
 import com.github.gwtbootstrap.client.ui.Form;
+import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -24,9 +27,11 @@ public class ViewPanel extends Composite {
     private Hidden fileType;
     
 	private DropdownButton exportAs;
-	private Button exportImage;
-	private Button exportFreeMind;
-	private Button exportJSON;
+	private NavLink exportImage;
+	private NavLink exportFreeMind;
+	private NavLink exportJSON;
+	
+	private Button share;
 	
 	private UIConstants UIC = UIConstants.LANG;
 	
@@ -46,17 +51,22 @@ public class ViewPanel extends Composite {
 		form.setMethod(FormPanel.METHOD_POST);
 		
 		exportAs = new DropdownButton(UIC.export_as());
+		exportAs.getElement().getStyle().setZIndex(-100);
 
-		exportImage = new Button(UIC.image(), IconType.PICTURE);
+		exportImage = new NavLink(UIC.image());
+		exportImage.setIcon(IconType.PICTURE);
 		exportAs.add(exportImage);
 
-		exportJSON = new Button("JSON");
+		exportJSON = new NavLink("JSON");
 		exportAs.add(exportJSON);
 
-		exportFreeMind = new Button(UIC.freemind_map());
+		exportFreeMind = new NavLink(UIC.freemind_map());
 		exportAs.add(exportFreeMind);
 		
 		container.add(exportAs);
+		
+		share = new Button("Share");
+		container.add(share);
 		
 		initWidget(container);
 		
@@ -72,6 +82,10 @@ public class ViewPanel extends Composite {
 	
 	public HasClickHandlers getExportJSONButton() {
 		return exportJSON;
+	}
+	
+	public Button getShareButton() {
+		return share;
 	}
 	
 	public void sendDownloadRequest(String name, String dataUrl) {

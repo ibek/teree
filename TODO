@@ -1,9 +1,4 @@
 
-0.6:
- 
-vraceni nahledu mapy po zadani urcite url pro vlozeni na vlastni externi stranky
-generovat html kod obsahujici tuto url na nahled a s odkazem na skutecnou mapu
-
 0.7:
 
 udelat testovani podle nalezenych chyb z testing release 0.5 + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)

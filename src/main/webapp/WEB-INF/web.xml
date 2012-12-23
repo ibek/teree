@@ -26,6 +26,11 @@
         <servlet-class>org.teree.server.ImageServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>ShareSchemeServlet</servlet-name>
+        <servlet-class>org.teree.server.ShareSchemeServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>ErraiServlet</servlet-name>
         <url-pattern>*.erraiBus</url-pattern>
@@ -44,6 +49,11 @@
     <servlet-mapping>
         <servlet-name>ImageServlet</servlet-name>
         <url-pattern>/getImage</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ShareSchemeServlet</servlet-name>
+        <url-pattern>/share</url-pattern>
     </servlet-mapping>
     
     <session-config>

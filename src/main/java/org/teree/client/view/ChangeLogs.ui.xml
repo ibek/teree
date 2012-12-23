@@ -20,6 +20,19 @@
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<g:FlowPanel addStyleNames="{style.scene}">
 			<b:Heading size="2" text="{uic.change_logs}" />
+			<b:Heading size="4" text="v0.6 2012-12-25" />
+				<b:Paragraph>
+					<b:Badge>-</b:Badge><b:Badge text="New types of nodes - Math Expressions" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="New types of exports and imports - JSON" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Global and user permissions" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Refresh button to refresh a scheme if it's needed" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Next and previous buttons in explore are visible only if there are any next or previous maps" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Ability to collapse node" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Scheme moving with mouse drag in the view" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Fixed bug5 - Nodes disappear after drag and drop" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Automatic language set by prefered locale" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Sharing - an html code to put a preview of scheme to your webpage" />
+				</b:Paragraph>
 			<b:Heading size="4" text="v0.5 2012-11-12" />
 				<b:Paragraph>
 					<b:Badge>-</b:Badge><b:Badge text="Internationalization - Czech and English support" /><br/>

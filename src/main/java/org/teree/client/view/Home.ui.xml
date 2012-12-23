@@ -30,11 +30,11 @@
 			<g:Anchor ui:field="changeLogs" text="{uic.change_logs}" addStyleNames="{style.link}" />
 			<b:Heading size="2" text="{uic.features}" />
 				<b:Paragraph>
-					<b:Badge>-</b:Badge><b:Badge text="{text.feature1}" /><br/>
-					<b:Badge>-</b:Badge><b:Badge text="{text.feature2}" /><br/>
-					<b:Badge>-</b:Badge><b:Badge text="{text.feature3}" /><br/>
-					<b:Badge>-</b:Badge><b:Badge text="{text.feature4}" /><br/>
-					<b:Badge>-</b:Badge><b:Badge text="{text.feature5}" />
+					<b:Badge>-</b:Badge><b:Badge text="{uim.feature1}" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="{uim.feature2}" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="{uim.feature3}" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="{uim.feature4}" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="{uim.feature5}" />
 				</b:Paragraph>
 			<b:Heading size="2" text="{uic.bug_tracking}" />
 				<b:Paragraph>
@@ -45,7 +45,7 @@
 				</b:Paragraph>
 			<b:Heading size="2" text="{uic.teree_details}" />
 				<b:NavList width="400px">
-					<b:NavHeader text="{uim.technical}" />
+					<b:NavHeader text="{uic.technical}" />
 					<b:NavLink text="{uim.technical_detail1}" />
 					<b:NavLink text="{uim.technical_detail2}" />
 					<b:NavLink text="{uim.technical_detail3}" />

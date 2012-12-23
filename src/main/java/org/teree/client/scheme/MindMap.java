@@ -35,8 +35,6 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 	private int top = 0;
 	
 	private boolean makePicture;
-	
-	private Context2d context;
 
 	@Override
 	protected void render(Canvas canvas, List<T> nodes, Node root, boolean makePicture, boolean editable) {
@@ -147,7 +145,6 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 			canvas.setCoordinateSpaceHeight(max_y);
 		}
 		Context2d context = canvas.getContext2d();
-		this.context = context;
 
 		id = 0;
 

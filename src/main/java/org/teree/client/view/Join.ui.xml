@@ -5,6 +5,7 @@
 
 	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
 	<ui:with field="uic" type="org.teree.client.text.UIConstants" />
+	<ui:with field="uim" type="org.teree.client.text.UIMessages" />
 
 	<ui:style>
 
@@ -28,7 +29,7 @@
 				<b:WellForm ui:field="form" type="HORIZONTAL">
 					<b:Fieldset>
                         <b:Legend>
-                        	<g:Label text="{uic.register_user}" /><small><g:Label text="{uic.all_fields_required}" /></small>
+                        	<g:Label text="{uic.register_user}" /><small><g:Label text="{uim.all_fields_required}" /></small>
                         </b:Legend>
                         
 						<b:ControlGroup ui:field="usernameControlGroup">

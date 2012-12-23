@@ -14,6 +14,7 @@ import org.vectomatic.file.events.LoadEndHandler;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.DropdownButton;
+import com.github.gwtbootstrap.client.ui.NavLink;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -26,8 +27,8 @@ public class PrivatePanel extends Composite {
 	private HorizontalPanel container;
 
 	private DropdownButton importScheme;
-	private Button importFreeMind;
-	private Button importJSON;
+	private NavLink importFreeMind;
+	private NavLink importJSON;
 
 	private FileUploadExt file;
 	private FileReader reader;
@@ -46,11 +47,12 @@ public class PrivatePanel extends Composite {
 		container.add(file);
 
 		importScheme = new DropdownButton(UIConstants.LANG.import_from());
+		importScheme.getElement().getStyle().setZIndex(-100);
 
-		importJSON = new Button("JSON");
+		importJSON = new NavLink("JSON");
 		importScheme.add(importJSON);
 
-		importFreeMind = new Button("FreeMind");
+		importFreeMind = new NavLink("FreeMind");
 		importScheme.add(importFreeMind);
 
 		container.add(importScheme);

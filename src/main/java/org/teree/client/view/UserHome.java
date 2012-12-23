@@ -11,6 +11,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.teree.client.CurrentUser;
 import org.teree.client.view.explorer.PrivatePanel;
 import org.teree.client.view.explorer.Scene;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
@@ -42,10 +43,21 @@ public class UserHome extends TemplateScene implements org.teree.client.presente
     @UiField
     PrivatePanel privatePanel;
     
+    private UserInfo ui; // user that is owner of this home (not the logged user)
+    
     @PostConstruct
     public void init() {
         initWidget(uiBinder.createAndBindUi(this));
     	privatePanel.setVisible(false);
+    }
+    
+    @Override
+    public void setCurrentUser(CurrentUser user) {
+    	super.setCurrentUser(user);
+    	
+		if (user != null && ui != null) {
+			privatePanel.setVisible(ui.getUserId().equals(user.getUserInfo().getUserId()));
+		}
     }
     
     @Override
@@ -90,12 +102,14 @@ public class UserHome extends TemplateScene implements org.teree.client.presente
 	
 	@Override
 	public void setUser(UserInfo ui) {
+		this.ui = ui;
 		if (ui != null) {
 	    	name.setText(ui.getName());
 	    	joined.setText(ui.getJoined());
 	    	
-			if (header.getCurrentUser() != null) {
-				privatePanel.setVisible(ui.getUserId().equals(header.getCurrentUser().getUserId()));
+	    	UserInfo user = header.getCurrentUser();
+			if (user != null && ui != null) {
+				privatePanel.setVisible(ui.getUserId().equals(user.getUserId()));
 			}
 		}
 	}

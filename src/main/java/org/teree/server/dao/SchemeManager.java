@@ -216,7 +216,9 @@ public class SchemeManager {
 	        DBObject searchById = new BasicDBObject("_id", new ObjectId(oid));
 	        putSelectSecurityConditions(searchById, ui);
 	        DBCollection coll = getCollection();
-	        DBObject found = coll.findOne(searchById, new BasicDBObject("screen", -1)); // without preview
+	        BasicDBObject filter = new BasicDBObject("screen", 0); // without preview
+	        DBObject found = coll.findOne(searchById, filter);
+	        found.removeField("_id"); // id won't be exported
 	        String json = JSON.serialize(found);
 	        return json;
     	} catch (Exception ex) {
@@ -227,8 +229,11 @@ public class SchemeManager {
     public Scheme importJSON(String json) {
     	try {
 	    	DBObject data = (DBObject)JSON.parse(json);
+	    	data.removeField("_id"); // id cannot be used for import
 	    	return fromSchemeDBObject(data);
-    	} catch (Exception ex) { }
+    	} catch (Exception ex) {
+    		ex.printStackTrace();
+    	}
     	
     	return null;
     }
@@ -333,7 +338,9 @@ public class SchemeManager {
     	Scheme s = new Scheme();
         
         s.setSchemePicture((String)scheme.get("screen"));
-        s.setOid(((ObjectId)scheme.get("_id")).toStringMongod());
+        if (scheme.get("_id") != null) { // for import it is null
+        	s.setOid(((ObjectId)scheme.get("_id")).toStringMongod());
+        }
         s.setAuthor(_uim.selectByOid((String)scheme.get("author")));
     	s.setPermissions(fromPermissionsDBObject((DBObject)scheme.get("permissions")));
         
