@@ -47,7 +47,6 @@ public class PrivatePanel extends Composite {
 		container.add(file);
 
 		importScheme = new DropdownButton(UIConstants.LANG.import_from());
-		importScheme.getElement().getStyle().setZIndex(-100);
 
 		importJSON = new NavLink("JSON");
 		importScheme.add(importJSON);

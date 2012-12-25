@@ -1,5 +1,7 @@
 package org.teree.client.view;
 
+import java.util.Date;
+
 import org.jboss.errai.bus.client.ErraiBus;
 import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
@@ -19,7 +21,9 @@ import com.github.gwtbootstrap.client.ui.constants.Placement;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 
 public class UserWidget extends Composite {
@@ -137,25 +141,10 @@ public class UserWidget extends Composite {
 		});
 	}
 	
-    private native void changeLocale(String newLocale)/*-{
-        var currLocation = $wnd.location.toString();
-        var noHistoryCurrLocArray = currLocation.split("#");
-        var noHistoryCurrLoc = noHistoryCurrLocArray[0];
-        var page = ""
-        if (noHistoryCurrLocArray.length > 1) {
-        	page = "#" + noHistoryCurrLocArray[1];
-        }
-        if (noHistoryCurrLoc.indexOf("?") >= 0) {
-        	if (noHistoryCurrLoc.indexOf("locale=") >= 0) {
-        		$wnd.location.href = noHistoryCurrLoc.replace(/locale=([^&#]*)/g, "locale=" + newLocale) + page; 
-        	} else {
-        		$wnd.location.href = noHistoryCurrLoc + "&locale=" + newLocale + page;
-        	} 
-        } else {
-        	$wnd.location.href = noHistoryCurrLoc + "?locale=" + newLocale + page; 
-        }
-        
-    }-*/;
+    private void changeLocale(String newLocale) {
+    	Cookies.setCookie("teree_locale", newLocale, new Date(System.currentTimeMillis() + 604800000L));
+    	Window.Location.reload();
+    }
 	
 	public UserInfo getCurrentUser() {
 		return user;

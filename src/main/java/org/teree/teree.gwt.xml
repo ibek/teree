@@ -18,66 +18,27 @@
 
 	<inherits name="org.vectomatic.libgwtfile" />
 
-	<extend-property name="locale" values="en" />
-	<extend-property name="locale" values="cs" />
+	<extend-property name="locale" values="en,cs"/>
 
 	<property-provider name="locale">
-    <![CDATA[
-      try {
-      var locale;
+        var locale_value = "";
+        var cookieName = "teree_locale";
 
-      // Look for the locale as a url argument
-      if (locale == null) {
-        var args = location.search;
-        var startLang = args.indexOf("locale=");
-        if (startLang >= 0) {
-          var language = args.substring(startLang);
-          var begin = language.indexOf("=") + 1;
-          var end = language.indexOf("&");
-          if (end == -1) {
-            end = language.length;
-          }
-          locale = language.substring(begin, end);
+        var theCookie=" "+document.cookie;
+        var ind=theCookie.indexOf(" "+cookieName+"=");
+        if (ind==-1) ind=theCookie.indexOf(";"+cookieName+"=");
+
+        if (ind==-1 || cookieName=="") {
+          locale_value = "en";
         }
-      }
-
-      if (locale == null) {
-        // Look for the locale on the web page
-        locale = __gwt_getMetaProperty("locale")
-      }
-
-      if (locale == null) {
-        // Look for an override computed by other means in the selection script
-        locale = $wnd['__gwt_Locale'];
-      }
-
-      if (locale == null) {
-        // Use the browser's locale
-        locale = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
-        if (locale != null) {
-           locale = locale.replace(/-/g, '_');
+        else {
+          var ind1=theCookie.indexOf(";",ind+1);
+          if (ind1==-1) ind1=theCookie.length;
+          locale_value = unescape(theCookie.substring(ind+cookieName.length+2,ind1));
         }
-      }
-      
-      if (locale == null) {
-        return "en";
-      }
 
-      while (!__gwt_isKnownPropertyValue("locale",  locale)) {
-        var lastIndex = locale.lastIndexOf("_");
-        if (lastIndex == -1) {
-              locale = "default";
-          break;
-        } else {
-          locale = locale.substring(0,lastIndex);
-        }
-      }
-      return locale;
-    } catch(e){
-      return "en";
-    }
-  ]]>
-	</property-provider>
+        return locale_value;
+    </property-provider>
 	
 	<!--removes client-side stack trace info (can reduce size up to 15%)-->
     <set-property name="compiler.stackMode" value="strip"/>

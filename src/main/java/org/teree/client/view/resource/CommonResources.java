@@ -7,7 +7,8 @@ import com.google.gwt.resources.client.ImageResource;
 public interface CommonResources extends Resources {
 	
 	public static final CommonResources RESOURCES = GWT.create(CommonResources.class);
-	
+
     ImageResource email();
+    ImageResource screenshot();
     
 }

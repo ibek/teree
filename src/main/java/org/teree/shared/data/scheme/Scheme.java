@@ -18,7 +18,7 @@ public class Scheme {
 	private UserInfo author; // for public scheme
 	//private UserInfo owner; // for private scheme
 	
-	private Permissions permissions;
+	private Permissions permissions = new Permissions();
 
 	public String getSchemePicture() {
         return schemePicture;

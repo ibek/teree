@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -36,9 +35,12 @@ public class ImageServlet extends HttpServlet {
 			    {
 			        output.write(buffer, 0, bytesRead);
 			    }
+			    output.flush();
 			} catch (Exception ex) {
 				
 			}
+		} else {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
 	

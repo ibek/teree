@@ -13,7 +13,7 @@ import org.teree.shared.data.UserInfo;
 @Portable
 public class Permissions {
 
-	private Boolean write; // global permissions, null means that the scheme is not globally readable
+	private Boolean write = null; // global permissions, null means that the scheme is not globally readable
 	private List<UserPermissions> users;
 	// TODO: create GroupPermissions
 	

@@ -52,7 +52,7 @@ public class SchemeWidget extends Composite {
 				History.newItem(Settings.VIEW_LINK + scheme.getOid());
 			}
 		});
-		th.setSize(Settings.SAMPLE_MAX_WIDTH+"px", (Settings.SAMPLE_MAX_HEIGHT+40)+"px");
+		th.setSize(Settings.SAMPLE_MAX_WIDTH+"px", (Settings.SAMPLE_MAX_HEIGHT+60)+"px");
 		th.getElement().getStyle().setMargin(5.0, Unit.PX);
 		th.getAnchor().getElement().getStyle().setBackgroundColor("white");
 		th.getAnchor().getElement().getStyle().setProperty("textAlign", "center");

@@ -51,7 +51,6 @@ public class ViewPanel extends Composite {
 		form.setMethod(FormPanel.METHOD_POST);
 		
 		exportAs = new DropdownButton(UIC.export_as());
-		exportAs.getElement().getStyle().setZIndex(-100);
 
 		exportImage = new NavLink(UIC.image());
 		exportImage.setIcon(IconType.PICTURE);

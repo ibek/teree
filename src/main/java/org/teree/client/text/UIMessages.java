@@ -22,12 +22,15 @@ public interface UIMessages extends Messages {
     String cannot_export_scheme();
     
     String attention_testing();
+    String new1();
+    String new2();
     
     String feature1();
     String feature2();
     String feature3();
     String feature4();
     String feature5();
+    String feature6();
     
     String technical_detail1();
     String technical_detail2();

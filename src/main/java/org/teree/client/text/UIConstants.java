@@ -10,6 +10,7 @@ public interface UIConstants extends Messages {
     public static UIConstants LANG = GWT.create(UIConstants.class);
 
     String attention();
+    String news();
     String change_logs();
     String features();
     String bug_tracking();

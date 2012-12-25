@@ -18,6 +18,15 @@
 			font-size: 20px;
 			cursor: Pointer;
 		}
+		
+		.innerlink {
+			cursor: Pointer;
+		}
+		
+		.screenshot {
+			float: right;
+			margin: 20px;
+		}
 
 	</ui:style>
 
@@ -26,7 +35,15 @@
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<g:FlowPanel addStyleNames="{style.scene}">
 			<b:PageHeader subtext="{uim.subtitle}">teree</b:PageHeader>
-			<b:AlertBlock width="500px" type="ERROR" heading="{uic.attention}" text="{uim.attention_testing}" />
+			<b:Image resource="{cres.screenshot}" addStyleNames="{style.screenshot}"/>
+			<b:AlertBlock type="ERROR" heading="{uic.attention}" text="{uim.attention_testing}" close="false" />
+			<b:AlertBlock type="INFO" heading="{uic.news}" close="false">
+				2012-12-25
+				<ul>
+					<li><g:Label text="{uim.new1}"/><g:Anchor ui:field="changeLogs2" text='{uic.change_logs}' addStyleNames="{style.innerlink}"/></li>
+					<li><g:Label text="{uim.new2}"/><g:Anchor href='https://openshift.redhat.com/community/application-gallery' target='_blank'>Openshift Application Gallery</g:Anchor></li>
+				</ul>
+			</b:AlertBlock>
 			<g:Anchor ui:field="changeLogs" text="{uic.change_logs}" addStyleNames="{style.link}" />
 			<b:Heading size="2" text="{uic.features}" />
 				<b:Paragraph>
@@ -34,7 +51,8 @@
 					<b:Badge>-</b:Badge><b:Badge text="{uim.feature2}" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="{uim.feature3}" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="{uim.feature4}" /><br/>
-					<b:Badge>-</b:Badge><b:Badge text="{uim.feature5}" />
+					<b:Badge>-</b:Badge><b:Badge text="{uim.feature5}" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="{uim.feature6}" />
 				</b:Paragraph>
 			<b:Heading size="2" text="{uic.bug_tracking}" />
 				<b:Paragraph>
