@@ -62,18 +62,6 @@ public class LinkNodeWidget extends NodeWidget {
 	private void fireSelect() {
     	getParent().fireEvent(new SelectNode(this));
     }
-    
-    @Override
-    public NodeWidget select() {
-    	content.getElement().getStyle().setBackgroundColor("grey");
-    	return super.select();
-    }
-    
-    @Override
-    public NodeWidget unselect() {
-    	content.getElement().getStyle().setBackgroundColor(null);
-    	return super.unselect();
-    }
 
 	@Override
 	public void edit() {

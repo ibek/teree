@@ -48,6 +48,7 @@ public class TextNodeWidget extends NodeWidget {
 
         nodeContent = (IconText)node.getContent();
 		icon = new Icon();
+		icon.getElement().getStyle().setZIndex(100);
         
         view();
         
@@ -99,15 +100,15 @@ public class TextNodeWidget extends NodeWidget {
         }
         
         editContent.setText(nodeContent.getText());
-        if (getOffsetWidth() <= Settings.NODE_MIN_WIDTH) {
-        	editContent.setWidth((Settings.NODE_MIN_WIDTH+2)+"px");
-        } else {
-        	editContent.setWidth((getOffsetWidth()+2)+"px");
-        }
-        editContent.setHeight(getOffsetHeight()+"px");
         
-        if (editContent.getText().isEmpty()) {
+        if (getOffsetWidth() > Settings.NODE_DEFAULT_WIDTH) {
+        	editContent.setWidth((getOffsetWidth()+4)+"px");
+        } else {
         	editContent.setWidth(Settings.NODE_DEFAULT_WIDTH+"px");
+        }
+        if (getOffsetHeight() > Settings.NODE_DEFAULT_HEIGHT) {
+            editContent.setHeight(getOffsetHeight()+"px");
+        } else {
             editContent.setHeight(Settings.NODE_DEFAULT_HEIGHT+"px");
         }
         
@@ -173,18 +174,6 @@ public class TextNodeWidget extends NodeWidget {
     
     private void fireSelect() {
     	getParent().fireEvent(new SelectNode(this));
-    }
-    
-    @Override
-    public NodeWidget select() {
-    	content.getElement().getStyle().setBackgroundColor("grey");
-    	return super.select();
-    }
-    
-    @Override
-    public NodeWidget unselect() {
-    	content.getElement().getStyle().setBackgroundColor(null);
-    	return super.unselect();
     }
     
     private void confirmChanges() {

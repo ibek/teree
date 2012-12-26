@@ -32,6 +32,9 @@ public interface UIConstants extends Messages {
     String view();
     String next();
     String back();
+    String save();
+    String refresh_scheme();
+    String share();
     
     String register_user();
     String username();

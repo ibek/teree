@@ -14,7 +14,6 @@ import org.teree.client.presenter.SchemeExplorer;
 import org.teree.client.view.explorer.Scene;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.resource.PageStyle;
-import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Scheme;
 
 public class Explorer extends TemplateScene implements SchemeExplorer.Display {

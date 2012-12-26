@@ -5,7 +5,6 @@ import java.util.List;
 import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
-import org.teree.shared.data.scheme.MathExpression;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
 import org.teree.shared.data.scheme.Node.NodeLocation;

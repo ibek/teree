@@ -219,6 +219,7 @@ public class SchemeManager {
 	        BasicDBObject filter = new BasicDBObject("screen", 0); // without preview
 	        DBObject found = coll.findOne(searchById, filter);
 	        found.removeField("_id"); // id won't be exported
+	        found.removeField("author");
 	        String json = JSON.serialize(found);
 	        return json;
     	} catch (Exception ex) {

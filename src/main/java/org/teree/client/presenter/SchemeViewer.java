@@ -79,7 +79,7 @@ public class SchemeViewer implements Presenter {
             	if (response == null) {
             		display.error(UIMessages.LANG.cannot_export_scheme());
             	} else {
-            		display.sendDownloadRequest(display.getScheme().getRoot().getContent().toString(), "json", response);
+            		display.sendDownloadRequest(display.getScheme().getRoot().getContent().toString(), "application/json", response);
             	}
             }
         }, new ErrorCallback() {

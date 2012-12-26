@@ -47,5 +47,12 @@ public interface UIMessages extends Messages {
     String password_short();
     String password_confirmation();
     String all_fields_required();
+
+    String create_text();
+    String create_image();
+    String create_link();
+    String create_math();
+    String bold_text();
+    String choose_icon();
     
 }

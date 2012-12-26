@@ -17,25 +17,20 @@ import org.teree.shared.data.scheme.Scheme;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.i18n.client.Messages.Select;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -138,14 +133,15 @@ public class Scene extends Composite {
         container.add(canvas);
         
         init(scheme.getRoot());
+        final List<NodeWidget> widgets = getNodeWidgets();
         
-        renderer.renderViewer(canvas, getNodeWidgets(), scheme.getRoot());
+        renderer.renderViewer(canvas, widgets, scheme.getRoot());
         if (requiresRender) { // to fix size and position of math expressions
         	requiresRender = false;
         	Timer t = new Timer() {
 				@Override
 				public void run() {
-					renderer.renderViewer(canvas, getNodeWidgets(), Scene.this.scheme.getRoot());
+					renderer.renderViewer(canvas, widgets, Scene.this.scheme.getRoot());
 				}
         	};
         	t.schedule(1000);
@@ -162,6 +158,19 @@ public class Scene extends Composite {
         canvas.setCoordinateSpaceWidth(this.canvas.getOffsetWidth());
         renderer.renderPicture(canvas, getNodeWidgets(), scheme.getRoot());
         return canvas.toDataUrl();
+    }
+    
+    private boolean collapseAll = true;
+    public void changeCollapseAll() {
+    	List<NodeWidget> widgets = getNodeWidgets();
+    	collapseAll = !collapseAll;
+		for (int i=1; i<widgets.size(); ++i) {
+			NodeWidget nw = widgets.get(i);
+			if (nw.getNode().getChildNodes() != null && !nw.getNode().getChildNodes().isEmpty() && nw.getNode().getParent().getParent() == null) {
+				nw.setCollapsed(collapseAll);
+			}
+		}
+		renderer.renderViewer(canvas, widgets, scheme.getRoot());
     }
 
     private boolean initMathScript = true;

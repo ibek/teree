@@ -1,10 +1,7 @@
 package org.teree.client.view.explorer;
 
-import org.teree.client.io.FreeMind;
 import org.teree.client.text.UIConstants;
 import org.teree.client.view.explorer.event.ImportSchemeHandler;
-import org.teree.shared.data.scheme.Node;
-import org.teree.shared.data.scheme.Scheme;
 import org.vectomatic.file.FileReader;
 import org.vectomatic.file.FileUploadExt;
 import org.vectomatic.file.events.ErrorEvent;
@@ -12,7 +9,6 @@ import org.vectomatic.file.events.ErrorHandler;
 import org.vectomatic.file.events.LoadEndEvent;
 import org.vectomatic.file.events.LoadEndHandler;
 
-import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.DropdownButton;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.google.gwt.event.dom.client.ChangeEvent;

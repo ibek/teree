@@ -31,6 +31,8 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
     
     protected boolean selected;
     
+    protected boolean collapsed = false;
+    
     public NodeWidget(Node node) {
         this.node = node;
         selected = false;
@@ -49,11 +51,13 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 	public abstract void changeStyle(NodeStyle style);
     
     public NodeWidget select() {
+    	container.getElement().getStyle().setBackgroundColor("#7FAF47");
         selected = true;
         return this;
     }
     
     public NodeWidget unselect() {
+    	container.getElement().getStyle().setBackgroundColor(null);
         selected = false;
         return null;
     }
@@ -76,21 +80,21 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
         content.addDragEnterHandler(new DragEnterHandler() {
 			@Override
 			public void onDragEnter(DragEnterEvent event) {
-				container.getElement().getStyle().setBackgroundColor("#ffa");
+				container.getElement().getStyle().setBackgroundColor("#7FAF47");
 			}
 		});
         
         content.addDragLeaveHandler(new DragLeaveHandler() {
 			@Override
 			public void onDragLeave(DragLeaveEvent event) {
-				container.getElement().getStyle().setBackgroundColor("white");
+		    	container.getElement().getStyle().setBackgroundColor(null);
 			}
 		});
         
         content.addDropHandler(new DropHandler() {
 			@Override
 			public void onDrop(DropEvent event) {
-				container.getElement().getStyle().setBackgroundColor("white");
+		    	container.getElement().getStyle().setBackgroundColor(null);
                 dropData(event);
 			}
 		});
@@ -154,10 +158,14 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
     	event.setData("id", String.valueOf(((AbsolutePanel)getParent()).getWidgetIndex(this)));
         event.getDataTransfer().setDragImage(container.getElement(), 10, 10);
     }
+    
+    public void setCollapsed(boolean collapsed) {
+    	this.collapsed = collapsed;
+    }
 	
 	@Override
 	public boolean isCollapsed() {
-		return false;
+		return collapsed;
 	}
 
 }

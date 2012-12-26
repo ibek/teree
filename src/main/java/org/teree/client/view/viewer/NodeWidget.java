@@ -16,6 +16,8 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
     
     protected AbsolutePanel container;
     
+    protected boolean collapsed = false;
+    
     public NodeWidget() {
     	
     }
@@ -45,9 +47,13 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 		return getWidget().getOffsetHeight();
 	}
 	
+	public void setCollapsed(boolean collapsed) {
+		this.collapsed = collapsed;
+	}
+	
 	@Override
 	public boolean isCollapsed() {
-		return false;
+		return collapsed;
 	}
 
 }

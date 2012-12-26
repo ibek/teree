@@ -20,6 +20,7 @@
 			margin: 0px;
 			margin-left: 20px;
 			text-align: center;
+			min-width: 200px;
 		}
 
 	</ui:style>

@@ -313,7 +313,6 @@ public class Scene extends Composite {
         canvas.getContext2d().scale(scale, scale);
         List<NodeWidget> nw = getNodeWidgets();
         scheme.renderPicture(canvas, nw, root);
-        
         NodeWidget root = nw.get(0);
         int x,y,w,h;
         x = (int)(root.getAbsoluteLeft() - this.canvas.getAbsoluteLeft() + root.getWidgetWidth()/2 - Settings.SAMPLE_MAX_WIDTH/2/scale);

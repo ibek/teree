@@ -25,7 +25,10 @@
 		
 		.screenshot {
 			float: right;
-			margin: 20px;
+		}
+		
+		.alert {
+			max-width: 500px;
 		}
 
 	</ui:style>
@@ -36,8 +39,8 @@
 		<g:FlowPanel addStyleNames="{style.scene}">
 			<b:PageHeader subtext="{uim.subtitle}">teree</b:PageHeader>
 			<b:Image resource="{cres.screenshot}" addStyleNames="{style.screenshot}"/>
-			<b:AlertBlock type="ERROR" heading="{uic.attention}" text="{uim.attention_testing}" close="false" />
-			<b:AlertBlock type="INFO" heading="{uic.news}" close="false">
+			<b:AlertBlock type="ERROR" heading="{uic.attention}" text="{uim.attention_testing}" close="true" addStyleNames="{style.alert}" />
+			<b:AlertBlock type="INFO" heading="{uic.news}" close="true" addStyleNames="{style.alert}">
 				2012-12-25
 				<ul>
 					<li><g:Label text="{uim.new1}"/><g:Anchor ui:field="changeLogs2" text='{uic.change_logs}' addStyleNames="{style.innerlink}"/></li>

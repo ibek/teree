@@ -1,7 +1,5 @@
 package org.teree.client.view;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 
 import com.github.gwtbootstrap.client.ui.constants.IconType;
@@ -17,7 +15,6 @@ import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.view.editor.EditPanel;
 import org.teree.client.view.editor.Scene;
 import org.teree.client.view.resource.PageStyle;
-import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Node;
 
 public class Editor extends TemplateScene implements SchemeEditor.Display {

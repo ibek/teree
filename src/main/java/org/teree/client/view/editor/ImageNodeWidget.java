@@ -10,8 +10,6 @@ import org.teree.shared.data.scheme.Node.NodeLocation;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Style.Unit;
@@ -96,18 +94,6 @@ public class ImageNodeWidget extends NodeWidget {
 	
 	private void fireSelect() {
     	getParent().fireEvent(new SelectNode(this));
-    }
-    
-    @Override
-    public NodeWidget select() {
-    	content.getElement().getStyle().setBackgroundColor("grey");
-    	return super.select();
-    }
-    
-    @Override
-    public NodeWidget unselect() {
-    	content.getElement().getStyle().setBackgroundColor(null);
-    	return super.unselect();
     }
 
 	@Override

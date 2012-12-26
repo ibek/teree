@@ -25,8 +25,8 @@ public class Settings {
     public static final int NODE_MIN_WIDTH = 50;
     public static final int NODE_MAX_WIDTH = 400;
     public static final int NODE_MIN_HEIGHT = 18;
-    public static final int NODE_DEFAULT_WIDTH = 400; // for empty node
-    public static final int NODE_DEFAULT_HEIGHT = 35; // for empty node
+    public static final int NODE_DEFAULT_WIDTH = 200; // for empty node
+    public static final int NODE_DEFAULT_HEIGHT = 40; // for empty node
 
     public static final int SAMPLE_MAX_WIDTH = 300;
     public static final int SAMPLE_MAX_HEIGHT = 200;

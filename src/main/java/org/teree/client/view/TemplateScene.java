@@ -2,8 +2,6 @@ package org.teree.client.view;
 
 import org.teree.client.CurrentUser;
 import org.teree.client.presenter.Template;
-import org.teree.shared.data.UserInfo;
-
 import com.github.gwtbootstrap.client.ui.Alert;
 import com.github.gwtbootstrap.client.ui.constants.AlertType;
 import com.google.gwt.uibinder.client.UiField;

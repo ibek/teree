@@ -7,13 +7,13 @@ import com.github.gwtbootstrap.client.ui.DropdownButton;
 import com.github.gwtbootstrap.client.ui.Form;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 
 public class ViewPanel extends Composite {
 	
@@ -30,8 +30,9 @@ public class ViewPanel extends Composite {
 	private NavLink exportImage;
 	private NavLink exportFreeMind;
 	private NavLink exportJSON;
-	
+
 	private Button share;
+	private Button collapseAll;
 	
 	private UIConstants UIC = UIConstants.LANG;
 	
@@ -50,6 +51,13 @@ public class ViewPanel extends Composite {
 		form.setEncoding(FormPanel.ENCODING_MULTIPART);
 		form.setMethod(FormPanel.METHOD_POST);
 		
+		collapseAll = new Button("un/collapse all");
+		container.add(collapseAll);
+		
+		Label space = new Label("");
+		space.getElement().getStyle().setMarginRight(20, Unit.PX);
+		container.add(space);
+		
 		exportAs = new DropdownButton(UIC.export_as());
 
 		exportImage = new NavLink(UIC.image());
@@ -64,11 +72,15 @@ public class ViewPanel extends Composite {
 		
 		container.add(exportAs);
 		
-		share = new Button("Share");
+		share = new Button(UIC.share());
 		container.add(share);
 		
 		initWidget(container);
 		
+	}
+	
+	public HasClickHandlers getCollapseAllButton() {
+		return collapseAll;
 	}
 	
 	public HasClickHandlers getExportImageButton() {

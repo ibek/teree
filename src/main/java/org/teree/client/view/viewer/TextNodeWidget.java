@@ -11,8 +11,6 @@ import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.ui.HTML;
@@ -21,7 +19,6 @@ public class TextNodeWidget extends NodeWidget {
 
 	private Icon icon;
     private HTML content;
-    private boolean collapsed;
     
     protected TextNodeWidget(Node node) {
         super(node);
@@ -83,11 +80,6 @@ public class TextNodeWidget extends NodeWidget {
     	}
         context.restore();
     }
-	
-	@Override
-	public boolean isCollapsed() {
-		return collapsed;
-	}
 
 	public void setCollapsed(boolean collapsed) {
 		if (collapsed) {

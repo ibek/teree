@@ -2,6 +2,8 @@ package org.teree.client.view.editor;
 
 import java.util.Set;
 
+import org.teree.client.text.UIConstants;
+import org.teree.client.text.UIMessages;
 import org.teree.client.view.resource.IconTypeContent;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -34,12 +36,11 @@ public class EditPanel extends Composite {
 	private static final int ICON_COLUMNS = 7;	
 	private static final int ICON_ROWS = 6;
 	
-	
 	public EditPanel() {
 		
 		container = new HorizontalPanel();
 
-		save = new Button("Save", IconType.SAVE);
+		save = new Button(UIConstants.LANG.save(), IconType.SAVE);
 		Label space = new Label("");
 		space.getElement().getStyle().setMarginRight(20, Unit.PX);
 		
@@ -61,34 +62,34 @@ public class EditPanel extends Composite {
 		container.add(save);
 		container.add(space);
 		
-		Tooltip tre = new Tooltip("Refresh scheme");
+		Tooltip tre = new Tooltip(UIConstants.LANG.refresh_scheme());
 		tre.add(refresh);
 		container.add(tre);
 		container.add(space2);
 		
-		Tooltip tct = new Tooltip("Create text child node");
+		Tooltip tct = new Tooltip(UIMessages.LANG.create_text());
 		tct.add(createText);
 		container.add(tct);
 
-        Tooltip tci = new Tooltip("Create image child node");
+        Tooltip tci = new Tooltip(UIMessages.LANG.create_image());
         tci.add(createImg);
 		container.add(tci);
 
-        Tooltip tcl = new Tooltip("Create link child node");
+        Tooltip tcl = new Tooltip(UIMessages.LANG.create_link());
         tcl.add(createLink);
 		container.add(tcl);
 
-        Tooltip tcme = new Tooltip("Create math expression child node");
+        Tooltip tcme = new Tooltip(UIMessages.LANG.create_math());
         tcme.add(createMathExpr);
 		container.add(tcme);
 		
 		container.add(space3);
 
-        Tooltip tcb = new Tooltip("Bold text node");
+        Tooltip tcb = new Tooltip(UIMessages.LANG.bold_text());
         tcb.add(bold);
 		container.add(tcb);
 		
-        Tooltip ti = new Tooltip("Choose icon for node");
+        Tooltip ti = new Tooltip(UIMessages.LANG.choose_icon());
         ti.add(icon);
 		container.add(ti);
 		

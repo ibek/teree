@@ -22,6 +22,10 @@ vyhledavani - pouze v root
 PercentNodeWidget - zobrazi graficky 0-100%, pri editaci se vlozi cislo 0-100 do integerboxu
 pridat hodnoceni mapy
 
+umoznit tisk mapy
+
+vytvorit stranku Help - popsat aplikaci (napr. novy radek pomoci shift+enter ...)
+
 upravit explore aby zobrazoval jak posledne vlozene mapy tak i nejvice otevrene za tyden apod.
 
 future:

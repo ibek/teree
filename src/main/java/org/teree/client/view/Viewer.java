@@ -2,7 +2,6 @@ package org.teree.client.view;
 
 import javax.annotation.PostConstruct;
 
-import com.github.gwtbootstrap.client.ui.Button;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -11,14 +10,12 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.teree.client.CurrentUser;
 import org.teree.client.io.FreeMind;
 import org.teree.client.presenter.SchemeViewer;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.client.view.viewer.Scene;
 import org.teree.client.view.viewer.ShareDialog;
 import org.teree.client.view.viewer.ViewPanel;
-import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Scheme;
 
 public class Viewer extends TemplateScene implements SchemeViewer.Display {
@@ -71,6 +68,13 @@ public class Viewer extends TemplateScene implements SchemeViewer.Display {
 				shareDialog.setOid(scene.getScheme().getOid());
 				shareDialog.setPopupPosition(view.getAbsoluteLeft()+view.getOffsetWidth()/2, view.getAbsoluteTop()+view.getOffsetHeight());
 				shareDialog.show();
+			}
+		});
+        
+        view.getCollapseAllButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scene.changeCollapseAll();
 			}
 		});
         

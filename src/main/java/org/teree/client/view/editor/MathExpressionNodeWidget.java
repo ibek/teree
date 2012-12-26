@@ -3,22 +3,16 @@ package org.teree.client.view.editor;
 import org.teree.client.Settings;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
-import org.teree.client.view.resource.IconTypeContent;
 import org.teree.client.view.resource.MathExpressionTools;
-import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.MathExpression;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
 
-import com.github.gwtbootstrap.client.ui.Icon;
-import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -95,15 +89,15 @@ public class MathExpressionNodeWidget extends NodeWidget {
         }
         
         editContent.setText(nodeContent.getExpression());
-        if (getOffsetWidth() <= Settings.NODE_MIN_WIDTH) {
-        	editContent.setWidth((Settings.NODE_MIN_WIDTH+2)+"px");
-        } else {
-        	editContent.setWidth((getOffsetWidth()+2)+"px");
-        }
-        editContent.setHeight(getOffsetHeight()+"px");
         
-        if (editContent.getText().isEmpty()) {
+        if (getOffsetWidth() > Settings.NODE_DEFAULT_WIDTH) {
+        	editContent.setWidth((getOffsetWidth()+4)+"px");
+        } else {
         	editContent.setWidth(Settings.NODE_DEFAULT_WIDTH+"px");
+        }
+        if (getOffsetHeight() > Settings.NODE_DEFAULT_HEIGHT) {
+            editContent.setHeight(getOffsetHeight()+"px");
+        } else {
             editContent.setHeight(Settings.NODE_DEFAULT_HEIGHT+"px");
         }
         
@@ -163,18 +157,6 @@ public class MathExpressionNodeWidget extends NodeWidget {
     
     private void fireSelect() {
     	getParent().fireEvent(new SelectNode(this));
-    }
-    
-    @Override
-    public NodeWidget select() {
-    	content.getElement().getStyle().setBackgroundColor("grey");
-    	return super.select();
-    }
-    
-    @Override
-    public NodeWidget unselect() {
-    	content.getElement().getStyle().setBackgroundColor(null);
-    	return super.unselect();
     }
     
     private void confirmChanges() {

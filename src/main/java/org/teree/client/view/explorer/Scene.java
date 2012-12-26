@@ -7,13 +7,10 @@ import org.teree.client.Settings;
 import org.teree.client.text.UIConstants;
 import org.teree.client.text.UIMessages;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
-import org.teree.client.view.explorer.event.PublishScheme;
-import org.teree.client.view.explorer.event.PublishSchemeHandler;
 import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
 import org.teree.client.view.explorer.event.UpdateSchemePermissions;
 import org.teree.client.view.explorer.event.UpdateSchemePermissionsHandler;
-import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Scheme;
 
 import com.github.gwtbootstrap.client.ui.Heading;

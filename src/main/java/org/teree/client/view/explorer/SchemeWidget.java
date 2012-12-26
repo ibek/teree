@@ -3,7 +3,6 @@ package org.teree.client.view.explorer;
 import org.teree.client.CurrentUser;
 import org.teree.client.Settings;
 import org.teree.client.text.UIConstants;
-import org.teree.client.text.UIMessages;
 import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.scheme.Permissions;
 import org.teree.shared.data.scheme.Scheme;

@@ -32,7 +32,7 @@ public class IconTypeContent {
 		ICONS.put(IconType.GLOBE, (char)0xf0ac);
 		ICONS.put(IconType.INFO_SIGN, (char)0xf05a);
 		ICONS.put(IconType.KEY, (char)0xf084);
-		ICONS.put(IconType.LEAF, (char)0xf06c);
+		ICONS.put(IconType.HEART, (char)0xf004);
 		ICONS.put(IconType.LOCK, (char)0xf023);
 		ICONS.put(IconType.UNLOCK, (char)0xf09c);
 		ICONS.put(IconType.MINUS, (char)0xf068);
