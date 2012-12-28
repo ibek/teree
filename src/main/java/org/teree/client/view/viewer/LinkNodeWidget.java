@@ -22,6 +22,8 @@ public class LinkNodeWidget extends NodeWidget {
 	private void init() {
 		content = new Anchor();
 		content.setTarget("_blank");
+        content.setStylePrimaryName(resources.css().node());
+        content.setStyleDependentName("view", true);
 
 		Link link = (Link) node.getContent();
 		String url = link.getUrl();

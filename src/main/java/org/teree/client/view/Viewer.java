@@ -74,7 +74,7 @@ public class Viewer extends TemplateScene implements SchemeViewer.Display {
         view.getCollapseAllButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				scene.changeCollapseAll();
+				view.setCollapsed(scene.changeCollapseAll(!view.isCollapsed()));
 			}
 		});
         

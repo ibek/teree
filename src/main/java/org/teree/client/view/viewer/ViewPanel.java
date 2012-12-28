@@ -33,6 +33,7 @@ public class ViewPanel extends Composite {
 
 	private Button share;
 	private Button collapseAll;
+	private boolean collapsed;
 	
 	private UIConstants UIC = UIConstants.LANG;
 	
@@ -51,7 +52,8 @@ public class ViewPanel extends Composite {
 		form.setEncoding(FormPanel.ENCODING_MULTIPART);
 		form.setMethod(FormPanel.METHOD_POST);
 		
-		collapseAll = new Button("un/collapse all");
+		collapseAll = new Button();
+		setCollapsed(true);
 		container.add(collapseAll);
 		
 		Label space = new Label("");
@@ -79,7 +81,20 @@ public class ViewPanel extends Composite {
 		
 	}
 	
-	public HasClickHandlers getCollapseAllButton() {
+	public boolean isCollapsed() {
+		return collapsed;
+	}
+	
+	public void setCollapsed(boolean collapsed) {
+		this.collapsed = collapsed;
+		if (collapsed) {
+			collapseAll.setText(UIC.uncollapse_all());
+		} else {
+			collapseAll.setText(UIC.collapse_all());
+		}
+	}
+	
+	public Button getCollapseAllButton() {
 		return collapseAll;
 	}
 	

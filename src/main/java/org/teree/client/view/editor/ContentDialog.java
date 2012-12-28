@@ -67,16 +67,6 @@ public class ContentDialog extends DialogBox {
 
 	}
 	
-	@Override
-	public int getOffsetWidth() {
-		return WIDTH;
-	}
-	
-	@Override
-	public int getOffsetHeight() {
-		return HEIGHT;
-	}
-	
 	public HasClickHandlers getOk() {
 		return okButton;
 	}

@@ -3,24 +3,37 @@
 
 udelat testovani podle nalezenych chyb z testing release 0.5 + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
 
-uzivatelsky privetive statusy a chybove hlasky
-tvorba map z templates
+po F2 se zobrazuje nejaky dialog (uprava odkazu obrazku) u textoveho uzlu
+automatické ukládání
+zlepsit uzivatelskou privetivost
+ - pohyb sipkami nahoru dolu i v pripade ze se nemaji spolecneho predka
+
+vytvorit metody pro vytvoreni a zruseni pripojeni s databazi v MongoDB, protoze se nevola close pri redeploy
+ - je to opravdu potreba? neni jednodussi restartovat databazi?
 
 umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
 
-direct explore - novy typ generovani mapy, nejspis pro to bude stacit mindmapa protoze leva strana se zajisti uz na serveru pri cteni 
-service explore(oid) - nacte mapy do urcite urovne pomoci NodeType.Connector
+direct explore - novy typ generovani mapy, velmi podobne mind mape ... generovani pouze vsech uzlu vpravo a root bude uplne vlevo
+ - provest refaktorizaci MindMapy, aby se casti mohli pouzit i v tomto typu generovani
 ConnectorNodeWidget (to connect another map)
+ - po kliknuti ve view se nacte mapa do daneho uzlu
+ - checkbox zda ma byt nacten hned pri otevreni nebo az po stisknuti
 funkce pro rozdeleni mapy na dve - z nodu vytvorit novou mapu a propojit connectorNodeWidgetem
- 
+ - ulozi se nova mapa s danym rootem (vybrany node)
+ - odstrani se vybrany node
+ - vytvori se connectorNodeWidget s odkazem vlozene nove mapy
+
 vyhledavani - pouze v root
  - je nutne pro ConnectorNodeWidget
  - vlozit na hlavni stranku vyhledavani - takovy portal, vysledek bude, ze se bud premisti na prvni nalezenou mapu, nebo se oznami ze nebyla nalezena
 
+uzivatelsky privetive statusy a chybove hlasky
+
+===============
 0.8:
+===============
 
 PercentNodeWidget - zobrazi graficky 0-100%, pri editaci se vlozi cislo 0-100 do integerboxu
-pridat hodnoceni mapy
 
 umoznit tisk mapy
 
@@ -28,19 +41,35 @@ vytvorit stranku Help - popsat aplikaci (napr. novy radek pomoci shift+enter ...
 
 upravit explore aby zobrazoval jak posledne vlozene mapy tak i nejvice otevrene za tyden apod.
 
-future:
+ulozeni ruznych pohledu na mapu
+ - nektere casti nejsou pro dany pohled dulezite a nebudou zobrazeny
+ - jine nody budou collapsed apod
+ - vlevo ve sloupci ve view budou vetsi tlacitka jako pohledy pro prepnuti
+ - vytvori se novy editor pohledu ktery bude nastavovat nody podle toho jak a zda se maji zobrazit
+ - editor pohledu bude pristupny pres editor map - tlacitko pridat pohled, ...
+
+===============
+0.9:
+===============
 
 collaboration
+
+pridat hodnoceni mapy
+ruzne typy nodu z hlediska vyznamu
+ - klicove slovo (bude mozne ho najit ve vyhledavani, a lze tento podstrom oddelit od mapy), definice, priklad, ...
+
+moznost obarveni nodu dedicne - tzn i potomci budou mit danou barvu pokud nebude nastaven styl
+
+tvorba skupin - pratele, apod ... pro urceni prav na urcite mapy
+
+===============
+future:
+===============
+
+tvorba map z templates - nejake vyhody ? jake vzory napriklad?
 undo-redo funkce
 fulltextove vyhledavani
  - v budoucnu bude vysledkem vygenerovana mapa s odkazy a cestami na mapy kde se hledane slovo nachazi
 DBAuth pres SSL
 management console/app - napr pro upravu balicku, zmena limitu apod
 sepsat use cases (pro studovani ...)
-ulozeni ruznych pohledu na mapu
- - nektere casti nejsou pro dany pohled dulezite a nebudou zobrazeny
- - jine nody budou collapsed apod
-ruzne typy nodu z hlediska vyznamu
- - klicove slovo (bude mozne ho najit ve vyhledavani, a lze tento podstrom oddelit od mapy), definice, priklad, ...
-moznost obarveni nodu dedicne - tzn i potomci budou mit danou barvu pokud nebude nastaven styl
-tvorba skupin - pratele, apod ... pro urceni prav na urcite mapy

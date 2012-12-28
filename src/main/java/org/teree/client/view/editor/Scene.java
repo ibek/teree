@@ -312,26 +312,27 @@ public class Scene extends Composite {
         canvas.setCoordinateSpaceWidth((int)(this.canvas.getOffsetWidth()*scale));
         canvas.getContext2d().scale(scale, scale);
         List<NodeWidget> nw = getNodeWidgets();
-        scheme.renderPicture(canvas, nw, root);
-        NodeWidget root = nw.get(0);
+        collapseAll(nw, true);
+        int[] rp = scheme.renderPicture(canvas, nw, root);
+        NodeWidget rw = nw.get(0);
         int x,y,w,h;
-        x = (int)(root.getAbsoluteLeft() - this.canvas.getAbsoluteLeft() + root.getWidgetWidth()/2 - Settings.SAMPLE_MAX_WIDTH/2/scale);
+        x = (int)(rp[0] + rw.getWidgetWidth()/2 - Settings.SAMPLE_MAX_WIDTH/2/scale);
         if (x < 0) {
         	x = 0;
-        	w = (int)(root.getAbsoluteLeft() - this.canvas.getAbsoluteLeft() + root.getWidgetWidth()/2 + Settings.SAMPLE_MAX_WIDTH/2/scale);
-        	if (w > this.canvas.getOffsetWidth()) {
-        		w = this.canvas.getOffsetWidth();
+        	w = (int)(rp[0] + rw.getWidgetWidth()/2 + Settings.SAMPLE_MAX_WIDTH/2/scale);
+        	if (w > rp[2]) {
+        		w = rp[2];
         	}
         } else {
         	w = (int)(Settings.SAMPLE_MAX_WIDTH/scale);
         }
         
-        y = (int)(root.getAbsoluteTop() - this.canvas.getAbsoluteTop() + root.getWidgetHeight()/2 - Settings.SAMPLE_MAX_HEIGHT/2/scale);
+        y = (int)(rp[1] + rw.getWidgetHeight()/2 - Settings.SAMPLE_MAX_HEIGHT/2/scale);
         if (y < 0) {
         	y = 0;
-        	h = (int)(root.getAbsoluteTop() - this.canvas.getAbsoluteTop() + root.getWidgetHeight()/2 + Settings.SAMPLE_MAX_HEIGHT/2/scale);
-        	if (h > this.canvas.getOffsetHeight()) {
-        		h = this.canvas.getOffsetHeight();
+        	h = (int)(rp[1] + rw.getWidgetHeight()/2 + Settings.SAMPLE_MAX_HEIGHT/2/scale);
+        	if (h > rp[3]) {
+        		h = rp[3];
         	}
         } else {
         	h = (int)(Settings.SAMPLE_MAX_HEIGHT/scale);
@@ -343,6 +344,8 @@ public class Scene extends Composite {
         canvasTmp.setCoordinateSpaceWidth(data.getWidth());
         Context2d context = canvasTmp.getContext2d();
         context.putImageData(data, 0, 0);
+        collapseAll(nw, false);
+        update(null);
         
         return canvasTmp.toDataUrl();
     }
@@ -523,6 +526,17 @@ public class Scene extends Composite {
         } else {
             selected = null;
         }
+    }
+    
+    private void collapseAll(List<NodeWidget> widgets, boolean collapse) {
+    	for (int i=1; i<widgets.size(); ++i) {
+    		NodeWidget nw = widgets.get(i);
+    		if ((nw.getNode().getParent().getParent() == null || nw.getNode().getParent().getParent().getParent() == null) && // collapse first or second level of nodes 
+    				nw.getNode().getChildNodes() != null && 
+    				nw.getNode().getChildNodes().size() > 2) {
+    			nw.setCollapsed(collapse);
+    		}
+    	}
     }
     
 }

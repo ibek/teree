@@ -160,17 +160,19 @@ public class Scene extends Composite {
         return canvas.toDataUrl();
     }
     
-    private boolean collapseAll = true;
-    public void changeCollapseAll() {
+    public boolean changeCollapseAll(boolean collapseAll) {
     	List<NodeWidget> widgets = getNodeWidgets();
-    	collapseAll = !collapseAll;
 		for (int i=1; i<widgets.size(); ++i) {
 			NodeWidget nw = widgets.get(i);
-			if (nw.getNode().getChildNodes() != null && !nw.getNode().getChildNodes().isEmpty() && nw.getNode().getParent().getParent() == null) {
+			if (nw.getNode().getChildNodes() != null && 
+					!nw.getNode().getChildNodes().isEmpty() && 
+					nw.getNode().getParent().getParent() == null &&
+					!(nw instanceof LinkNodeWidget)) {
 				nw.setCollapsed(collapseAll);
 			}
 		}
 		renderer.renderViewer(canvas, widgets, scheme.getRoot());
+		return collapseAll;
     }
 
     private boolean initMathScript = true;

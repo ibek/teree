@@ -1,16 +1,21 @@
 package org.teree.client.view.editor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.teree.client.Settings;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.resource.IconTypeContent;
 import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.Node;
+import org.teree.shared.data.scheme.Node.NodeLocation;
 import org.teree.shared.data.scheme.NodeStyle;
 
 import com.github.gwtbootstrap.client.ui.Icon;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.TextMetrics;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
@@ -100,11 +105,15 @@ public class TextNodeWidget extends NodeWidget {
         }
         
         editContent.setText(nodeContent.getText());
-        
+
         if (getOffsetWidth() > Settings.NODE_DEFAULT_WIDTH) {
         	editContent.setWidth((getOffsetWidth()+4)+"px");
         } else {
+            if (node.getLocation() == NodeLocation.LEFT) {
+            	container.getElement().getStyle().setMarginLeft(getOffsetWidth() - Settings.NODE_DEFAULT_WIDTH, Unit.PX);
+            }
         	editContent.setWidth(Settings.NODE_DEFAULT_WIDTH+"px");
+        	container.setWidth(Settings.NODE_DEFAULT_WIDTH+"px");
         }
         if (getOffsetHeight() > Settings.NODE_DEFAULT_HEIGHT) {
             editContent.setHeight(getOffsetHeight()+"px");
@@ -157,6 +166,8 @@ public class TextNodeWidget extends NodeWidget {
 	        content.addStyleName(resources.css().nodeView());
         
     	}
+    	container.getElement().getStyle().setMarginLeft(0, Unit.PX);
+    	container.setWidth("auto");
 
     	update();
     	
@@ -215,16 +226,51 @@ public class TextNodeWidget extends NodeWidget {
     	context.save();
     	context.setFont("14px monospace");
         context.setFillStyle("#000000");
-    	if (nodeContent.getIconType() != null) {
-    		context.setFont("14px FontAwesome");
+
+        String text = content.getText();
+        if (collapsed) {
+        	text = "+ " + text;
+        }
+        String[] words = text.split(" ");
+        String line = "";
+        int lineHeight = 14;
+        int mw = getOffsetWidth() + 10;
+        int py = y;
+        List<Integer> ly = new ArrayList<Integer>();
+        List<String> ls = new ArrayList<String>();
+        for (int n=0; n<words.length; ++n) {
+        	String testLine = line + words[n] + " ";
+        	TextMetrics tm = context.measureText(testLine);
+        	double testWidth = tm.getWidth();
+        	if (testWidth > mw) {
+        		ls.add(line);
+        		ly.add(py);
+                line = words[n] + ' ';
+                py += lineHeight;
+        	} else {
+                line = testLine;
+            }
+        }
+		ls.add(line);
+		ly.add(py);
+		int m = ly.size()*lineHeight - lineHeight;
+		
+		if (icon.getIconType() != null) {
+        	x += Settings.ICON_WIDTH;
+		}
+		
+		for (int i=0; i<ly.size(); ++i) {
+	        context.fillText(ls.get(i), x, ly.get(i) - m);
+		}
+		
+        if (icon.getIconType() != null) {
+        	context.setFont("14px FontAwesome");
         	String c = "";
         	c += IconTypeContent.get(icon.getIconType());
-        	context.fillText(c, x, y);
+        	context.fillText(c, x - Settings.ICON_WIDTH, y - m);
         	context.setFont("14px monospace");
-            context.fillText(content.getText(), x+Settings.ICON_WIDTH, y);
-    	} else {
-            context.fillText(content.getText(), x, y);
     	}
+    	
         context.restore();
     }
 

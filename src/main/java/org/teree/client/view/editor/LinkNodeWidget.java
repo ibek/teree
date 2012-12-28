@@ -35,7 +35,8 @@ public class LinkNodeWidget extends NodeWidget {
 
 	private void init() {
 		content = new Label();
-		
+        content.setStylePrimaryName(resources.css().node());
+        content.setStyleDependentName("view", true);
 
 		content.addClickHandler(new ClickHandler() {
 			@Override
@@ -86,19 +87,20 @@ public class LinkNodeWidget extends NodeWidget {
 			
 		}
 
-		int x = 0;
-		if (node.getLocation() == NodeLocation.LEFT) {
-			x = -linkDialog.getOffsetWidth() - content.getOffsetWidth();
-		} else {
-			x = content.getOffsetWidth();
-		}
-		linkDialog.setPopupPosition(getAbsoluteLeft() + x, 
-				getAbsoluteTop() - content.getOffsetHeight()/2 - linkDialog.getOffsetHeight()/2);
-
 		linkDialog.setUrlField(nodeContent.getUrl());
 		linkDialog.setTextField(nodeContent.getText());
 		
 		linkDialog.show();
+
+		int x = 0;
+		if (node.getLocation() == NodeLocation.LEFT) {
+			x = -linkDialog.getOffsetWidth();
+		} else {
+			x = content.getOffsetWidth();
+		}
+		
+		linkDialog.setPopupPosition(getAbsoluteLeft() + x, 
+				getAbsoluteTop() + content.getOffsetHeight()/2 - linkDialog.getOffsetHeight()/2);
 	}
 
     @Override

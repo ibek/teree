@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.teree.shared.data.UserPackage;
@@ -13,12 +14,13 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
+@Stateless
 public class UserPackageManager {
 	
 	private static final int COUNT_OF_PARAMETERS = 1; // "primary" key name is not counted
 
 	@Inject
-    protected MongoDB mdb;
+    MongoDB mdb;
     
     protected DBCollection getCollection() {
     	DB db = mdb.getDatabase();

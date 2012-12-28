@@ -35,6 +35,8 @@ public interface UIConstants extends Messages {
     String save();
     String refresh_scheme();
     String share();
+    String collapse_all();
+    String uncollapse_all();
     
     String register_user();
     String username();

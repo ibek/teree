@@ -86,9 +86,11 @@ public class ImageNodeWidget extends NodeWidget {
 	}
 
 	public void update() {
-		final String url = nodeContent.getUrl();
-		if (url != null) {
-			content.setUrl(Settings.HOST + "getImage?url=" + url);
+		if (nodeContent != null) {
+			final String url = nodeContent.getUrl();
+			if (url != null) {
+				content.setUrl(Settings.HOST + "getImage?url=" + url);
+			}
 		}
 	}
 	
@@ -112,19 +114,19 @@ public class ImageNodeWidget extends NodeWidget {
 			});
 			
 		}
+		
+		contentDialog.setUrlField(nodeContent.getUrl());
+		contentDialog.show();
 
 		int x = 0;
 		if (node.getLocation() == NodeLocation.LEFT) {
-			x = -contentDialog.getOffsetWidth() - content.getOffsetWidth();
+			x = -contentDialog.getOffsetWidth();
 		} else {
 			x = content.getOffsetWidth();
 		}
+		
 		contentDialog.setPopupPosition(getAbsoluteLeft() + x, 
-				getAbsoluteTop() - content.getOffsetHeight()/2 - contentDialog.getOffsetHeight()/2);
-		
-		contentDialog.setUrlField(nodeContent.getUrl());
-		
-		contentDialog.show();
+				getAbsoluteTop() + content.getOffsetHeight()/2 - contentDialog.getOffsetHeight()/2);
 	}
 
     @Override

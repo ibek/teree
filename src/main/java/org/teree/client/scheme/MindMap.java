@@ -37,7 +37,7 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 	private boolean makePicture;
 
 	@Override
-	protected void render(Canvas canvas, List<T> nodes, Node root, boolean makePicture, boolean editable) {
+	protected int[] render(Canvas canvas, List<T> nodes, Node root, boolean makePicture, boolean editable) {
 	    
 	    this.makePicture = makePicture;
 		
@@ -157,9 +157,13 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		context.setLineWidth(2.0);
 		context.setStrokeStyle(CssColor.make(0,0,0));
 		
+		int rx, ry;
+		
 		if (makePicture) {
 
-		    rw.draw(context, maxlw, max_y / 2 - 5);
+			rx = maxlw;
+			ry = max_y / 2 - 5;
+		    rw.draw(context, rx, ry);
 		    
 		} else {
 			AbsolutePanel panel = (AbsolutePanel) rw.getParent();
@@ -173,7 +177,9 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 			this.left = canvas.getAbsoluteLeft() - canvas.getParent().getAbsoluteLeft(); // getRelativeLeft
 			this.top = canvas.getAbsoluteTop() - canvas.getParent().getAbsoluteTop(); // getRelativeTop
 			
-    		panel.setWidgetPosition(rw, this.left + maxlw, this.top + max_y / 2 - rw.getOffsetHeight()); // set root node into middle of scene
+			rx = this.left + maxlw;
+			ry = this.top + max_y / 2 - rw.getOffsetHeight();
+    		panel.setWidgetPosition(rw, rx, ry); // set root node into middle of scene
     		DOM.setStyleAttribute(rw.getElement(), "visibility", "visible");
     		
 		}
@@ -210,6 +216,8 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 				+ rw.getOffsetWidth(), max_y / 2, 0, rh, id);
 
 		context.stroke(); // draw the lines
+		
+		return new int[]{rx, ry, max_x, max_y};
 		
 	}
 

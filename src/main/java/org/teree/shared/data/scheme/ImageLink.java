@@ -5,7 +5,7 @@ import org.jboss.errai.common.client.api.annotations.Portable;
 @Portable
 public class ImageLink {
 
-	private String url;
+	private String url = "";
 	
 	public ImageLink() {
 		

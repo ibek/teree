@@ -1,5 +1,8 @@
 package org.teree.client.view.viewer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.teree.client.Settings;
 import org.teree.client.view.resource.IconTypeContent;
 import org.teree.shared.data.scheme.IconText;
@@ -9,6 +12,7 @@ import org.teree.shared.data.scheme.NodeStyle;
 import com.github.gwtbootstrap.client.ui.Icon;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.TextMetrics;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -27,7 +31,6 @@ public class TextNodeWidget extends NodeWidget {
     
     public void init() {
         content = new HTML();
-        content.setText(node.getContent().toString());
         content.setStylePrimaryName(resources.css().node());
         content.setStyleDependentName("view", true);
         
@@ -61,6 +64,8 @@ public class TextNodeWidget extends NodeWidget {
 		}
         
         container.add(content);
+        
+        content.setText(node.getContent().toString());
     }
 
     @Override
@@ -68,16 +73,48 @@ public class TextNodeWidget extends NodeWidget {
     	context.save();
     	context.setFont("14px monospace");
         context.setFillStyle("#000000");
+        
+        String text = content.getText();
+        String[] words = text.split(" ");
+        String line = "";
+        int lineHeight = 14;
+        int mw = getOffsetWidth() + 10;
+        int py = y;
+        List<Integer> ly = new ArrayList<Integer>();
+        List<String> ls = new ArrayList<String>();
+        for (int n=0; n<words.length; ++n) {
+        	String testLine = line + words[n] + " ";
+        	TextMetrics tm = context.measureText(testLine);
+        	double testWidth = tm.getWidth();
+        	if (testWidth > mw) {
+        		ls.add(line);
+        		ly.add(py);
+                line = words[n] + ' ';
+                py += lineHeight;
+        	} else {
+                line = testLine;
+            }
+        }
+		ls.add(line);
+		ly.add(py);
+		int m = ly.size()*lineHeight - lineHeight;
+		
+		if (icon.getIconType() != null) {
+        	x += Settings.ICON_WIDTH;
+		}
+		
+		for (int i=0; i<ly.size(); ++i) {
+	        context.fillText(ls.get(i), x, ly.get(i) - m);
+		}
+		
         if (icon.getIconType() != null) {
         	context.setFont("14px FontAwesome");
         	String c = "";
         	c += IconTypeContent.get(icon.getIconType());
-        	context.fillText(c, x, y);
+        	context.fillText(c, x - Settings.ICON_WIDTH, y - m);
         	context.setFont("14px monospace");
-            context.fillText(content.getText(), x+Settings.ICON_WIDTH, y);
-    	} else {
-            context.fillText(content.getText(), x, y);
     	}
+        
         context.restore();
     }
 

@@ -3,6 +3,7 @@ package org.teree.server.dao;
 import java.text.DateFormat;
 import java.util.Date;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
@@ -16,13 +17,14 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
+@Stateless
 public class UserInfoManager {
 
 	@Inject
-    protected MongoDB mdb;
+    MongoDB mdb;
 	
 	@Inject
-	protected UserPackageManager upm;
+	UserPackageManager upm;
     
     protected DBCollection getCollection() {
     	DB db = mdb.getDatabase();

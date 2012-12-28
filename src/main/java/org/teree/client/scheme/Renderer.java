@@ -49,13 +49,20 @@ public abstract class Renderer<T extends Widget & NodeInterface> {
         });
     }
 
-    public void renderPicture(Canvas canvas, final List<T> nodes, final Node root) {
+    /**
+     * 
+     * @param canvas
+     * @param nodes
+     * @param root
+     * @return root x,y coordinates
+     */
+    public int[] renderPicture(Canvas canvas, final List<T> nodes, final Node root) {
         prepare(nodes);
         boolean succ = resize(nodes);
         if(!succ){ // some node is too wide
             resize(nodes);
         }
-        render(canvas, nodes, root, true, false);
+        return render(canvas, nodes, root, true, false);
     }
     
     /**
@@ -66,8 +73,9 @@ public abstract class Renderer<T extends Widget & NodeInterface> {
      * @param root
      * @param makePicture generate the map into canvas to be transformed into picture
      * @param editable
+     * @return root x,y coordinates
      */
-    protected abstract void render(Canvas canvas, List<T> nodes, Node root, boolean makePicture, boolean editable);
+    protected abstract int[] render(Canvas canvas, List<T> nodes, Node root, boolean makePicture, boolean editable);
 
     /**
      * Get location for root child node.
