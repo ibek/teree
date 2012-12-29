@@ -21,6 +21,7 @@ import org.teree.shared.data.scheme.MathExpression;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
 import org.teree.shared.data.scheme.Node.NodeLocation;
+import org.teree.shared.data.scheme.Scheme;
 
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.canvas.client.Canvas;
@@ -31,8 +32,10 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -43,8 +46,8 @@ public class Scene extends Composite {
 	
 	private static final int NODE_WIDGET_MARK = 1; // from this mark are node widgets in container
     
-    private Node root;
-    private Renderer<NodeWidget> scheme;
+    private Scheme scheme;
+    private Renderer<NodeWidget> renderer;
     
     private AbsolutePanel container;
     private Canvas canvas;
@@ -111,13 +114,14 @@ public class Scene extends Composite {
     public void setSchemeType(SchemeType type) {
     	switch(type) {
 	    	case MindMap: {
-	    		scheme = new MindMap<NodeWidget>();
+	    		renderer = new MindMap<NodeWidget>();
 	    	}
     	}
     }
     
-    public void setRoot(Node root) {
-    	this.root = root;
+    public void setScheme(Scheme scheme) {
+    	this.scheme = scheme;
+    	Node root = scheme.getRoot();
     	container.clear();
         container.add(canvas);
         
@@ -125,6 +129,7 @@ public class Scene extends Composite {
         container.add(nw, 0, 0);
         
         update(root); // initialize
+        
     }
     
     /**
@@ -134,6 +139,7 @@ public class Scene extends Composite {
     public void update(Node changed) {
     	int id = 1;
     	
+    	Node root = scheme.getRoot();
     	List<Node> cn = root.getChildNodes();
     	List<Node> right = new ArrayList<Node>();
     	for (int i=0; cn!=null && i<cn.size(); ++i){
@@ -150,7 +156,7 @@ public class Scene extends Composite {
     		id = update(n, changed, id);
     	}
     	
-    	scheme.renderEditor(canvas, getNodeWidgets(), root);
+    	renderer.renderEditor(canvas, getNodeWidgets(), root);
     }
     
     public void editSelectedNode() {
@@ -246,9 +252,11 @@ public class Scene extends Composite {
                 
             }
             
-            NodeWidget upper = (NodeWidget)container.getWidget(id - n.getNumberOfChildNodes() - 1);
-            if (upper.getNode().getParent() == selected.getNode().getParent()) { // has upper node
-            	selectNode(upper);
+            if (n != null) {
+	            NodeWidget upper = (NodeWidget)container.getWidget(id - n.getNumberOfChildNodes() - 1);
+	            if (upper.getNode().getParent() == selected.getNode().getParent()) { // has upper node
+	            	selectNode(upper);
+	            }
             }
     	}
     }
@@ -301,7 +309,7 @@ public class Scene extends Composite {
         Canvas canvas = Canvas.createIfSupported();
         canvas.setCoordinateSpaceHeight(this.canvas.getOffsetHeight());
         canvas.setCoordinateSpaceWidth(this.canvas.getOffsetWidth());
-        scheme.renderPicture(canvas, getNodeWidgets(), root);
+        renderer.renderPicture(canvas, getNodeWidgets(), scheme.getRoot());
         return canvas.toDataUrl();
     }
     
@@ -313,7 +321,7 @@ public class Scene extends Composite {
         canvas.getContext2d().scale(scale, scale);
         List<NodeWidget> nw = getNodeWidgets();
         collapseAll(nw, true);
-        int[] rp = scheme.renderPicture(canvas, nw, root);
+        int[] rp = renderer.renderPicture(canvas, nw, scheme.getRoot());
         NodeWidget rw = nw.get(0);
         int x,y,w,h;
         x = (int)(rp[0] + rw.getWidgetWidth()/2 - Settings.SAMPLE_MAX_WIDTH/2/scale);
@@ -415,7 +423,7 @@ public class Scene extends Composite {
     		NodeLocation loc = selected.getNode().getLocation();
     		int offset = selected.getNode().getNumberOfChildNodes() + 1;
     		if (selected.getNode().getParent() == null) {
-    			loc = scheme.getRootChildNodeLocation(root);
+    			loc = renderer.getRootChildNodeLocation(scheme.getRoot());
     			if (loc == NodeLocation.LEFT) {
     				offset = selected.getNode().getNumberOfLeftChildNodes() + 1;
     			}
@@ -434,7 +442,7 @@ public class Scene extends Composite {
     	int id = container.getWidgetIndex(nw);
     	int count = nw.getNode().getNumberOfChildNodes();
     	int i = -1; 
-    	if (nw.getNode() == root) {
+    	if (nw.getNode() == scheme.getRoot()) {
     		// skip root
     		i++;
     		id++;

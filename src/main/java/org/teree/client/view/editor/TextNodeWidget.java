@@ -228,9 +228,6 @@ public class TextNodeWidget extends NodeWidget {
         context.setFillStyle("#000000");
 
         String text = content.getText();
-        if (collapsed) {
-        	text = "+ " + text;
-        }
         String[] words = text.split(" ");
         String line = "";
         int lineHeight = 14;
@@ -260,7 +257,12 @@ public class TextNodeWidget extends NodeWidget {
 		}
 		
 		for (int i=0; i<ly.size(); ++i) {
-	        context.fillText(ls.get(i), x, ly.get(i) - m);
+			text = ls.get(i);
+	        if (collapsed && i==0) {
+	        	text = "+" + text;
+	        	x -= context.measureText("+").getWidth();
+	        }
+	        context.fillText(text, x, ly.get(i) - m);
 		}
 		
         if (icon.getIconType() != null) {

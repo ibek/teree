@@ -16,6 +16,7 @@ import org.teree.client.view.editor.EditPanel;
 import org.teree.client.view.editor.Scene;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.scheme.Node;
+import org.teree.shared.data.scheme.Scheme;
 
 public class Editor extends TemplateScene implements SchemeEditor.Display {
 	
@@ -108,8 +109,8 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
     }
 
 	@Override
-	public void setRoot(Node root) {
-		scene.setRoot(root);
+	public void setScheme(Scheme scheme) {
+		scene.setScheme(scheme);
 	}
 
 	@Override

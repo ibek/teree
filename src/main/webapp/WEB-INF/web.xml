@@ -30,6 +30,11 @@
         <servlet-name>ShareSchemeServlet</servlet-name>
         <servlet-class>org.teree.server.ShareSchemeServlet</servlet-class>
     </servlet>
+    
+    <filter>
+		<filter-name>gwtCacheControlFilter</filter-name>
+		<filter-class>org.teree.server.GWTCacheControlFilter</filter-class>
+	</filter>
 
     <servlet-mapping>
         <servlet-name>ErraiServlet</servlet-name>
@@ -55,6 +60,11 @@
         <servlet-name>ShareSchemeServlet</servlet-name>
         <url-pattern>/share</url-pattern>
     </servlet-mapping>
+
+	<filter-mapping>
+		<filter-name>gwtCacheControlFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
     
     <session-config>
 		<session-timeout>30</session-timeout>

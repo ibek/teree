@@ -7,12 +7,14 @@ import org.teree.client.view.resource.MathExpressionTools;
 import org.teree.shared.data.scheme.MathExpression;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
+import org.teree.shared.data.scheme.Node.NodeLocation;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -91,9 +93,13 @@ public class MathExpressionNodeWidget extends NodeWidget {
         editContent.setText(nodeContent.getExpression());
         
         if (getOffsetWidth() > Settings.NODE_DEFAULT_WIDTH) {
-        	editContent.setWidth((getOffsetWidth()+4)+"px");
-        } else {
         	editContent.setWidth(Settings.NODE_DEFAULT_WIDTH+"px");
+        } else {
+            if (node.getLocation() == NodeLocation.LEFT) {
+            	container.getElement().getStyle().setMarginLeft(getOffsetWidth() - Settings.NODE_DEFAULT_WIDTH, Unit.PX);
+            }
+        	editContent.setWidth(Settings.NODE_DEFAULT_WIDTH+"px");
+        	container.setWidth(Settings.NODE_DEFAULT_WIDTH+"px");
         }
         if (getOffsetHeight() > Settings.NODE_DEFAULT_HEIGHT) {
             editContent.setHeight(getOffsetHeight()+"px");
@@ -140,6 +146,8 @@ public class MathExpressionNodeWidget extends NodeWidget {
 	        content.addStyleName(resources.css().nodeView());
         
     	}
+    	container.getElement().getStyle().setMarginLeft(0, Unit.PX);
+    	container.setWidth("auto");
 
     	update();
     	

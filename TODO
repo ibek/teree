@@ -3,11 +3,6 @@
 
 udelat testovani podle nalezenych chyb z testing release 0.5 + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
 
-po F2 se zobrazuje nejaky dialog (uprava odkazu obrazku) u textoveho uzlu
-automatické ukládání
-zlepsit uzivatelskou privetivost
- - pohyb sipkami nahoru dolu i v pripade ze se nemaji spolecneho predka
-
 vytvorit metody pro vytvoreni a zruseni pripojeni s databazi v MongoDB, protoze se nevola close pri redeploy
  - je to opravdu potreba? neni jednodussi restartovat databazi?
 
@@ -28,6 +23,8 @@ vyhledavani - pouze v root
  - vlozit na hlavni stranku vyhledavani - takovy portal, vysledek bude, ze se bud premisti na prvni nalezenou mapu, nebo se oznami ze nebyla nalezena
 
 uzivatelsky privetive statusy a chybove hlasky
+
+opravit viewer pri uncollapse all, collapse all, uncollapse all ... v pripade ze je mapa dost velka (prostorove db) tak se nastavi sirka textu na MIN_WIDTH
 
 ===============
 0.8:

@@ -34,7 +34,7 @@ public class SchemeEditor implements Presenter {
     public interface Display extends KeyAction, Template {
         HasClickHandlers getSaveButton();
         Widget asWidget();
-        void setRoot(Node root);
+        void setScheme(Scheme scheme);
         String getSchemeSamplePicture();
     }
     
@@ -54,7 +54,7 @@ public class SchemeEditor implements Presenter {
 			@Override
 			public void received(SchemeReceived event) {
 				scheme = event.getScheme();
-				display.setRoot(scheme.getRoot());
+				display.setScheme(scheme);
 			}
 		});
     	

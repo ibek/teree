@@ -36,14 +36,9 @@ public abstract class Renderer<T extends Widget & NodeInterface> {
     }
 
     public void renderViewer(final Canvas canvas, final List<T> nodes, final Node root) {
-        prepare(nodes);
         Scheduler.get().scheduleDeferred(new ScheduledCommand() { // to ensure that widget automatically resized size is already set
             @Override
             public void execute() {
-                boolean succ = resize(nodes);
-                if(!succ){ // some node is too wide
-                    resize(nodes);
-                }
                 render(canvas, nodes, root, false, false);
             }
         });

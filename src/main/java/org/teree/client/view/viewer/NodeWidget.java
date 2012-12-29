@@ -28,8 +28,10 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
         resources.css().ensureInjected();
         
         initWidget(container);
-        
-    	DOM.setStyleAttribute(getElement(), "visibility", "hidden");
+    }
+    
+    public void update() {
+    	
     }
 
 	@Override

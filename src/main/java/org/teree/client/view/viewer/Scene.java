@@ -27,6 +27,7 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -44,8 +45,11 @@ public class Scene extends Composite {
     private boolean move = false;
     private Integer lastx;
     private Integer lasty;
+    private final List<NodeWidget> widgets;
     
     public Scene() {
+    	
+    	widgets = new ArrayList<NodeWidget>();
     	
         setSchemeType(Settings.DEFAULT_SCHEME_TYPE);
         
@@ -69,7 +73,7 @@ public class Scene extends Composite {
 			public void onResize(ResizeEvent event) {
                 sp.setWidth(event.getWidth() + "px");
                 sp.setHeight((event.getHeight()-Settings.SCENE_HEIGHT_LESS) + "px");
-                renderer.renderViewer(canvas, getNodeWidgets(), scheme.getRoot());
+                renderer.renderViewer(canvas, widgets, scheme.getRoot());
             }
 		});
         
@@ -113,7 +117,7 @@ public class Scene extends Composite {
     	container.addHandler(new NodeChangedHandler() {
 			@Override
 			public void changed(NodeChanged event) {
-				renderer.renderViewer(canvas, getNodeWidgets(), scheme.getRoot());
+				renderer.renderViewer(canvas, widgets, scheme.getRoot());
 			}
 		}, NodeChanged.TYPE);
     }
@@ -133,7 +137,6 @@ public class Scene extends Composite {
         container.add(canvas);
         
         init(scheme.getRoot());
-        final List<NodeWidget> widgets = getNodeWidgets();
         
         renderer.renderViewer(canvas, widgets, scheme.getRoot());
         if (requiresRender) { // to fix size and position of math expressions
@@ -156,14 +159,16 @@ public class Scene extends Composite {
         Canvas canvas = Canvas.createIfSupported();
         canvas.setCoordinateSpaceHeight(this.canvas.getOffsetHeight());
         canvas.setCoordinateSpaceWidth(this.canvas.getOffsetWidth());
-        renderer.renderPicture(canvas, getNodeWidgets(), scheme.getRoot());
+        renderer.renderPicture(canvas, widgets, scheme.getRoot());
         return canvas.toDataUrl();
     }
     
     public boolean changeCollapseAll(boolean collapseAll) {
-    	List<NodeWidget> widgets = getNodeWidgets();
 		for (int i=1; i<widgets.size(); ++i) {
 			NodeWidget nw = widgets.get(i);
+			if (!collapseAll) { // for uncollapse update content - necessary for images
+				nw.update();
+			}
 			if (nw.getNode().getChildNodes() != null && 
 					!nw.getNode().getChildNodes().isEmpty() && 
 					nw.getNode().getParent().getParent() == null &&
@@ -212,6 +217,8 @@ public class Scene extends Composite {
 	        }
 	    }
 		container.add(nw,0,0);
+		widgets.add(nw);
+    	nw.update();
 		
     	List<Node> cn = node.getChildNodes();
     	for(int i=0; cn!=null && i<cn.size(); ++i){
@@ -223,21 +230,11 @@ public class Scene extends Composite {
     private void changeCollapseNode(TextNodeWidget nw) {
     	if (nw.getNode().getChildNodes() != null && !nw.getNode().getChildNodes().isEmpty()) { // has child nodes
 	    	nw.setCollapsed(!nw.isCollapsed());
-	        renderer.renderViewer(canvas, getNodeWidgets(), scheme.getRoot());
+	    	if (!nw.isCollapsed()) {
+	    		nw.update();
+	    	}
+	        renderer.renderViewer(canvas, widgets, scheme.getRoot());
     	}
-    }
-    
-    private List<NodeWidget> getNodeWidgets() {
-    	Iterator<Widget> it = container.iterator();
-    	List<NodeWidget> nodes = new ArrayList<NodeWidget>();
-    	while (it.hasNext()) {
-    		Widget w = it.next();
-    		if(w instanceof NodeWidget){
-    			nodes.add((NodeWidget)w); // there is the casting from Widget to NodeWidget
-    		}
-    	}
-    	
-    	return nodes;
     }
     
 }

@@ -114,7 +114,7 @@ public class UserHome implements Presenter {
 				}, new ErrorCallback() {
 					@Override
 					public boolean error(Message message, Throwable throwable) {
-						// TODO Auto-generated method stub
+						display.error(UIMessages.LANG.connectionIssue());
 						return false;
 					}
 				}).removeScheme(event.getScheme().getOid());

@@ -61,7 +61,11 @@ public class ImageNodeWidget extends NodeWidget {
 				getParent().fireEvent(new NodeChanged(null)); // null because nothing was inserted
 			}
 		});
-		
+	}
+	
+	@Override
+	public void update() {
+		super.update();
 		
 		final String url = ((ImageLink) node.getContent()).getUrl();
 		if (url != null) {
@@ -74,7 +78,6 @@ public class ImageNodeWidget extends NodeWidget {
 		} else {
 			content.setResource(res.noImage());
 		}
-		
 	}
 
     @Override

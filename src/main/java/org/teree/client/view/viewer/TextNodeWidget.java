@@ -31,8 +31,9 @@ public class TextNodeWidget extends NodeWidget {
     
     public void init() {
         content = new HTML();
+        content.setText(node.getContent().toString());
         content.setStylePrimaryName(resources.css().node());
-        content.setStyleDependentName("view", true);
+        content.addStyleName(resources.css().nodeView());
         
     	icon = new Icon();
     	String iconType = ((IconText)node.getContent()).getIconType();
@@ -65,7 +66,6 @@ public class TextNodeWidget extends NodeWidget {
         
         container.add(content);
         
-        content.setText(node.getContent().toString());
     }
 
     @Override
@@ -116,6 +116,14 @@ public class TextNodeWidget extends NodeWidget {
     	}
         
         context.restore();
+    }
+    
+    @Override
+    public void update() {
+    	super.update();
+    	if(getOffsetWidth() >= Settings.NODE_MAX_WIDTH){
+            content.setWidth(Settings.NODE_MAX_WIDTH+"px");
+        }
     }
 
 	public void setCollapsed(boolean collapsed) {
