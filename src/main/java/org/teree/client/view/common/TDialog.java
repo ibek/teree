@@ -11,9 +11,9 @@ public class TDialog extends DialogBox {
 		addStyleName("popover");
 		getElement().getStyle().setDisplay(Display.BLOCK);
 		getElement().getStyle().setPadding(0.0, Unit.PX);
+		getElement().getStyle().setProperty("width", "auto");
 		
 		getCaption().asWidget().addStyleName("popover-title");
-		getCaption().asWidget().getElement().getStyle().setMarginRight(-3.0, Unit.PX);
 		setAutoHideEnabled(true);
 
 	}

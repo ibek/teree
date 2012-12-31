@@ -81,7 +81,7 @@ public class ConnectorNodeWidget extends NodeWidget {
 	
     public void update() {
 		String text = nodeContent.toString();
-		if (text.isEmpty()) {
+		if (text == null || text.isEmpty()) {
 			text = "[connector]";
 		}
 		content.setText("╠═" + text);
@@ -110,9 +110,13 @@ public class ConnectorNodeWidget extends NodeWidget {
 			connectorDialog.getOk().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					nodeContent.setOid(connectorDialog.getOid());
-					// also update root, the dialog should have it loaded already
-					update();
+					IconText it = connectorDialog.getRoot();
+					if (it != null) {
+						nodeContent.setOid(connectorDialog.getOid());
+						nodeContent.setRoot(it);
+						update();
+						connectorDialog.hide();
+					}
 				}
 			});
 		}

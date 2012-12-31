@@ -23,7 +23,7 @@ public class Connector {
 	public void setOid(String oid) {
 		this.oid = oid;
 	}
-	
+
 	@Override
 	public String toString() {
 		return (root != null)?root.getText():"";
