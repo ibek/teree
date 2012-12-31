@@ -236,17 +236,28 @@ public class TextNodeWidget extends NodeWidget {
         List<Integer> ly = new ArrayList<Integer>();
         List<String> ls = new ArrayList<String>();
         for (int n=0; n<words.length; ++n) {
-        	String testLine = line + words[n] + " ";
-        	TextMetrics tm = context.measureText(testLine);
-        	double testWidth = tm.getWidth();
-        	if (testWidth > mw) {
-        		ls.add(line);
-        		ly.add(py);
-                line = words[n] + ' ';
-                py += lineHeight;
+        	String[] lines = words[n].split("\n");
+        	if (lines.length == 1) {
+	        	String testLine = line + words[n] + " ";
+	        	TextMetrics tm = context.measureText(testLine);
+	        	double testWidth = tm.getWidth();
+	        	if (testWidth > mw) {
+	        		ls.add(line);
+	        		ly.add(py);
+	                line = words[n] + ' ';
+	                py += lineHeight;
+	        	} else {
+	                line = testLine;
+	            }
         	} else {
-                line = testLine;
-            }
+        		for (int i=0; i<lines.length-1; ++i) {
+        			ls.add(line + lines[i]);
+	        		ly.add(py);
+	                line = "";
+	                py += lineHeight;
+        		}
+        		line = lines[lines.length-1];
+        	}
         }
 		ls.add(line);
 		ly.add(py);

@@ -1,0 +1,9 @@
+/* Prevent our icons from css obfuscation */
+@external .customIcon_*;
+
+@sprite .customIcon_connector {
+    gwt-image: "connector";
+    display: inline-block;
+  	width: 1.25em;
+  	text-align: center;
+}

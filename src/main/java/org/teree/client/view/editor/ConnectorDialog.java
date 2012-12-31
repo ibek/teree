@@ -2,43 +2,51 @@ package org.teree.client.view.editor;
 
 import org.teree.client.view.common.TDialog;
 
+import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.TextBox;
+import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class ContentDialog extends TDialog {
+public class ConnectorDialog extends TDialog {
 
 	private static final int WIDTH = 186;
 	private static final int HEIGHT = 100;
 	
+	// TODO: add preview of scheme and refresh button
 	private Button okButton;
+	private Button search;
 
-	private TextBox textField;
-	private TextBox urlField;
+	private TextBox oid;
 
-	public ContentDialog(String title) {
+	public ConnectorDialog() {
 		
-		setTitle(title);
+		setTitle("Set Connector");
 
 		VerticalPanel panel = new VerticalPanel();
 		panel.getElement().getStyle().setMargin(9.0, Unit.PX);
 		panel.setWidth(WIDTH+"px");
 		panel.setHeight(HEIGHT+"px");
-		
-		textField = new TextBox();
-		textField.setPlaceholder("text");
-		textField.setWidth(200+"px");
-		urlField = new TextBox();
-		urlField.setPlaceholder("url");
-		urlField.setWidth(200+"px");
-		
-		panel.add(textField);
-		panel.add(urlField);
+
+		HorizontalPanel oidhp = new HorizontalPanel();
+		oid = new TextBox();
+		oid.setPlaceholder("oid");
+		oid.setWidth(200+"px");
+
+		search = new Button("", IconType.SEARCH);
+		search.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO: open search dialog
+			}
+		});
+		oidhp.add(oid);
+		oidhp.add(search);
+		panel.add(oidhp);
 		
 		okButton = new Button("Ok");
 		
@@ -46,7 +54,7 @@ public class ContentDialog extends TDialog {
 		cancel.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				ContentDialog.this.hide();
+				ConnectorDialog.this.hide();
 			}
 		});
 		
@@ -64,33 +72,12 @@ public class ContentDialog extends TDialog {
 		return okButton;
 	}
 	
-	@Override
-	public void show() {
-		super.show();
-	}
-	
-	public void setTextFieldVisible(boolean visible) {
-		textField.setVisible(visible);
-	}
-	
-	public String getTextField() {
-		return textField.getText();
+	public String getOid() {
+		return oid.getText();
 	}
 
-	public String getUrlField() {
-		String url = urlField.getText();
-		if (!url.startsWith("http://") && !url.startsWith("https://")) {
-			url = "http://"+url;
-		}
-		return url;
-	}
-
-	public void setUrlField(String urlField) {
-		this.urlField.setText(urlField);
-	}
-
-	public void setTextField(String textField) {
-		this.textField.setText(textField);
+	public void setOid(String oid) {
+		this.oid.setText(oid);
 	}
 
 }

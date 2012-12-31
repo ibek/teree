@@ -46,7 +46,8 @@ public class FreeMind {
 			setElementStyle(node, doc, en);
 			switch (node.getType()) {
 				case IconText:
-				case MathExpression: {
+				case MathExpression:
+				case Connector: {
 					en.setAttribute("TEXT", node.getContent().toString());
 					parent.appendChild(en);
 					break;

@@ -5,6 +5,7 @@ import java.util.Set;
 import org.teree.client.text.UIConstants;
 import org.teree.client.text.UIMessages;
 import org.teree.client.view.resource.IconTypeContent;
+import org.teree.client.view.resource.icon.CustomIconType;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.DropdownButton;
@@ -28,6 +29,7 @@ public class EditPanel extends Composite {
 	private Button createImg;
 	private Button createLink;
 	private Button createMathExpr;
+	private Button createConnector;
 	private Button bold;
 	private DropdownButton icon;
 	
@@ -52,8 +54,16 @@ public class EditPanel extends Composite {
 		createImg = new Button("", IconType.PICTURE);
 		createLink = new Button("", IconType.LINK);
 		createMathExpr = new Button("Σ");
+		createConnector = new Button("");
+		
 		Label space3 = new Label("");
 		space3.getElement().getStyle().setMarginRight(20, Unit.PX);
+		
+		createConnector.setBaseIcon(CustomIconType.connector);
+
+		Label space4 = new Label("");
+		space4.getElement().getStyle().setMarginRight(20, Unit.PX);
+		
 		bold = new Button("", IconType.BOLD);
 		
 		icon = new DropdownButton("icon");
@@ -84,6 +94,14 @@ public class EditPanel extends Composite {
 		container.add(tcme);
 		
 		container.add(space3);
+
+        Tooltip tccon = new Tooltip("Create connector");
+        tccon.add(createConnector);
+		container.add(tccon);
+		
+		// TODO: add here the split button
+		
+		container.add(space4);
 
         Tooltip tcb = new Tooltip(UIMessages.LANG.bold_text());
         tcb.add(bold);
@@ -145,6 +163,10 @@ public class EditPanel extends Composite {
 	
 	public HasClickHandlers getCreateMathExprButton() {
 		return createMathExpr;
+	}
+	
+	public HasClickHandlers getCreateConnectorButton() {
+		return createConnector;
 	}
 	
 	public HasClickHandlers getBoldButton() {

@@ -215,6 +215,10 @@ public class Scene extends Composite {
 	        	nw = new MathExpressionNodeWidget(node);
 	        	break;
 	        }
+	        case Connector: {
+	        	nw = new ConnectorNodeWidget(node);
+	        	break;
+	        }
 	    }
 		container.add(nw,0,0);
 		widgets.add(nw);

@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.teree.server.dao.MongoDB;
 import org.teree.shared.data.UserInfo;
-import org.teree.test.server.object.MockMongoDB;
+//import org.teree.test.server.object.MockMongoDB;
 import org.teree.test.server.object.MockUserInfoManager;
 
 public class UserInfoManagerTest {
@@ -16,7 +16,7 @@ public class UserInfoManagerTest {
 	
 	@BeforeClass
 	public static void init() {
-		mdb = new MockMongoDB();
+		//mdb = new MockMongoDB();
 		uim = new MockUserInfoManager(mdb);
 	}
 	

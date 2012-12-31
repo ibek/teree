@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.bson.types.ObjectId;
+import org.teree.shared.data.scheme.Connector;
 import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
@@ -305,6 +306,13 @@ public class SchemeManager {
             	doc.put("mathexpr", me.getExpression());
             	break;
             }
+            case Connector: {
+            	Connector con = (Connector)value;
+            	doc.put("text", con.getRoot().getText());
+            	doc.put("icon", con.getRoot().getIconType());
+            	doc.put("conid", con.getOid());
+            	break;
+            }
         }
         
         if (root.getLocation() != null) {
@@ -380,6 +388,16 @@ public class SchemeManager {
             	MathExpression me = new MathExpression();
             	me.setExpression(root.getString("mathexpr"));
             	node.setContent(me);
+            	break;
+            }
+            case Connector: {
+            	Connector con = new Connector();
+            	IconText it = new IconText();
+            	it.setText(root.getString("text"));
+            	it.setIconType(root.getString("icon"));
+            	con.setRoot(it);
+            	con.setOid(root.getString("conid"));
+            	node.setContent(con);
             	break;
             }
         }

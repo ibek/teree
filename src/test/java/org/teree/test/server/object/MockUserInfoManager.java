@@ -12,8 +12,8 @@ import com.mongodb.DBObject;
 public class MockUserInfoManager extends UserInfoManager {
 	
 	public MockUserInfoManager(MongoDB mdb) {
-		this.mdb = mdb;
-		upm = new MockUserPackageManager(mdb);
+		//this.mdb = mdb;
+		//upm = new MockUserPackageManager(mdb);
 	}
 	
 }

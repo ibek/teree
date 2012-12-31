@@ -14,6 +14,7 @@ import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
 import org.teree.client.view.resource.MathExpressionTools;
+import org.teree.shared.data.scheme.Connector;
 import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.ImageLink;
 import org.teree.shared.data.scheme.Link;
@@ -201,6 +202,14 @@ public class Scene extends Composite {
     	MathExpression me = new MathExpression();
     	me.setExpression("");
     	child.setContent(me);
+    	createChildNode(child);
+    }
+    
+    public void createConnectorChildNode() {
+    	Node child = new Node();
+    	Connector con = new Connector();
+    	con.setRoot(new IconText());
+    	child.setContent(con);
     	createChildNode(child);
     }
     
@@ -501,6 +510,9 @@ public class Scene extends Composite {
 	        		MathExpressionTools.initScript();
 	        	}
 	        	return new MathExpressionNodeWidget(node);
+	        }
+	        case Connector:{
+	        	return new ConnectorNodeWidget(node);
 	        }
 	    }
     	

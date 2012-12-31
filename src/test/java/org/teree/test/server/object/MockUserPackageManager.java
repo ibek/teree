@@ -10,7 +10,7 @@ import com.mongodb.DBCollection;
 public class MockUserPackageManager extends UserPackageManager {
 	
 	public MockUserPackageManager(MongoDB mdb) {
-		this.mdb = mdb;
+		//this.mdb = mdb;
 	}
 	
 }

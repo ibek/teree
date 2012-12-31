@@ -17,6 +17,7 @@ funkce pro rozdeleni mapy na dve - z nodu vytvorit novou mapu a propojit connect
  - ulozi se nova mapa s danym rootem (vybrany node)
  - odstrani se vybrany node
  - vytvori se connectorNodeWidget s odkazem vlozene nove mapy
+funkce pro spojeni map - v miste connectoru se nacte a prida dana mapa kterou bude mozno rovnou upravovat
 
 vyhledavani - pouze v root
  - je nutne pro ConnectorNodeWidget
@@ -25,6 +26,9 @@ vyhledavani - pouze v root
 uzivatelsky privetive statusy a chybove hlasky
 
 opravit viewer pri uncollapse all, collapse all, uncollapse all ... v pripade ze je mapa dost velka (prostorove db) tak se nastavi sirka textu na MIN_WIDTH
+opravit kopirovani uzlu - provadi se i kdyz nema ... mam ruzne textfieldy kde se da klasicky kopirovat
+urcit vysku a sirku tlacitek v panelu ikon
+opet nefunguje pokud dam max_width content a pak ho zmensim tak se to neupravi na auto
 
 ===============
 0.8:

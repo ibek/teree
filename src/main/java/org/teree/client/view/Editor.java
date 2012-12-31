@@ -82,6 +82,13 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
 			}
 		});
     	
+    	edit.getCreateConnectorButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scene.createConnectorChildNode();
+			}
+		});
+    	
     	edit.getBoldButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

@@ -10,11 +10,12 @@ import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 
 @TestMock
-public class MockMongoDB extends MongoDB {
+public class MockMongoDB //extends MongoDB
+{
 
 	private DB db;
 	
-	@Override
+	//@Override
 	public DB getDatabase() {
 		if (db == null) {
 			try {
