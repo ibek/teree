@@ -6,12 +6,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.teree.server.dao.MongoDB;
 import org.teree.shared.data.UserInfo;
-//import org.teree.test.server.object.MockMongoDB;
-import org.teree.test.server.object.MockUserInfoManager;
 
 public class UserInfoManagerTest {
 
-	private static MockUserInfoManager uim;
+	/**private static MockUserInfoManager uim;
 	private static MongoDB mdb;
 	
 	@BeforeClass
@@ -63,6 +61,6 @@ public class UserInfoManagerTest {
 	public void testMultipleInsertUserInfo() {
 		insertUserInfo("admin", "Administrator", "admin@teree.org");
 		insertUserInfo("admin2", "Administrator2", "admin@teree.org");
-	}
+	}*/
 
 }

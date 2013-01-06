@@ -42,20 +42,22 @@ import com.google.gwt.user.client.ui.TextArea;
  */
 public class TextNodeWidget extends NodeWidget {
 	
-	private Icon icon;
-    private HTML content;
-    private TextArea editContent;
+	protected Icon icon;
+    protected HTML content;
+    protected TextArea editContent;
     
-    private IconText nodeContent;
+    protected IconText nodeContent;
     
     public TextNodeWidget(Node node) {
         super(node);
 
-        nodeContent = (IconText)node.getContent();
 		icon = new Icon();
 		icon.getElement().getStyle().setZIndex(100);
-        
-        view();
+		
+        if (node.getContent() instanceof IconText) {
+        	nodeContent = (IconText)node.getContent();
+            view();
+        }
         
     }
     
@@ -201,7 +203,7 @@ public class TextNodeWidget extends NodeWidget {
     
     public void update() {
 		String text = nodeContent.getText();
-		if (text.isEmpty()) {
+		if (text == null || text.isEmpty()) {
 			text = "[empty]";
 		}
 		content.setText(text);

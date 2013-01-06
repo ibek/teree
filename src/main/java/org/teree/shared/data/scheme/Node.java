@@ -16,6 +16,14 @@ public class Node implements Cloneable {
     private NodeLocation location;
     private NodeStyle style;
     
+    public Node() {
+    	
+    }
+    
+    public Node(Object content) {
+    	setContent(content);
+    }
+    
 	public Node clone() {
         Node root = new Node();
         root.setContent(content);

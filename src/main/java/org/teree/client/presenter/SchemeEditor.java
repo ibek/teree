@@ -1,5 +1,7 @@
 package org.teree.client.presenter;
 
+import java.util.List;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -15,6 +17,7 @@ import org.teree.client.event.SchemeReceived;
 import org.teree.client.event.SchemeReceivedHandler;
 import org.teree.client.text.UIMessages;
 import org.teree.client.view.KeyAction;
+import org.teree.shared.SchemeService;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Scheme;
@@ -40,6 +43,9 @@ public class SchemeEditor implements Presenter {
     
     @Inject @Named(value="eventBus")
     private HandlerManager eventBus;
+    
+	@Inject
+	private Caller<SchemeService> generalService;
     
 	@Inject
 	private Caller<SecuredSchemeService> securedScheme;
@@ -140,7 +146,6 @@ public class SchemeEditor implements Presenter {
 	            public void callback(String response) {
 	                scheme.setOid(response);
 	                display.info(UIMessages.LANG.schemeCreated(scheme.getOid()));
-	                eventBus.fireEvent(new RefreshUserInfo());
 	            }
 	        }, new ErrorCallback() {
 				@Override
@@ -164,5 +169,30 @@ public class SchemeEditor implements Presenter {
 			}).updateScheme(scheme);
     	}
     }
+    
+    public void getScheme(String oid, RemoteCallback<Scheme> callback) {
+    	generalService.call(callback, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				display.error(message.toString());
+				return false;
+			}
+		}).getScheme(oid);
+    }
+    
+    public void searchFrom(String fromOid, String text, RemoteCallback<List<Scheme>> callback) {
+    	generalService.call(callback, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				display.error(message.toString());
+				return false;
+			}
+		}).searchFrom(fromOid, text, 5);
+    }
+
+	@Override
+	public String getTitle() {
+		return "Editor";
+	}
 
 }

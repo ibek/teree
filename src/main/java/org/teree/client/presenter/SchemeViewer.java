@@ -90,5 +90,20 @@ public class SchemeViewer implements Presenter {
 			}
 		}).exportJSON(oid);
 	}
+	
+	public void getScheme(String oid, RemoteCallback<Scheme> callback) {
+    	generalService.call(callback, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				display.error(message.toString());
+				return false;
+			}
+		}).getScheme(oid);
+    }
+
+	@Override
+	public String getTitle() {
+		return "Viewer";
+	}
 
 }

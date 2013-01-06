@@ -148,4 +148,9 @@ public class SchemeExplorer implements Presenter {
 		}).getAllTo(to_oid, Settings.SCHEME_COUNT_IN_EXPLORER);
 	}
 
+	@Override
+	public String getTitle() {
+		return "Explorer";
+	}
+
 }

@@ -21,26 +21,23 @@ import com.google.gwt.user.client.ui.HTML;
 
 public class TextNodeWidget extends NodeWidget {
 
-	private Icon icon;
-    private HTML content;
+	protected Icon icon;
+    protected HTML content;
     
     protected TextNodeWidget(Node node) {
         super(node);
         init();
     }
     
-    public void init() {
+    private void init() {
         content = new HTML();
         content.setText(node.getContent().toString());
         content.setStylePrimaryName(resources.css().node());
         content.addStyleName(resources.css().nodeView());
         
     	icon = new Icon();
-    	String iconType = ((IconText)node.getContent()).getIconType();
-    	if (iconType != null) {
-	    	icon.setType(IconType.valueOf(iconType));
-	    	container.insert(icon, 0, 0, 0);
-			content.getElement().getStyle().setPaddingLeft(Settings.ICON_WIDTH, Unit.PX);
+    	if (node.getContent() instanceof IconText) {
+    		setIconType((IconText)node.getContent());
     	}
     	
     	content.addMouseDownHandler(new MouseDownHandler() {
@@ -66,6 +63,15 @@ public class TextNodeWidget extends NodeWidget {
         
         container.add(content);
         
+    }
+    
+    protected void setIconType(IconText it) {
+    	String iconType = it.getIconType();
+    	if (iconType != null) {
+	    	icon.setType(IconType.valueOf(iconType));
+	    	container.insert(icon, 0, 0, 0);
+			content.getElement().getStyle().setPaddingLeft(Settings.ICON_WIDTH, Unit.PX);
+    	}
     }
 
     @Override

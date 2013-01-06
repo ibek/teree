@@ -31,4 +31,9 @@ public class ChangeLogsPage implements Presenter {
 		return display;
 	}
 
+	@Override
+	public String getTitle() {
+		return "Change Logs";
+	}
+
 }

@@ -18,6 +18,7 @@ public interface UIConstants extends Messages {
     String technical();
     String contact_and_feedback();
     
+    String search();
     String create();
     String explore();
     String help();

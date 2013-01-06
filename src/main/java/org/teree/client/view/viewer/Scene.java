@@ -12,6 +12,7 @@ import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.resource.MathExpressionTools;
 import org.teree.client.view.viewer.NodeWidget;
+import org.teree.shared.data.scheme.Connector;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.Scheme;
 
@@ -80,22 +81,6 @@ public class Scene extends Composite {
         initWidget(sp);
         
         bind();
-        
-        container.addDomHandler(new MouseDownHandler() {
-			@Override
-			public void onMouseDown(MouseDownEvent event) {
-				move = true;
-				lastx = null;
-				lasty = null;
-			}
-		}, MouseDownEvent.getType());
-    	
-        container.addDomHandler(new MouseUpHandler() {
-			@Override
-			public void onMouseUp(MouseUpEvent event) {
-				move = false;
-			}
-		}, MouseUpEvent.getType());
     	
         container.addDomHandler(new MouseMoveHandler() {
 			@Override
@@ -114,10 +99,31 @@ public class Scene extends Composite {
     }
     
     private void bind() {
+        
+        container.addDomHandler(new MouseDownHandler() {
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				move = true;
+				lastx = null;
+				lasty = null;
+			}
+		}, MouseDownEvent.getType());
+    	
+        container.addDomHandler(new MouseUpHandler() {
+			@Override
+			public void onMouseUp(MouseUpEvent event) {
+				move = false;
+			}
+		}, MouseUpEvent.getType());
+        
     	container.addHandler(new NodeChangedHandler() {
 			@Override
 			public void changed(NodeChanged event) {
-				renderer.renderViewer(canvas, widgets, scheme.getRoot());
+				if (event.getNode() == null) {
+					renderer.renderViewer(canvas, widgets, scheme.getRoot());
+				} else {
+					setScheme(scheme); // scene has to be reinitialized because some nodes were added
+				}
 			}
 		}, NodeChanged.TYPE);
     }
@@ -135,6 +141,7 @@ public class Scene extends Composite {
     	this.scheme = scheme;
     	container.clear();
         container.add(canvas);
+        widgets.clear();
         
         init(scheme.getRoot());
         
@@ -217,6 +224,15 @@ public class Scene extends Composite {
 	        }
 	        case Connector: {
 	        	nw = new ConnectorNodeWidget(node);
+	        	nw.addDomHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent event) {
+						Object src = event.getSource();
+						if (src instanceof ConnectorNodeWidget) {
+							changeCollapseNode((ConnectorNodeWidget) src);
+						}
+					}
+				}, ClickEvent.getType());
 	        	break;
 	        }
 	    }

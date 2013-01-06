@@ -31,4 +31,9 @@ public class HomePage implements Presenter {
 		return display;
 	}
 
+	@Override
+	public String getTitle() {
+		return "Home";
+	}
+
 }

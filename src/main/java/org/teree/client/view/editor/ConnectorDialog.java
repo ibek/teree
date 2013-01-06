@@ -1,25 +1,26 @@
 package org.teree.client.view.editor;
 
-import org.jboss.errai.bus.client.api.ErrorCallback;
-import org.jboss.errai.bus.client.api.Message;
+import java.util.List;
+
 import org.jboss.errai.bus.client.api.RemoteCallback;
-import org.teree.client.Settings;
-import org.teree.client.controller.GeneralController;
-import org.teree.client.event.SchemeReceived;
+import org.teree.client.CurrentPresenter;
+import org.teree.client.presenter.Presenter;
+import org.teree.client.presenter.SchemeEditor;
+import org.teree.client.text.UIConstants;
 import org.teree.client.view.common.TDialog;
 import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.Scheme;
 
 import com.github.gwtbootstrap.client.ui.Button;
-import com.github.gwtbootstrap.client.ui.CheckBox;
 import com.github.gwtbootstrap.client.ui.Image;
 import com.github.gwtbootstrap.client.ui.TextBox;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -28,7 +29,8 @@ public class ConnectorDialog extends TDialog {
 	private static final int WIDTH = 226;
 	private static final int HEIGHT = 100;
 	
-	// TODO: add preview of scheme and refresh button
+	private Button next;
+	private Button back;
 	private Button okButton;
 	private Button search;
 
@@ -36,6 +38,9 @@ public class ConnectorDialog extends TDialog {
 	private TextBox oid;
 	
 	private Scheme scheme;
+	
+	private List<Scheme> searched;
+	private int current = 0;
 
 	public ConnectorDialog() {
 		
@@ -51,21 +56,38 @@ public class ConnectorDialog extends TDialog {
 		//preview.setHeight(Settings.SAMPLE_MAX_HEIGHT + "px");
 		panel.add(preview);
 
+		FlowPanel fp = new FlowPanel();
+		back = new Button(UIConstants.LANG.back());
+		//back.getElement().getStyle().setFloat(Float.LEFT);
+		back.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				back();
+			}
+		});
+		next = new Button(UIConstants.LANG.next());
+		next.getElement().getStyle().setFloat(Float.RIGHT);
+		next.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				next();
+			}
+		});
+		fp.add(back);
+		fp.add(next);
+		panel.add(fp);
+
 		HorizontalPanel oidhp = new HorizontalPanel();
+		oidhp.getElement().getStyle().setMarginTop(10, Unit.PX);
 		oid = new TextBox();
-		oid.setPlaceholder("oid");
+		oid.setPlaceholder("oid or root to search");
 		oid.setWidth(200+"px");
 
 		search = new Button("", IconType.SEARCH);
 		search.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				String t = oid.getText();
-				if (t.length() == 25 && !t.contains(" ")) { // it is oid
-					load();
-				} else {
-					
-				}
+				checkOid();
 			}
 		});
 		oidhp.add(oid);
@@ -78,11 +100,7 @@ public class ConnectorDialog extends TDialog {
 			public void onClick(ClickEvent event) {
 				if (!isReady()) {
 					event.stopPropagation();
-					if (oid.getText().isEmpty()) {
-						// error - oid should be set
-					} else {
-						load();
-					}
+					checkOid();
 				}
 			}
 		});
@@ -106,6 +124,56 @@ public class ConnectorDialog extends TDialog {
 
 	}
 	
+	private void checkOid() {
+		String t = oid.getText();
+		if (oid.getText().isEmpty()) {
+			// error - oid should be set
+		} else if (t.length() == 25 && !t.contains(" ")) { // it is oid
+			load(oid.getText());
+		} else {
+			((SchemeEditor)CurrentPresenter.getInstance().getPresenter()).searchFrom(null, t, new RemoteCallback<List<Scheme>>() {
+				@Override
+				public void callback(List<Scheme> response) {
+					if (response.isEmpty()) {
+						clearDialog();
+					} else {
+						boolean canNext = response.size() > 1;
+						next.setVisible(canNext);
+						back.setVisible(canNext);
+						searched = response;
+						current = 0;
+						loadCurrent();
+					}
+					setOkButton();
+				}
+			});
+		}
+	}
+	
+	private void next() {
+		current++;
+		if (current >= searched.size()) {
+			current = 0;
+		}
+		loadCurrent();
+	}
+	
+	private void back() {
+		current--;
+		if (current < 0) {
+			current = searched.size()-1;
+		}
+		loadCurrent();
+	}
+	
+	private void loadCurrent() {
+		if (searched != null) {
+			scheme = searched.get(current);
+			preview.setVisible(true);
+			preview.setUrl(scheme.getSchemePicture());
+		}
+	}
+	
 	private void setOkButton() {
 		if (isReady()) {
 			okButton.setText("Ok");
@@ -114,25 +182,32 @@ public class ConnectorDialog extends TDialog {
 		}
 	}
 	
-	private void load() {
-		String o = oid.getText();
-		if (!o.isEmpty()) {
-			GeneralController.getInstance().getGeneralService().call(new RemoteCallback<Scheme>() {
-				@Override
-				public void callback(Scheme response) {
-					scheme = response;
-					if (response != null) {
-						preview.setUrl(scheme.getSchemePicture());
+	public void clearDialog() {
+		searched = null;
+		scheme = null;
+		preview.setVisible(false);
+		next.setVisible(false);
+		back.setVisible(false);
+	}
+	
+	private void load(String o) {
+		if (o != null && !o.isEmpty()) {
+			SchemeEditor se = null;
+			Presenter cp = CurrentPresenter.getInstance().getPresenter();
+			if (cp instanceof SchemeEditor) {
+				se = (SchemeEditor)cp;
+				se.getScheme(o, new RemoteCallback<Scheme>() {
+					@Override
+					public void callback(Scheme response) {
+						scheme = response;
+						if (response != null) {
+							preview.setVisible(true);
+							preview.setUrl(scheme.getSchemePicture());
+						}
+						setOkButton();
 					}
-					setOkButton();
-				}
-			}, new ErrorCallback() {
-				@Override
-				public boolean error(Message message, Throwable throwable) {
-					
-					return false;
-				}
-			}).getScheme(o);
+				});
+			}
 		}
 	}
 	
@@ -149,12 +224,12 @@ public class ConnectorDialog extends TDialog {
 	}
 	
 	public String getOid() {
-		return oid.getText();
+		return (scheme == null || scheme.getRoot() == null)?null:scheme.getOid();
 	}
 
 	public void setOid(String oid) {
 		this.oid.setText(oid);
-		load();
+		load(oid);
 	}
 
 }

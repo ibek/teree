@@ -15,7 +15,6 @@ import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.bus.client.api.base.MessageBuilder;
 import org.jboss.errai.bus.client.protocols.SecurityCommands;
 import org.jboss.errai.common.client.protocols.MessageParts;
-import org.teree.client.controller.GeneralController;
 import org.teree.client.event.GlobalKeyUp;
 import org.teree.client.event.RefreshUserInfo;
 import org.teree.client.event.RefreshUserInfoHandler;
@@ -68,6 +67,7 @@ public class TereeController implements ValueChangeHandler<String> {
 	private Keyboard keyboard;
 	
 	private CurrentUser currentUser = CurrentUser.getInstance();
+	private CurrentPresenter currentPresenter = CurrentPresenter.getInstance();
 	
 	/**
 	 * Current presenter.
@@ -135,12 +135,6 @@ public class TereeController implements ValueChangeHandler<String> {
 				loadUserInfoData();
 			}
 		});
-		
-		GeneralController sc = GeneralController.getInstance();
-		sc.setEventBus(eventBus);
-		sc.setGeneralService(generalService);
-		sc.setSecuredScheme(securedScheme);
-		sc.setUserService(userService);
 		
 	}
 
@@ -268,6 +262,7 @@ public class TereeController implements ValueChangeHandler<String> {
 			loadUserInfoData();
 		}
 		this.presenter = presenter;
+		currentPresenter.setPresenter(presenter);
 		presenter.go(container);
 		
 		String sessionId = Cookies.getCookie(Settings.COOKIE_SESSION_ID);

@@ -1,11 +1,14 @@
 package org.teree.client.view;
 
+import org.teree.client.CurrentPresenter;
 import org.teree.client.CurrentUser;
+import org.teree.client.presenter.Presenter;
 import org.teree.client.presenter.Template;
 import com.github.gwtbootstrap.client.ui.Alert;
 import com.github.gwtbootstrap.client.ui.constants.AlertType;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 
 public abstract class TemplateScene extends Composite implements Template {
@@ -18,6 +21,10 @@ public abstract class TemplateScene extends Composite implements Template {
 	
 	public TemplateScene() {
 		header = new Header();
+		Presenter cp = CurrentPresenter.getInstance().getPresenter();
+		if (cp != null) {
+			Window.setTitle("teree - " + cp.getTitle());
+		}
 	}
 
 	@Override

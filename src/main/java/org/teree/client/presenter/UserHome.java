@@ -100,12 +100,6 @@ public class UserHome implements Presenter {
 					public void callback(Boolean response) {
 						if (response) {
 							display.info(UIMessages.LANG.schemeRemoved(event.getScheme().getOid()));
-							Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-					            @Override
-					            public void execute() {
-									eventBus.fireEvent(new RefreshUserInfo());
-					            }
-					        });
 							loadData(null);
 						} else {
 							display.error("You are not owner or author of the scheme.");
@@ -250,6 +244,11 @@ public class UserHome implements Presenter {
 				return false;
 			}
 		}).getAllToUser(to_oid, Settings.SCHEME_COUNT_IN_EXPLORER, userid);
+	}
+
+	@Override
+	public String getTitle() {
+		return "User Home";
 	}
 
 }

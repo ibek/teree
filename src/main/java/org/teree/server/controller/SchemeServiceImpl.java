@@ -59,5 +59,15 @@ public class SchemeServiceImpl implements SchemeService {
 	public Scheme importJSON(String json) {
 		return _sm.importJSON(json);
 	}
+
+	@Override
+	public List<Scheme> searchFrom(String from_oid, String text, int limit) {
+		return _sm.searchFrom(from_oid, text, limit, _us.getUserInfo());
+	}
+
+	@Override
+	public List<Scheme> searchTo(String to_oid, String text, int limit) {
+		return _sm.searchTo(to_oid, text, limit, _us.getUserInfo());
+	}
     
 }

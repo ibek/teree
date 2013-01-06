@@ -51,4 +51,9 @@ public class LoginPage implements Presenter {
 		return display;
 	}
 
+	@Override
+	public String getTitle() {
+		return "Login";
+	}
+
 }

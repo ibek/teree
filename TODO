@@ -1,18 +1,11 @@
 
+===============
 0.7:
-
-udelat testovani podle nalezenych chyb z testing release 0.5 + vytvorit mockobjekty a pres ne kontrolovat spravny prubeh (napr. generovani mapy)
-
-vytvorit metody pro vytvoreni a zruseni pripojeni s databazi v MongoDB, protoze se nevola close pri redeploy
- - je to opravdu potreba? neni jednodussi restartovat databazi?
-
-umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
+===============
 
 direct explore - novy typ generovani mapy, velmi podobne mind mape ... generovani pouze vsech uzlu vpravo a root bude uplne vlevo
  - provest refaktorizaci MindMapy, aby se casti mohli pouzit i v tomto typu generovani
-ConnectorNodeWidget (to connect another map)
- - po kliknuti ve view se nacte mapa do daneho uzlu
- - checkbox zda ma byt nacten hned pri otevreni nebo az po stisknuti
+
 funkce pro rozdeleni mapy na dve - z nodu vytvorit novou mapu a propojit connectorNodeWidgetem
  - ulozi se nova mapa s danym rootem (vybrany node)
  - odstrani se vybrany node
@@ -20,7 +13,6 @@ funkce pro rozdeleni mapy na dve - z nodu vytvorit novou mapu a propojit connect
 funkce pro spojeni map - v miste connectoru se nacte a prida dana mapa kterou bude mozno rovnou upravovat
 
 vyhledavani - pouze v root
- - je nutne pro ConnectorNodeWidget
  - vlozit na hlavni stranku vyhledavani - takovy portal, vysledek bude, ze se bud premisti na prvni nalezenou mapu, nebo se oznami ze nebyla nalezena
 
 uzivatelsky privetive statusy a chybove hlasky
@@ -29,18 +21,26 @@ opravit viewer pri uncollapse all, collapse all, uncollapse all ... v pripade ze
 opravit kopirovani uzlu - provadi se i kdyz nema ... mam ruzne textfieldy kde se da klasicky kopirovat
 urcit vysku a sirku tlacitek v panelu ikon
 opet nefunguje pokud dam max_width content a pak ho zmensim tak se to neupravi na auto
+add method with @PreDestroy annotation to MongoDB bean
+ - vytvorit metody pro vytvoreni a zruseni pripojeni s databazi v MongoDB, protoze se nevola close pri redeploy
+ - nemit MongoDB jako @ApplicationScoped!!! - concurrent pripojeni by mohly delat problemy
+use Infinispan as a cache for users and maps
+replace openshift app to enable scalability https://openshift.redhat.com/community/developers/scaling
 
 ===============
 0.8:
 ===============
 
 PercentNodeWidget - zobrazi graficky 0-100%, pri editaci se vlozi cislo 0-100 do integerboxu
+ - vytvorit dropdown button ktery bude obsahovat mene pouzivane typy uzlu jako tento a Math Expression
 
 umoznit tisk mapy
+umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
 
 vytvorit stranku Help - popsat aplikaci (napr. novy radek pomoci shift+enter ...)
 
 upravit explore aby zobrazoval jak posledne vlozene mapy tak i nejvice otevrene za tyden apod.
+pridat hodnoceni a pocet shlednuti mapy
 
 ulozeni ruznych pohledu na mapu
  - nektere casti nejsou pro dany pohled dulezite a nebudou zobrazeny
@@ -55,7 +55,6 @@ ulozeni ruznych pohledu na mapu
 
 collaboration
 
-pridat hodnoceni mapy
 ruzne typy nodu z hlediska vyznamu
  - klicove slovo (bude mozne ho najit ve vyhledavani, a lze tento podstrom oddelit od mapy), definice, priklad, ...
 
@@ -74,3 +73,4 @@ fulltextove vyhledavani
 DBAuth pres SSL
 management console/app - napr pro upravu balicku, zmena limitu apod
 sepsat use cases (pro studovani ...)
+smysluplne testovani

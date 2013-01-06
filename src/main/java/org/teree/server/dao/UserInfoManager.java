@@ -21,13 +21,13 @@ import com.mongodb.DBObject;
 public class UserInfoManager {
 
 	@Inject
-    MongoDB mdb;
+    MongoDB _mdb;
 	
 	@Inject
-	UserPackageManager upm;
+	UserPackageManager _upm;
     
     protected DBCollection getCollection() {
-    	DB db = mdb.getDatabase();
+    	DB db = _mdb.getDatabase();
         DBCollection coll = null;
         if(db.getCollectionNames().contains("user")){
         	coll = db.getCollection("user");
@@ -40,7 +40,7 @@ public class UserInfoManager {
     }
     
     protected UserPackageManager getUserPackageManager() {
-    	return upm;
+    	return _upm;
     }
     
     public boolean insert(UserInfo ui, String password) {
@@ -61,7 +61,8 @@ public class UserInfoManager {
         DBObject doc = toUserInfoDBObject(ui);
         
         doc.put("googleid", googleid);
-        doc.put("package", upm.getFreePackage().getName());
+        doc.put("package", _upm.getFreePackage().getName());
+        doc.put("joined", DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date(System.currentTimeMillis())));
         
         DBCollection coll = getCollection();
         coll.insert(doc);
@@ -124,7 +125,7 @@ public class UserInfoManager {
         DBObject search = new BasicDBObject();
         search.put("username", username);
         DBObject found = coll.findOne(search, new BasicDBObject("password", 1));
-    	return (String)found.get("password");
+    	return (found == null)?null:(String)found.get("password");
     }
     
     // TODO return only public informations (not mem used and so)
@@ -179,7 +180,7 @@ public class UserInfoManager {
         ui.setEmail((String)userinfo.get("email"));
         ui.setJoined((String)userinfo.get("joined"));
         ui.setMemUsed((Long)userinfo.get("memUsed"));
-        ui.setUserPackage(getUserPackageManager().select((String)userinfo.get("package")));
+        //ui.setUserPackage(getUserPackageManager().select((String)userinfo.get("package")));
         
         return ui;
     }

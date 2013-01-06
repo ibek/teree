@@ -14,13 +14,17 @@ import org.teree.shared.data.scheme.Scheme;
 @Remote
 public interface SchemeService {
 
-	public List<Scheme> getAllFrom(String from_oid, int limit);
+	public List<Scheme> getAllFrom(String fromOid, int limit);
 	
-	public List<Scheme> getAllTo(String to_oid, int limit);
+	public List<Scheme> getAllTo(String toOid, int limit);
 
-	public List<Scheme> getAllFromUser(String from_oid, int limit, String userid);
+	public List<Scheme> getAllFromUser(String fromOid, int limit, String userid);
 	
-	public List<Scheme> getAllToUser(String to_oid, int limit, String userid);
+	public List<Scheme> getAllToUser(String toOid, int limit, String userid);
+
+	public List<Scheme> searchFrom(String fromOid, String text, int limit);
+	
+	public List<Scheme> searchTo(String toOid, String text, int limit);
     
     public Scheme getScheme(String oid);
     

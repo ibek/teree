@@ -99,4 +99,9 @@ public class SettingsPage implements Presenter {
 		return display;
 	}
 
+	@Override
+	public String getTitle() {
+		return "Settings";
+	}
+
 }

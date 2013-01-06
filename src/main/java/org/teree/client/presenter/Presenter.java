@@ -12,4 +12,6 @@ public interface Presenter {
     
     public Template getTemplate();
     
+    public String getTitle();
+    
 }

@@ -83,4 +83,9 @@ public class JoinPage implements Presenter {
 		return display;
 	}
 
+	@Override
+	public String getTitle() {
+		return "Join";
+	}
+
 }
