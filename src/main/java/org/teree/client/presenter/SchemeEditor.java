@@ -121,7 +121,7 @@ public class SchemeEditor implements Presenter {
             @Override
             public void onClick(ClickEvent event) {
                 scheme.setSchemePicture(display.getSchemeSamplePicture());
-                saveScheme();
+                saveScheme(scheme);
             }
         });
         
@@ -139,21 +139,15 @@ public class SchemeEditor implements Presenter {
 		return display;
 	}
     
-    public void saveScheme() {
+    public void saveScheme(final Scheme scheme) {
     	if (scheme.getOid() == null) {
-    		securedScheme.call(new RemoteCallback<String>() {
-	            @Override
-	            public void callback(String response) {
-	                scheme.setOid(response);
-	                display.info(UIMessages.LANG.schemeCreated(scheme.getOid()));
-	            }
-	        }, new ErrorCallback() {
-				@Override
-				public boolean error(Message message, Throwable throwable) {
-					display.error(message.toString());
-					return false;
-				}
-			}).insertScheme(scheme);
+    		insertScheme(scheme, new RemoteCallback<String>() {
+                @Override
+                public void callback(String response) {
+                    scheme.setOid(response);
+                    display.info(UIMessages.LANG.schemeCreated(scheme.getOid()));
+                }
+            });
     	} else {
     		securedScheme.call(new RemoteCallback<Void>() {
 	            @Override
@@ -168,6 +162,16 @@ public class SchemeEditor implements Presenter {
 				}
 			}).updateScheme(scheme);
     	}
+    }
+    
+    public void insertScheme(Scheme scheme, RemoteCallback<String> callback) {
+    	securedScheme.call(callback, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				display.error(message.toString());
+				return false;
+			}
+		}).insertScheme(scheme);
     }
     
     public void getScheme(String oid, RemoteCallback<Scheme> callback) {

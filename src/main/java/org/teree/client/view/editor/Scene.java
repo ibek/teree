@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jboss.errai.bus.client.api.RemoteCallback;
+import org.teree.client.CurrentPresenter;
 import org.teree.client.Settings;
+import org.teree.client.presenter.SchemeEditor;
 import org.teree.client.scheme.MindMap;
 import org.teree.client.scheme.SchemeType;
 import org.teree.client.scheme.Renderer;
+import org.teree.client.text.UIMessages;
 import org.teree.client.view.editor.NodeWidget;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
+import org.teree.client.view.editor.event.SelectedNodeListener;
 import org.teree.client.view.resource.MathExpressionTools;
 import org.teree.shared.data.scheme.Connector;
 import org.teree.shared.data.scheme.IconText;
@@ -131,6 +136,13 @@ public class Scene extends Composite {
         
         update(root); // initialize
         
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+	        @Override
+	        public void execute() {
+	        	selectNode(null); // to call listeners and in edit panel check the buttons to disable unnecessary
+	        }
+        });
+        
     }
     
     /**
@@ -223,6 +235,71 @@ public class Scene extends Composite {
 	   			editSelectedNode();
 	        }
         });
+    }
+    
+    public void mergeSelectedConnector() {
+    	if (selected != null && selected instanceof ConnectorNodeWidget) {
+    		final Node n = selected.getNode();
+    		Connector con = (Connector)n.getContent();
+            final NodeWidget oldSelected = selected;
+    		((SchemeEditor)CurrentPresenter.getInstance().getPresenter()).getScheme(con.getOid(), new RemoteCallback<Scheme>() {
+				@Override
+				public void callback(Scheme response) {
+					List<Node> childNodes = response.getRoot().getChildNodes();
+					for (int i=0; childNodes != null && i<childNodes.size(); ++i) {
+						childNodes.get(i).setLocation(n.getLocation());
+					}
+					insertNodeBefore(response.getRoot());
+                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            	        @Override
+            	        public void execute() {
+            	        	selected = oldSelected;
+            	        	removeSelectedNode();
+            	        }
+                    });
+				}
+			});
+    	}
+    }
+    
+    public void splitSelectedNode() {
+    	if (selected != null && selected instanceof TextNodeWidget && !(selected instanceof ConnectorNodeWidget)) {
+    		final Scheme s = new Scheme();
+    		Node root = selected.getNode().clone();
+    		List<Node> childNodes = root.getChildNodes();
+    		for (int i=0; childNodes != null && i<childNodes.size(); ++i) {
+    			childNodes.get(i).setLocation(root.getLocation());
+    		}
+    		s.setRoot(root);
+            final NodeWidget oldSelected = selected;
+    		((SchemeEditor)CurrentPresenter.getInstance().getPresenter()).insertScheme(s, new RemoteCallback<String>() {
+                @Override
+                public void callback(String response) {
+                    Node connector = new Node();
+                    Connector con = new Connector();
+                    IconText it = new IconText();
+                    IconText rc = (IconText)s.getRoot().getContent();
+                    it.setText(rc.getText());
+                    it.setIconType(rc.getIconType());
+                    con.setRoot(it);
+                    con.setOid(response);
+                    connector.setContent(con);
+                    NodeStyle ns = s.getRoot().getStyle();
+                    if (ns != null) {
+                    	connector.setStyle(ns.clone());
+                    }
+                    
+                    insertNodeBefore(connector);
+                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            	        @Override
+            	        public void execute() {
+            	        	selected = oldSelected;
+            	        	removeSelectedNode();
+            	        }
+                    });
+                }
+            });
+    	}
     }
     
     public void copySelectedNode() {
@@ -428,7 +505,6 @@ public class Scene extends Composite {
     
     private void insertChildNode(Node child) {
     	if (selected != null) {
-    		
     		NodeLocation loc = selected.getNode().getLocation();
     		int offset = selected.getNode().getNumberOfChildNodes() + 1;
     		if (selected.getNode().getParent() == null) {
@@ -444,6 +520,19 @@ public class Scene extends Composite {
     		// select new child node
     		int id = container.getWidgetIndex(selected);
     		selectNode((NodeWidget)container.getWidget(id + offset)); 
+    	}
+    }
+    
+    private void insertNodeBefore(Node node) {
+    	if (selected != null && selected.getParent() != null) {
+    		NodeLocation loc = selected.getNode().getLocation();
+    		node.setLocation(loc);
+    		selected.getNode().insertBefore(node);
+    		update(node);
+    		
+    		// select new child node
+    		int id = container.getWidgetIndex(selected);
+    		selectNode((NodeWidget)container.getWidget(id));
     	}
     }
     
@@ -540,12 +629,27 @@ public class Scene extends Composite {
         if (selected != null) { // only one node can be selected
             selected = selected.unselect();
         }
-        
+
+    	fireSelectedNode(node);
         if (node != null) {
             selected = node.select();
         } else {
             selected = null;
         }
+    }
+    
+    private List<SelectedNodeListener> slisteners;
+    public void addSelectedNodeListener(SelectedNodeListener snl) {
+    	if (slisteners == null) {
+    		slisteners = new ArrayList<SelectedNodeListener>();
+    	}
+    	slisteners.add(snl);
+    }
+    
+    private void fireSelectedNode(NodeWidget nw) {
+    	for (int i=0; slisteners != null && i<slisteners.size(); ++i) {
+    		slisteners.get(i).selected(nw);
+    	}
     }
     
     private void collapseAll(List<NodeWidget> widgets, boolean collapse) {

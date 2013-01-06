@@ -9,6 +9,8 @@ import org.teree.client.view.resource.icon.CustomIconType;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.DropdownButton;
+import com.github.gwtbootstrap.client.ui.NavLink;
+import com.github.gwtbootstrap.client.ui.SplitDropdownButton;
 import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.dom.client.Style.Unit;
@@ -29,7 +31,9 @@ public class EditPanel extends Composite {
 	private Button createImg;
 	private Button createLink;
 	private Button createMathExpr;
-	private Button createConnector;
+	private SplitDropdownButton createConnector;
+	private NavLink mergeConnector;
+	private NavLink splitConnector;
 	private Button bold;
 	private DropdownButton icon;
 	
@@ -54,7 +58,11 @@ public class EditPanel extends Composite {
 		createImg = new Button("", IconType.PICTURE);
 		createLink = new Button("", IconType.LINK);
 		createMathExpr = new Button("Σ");
-		createConnector = new Button("");
+		createConnector = new SplitDropdownButton("");
+		mergeConnector = new NavLink("Merge connector");
+		splitConnector = new NavLink("Split node and connect");
+		createConnector.add(mergeConnector);
+		createConnector.add(splitConnector);
 		
 		Label space3 = new Label("");
 		space3.getElement().getStyle().setMarginRight(20, Unit.PX);
@@ -141,6 +149,14 @@ public class EditPanel extends Composite {
 		iconHandler.select(icon);
 	}
 	
+	public void checkSelectedNode(NodeWidget nw) {
+		mergeConnector.setDisabled(nw == null || !(nw instanceof ConnectorNodeWidget));
+		splitConnector.setDisabled(nw == null || !(nw instanceof TextNodeWidget) || nw instanceof ConnectorNodeWidget || 
+				!(nw.getNode().getChildNodes() != null && nw.getNode().getChildNodes().size() > 0));
+		bold.setEnabled(nw != null && ( 
+				(nw instanceof TextNodeWidget && !(nw instanceof ConnectorNodeWidget)) || nw instanceof LinkNodeWidget));
+	}
+	
 	public HasClickHandlers getSaveButton() {
 		return save;
 	}
@@ -167,6 +183,14 @@ public class EditPanel extends Composite {
 	
 	public HasClickHandlers getCreateConnectorButton() {
 		return createConnector;
+	}
+	
+	public HasClickHandlers getMergeConnectorButton() {
+		return mergeConnector;
+	}
+	
+	public HasClickHandlers getSplitConnectorButton() {
+		return splitConnector;
 	}
 	
 	public HasClickHandlers getBoldButton() {

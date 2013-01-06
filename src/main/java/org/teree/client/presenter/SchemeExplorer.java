@@ -16,6 +16,8 @@ import org.teree.client.text.UIMessages;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
+import org.teree.client.view.explorer.event.UpdateSchemePermissions;
+import org.teree.client.view.explorer.event.UpdateSchemePermissionsHandler;
 import org.teree.shared.SchemeService;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.data.scheme.Scheme;
@@ -75,6 +77,8 @@ public class SchemeExplorer implements Presenter {
 			}
 		});
 		
+		// TODO: move following actions into views and call the functions through current presenter
+		
 		display.getScene().addRemoveHandler(new RemoveSchemeHandler() {
 			@Override
 			public void remove(final RemoveScheme event) {
@@ -101,6 +105,24 @@ public class SchemeExplorer implements Presenter {
 						return false;
 					}
 				}).removeScheme(event.getScheme().getOid());
+			}
+		});
+		
+		display.getScene().addUpdatePermissionsHandler(new UpdateSchemePermissionsHandler() {
+			@Override
+			public void updatePermissions(UpdateSchemePermissions event) {
+				securedService.call(new RemoteCallback<Void>() {
+		            @Override
+		            public void callback(Void response) {
+		                display.info("Scheme permissions updated");
+		            }
+		        }, new ErrorCallback() {
+					@Override
+					public boolean error(Message message, Throwable throwable) {
+						display.error(UIMessages.LANG.connectionIssue());
+						return false;
+					}
+				}).updateSchemePermissions(event.getScheme());
 			}
 		});
 	}

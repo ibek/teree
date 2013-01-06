@@ -6,12 +6,6 @@
 direct explore - novy typ generovani mapy, velmi podobne mind mape ... generovani pouze vsech uzlu vpravo a root bude uplne vlevo
  - provest refaktorizaci MindMapy, aby se casti mohli pouzit i v tomto typu generovani
 
-funkce pro rozdeleni mapy na dve - z nodu vytvorit novou mapu a propojit connectorNodeWidgetem
- - ulozi se nova mapa s danym rootem (vybrany node)
- - odstrani se vybrany node
- - vytvori se connectorNodeWidget s odkazem vlozene nove mapy
-funkce pro spojeni map - v miste connectoru se nacte a prida dana mapa kterou bude mozno rovnou upravovat
-
 vyhledavani - pouze v root
  - vlozit na hlavni stranku vyhledavani - takovy portal, vysledek bude, ze se bud premisti na prvni nalezenou mapu, nebo se oznami ze nebyla nalezena
 

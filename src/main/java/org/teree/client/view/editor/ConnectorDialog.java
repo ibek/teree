@@ -170,7 +170,9 @@ public class ConnectorDialog extends TDialog {
 		if (searched != null) {
 			scheme = searched.get(current);
 			preview.setVisible(true);
-			preview.setUrl(scheme.getSchemePicture());
+			if (scheme.getSchemePicture() != null) {
+				preview.setUrl(scheme.getSchemePicture());
+			}
 		}
 	}
 	
@@ -202,7 +204,9 @@ public class ConnectorDialog extends TDialog {
 						scheme = response;
 						if (response != null) {
 							preview.setVisible(true);
-							preview.setUrl(scheme.getSchemePicture());
+							if (scheme.getSchemePicture() != null) {
+								preview.setUrl(scheme.getSchemePicture());
+							}
 						}
 						setOkButton();
 					}

@@ -109,7 +109,7 @@ public class SchemeManager {
 
 	public List<Scheme> allFrom(String from_oid, int limit, UserInfo ui) {
     	DBObject keys = new BasicDBObject();
-    	keys.put("root", 0);
+    	keys.put("root.childNodes", 0);
     	DBObject ref = new BasicDBObject();
     	if (from_oid != null) {
     		ref.put("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
@@ -120,7 +120,7 @@ public class SchemeManager {
     
     public List<Scheme> allTo(String to_oid, int limit, UserInfo ui) {
     	DBObject keys = new BasicDBObject();
-    	keys.put("root", 0);
+    	keys.put("root.childNodes", 0);
     	DBObject ref = new BasicDBObject();
     	if (to_oid != null) {
     		ref.put("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
@@ -131,7 +131,7 @@ public class SchemeManager {
 
 	public List<Scheme> allFromUser(String from_oid, int limit, String userid, UserInfo ui) {
     	DBObject keys = new BasicDBObject();
-    	keys.put("root", 0);
+    	keys.put("root.childNodes", 0);
     	DBObject ref = new BasicDBObject("author", userid);
     	if (from_oid != null) {
     		ref.put("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
@@ -142,7 +142,7 @@ public class SchemeManager {
     
     public List<Scheme> allToUser(String to_oid, int limit, String userid, UserInfo ui) {
     	DBObject keys = new BasicDBObject();
-    	keys.put("root", 0);
+    	keys.put("root.childNodes", 0);
     	DBObject ref = new BasicDBObject("author", userid);
     	if (to_oid != null) {
     		ref.put("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
@@ -245,6 +245,7 @@ public class SchemeManager {
     	if (text == null || text.isEmpty()) {
     		return new ArrayList<Scheme>();
     	}
+    	DBObject keys = new BasicDBObject();
     	
     	DBObject ref = new BasicDBObject();
     	String[] parts = text.split(" ");
@@ -258,22 +259,14 @@ public class SchemeManager {
     		ref.put("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
     	}
     	putSelectSecurityConditions(ref, ui);
-    	List<Scheme> res = new ArrayList<Scheme>();
-    	DBCollection coll = getCollection();
-        DBCursor found = coll.find(ref)
-        		.sort(new BasicDBObject("_id", -1))
-        		.limit(limit);
-        while(found.hasNext()) {
-        	DBObject dbo = found.next();
-        	res.add(fromSchemeDBObject(dbo));
-        }
-        return res;
+    	return allFrom(ref, keys, limit, ui);
     }
     
     public List<Scheme> searchTo(String to_oid, String text, int limit, UserInfo ui) {
     	if (text == null || text.isEmpty()) {
     		return new ArrayList<Scheme>();
     	}
+    	DBObject keys = new BasicDBObject();
     	
     	DBObject ref = new BasicDBObject();
     	String[] parts = text.split(" ");
@@ -287,16 +280,7 @@ public class SchemeManager {
     		ref.put("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
     	}
     	putSelectSecurityConditions(ref, ui);
-    	List<Scheme> res = new ArrayList<Scheme>();
-    	DBCollection coll = getCollection();
-        DBCursor found = coll.find(ref)
-        		.sort(new BasicDBObject("_id", 1))
-        		.limit(limit);
-        while(found.hasNext()) {
-        	DBObject dbo = found.next();
-        	res.add(0, fromSchemeDBObject(dbo));
-        }
-        return res;
+    	return allTo(ref, keys, limit, ui);
     }
     
     private DBObject putSelectSecurityConditions(DBObject req, UserInfo ui) {
@@ -411,6 +395,13 @@ public class SchemeManager {
         }
         s.setAuthor(_uim.selectByOid((String)scheme.get("author")));
     	s.setPermissions(fromPermissionsDBObject((DBObject)scheme.get("permissions")));
+    	Node root = new Node();
+    	IconText it = new IconText();
+    	DBObject r = (DBObject)scheme.get("root");
+    	it.setText((String)r.get("text"));
+    	it.setIconType((String)r.get("icon"));
+    	root.setContent(it);
+    	s.setRoot(root);
         
         return s;
     }

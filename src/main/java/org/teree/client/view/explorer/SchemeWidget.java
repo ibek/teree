@@ -24,12 +24,16 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 
 public class SchemeWidget extends Composite {
+	
+	private static final int COMPONENTS_HEIGHT = 65;
 
 	private ThumbnailLink th;
-	
+
+	private Badge root;
 	private Image screen;
 	private Badge author;
 	private Button remove;
@@ -51,12 +55,20 @@ public class SchemeWidget extends Composite {
 				History.newItem(Settings.VIEW_LINK + scheme.getOid());
 			}
 		});
-		th.setSize(Settings.SAMPLE_MAX_WIDTH+"px", (Settings.SAMPLE_MAX_HEIGHT+60)+"px");
+		th.setSize(Settings.SAMPLE_MAX_WIDTH+"px", (Settings.SAMPLE_MAX_HEIGHT+COMPONENTS_HEIGHT)+"px");
 		th.getElement().getStyle().setMargin(5.0, Unit.PX);
 		th.getAnchor().getElement().getStyle().setBackgroundColor("white");
 		th.getAnchor().getElement().getStyle().setProperty("textAlign", "center");
 		
+		root = new Badge();
+		root.setType(BadgeType.INFO);
+		root.getElement().getStyle().setProperty("lineHeight", "30px");
+		root.setWidth((Settings.SAMPLE_MAX_WIDTH - 20)+"px");
+		
+		FlowPanel fscreen = new FlowPanel();
+		fscreen.setSize(Settings.SAMPLE_MAX_WIDTH+"px", (Settings.SAMPLE_MAX_HEIGHT)+"px");
 		screen = new Image();
+		fscreen.add(screen);
 		
 		edit = new Button(UIC.edit());
 		edit.setVisible(false);
@@ -80,9 +92,10 @@ public class SchemeWidget extends Composite {
 		
 		Style vs = view.getElement().getStyle();
 		vs.setFloat(Style.Float.RIGHT);
+		vs.setZIndex(10);
 		
 		author = new Badge();
-		author.setType(BadgeType.INFO);
+		//author.setType(BadgeType.INFO);
 		author.getElement().getStyle().setProperty("lineHeight", "30px");
 		author.addClickHandler(new ClickHandler() {
 			@Override
@@ -135,13 +148,18 @@ public class SchemeWidget extends Composite {
         rt.add(remove);
 
         th.add(pt);
+        th.add(root);
         th.add(rt);
-		th.add(screen);
-		th.add(edit);
-        th.add(author);
-		th.add(view);
+		th.add(fscreen);
+		FlowPanel fp = new FlowPanel();
+		fp.add(edit);
+        fp.add(author);
+		fp.add(view);
+		th.add(fp);
 		
 		initWidget(th);
+		
+		th.getAnchor().setSize(Settings.SAMPLE_MAX_WIDTH+"px", (Settings.SAMPLE_MAX_HEIGHT+COMPONENTS_HEIGHT)+"px");
 		
 	}
 	
@@ -159,13 +177,25 @@ public class SchemeWidget extends Composite {
 	
 	public void setScheme(Scheme scheme) {
 		this.scheme = scheme;
-		screen.setUrl(scheme.getSchemePicture());
-		author.setText(scheme.getAuthor().getName());
+		if (scheme.getSchemePicture() != null) {
+			screen.setUrl(scheme.getSchemePicture());
+		}
+		if (scheme.getRoot() != null) {
+			String t = scheme.getRoot().getContent().toString();
+			if (t.length() > 25) {
+				t = t.substring(0, 25) + "...";
+			}
+			root.setText(t);
+		}
+		if (scheme.getAuthor() != null) {
+			author.setText(scheme.getAuthor().getName());
+		}
 		if (scheme.getPermissions() != null) {
 			UserInfo ui = CurrentUser.getInstance().getUserInfo();
 			if (ui != null && scheme.getAuthor().getUserId().equals(ui.getUserId())) {
 				permissions.setVisible(true);
 				remove.setVisible(true);
+				root.setWidth((Settings.SAMPLE_MAX_WIDTH - 120)+"px");
 				edit.setVisible(true);
 			} else if (scheme.getPermissions().canEdit(ui)) {
 				edit.setVisible(true);

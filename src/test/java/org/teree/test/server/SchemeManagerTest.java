@@ -65,7 +65,8 @@ public class SchemeManagerTest {
 		initDB();
 		UserInfo ui = new UserInfo();
 		ui.setUserId("50e8a5efe4b09e11e18873c7");
-		List<Scheme> s = sm.searchFrom(null, "vzor", 5, ui);
+		//List<Scheme> s = sm.searchFrom(null, "vzor", 5, ui);
+		List<Scheme> s = sm.allFrom(null, 5, ui);
 		System.out.println("ahoj");
 		for (Scheme sc:s) {
 			System.out.println("cau");
