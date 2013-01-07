@@ -15,6 +15,7 @@ public interface PageStyle extends ClientBundle {
 	public interface PageStyleCssResource extends CssResource {
 	    String scene();
 	    String status();
+	    String invisibleFrame();
 	}
 	
 }

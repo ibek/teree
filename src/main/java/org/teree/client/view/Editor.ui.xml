@@ -19,6 +19,7 @@
 	<g:FlowPanel>
 		<view:Header ui:field="header"/>
 		<edit:EditPanel ui:field="edit" addStyleNames="{style.editPanel}"></edit:EditPanel>
+		<g:Frame ui:field="tmpFrame" addStyleNames="{res.css.invisibleFrame}"/>
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<edit:Scene ui:field="scene" addStyleNames="{res.css.scene}"></edit:Scene>
 	</g:FlowPanel>

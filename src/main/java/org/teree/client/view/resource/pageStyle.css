@@ -9,3 +9,9 @@
 	position: absolute;
 	right: 5px;
 }
+		
+.invisibleFrame {
+	width:0px;
+	height:0px;
+	border:none;
+}

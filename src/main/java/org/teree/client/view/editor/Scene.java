@@ -19,6 +19,7 @@ import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
 import org.teree.client.view.editor.event.SelectedNodeListener;
 import org.teree.client.view.resource.MathExpressionTools;
+import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.scheme.Connector;
 import org.teree.shared.data.scheme.IconText;
 import org.teree.shared.data.scheme.ImageLink;
@@ -35,16 +36,21 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.ImageData;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.FrameElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -262,8 +268,10 @@ public class Scene extends Composite {
     	}
     }
     
-    public void splitSelectedNode() {
+    private Frame tmpFrame;
+    public void splitSelectedNode(Frame tmpFrame) {
     	if (selected != null && selected instanceof TextNodeWidget && !(selected instanceof ConnectorNodeWidget)) {
+    		this.tmpFrame = tmpFrame;
     		final Scheme s = new Scheme();
     		Node root = selected.getNode().clone();
     		List<Node> childNodes = root.getChildNodes();
@@ -271,33 +279,54 @@ public class Scene extends Composite {
     			childNodes.get(i).setLocation(root.getLocation());
     		}
     		s.setRoot(root);
-            final NodeWidget oldSelected = selected;
-    		((SchemeEditor)CurrentPresenter.getInstance().getPresenter()).insertScheme(s, new RemoteCallback<String>() {
-                @Override
-                public void callback(String response) {
-                    Node connector = new Node();
-                    Connector con = new Connector();
-                    IconText it = new IconText();
-                    IconText rc = (IconText)s.getRoot().getContent();
-                    it.setText(rc.getText());
-                    it.setIconType(rc.getIconType());
-                    con.setRoot(it);
-                    con.setOid(response);
-                    connector.setContent(con);
-                    NodeStyle ns = s.getRoot().getStyle();
-                    if (ns != null) {
-                    	connector.setStyle(ns.clone());
-                    }
-                    
-                    insertNodeBefore(connector);
-                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            	        @Override
-            	        public void execute() {
-            	        	selected = oldSelected;
-            	        	removeSelectedNode();
-            	        }
-                    });
-                }
+    		
+    		final Scene scene = new Scene();
+    		scene.addStyleName(PageStyle.INSTANCE.css().scene());
+    		
+    		FrameElement frameElt = Scene.this.tmpFrame.getElement().cast();
+    		Document frameDoc = frameElt.getContentDocument();
+    		frameDoc.getBody().appendChild(scene.getElement());
+    		
+    		scene.setScheme(s);
+    		
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+    	        @Override
+    	        public void execute() {
+    	        	s.setSchemePicture(scene.getSchemePicture());
+    	        	
+    	    		FrameElement frameElt = Scene.this.tmpFrame.getElement().cast();
+    	    		Document frameDoc = frameElt.getContentDocument();
+    	    		frameDoc.getBody().removeChild(scene.getElement());
+    	    		
+    	            final NodeWidget oldSelected = selected;
+    	    		((SchemeEditor)CurrentPresenter.getInstance().getPresenter()).insertScheme(s, new RemoteCallback<String>() {
+    	                @Override
+    	                public void callback(String response) {
+    	                    Node connector = new Node();
+    	                    Connector con = new Connector();
+    	                    IconText it = new IconText();
+    	                    IconText rc = (IconText)s.getRoot().getContent();
+    	                    it.setText(rc.getText());
+    	                    it.setIconType(rc.getIconType());
+    	                    con.setRoot(it);
+    	                    con.setOid(response);
+    	                    connector.setContent(con);
+    	                    NodeStyle ns = s.getRoot().getStyle();
+    	                    if (ns != null) {
+    	                    	connector.setStyle(ns.clone());
+    	                    }
+    	                    
+    	                    insertNodeBefore(connector);
+    	                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+    	            	        @Override
+    	            	        public void execute() {
+    	            	        	selected = oldSelected;
+    	            	        	removeSelectedNode();
+    	            	        }
+    	                    });
+    	                }
+    	            });
+    	        }
             });
     	}
     }

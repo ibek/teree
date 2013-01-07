@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.presenter.SchemeEditor;
@@ -36,6 +37,9 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
     
     @UiField
     EditPanel edit;
+    
+    @UiField
+    Frame tmpFrame;
     
     public Editor() {
     	scene = new Scene();
@@ -101,7 +105,7 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
     	edit.getSplitConnectorButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				scene.splitSelectedNode();
+				scene.splitSelectedNode(tmpFrame);
 			}
 		});
     	

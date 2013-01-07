@@ -52,13 +52,17 @@ public class ViewPanel extends Composite {
 		form.setEncoding(FormPanel.ENCODING_MULTIPART);
 		form.setMethod(FormPanel.METHOD_POST);
 		
+		Label space = new Label("");
+		space.getElement().getStyle().setMarginRight(20, Unit.PX);
+		container.add(space);
+		
 		collapseAll = new Button();
 		setCollapsed(true);
 		container.add(collapseAll);
 		
-		Label space = new Label("");
-		space.getElement().getStyle().setMarginRight(20, Unit.PX);
-		container.add(space);
+		Label space2 = new Label("");
+		space2.getElement().getStyle().setMarginRight(20, Unit.PX);
+		container.add(space2);
 		
 		exportAs = new DropdownButton(UIC.export_as());
 

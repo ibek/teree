@@ -20,6 +20,8 @@ add method with @PreDestroy annotation to MongoDB bean
  - nemit MongoDB jako @ApplicationScoped!!! - concurrent pripojeni by mohly delat problemy
 use Infinispan as a cache for users and maps
 replace openshift app to enable scalability https://openshift.redhat.com/community/developers/scaling
+nelze importovat prostorove DB jako JSON
+nastavit styl pro tisk
 
 ===============
 0.8:
@@ -28,7 +30,6 @@ replace openshift app to enable scalability https://openshift.redhat.com/communi
 PercentNodeWidget - zobrazi graficky 0-100%, pri editaci se vlozi cislo 0-100 do integerboxu
  - vytvorit dropdown button ktery bude obsahovat mene pouzivane typy uzlu jako tento a Math Expression
 
-umoznit tisk mapy
 umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
 
 vytvorit stranku Help - popsat aplikaci (napr. novy radek pomoci shift+enter ...)
