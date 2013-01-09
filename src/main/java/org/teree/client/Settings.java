@@ -31,7 +31,7 @@ public class Settings {
     public static final int SAMPLE_MAX_WIDTH = 300;
     public static final int SAMPLE_MAX_HEIGHT = 200;
 
-    public static final int SCENE_HEIGHT_LESS = 80;
+    public static final int SCENE_HEIGHT_LESS = 100;
     
 	public static final double ICON_WIDTH = 15.0;
 	

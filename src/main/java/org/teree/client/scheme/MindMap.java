@@ -20,236 +20,112 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 
 	private static final int MARGIN = 25;
 	private static final int CURVENESS = 20;
-
-	private int max_width;
-
-	/**
-	 * level of max_width for the case: parent1|child2 |child3 the longest
-	 * parent 2
-	 */
-	private int level;
-
-	private int left = 0;
-	private int top = 0;
-
-	private boolean makePicture;
+	private static final int ELLIPSE_OVERFLOW_WIDTH = 44;
+	
+	private static final int LEFT = 0;
+	private static final int RIGHT = 1;
 
 	@Override
 	protected int[] render(Canvas canvas, List<T> nodes, Node root,
 			boolean makePicture, boolean editable) {
-
-		this.makePicture = makePicture;
-
-		/**
-		 * left.get(col).get(row)
-		 */
-		List<List<Integer>> left = new ArrayList<List<Integer>>(); // left
-																	// bounds
-		left.add(new ArrayList<Integer>());
-		List<List<Integer>> right = new ArrayList<List<Integer>>(); // right
-																	// bounds
-		right.add(new ArrayList<Integer>());
-
-		int maxlw = 0; // max left width
-		int maxrw = 0; // max right width
-		List<Node> rootcn = root.getChildNodes();
-
-		int id = 1; // identifier for node widgets
-		int left_level = 0;
-		int right_level = 0;
-
-		// set bounds for left and right nodes
-		for (int i = 0; rootcn != null && i < rootcn.size(); ++i) {
-			Node n = rootcn.get(i);
-			T nc = nodes.get(id);
-
-			if (n.getLocation() == NodeLocation.LEFT
-					&& n.getChildNodes() != null) {
-				max_width = nc.getOffsetWidth(); // for this node n, it is set
-													// in setBounds method!!
-				level = 1;
-				int h = 0;
-				if (!nc.isCollapsed()) {
-					h = setBounds(nodes, n.getChildNodes(), left,
-							nc.getOffsetWidth(), level, id + 1); // don't worry,
-																	// the
-																	// current
-																	// node is
-																	// set in
-																	// setBounds
-				}
-				if (nc.getOffsetHeight() > h) {
-					h = nc.getOffsetHeight();
-				}
-				left.get(0).add(h);
-				id += n.getNumberOfChildNodes() + 1;
-				if (max_width > maxlw) {
-					maxlw = max_width;
-					left_level = level + 1;
-				}
-			} else if (n.getChildNodes() != null) {
-				max_width = nc.getOffsetWidth();
-				level = 1;
-				int h = 0;
-				if (!nc.isCollapsed()) {
-					h = setBounds(nodes, n.getChildNodes(), right,
-							nc.getOffsetWidth(), level, id + 1); // don't worry,
-																	// the
-																	// current
-																	// node is
-																	// set in
-																	// setBounds
-				}
-				if (nc.getOffsetHeight() > h) {
-					h = nc.getOffsetHeight();
-				}
-				right.get(0).add(h);
-				id += n.getNumberOfChildNodes() + 1;
-				if (max_width > maxrw) {
-					maxrw = max_width;
-					right_level = level + 1;
-				}
-			} else if (n.getLocation() == NodeLocation.LEFT) {
-				left.get(0).add(nc.getOffsetHeight());
-				id++;
-				if (maxlw < nc.getOffsetWidth()) {
-					maxlw = nc.getOffsetWidth();
-					left_level = 1;
-				}
-			} else {
-				right.get(0).add(nc.getOffsetHeight());
-				id++;
-				if (maxrw < nc.getOffsetWidth()) {
-					maxrw = nc.getOffsetWidth();
-					right_level = 1;
-				}
-			}
-		}
+		
+		List<List<Integer>>leftBounds = new ArrayList<List<Integer>>();
+		leftBounds.add(new ArrayList<Integer>());
+		List<List<Integer>> rightBounds = new ArrayList<List<Integer>>();
+		rightBounds.add(new ArrayList<Integer>());
+		Integer[] widths = new Integer[]{0,0};
+		setBoundsAndWidths(nodes, root, leftBounds, rightBounds, widths);
 
 		List<Node> lcn = new ArrayList<Node>(); // left child nodes
 		List<Node> rcn = new ArrayList<Node>(); // right child nodes
-		int lefth = 0; // left height
-		int righth = 0; // right height
-
-		// split child nodes to left and right
-		for (int i = 0; rootcn != null && i < rootcn.size(); ++i) {
-			Node n = rootcn.get(i);
-			if (n.getLocation() == NodeLocation.LEFT) {
-				lefth += left.get(0).get(lcn.size());
-				lcn.add(n);
-			} else {
-				righth += right.get(0).get(rcn.size());
-				rcn.add(n);
-			}
-		}
+		Integer[] heights = new Integer[]{0,0};
+		setChildNodesByLocationAndHeights(root, lcn, rcn, leftBounds, rightBounds, heights);
+		
+		int leftw = widths[LEFT]; // left width
+		int rightw = widths[RIGHT]; // right width
+		int lefth = heights[LEFT]; // left height
+		int righth = heights[RIGHT]; // right height
 
 		final T rw = nodes.get(0); // root widget
-
-		maxlw += left_level * MARGIN;
-		maxrw += right_level * MARGIN;
-		int max_x = maxlw + rw.getOffsetWidth() + maxrw;
-		int max_y = (lefth > righth) ? lefth : righth;
-		max_y += rw.getOffsetHeight() / 2;
-
-		// for case root is biggest
-		max_y = (max_y / 2 - rw.getOffsetHeight() > 0) ? max_y : rw
-				.getOffsetHeight() * 2;
+		int width = getWidth(rw, leftw, rightw);
+		int height = getHeight(rw, lefth, righth);
 
 		if (!makePicture) {
-			canvas.setCoordinateSpaceWidth(max_x);
-			canvas.setCoordinateSpaceHeight(max_y);
+			canvas.setCoordinateSpaceWidth(width);
+			canvas.setCoordinateSpaceHeight(height);
 		}
 		Context2d context = canvas.getContext2d();
+		initContext(context, width, height);
 
-		id = 0;
-
-		context.beginPath(); // of lines
-
-		// support content
-		context.setFillStyle("white");
-		context.fillRect(0, 0, max_x, max_y);
-
-		context.setLineWidth(2.0);
-		context.setStrokeStyle(CssColor.make(0, 0, 0));
-
-		int rx = 0, ry = 0;
+		int rootX = 0, rootY = 0;
+		int left = 0, top = 0; // position of centered canvas
 
 		if (!makePicture) {
 			AbsolutePanel panel = (AbsolutePanel) rw.getParent();
-			int pw = maxlw + maxrw + rw.getOffsetWidth()
-					+ Settings.NODE_MAX_WIDTH; // the NODE_MAX_WIDTH fixes bug
-												// that last node had minimal
-												// width because of
-												// panel.setWidth (there wasn't
-												// any place for new node)
-			if (pw >= Window.getClientWidth()) {
-				panel.setWidth(pw + "px"); // to enable scrolling with
+			/**
+			 * the NODE_MAX_WIDTH fixes bug that last node had minimal
+			 * width because of panel.setWidth (there wasn't any place 
+			 * for new node)
+			 */
+			int panelWidth = width + Settings.NODE_MAX_WIDTH; 
+			if (panelWidth >= Window.getClientWidth()) {
+				panel.setWidth(panelWidth + "px"); // to enable scrolling with
 											// horizontal scrollbar
 			} else {
 				panel.setWidth("auto");
 			}
 
-			this.left = canvas.getAbsoluteLeft()
+			left = canvas.getAbsoluteLeft()
 					- canvas.getParent().getAbsoluteLeft(); // getRelativeLeft
-			this.top = canvas.getAbsoluteTop()
+			top = canvas.getAbsoluteTop()
 					- canvas.getParent().getAbsoluteTop(); // getRelativeTop
 
-			rx = this.left + maxlw;
-			ry = this.top + max_y / 2 - rw.getOffsetHeight() / 2;
-			panel.setWidgetPosition(rw, rx, ry); // set root node into middle of
+			rootX = left + leftw;
+			rootY = top + height / 2 - rw.getOffsetHeight() / 2;
+			panel.setWidgetPosition(rw, rootX, rootY); // set root node into middle of
 													// scene
 			DOM.setStyleAttribute(rw.getElement(), "visibility", "visible");
 
 		}
-		id++;
-
-		// underline root
-		// drawLine(context, maxlw, max_y / 2, maxlw
-		// + rw.getOffsetWidth(), max_y / 2);
-		/**
-		 * drawCover(context, maxlw, max_y / 2, maxlw + rw.getOffsetWidth(),
-		 * max_y / 2, rw.getOffsetHeight());
-		 */
-
-		int lh = 0, rh = 0;
 
 		// start position for child nodes where root height is biggest
 		// and for child nodes where height is smaller
-		lh += (max_y - lefth) / 2;
-		rh += (max_y - righth) / 2;
+		int startLeftChildNodeY = (height - lefth) / 2;
+		int startRightChildNodeY = (height - righth) / 2;
 
 		// to get right identifier for left and right heights in specific level
-		List<Integer> status = new ArrayList<Integer>();
-		for (int i = 0; i < left.size(); ++i) {
-			status.add(0);
+		List<Integer> columns = new ArrayList<Integer>();
+		for (int i = 0; i < leftBounds.size(); ++i) {
+			columns.add(0);
 		}
 
-		id = generate(nodes, context, lcn, left, status, NodeLocation.LEFT,
-				maxlw, max_y / 2, 0, lh, id);
-		status.clear();
-		for (int i = 0; i < right.size(); ++i) {
-			status.add(0);
+		int id = 1;
+		GenerateData<T> data = new GenerateData<T>(nodes, leftBounds, columns, NodeLocation.LEFT, context, makePicture);
+		id = generate(data, lcn, leftw, height / 2, left, top, 0, startLeftChildNodeY, id);
+		
+		columns.clear();
+		for (int i = 0; i < rightBounds.size(); ++i) {
+			columns.add(0);
 		}
-		generate(nodes, context, rcn, right, status, NodeLocation.RIGHT, maxlw
-				+ rw.getOffsetWidth(), max_y / 2, 0, rh, id);
 
-		context.stroke(); // draw the lines
+		data = new GenerateData<T>(nodes, rightBounds, columns, NodeLocation.RIGHT, context, makePicture);
+		generate(data, rcn, leftw + rw.getOffsetWidth(), height / 2, left, top, 0, startRightChildNodeY, id);
 
-		// drawCircle(context, maxlw, max_y / 2, maxlw
-		// + rw.getOffsetWidth(), max_y / 2, rw.getOffsetHeight());
-		int h = rw.getOffsetHeight()*2;
-		drawEllipse(context, maxlw - 22, max_y / 2 - h / 2,
-				rw.getOffsetWidth() + 44, h);
+		context.stroke(); // draw the arrows
+
+		int ellipseHeight = rw.getOffsetHeight()*2;
+		drawEllipse(context, leftw - ELLIPSE_OVERFLOW_WIDTH/2, height / 2 - ellipseHeight / 2,
+				rw.getOffsetWidth() + ELLIPSE_OVERFLOW_WIDTH, ellipseHeight); // ellipse for the root node
 		
 		if (makePicture) {
 
-			rx = maxlw;
-			ry = max_y / 2 + rw.getOffsetHeight() / 2 - 5;
-			rw.draw(context, rx, ry);
+			rootX = leftw;
+			rootY = height / 2 + rw.getOffsetHeight() / 2 - 5;
+			rw.draw(context, rootX, rootY);
 
 		}
 
-		return new int[] { rx, ry, max_x, max_y };
+		return new int[] { rootX, rootY, width, height };
 
 	}
 
@@ -270,6 +146,177 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		}
 		return (left < right) ? NodeLocation.LEFT : NodeLocation.RIGHT;
 	}
+	
+	/**
+	 * Sets left and right bounds and width of left and right part of tree
+	 * @param nodes
+	 * @param root
+	 * @param leftBounds leftBounds.get(col).get(row)
+	 * @param rightBounds
+	 * @param widths [0]-leftw, [1]-rightw
+	 */
+	private void setBoundsAndWidths(List<T> nodes, Node root, List<List<Integer>> leftBounds, 
+			List<List<Integer>> rightBounds, Integer[] widths) {
+
+		List<Node> rootcn = root.getChildNodes();
+
+		int id = 1; // identifier for node widgets
+		int leftLevel = 0;
+		int rightLevel = 0;
+		
+		// set bounds for left and right nodes
+		for (int i = 0; rootcn != null && i < rootcn.size(); ++i) {
+			Node n = rootcn.get(i);
+			T nc = nodes.get(id);
+
+			if (n.getLocation() == NodeLocation.LEFT && n.getChildNodes() != null) {
+				
+				BoundsData<T> data = new BoundsData<T>(nodes, leftBounds, nc.getOffsetWidth());
+				
+				int h = 0;
+				if (!nc.isCollapsed()) {
+					// don't worry, the current node is set in setBounds
+					h = setBounds(data, n.getChildNodes(), nc.getOffsetWidth(), data.getMaxWidthLevel(), id + 1);
+				}
+				if (nc.getOffsetHeight() > h) {
+					h = nc.getOffsetHeight();
+				}
+				leftBounds.get(0).add(h);
+				id += n.getNumberOfChildNodes() + 1;
+				if (data.getMaxWidth() > widths[LEFT]) {
+					widths[LEFT] = data.getMaxWidth();
+					leftLevel = data.getMaxWidthLevel() + 1;
+				}
+			} else if (n.getChildNodes() != null) { // right
+				
+				BoundsData<T> data = new BoundsData<T>(nodes, rightBounds, nc.getOffsetWidth());
+				
+				int h = 0;
+				if (!nc.isCollapsed()) {
+					// don't worry, the current node is set in setBounds
+					h = setBounds(data, n.getChildNodes(), nc.getOffsetWidth(), data.getMaxWidthLevel(), id + 1);
+				}
+				if (nc.getOffsetHeight() > h) {
+					h = nc.getOffsetHeight();
+				}
+				rightBounds.get(0).add(h);
+				id += n.getNumberOfChildNodes() + 1;
+				if (data.getMaxWidth() > widths[RIGHT]) {
+					widths[RIGHT] = data.getMaxWidth();
+					rightLevel = data.getMaxWidthLevel() + 1;
+				}
+				
+			} else if (n.getLocation() == NodeLocation.LEFT) {
+				
+				leftBounds.get(0).add(nc.getOffsetHeight());
+				id++;
+				if (widths[LEFT] < nc.getOffsetWidth()) {
+					widths[LEFT] = nc.getOffsetWidth();
+					leftLevel = 1;
+				}
+				
+			} else {
+				
+				rightBounds.get(0).add(nc.getOffsetHeight());
+				id++;
+				if (widths[RIGHT] < nc.getOffsetWidth()) {
+					widths[RIGHT] = nc.getOffsetWidth();
+					rightLevel = 1;
+				}
+				
+			}
+		}
+		
+		widths[LEFT] = widths[LEFT] + leftLevel * MARGIN;
+		widths[RIGHT] = widths[RIGHT] + rightLevel * MARGIN;
+	}
+
+	/**
+	 * Set required place for nodes in BoundsData.
+	 * 
+	 * @param data
+	 * @param childNodes
+	 * @param current_width
+	 * @param level
+	 * @param id
+	 * @return height of child nodes (cn)
+	 */
+	private int setBounds(BoundsData<T> data, List<Node> childNodes, int current_width, int level, int id) {
+		int bounds = 0;
+		while (data.getBounds().size() <= level) {
+			data.getBounds().add(new ArrayList<Integer>());
+		}
+		for (int i = 0; i < childNodes.size(); ++i) {
+			Node n = childNodes.get(i);
+			T nw = data.getNodes().get(id);
+
+			List<Node> fcn = n.getChildNodes();
+			if (fcn != null && !fcn.isEmpty()) {
+				// recursively get height
+				int h = 0;
+				if (!nw.isCollapsed()) {
+					h = setBounds(data, fcn, current_width + nw.getOffsetWidth(), level + 1, id + 1);
+				}
+				h = (nw.getOffsetHeight() > h) ? nw.getOffsetHeight() : h;
+				bounds += h;
+				id += n.getNumberOfChildNodes() + 1;
+				data.getBounds().get(level).add(h); // add max height of the node
+												// and its child nodes
+			} else { // leaf
+				bounds += nw.getOffsetHeight();
+				id++;
+				// add height of the node which is leaf
+				data.getBounds().get(level).add(nw.getOffsetHeight());
+			}
+
+			// !!! this part set maximal width
+			if (data.getMaxWidth() < current_width + nw.getOffsetWidth()) {
+				data.setMaxWidth(current_width + nw.getOffsetWidth());
+				data.setMaxWidthLevel(level);
+			}
+		}
+		return bounds;
+	}
+	
+	private void setChildNodesByLocationAndHeights(Node root, List<Node> left, List<Node> right, List<List<Integer>> leftBounds, List<List<Integer>> rightBounds, Integer[] heights) {
+		List<Node> rootcn = root.getChildNodes();
+		// split child nodes to left and right
+		for (int i = 0; rootcn != null && i < rootcn.size(); ++i) {
+			Node n = rootcn.get(i);
+			if (n.getLocation() == NodeLocation.LEFT) {
+				heights[LEFT] = heights[LEFT] + leftBounds.get(0).get(left.size());
+				left.add(n);
+			} else {
+				heights[RIGHT] = heights[RIGHT] + rightBounds.get(0).get(right.size());
+				right.add(n);
+			}
+		}
+	}
+	
+	private void initContext(Context2d context, int width, int height) {
+		context.beginPath(); // of lines
+
+		// support content
+		context.setFillStyle("white");
+		context.fillRect(0, 0, width, height);
+
+		context.setLineWidth(2.0);
+		context.setStrokeStyle(CssColor.make(0, 0, 0));
+	}
+	
+	private int getWidth(T rw, int leftw, int rightw) {
+		return leftw + rw.getOffsetWidth() + rightw;
+	}
+	
+	private int getHeight(T rw, int lefth, int righth) {
+		int max_y = (lefth > righth) ? lefth : righth;
+		max_y += rw.getOffsetHeight() / 2;
+
+		// for case root is biggest
+		max_y = (max_y / 2 - rw.getOffsetHeight() > 0) ? max_y : rw
+				.getOffsetHeight() * 2;
+		return max_y;
+	}
 
 	/**
 	 * Generate part of mind map.
@@ -281,70 +328,65 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 	 * @param level_bounds
 	 * @param loc
 	 *            node location
-	 * @param start_x
+	 * @param startX
 	 *            the point where arrow begins
-	 * @param start_y
+	 * @param startY
 	 *            the point where arrow begins
+	 * @param left
+	 * @param top
 	 * @param level
 	 *            depth
-	 * @param start_cn
+	 * @param startChildNodeY
 	 *            the point where child nodes begins (Y)
 	 */
-	private int generate(List<T> nodes, Context2d context, List<Node> cn,
-			List<List<Integer>> level_bounds, List<Integer> status,
-			NodeLocation loc, int start_x, int start_y, int level,
-			int start_cn, int id) {
+	private int generate(GenerateData<T> data, List<Node> childNodes, int startX, int startY, int left, int top, int level,
+			int startChildNodeY, int id) {
 
-		int py = start_cn;
+		int py = startChildNodeY;
 		int lvl = 0;
 
-		int margin = (loc == NodeLocation.LEFT) ? -MARGIN : MARGIN;
-		int curveness = (loc == NodeLocation.LEFT) ? -CURVENESS : CURVENESS;
+		int margin = (data.getLocation() == NodeLocation.LEFT) ? -MARGIN : MARGIN;
+		int curveness = (data.getLocation() == NodeLocation.LEFT) ? -CURVENESS : CURVENESS;
 
-		for (int i = 0; i < cn.size(); ++i) {
-			Node n = cn.get(i);
-			T nw = nodes.get(id);
+		for (int i = 0; i < childNodes.size(); ++i) {
+			Node n = childNodes.get(i);
+			T nw = data.getNodes().get(id);
 
 			AbsolutePanel panel = (AbsolutePanel) nw.getParent();
 
-			int x = (loc == NodeLocation.LEFT) ? start_x - nw.getOffsetWidth()
-					: start_x;
+			int x = (data.getLocation() == NodeLocation.LEFT) ? startX - nw.getOffsetWidth()
+					: startX;
 			x += margin;
-			lvl = ((level_bounds.size() > level) ? level_bounds.get(level).get(
-					status.get(level)) / 2 : 0);
+			lvl = ((data.getLevelBounds().size() > level) ? data.getLevelBounds().get(level).get(
+					data.getColumns().get(level)) / 2 : 0);
 			int y = lvl + py;
 
-			if (makePicture) {
-				nw.draw(context, x, y + nw.getOffsetHeight() / 2 - 5);
+			if (data.isMakePicture()) {
+				nw.draw(data.getContext(), x, y + nw.getOffsetHeight() / 2 - 5);
 			} else {
-				panel.setWidgetPosition(nw, this.left + x,
-						this.top + y - nw.getOffsetHeight() / 2);
+				panel.setWidgetPosition(nw, left + x,
+						top + y - nw.getOffsetHeight() / 2);
 				DOM.setStyleAttribute(nw.getElement(), "visibility", "visible");
 			}
-			status.set(level, status.get(level) + 1);
+			data.getColumns().set(level, data.getColumns().get(level) + 1);
 			id++;
 			// underline node
-			drawLine(context, x, y + nw.getOffsetHeight() / 2,
+			drawLine(data.getContext(), x, y + nw.getOffsetHeight() / 2,
 					x + nw.getOffsetWidth(), y + nw.getOffsetHeight() / 2);
 			// draw arrow
-			drawCurve(context, start_x, start_y, x
-					+ ((loc == NodeLocation.LEFT) ? nw.getOffsetWidth() : 0), y
+			drawCurve(data.getContext(), startX, startY, x
+					+ ((data.getLocation() == NodeLocation.LEFT) ? nw.getOffsetWidth() : 0), y
 					+ nw.getOffsetHeight() / 2, curveness);
-			// drawLine(context, start_x, start_y, x+((loc
-			// ==NodeLocation.LEFT)?n.getContent().getWidth():0),
-			// y+n.getContent().getHeight()/2);
 
 			if (!nw.isCollapsed() && n.getChildNodes() != null
 					&& n.getChildNodes().size() > 0) {
 				// generate child nodes
-				x = (loc == NodeLocation.RIGHT) ? start_x + nw.getOffsetWidth()
+				x = (data.getLocation() == NodeLocation.RIGHT) ? startX + nw.getOffsetWidth()
 						: x;
-				id = generate(nodes, context, n.getChildNodes(), level_bounds,
-						status, loc, x
-								+ ((loc == NodeLocation.LEFT) ? 0 : margin), y
-								+ nw.getOffsetHeight() / 2, level + 1, py, id);
+				id = generate(data, n.getChildNodes(), x + ((data.getLocation() == NodeLocation.LEFT) ? 0 : margin), 
+								y + nw.getOffsetHeight() / 2, left, top, level + 1, py, id);
 			} else if (nw.isCollapsed()) {
-				hideChildNodes(nw, nodes);
+				hideChildNodes(nw, data.getNodes());
 				id += n.getNumberOfChildNodes();
 			}
 			py += lvl * 2; // for next row, increase py
@@ -361,67 +403,6 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 			DOM.setStyleAttribute(nodes.get(id + i + 1).getElement(),
 					"visibility", "hidden");
 		}
-	}
-
-	/**
-	 * Set required place for nodes in level_bounds.
-	 * 
-	 * @param cn
-	 *            child nodes
-	 * @param level_bounds
-	 * @param current_width
-	 * @param level
-	 * @return height of child nodes (cn)
-	 */
-	private int setBounds(List<T> nodes, List<Node> cn,
-			List<List<Integer>> level_bounds, int current_width, int level,
-			int id) {
-		int bounds = 0;
-		while (level_bounds.size() <= level) {
-			level_bounds.add(new ArrayList<Integer>());
-		}
-		for (int i = 0; i < cn.size(); ++i) {
-			Node n = cn.get(i);
-			T nw = nodes.get(id);
-
-			List<Node> fcn = n.getChildNodes();
-			if (fcn != null && !fcn.isEmpty()) {
-				// recursively get height
-				int h = 0;
-				if (!nw.isCollapsed()) {
-					h = setBounds(nodes, fcn, level_bounds,
-							current_width + nw.getOffsetWidth(), level + 1,
-							id + 1);
-				}
-				h = (nw.getOffsetHeight() > h) ? nw.getOffsetHeight() : h;
-				bounds += h;
-				id += n.getNumberOfChildNodes() + 1;
-				level_bounds.get(level).add(h); // add max height of the node
-												// and its child nodes
-			} else { // leaf
-				bounds += nw.getOffsetHeight();
-				id++;
-				// add height of the node which is leaf
-				level_bounds.get(level).add(nw.getOffsetHeight());
-			}
-
-			// !!! this part set maximal width
-			if (max_width < current_width + nw.getOffsetWidth()) {
-				max_width = current_width + nw.getOffsetWidth();
-				this.level = level;
-			}
-		}
-		return bounds;
-	}
-
-	private void drawCover(Context2d context, int x1, int y1, int x2, int y2,
-			int height) {
-		/**
-		 * context.moveTo(x1 - 2, y1); context.lineTo(x1 + 3, y1 - height/2);
-		 * context.lineTo(x2 - 3, y1 - height/2); context.lineTo(x2 + 2, y2);
-		 * context.lineTo(x2 - 3, y1 + height/2); context.lineTo(x1 + 3, y1 +
-		 * height/2); context.lineTo(x1 - 2, y1);
-		 */
 	}
 
 	private void drawEllipse(Context2d ctx, int x, int y, int w, int h) {
@@ -446,24 +427,6 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		ctx.setStrokeStyle(CssColor.make(0, 0, 0));
 		ctx.fill();
 		ctx.stroke();
-	}
-
-	private void drawCircle(Context2d context, int x1, int y1, int x2, int y2,
-			int rad) {
-		int radius = (x2 - x1 > rad) ? x2 - x1 : rad;
-		radius += 5;
-		context.beginPath();
-		context.moveTo(x1 - 2, y1);
-		context.arc(x1 + (x2 - x1) / 2 - radius, y1 + (y2 - y1) / 2,
-				(x2 - x1) / 2, 0, 2 * Math.PI);
-		context.closePath();
-		context.stroke();
-		context.beginPath();
-		context.moveTo(x1 - 2, y1);
-		context.arc(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2, (x2 - x1) / 2, 0,
-				2 * Math.PI);
-		context.closePath();
-		context.fill();
 	}
 
 	private void drawCurve(Context2d context, int x1, int y1, int x2, int y2,

@@ -11,6 +11,10 @@ vyhledavani - pouze v root
 
 uzivatelsky privetive statusy a chybove hlasky
 
+vytvorit stranku Help - popsat aplikaci (napr. novy radek pomoci shift+enter ...)
+
+use Infinispan as a cache for users and maps
+
 opravit viewer pri uncollapse all, collapse all, uncollapse all ... v pripade ze je mapa dost velka (prostorove db) tak se nastavi sirka textu na MIN_WIDTH
 opravit kopirovani uzlu - provadi se i kdyz nema ... mam ruzne textfieldy kde se da klasicky kopirovat
 urcit vysku a sirku tlacitek v panelu ikon
@@ -18,10 +22,8 @@ opet nefunguje pokud dam max_width content a pak ho zmensim tak se to neupravi n
 add method with @PreDestroy annotation to MongoDB bean
  - vytvorit metody pro vytvoreni a zruseni pripojeni s databazi v MongoDB, protoze se nevola close pri redeploy
  - nemit MongoDB jako @ApplicationScoped!!! - concurrent pripojeni by mohly delat problemy
-use Infinispan as a cache for users and maps
 replace openshift app to enable scalability https://openshift.redhat.com/community/developers/scaling
 nelze importovat prostorove DB jako JSON
-nastavit styl pro tisk
 
 ===============
 0.8:
@@ -32,10 +34,10 @@ PercentNodeWidget - zobrazi graficky 0-100%, pri editaci se vlozi cislo 0-100 do
 
 umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
 
-vytvorit stranku Help - popsat aplikaci (napr. novy radek pomoci shift+enter ...)
-
 upravit explore aby zobrazoval jak posledne vlozene mapy tak i nejvice otevrene za tyden apod.
 pridat hodnoceni a pocet shlednuti mapy
+
+nastavit styl pro tisk
 
 ulozeni ruznych pohledu na mapu
  - nektere casti nejsou pro dany pohled dulezite a nebudou zobrazeny
