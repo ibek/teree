@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.presenter.SchemeEditor;
+import org.teree.client.scheme.SchemeType;
 import org.teree.client.view.editor.EditPanel;
 import org.teree.client.view.editor.NodeWidget;
 import org.teree.client.view.editor.Scene;
@@ -120,6 +121,22 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
 			@Override
 			public void select(IconType icon) {
 				scene.setSelectedIcon(icon);
+			}
+		});
+    	
+    	edit.getMindMapButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scene.setSchemeType(SchemeType.MindMap);
+				scene.update(null);
+			}
+		});
+    	
+    	edit.getHierarchicalHorizontalButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scene.setSchemeType(SchemeType.HierarchicalHorizontal);
+				scene.update(null);
 			}
 		});
     	

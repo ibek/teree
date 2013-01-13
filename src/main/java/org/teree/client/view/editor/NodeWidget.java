@@ -6,6 +6,8 @@ import org.teree.client.view.resource.NodeCssStyle;
 import org.teree.shared.data.scheme.Node;
 import org.teree.shared.data.scheme.NodeStyle;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.DragEnterEvent;
 import com.google.gwt.event.dom.client.DragEnterHandler;
 import com.google.gwt.event.dom.client.DragLeaveEvent;
@@ -51,13 +53,19 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 	public abstract void changeStyle(NodeStyle style);
     
     public NodeWidget select() {
-    	container.getElement().getStyle().setBackgroundColor("#7FAF47");
+    	//container.getElement().getStyle().setBackgroundColor("#7FAF47");
+    	container.getElement().getStyle().setBorderStyle(BorderStyle.DASHED);
+    	container.getElement().getStyle().setBorderWidth(2.0, Unit.PX);
+    	container.getElement().getStyle().setBorderColor("#08C");
+    	container.getElement().getStyle().setProperty("borderBottom", "none");
+    	container.getElement().getStyle().setProperty("borderTop", "none");
         selected = true;
         return this;
     }
     
     public NodeWidget unselect() {
     	container.getElement().getStyle().setBackgroundColor(null);
+    	container.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
         selected = false;
         return null;
     }

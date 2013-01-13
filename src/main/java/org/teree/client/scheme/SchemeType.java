@@ -2,6 +2,8 @@ package org.teree.client.scheme;
 
 public enum SchemeType {
 
-	MindMap
+	MindMap,
+	HierarchicalHorizontal,
+	HierarchicalVertical;
 	
 }

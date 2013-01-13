@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.teree.client.Settings;
+import org.teree.client.scheme.HierarchicalHotizontal;
 import org.teree.client.scheme.MindMap;
 import org.teree.client.scheme.SchemeType;
 import org.teree.client.scheme.Renderer;
@@ -52,7 +53,8 @@ public class Scene extends Composite {
     	
     	widgets = new ArrayList<NodeWidget>();
     	
-        setSchemeType(Settings.DEFAULT_SCHEME_TYPE);
+        //setSchemeType(Settings.DEFAULT_SCHEME_TYPE);
+    	setSchemeType(SchemeType.HierarchicalHorizontal);
         
         container = new AbsolutePanel();
         Style style = container.getElement().getStyle();
@@ -132,6 +134,11 @@ public class Scene extends Composite {
     	switch(type) {
 	    	case MindMap: {
 	    		renderer = new MindMap<NodeWidget>();
+	    		break;
+	    	}
+	    	case HierarchicalHorizontal: {
+	    		renderer = new HierarchicalHotizontal<NodeWidget>();
+	    		break;
 	    	}
     	}
     }
@@ -248,7 +255,7 @@ public class Scene extends Composite {
     }
     
     private void changeCollapseNode(TextNodeWidget nw) {
-    	if (nw.getNode().getChildNodes() != null && !nw.getNode().getChildNodes().isEmpty()) { // has child nodes
+    	if (nw.getNode().getChildNodes() != null && !nw.getNode().getChildNodes().isEmpty() && nw.getNode().getParent() != null) { // has child nodes
 	    	nw.setCollapsed(!nw.isCollapsed());
 	    	if (!nw.isCollapsed()) {
 	    		nw.update();

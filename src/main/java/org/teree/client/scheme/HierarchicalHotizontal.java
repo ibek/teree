@@ -16,7 +16,14 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
+/**
+ * 
+ * A scheme displayed from left side of scene.
+ * 
+ * @author ibek
+ *
+ */
+public class HierarchicalHotizontal<T extends Widget & NodeInterface> extends Renderer<T> {
 
 	@Override
 	protected int[] render(Canvas canvas, List<T> nodes, Node root,
@@ -73,7 +80,7 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 			top = canvas.getAbsoluteTop()
 					- canvas.getParent().getAbsoluteTop(); // getRelativeTop
 
-			rootX = left + leftw;
+			rootX = left + MARGIN;
 			rootY = top + height / 2 - rw.getOffsetHeight() / 2;
 			panel.setWidgetPosition(rw, rootX, rootY); // set root node into middle of
 													// scene
@@ -83,8 +90,8 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 
 		// start position for child nodes where root height is biggest
 		// and for child nodes where height is smaller
-		int startLeftChildNodeY = (height - lefth) / 2;
-		int startRightChildNodeY = (height - righth) / 2;
+		int startLeftChildNodeY = (height - lefth - righth) / 2;
+		int startRightChildNodeY = startLeftChildNodeY + lefth;
 
 		// to get right identifier for left and right heights in specific level
 		List<Integer> columns = new ArrayList<Integer>();
@@ -93,8 +100,8 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		}
 
 		int id = 1;
-		GenerateData<T> data = new GenerateData<T>(nodes, leftBounds, columns, NodeLocation.LEFT, context, makePicture);
-		id = generate(data, lcn, leftw, height / 2, left, top, 0, startLeftChildNodeY, id);
+		GenerateData<T> data = new GenerateData<T>(nodes, leftBounds, columns, NodeLocation.RIGHT, context, makePicture);
+		id = generate(data, lcn, rw.getOffsetWidth() + MARGIN + 5, height / 2, left, top, 0, startLeftChildNodeY, id);
 		
 		columns.clear();
 		for (int i = 0; i < rightBounds.size(); ++i) {
@@ -102,13 +109,13 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		}
 
 		data = new GenerateData<T>(nodes, rightBounds, columns, NodeLocation.RIGHT, context, makePicture);
-		generate(data, rcn, leftw + rw.getOffsetWidth(), height / 2, left, top, 0, startRightChildNodeY, id);
+		generate(data, rcn, rw.getOffsetWidth() + MARGIN + 5, height / 2, left, top, 0, startRightChildNodeY, id);
 
 		context.stroke(); // draw the arrows
 
 		int ellipseHeight = rw.getOffsetHeight()*2;
-		drawEllipse(context, leftw - ELLIPSE_OVERFLOW_WIDTH/2, height / 2 - ellipseHeight / 2,
-				rw.getOffsetWidth() + ELLIPSE_OVERFLOW_WIDTH, ellipseHeight); // ellipse for the root node
+		drawEllipse(context, 0, height / 2 - ellipseHeight / 2,
+				rw.getOffsetWidth() + 2*MARGIN, ellipseHeight); // ellipse for the root node
 		
 		if (makePicture) {
 
@@ -121,38 +128,17 @@ public class MindMap<T extends Widget & NodeInterface> extends Renderer<T> {
 		return new int[] { rootX, rootY, width, height };
 
 	}
-
-	@Override
-	public NodeLocation getRootChildNodeLocation(Node root) {
-		int left = 0, right = 0;
-		List<Node> cn = root.getChildNodes();
-		if (cn == null || cn.isEmpty()) {
-			return NodeLocation.RIGHT;
-		}
-		for (int i = 0; i < cn.size(); ++i) {
-			Node n = cn.get(i);
-			if (n.getLocation() == NodeLocation.LEFT) {
-				left++;
-			} else if (n.getLocation() == NodeLocation.RIGHT) {
-				right++;
-			}
-		}
-		return (left < right) ? NodeLocation.LEFT : NodeLocation.RIGHT;
-	}
 	
-	@Override
 	protected int getWidth(T rw, int leftw, int rightw) {
-		return leftw + rw.getOffsetWidth() + rightw;
+		int w = (leftw > rightw)?leftw:rightw;
+		return rw.getOffsetWidth() + w + MARGIN + 5;
 	}
 	
-	@Override
 	protected int getHeight(T rw, int lefth, int righth) {
-		int max_y = (lefth > righth) ? lefth : righth;
-		max_y += rw.getOffsetHeight() / 2;
+		int max_y = lefth + righth;
 
 		// for case root is biggest
-		max_y = (max_y / 2 - rw.getOffsetHeight() > 0) ? max_y : rw
-				.getOffsetHeight() * 2;
+		max_y = (max_y > rw.getOffsetHeight()*2) ? max_y : rw.getOffsetHeight()*2;
 		return max_y;
 	}
 

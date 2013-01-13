@@ -84,15 +84,15 @@ public class SchemeEditor implements Presenter {
 				}
 				else if (key == 67 && e.getCtrlKey())
 				{
-                	display.copy();
+                	//display.copy(); // TODO: create buttons for copy, cut and paste
                 }
 				else if (key == 88 && e.getCtrlKey())
 				{
-                	display.cut();
+                	//display.cut();
                 }
 				else if (key == 86 && e.getCtrlKey())
 				{
-                	display.paste();
+                	//display.paste();
                 }
 				else if (key == 66 && e.getCtrlKey())
 				{

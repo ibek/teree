@@ -172,10 +172,6 @@ public class TextNodeWidget extends NodeWidget {
     	container.setWidth("auto");
 
     	update();
-    	
-    	if(getOffsetWidth() >= Settings.NODE_MAX_WIDTH){
-            content.setWidth(Settings.NODE_MAX_WIDTH+"px");
-        }
         
         if (editContent != null) {
             container.remove(editContent);

@@ -8,11 +8,14 @@ import org.teree.client.view.resource.IconTypeContent;
 import org.teree.client.view.resource.icon.CustomIconType;
 
 import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.Dropdown;
 import com.github.gwtbootstrap.client.ui.DropdownButton;
+import com.github.gwtbootstrap.client.ui.ListBox;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.SplitDropdownButton;
 import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -26,6 +29,9 @@ public class EditPanel extends Composite {
 
 	private HorizontalPanel container;
 	private Button save;
+	private DropdownButton type;
+	private NavLink mindmap;
+	private NavLink hierarchicalHorizontal;
 	private Button refresh;
 	private Button createText;
 	private Button createImg;
@@ -54,6 +60,28 @@ public class EditPanel extends Composite {
 		Label space2 = new Label("");
 		space2.getElement().getStyle().setMarginRight(20, Unit.PX);
 		
+		type = new DropdownButton(" ");
+		type.getElement().getStyle().setDisplay(Display.INLINE);
+		type.setBaseIcon(CustomIconType.mindmap);
+		mindmap = new NavLink("MindMap");
+		mindmap.setBaseIcon(CustomIconType.mindmap);
+		mindmap.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				type.setBaseIcon(CustomIconType.mindmap);
+			}
+		});
+		type.add(mindmap);
+		hierarchicalHorizontal = new NavLink("Hierarchical Horizontal");
+		hierarchicalHorizontal.setBaseIcon(CustomIconType.hierarchicalhorizontal);
+		hierarchicalHorizontal.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				type.setBaseIcon(CustomIconType.hierarchicalhorizontal);
+			}
+		});
+		type.add(hierarchicalHorizontal);
+		
 		createText = new Button("", IconType.PLUS);
 		createImg = new Button("", IconType.PICTURE);
 		createLink = new Button("", IconType.LINK);
@@ -80,9 +108,12 @@ public class EditPanel extends Composite {
 		container.add(save);
 		container.add(space);
 		
+		container.add(type);
+		
 		Tooltip tre = new Tooltip(UIConstants.LANG.refresh_scheme());
 		tre.add(refresh);
 		container.add(tre);
+		
 		container.add(space2);
 		
 		Tooltip tct = new Tooltip(UIMessages.LANG.create_text());
@@ -121,6 +152,8 @@ public class EditPanel extends Composite {
 		
 		initWidget(container);
 		
+		type.setHeight(save.getOffsetHeight()+"px");
+		
 	}
 	
 	private void loadIcons() {
@@ -133,7 +166,8 @@ public class EditPanel extends Composite {
 				break;
 			}
 			final IconType ic = icons[i];
-			Button ib = new Button("", ic);
+			NavLink ib = new NavLink();
+			ib.setIcon(ic);
 			ib.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
@@ -159,6 +193,14 @@ public class EditPanel extends Composite {
 	
 	public HasClickHandlers getSaveButton() {
 		return save;
+	}
+	
+	public HasClickHandlers getMindMapButton() {
+		return mindmap;
+	}
+	
+	public HasClickHandlers getHierarchicalHorizontalButton() {
+		return hierarchicalHorizontal;
 	}
 	
 	public HasClickHandlers getRefreshButton() {

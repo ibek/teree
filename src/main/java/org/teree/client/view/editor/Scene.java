@@ -8,6 +8,7 @@ import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.teree.client.CurrentPresenter;
 import org.teree.client.Settings;
 import org.teree.client.presenter.SchemeEditor;
+import org.teree.client.scheme.HierarchicalHotizontal;
 import org.teree.client.scheme.MindMap;
 import org.teree.client.scheme.SchemeType;
 import org.teree.client.scheme.Renderer;
@@ -68,7 +69,7 @@ public class Scene extends Composite {
     private Node copied;
     
     public Scene() {
-        
+
         setSchemeType(Settings.DEFAULT_SCHEME_TYPE);
         
         container = new AbsolutePanel();
@@ -128,12 +129,18 @@ public class Scene extends Composite {
     	switch(type) {
 	    	case MindMap: {
 	    		renderer = new MindMap<NodeWidget>();
+	    		break;
+	    	}
+	    	case HierarchicalHorizontal: {
+	    		renderer = new HierarchicalHotizontal<NodeWidget>();
+	    		break;
 	    	}
     	}
     }
     
     public void setScheme(Scheme scheme) {
     	this.scheme = scheme;
+    	
     	Node root = scheme.getRoot();
     	container.clear();
         container.add(canvas);

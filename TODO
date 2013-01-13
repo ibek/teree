@@ -3,9 +3,6 @@
 0.7:
 ===============
 
-direct explore - novy typ generovani mapy, velmi podobne mind mape ... generovani pouze vsech uzlu vpravo a root bude uplne vlevo
- - provest refaktorizaci MindMapy, aby se casti mohli pouzit i v tomto typu generovani
-
 vyhledavani - pouze v root
  - vlozit na hlavni stranku vyhledavani - takovy portal, vysledek bude, ze se bud premisti na prvni nalezenou mapu, nebo se oznami ze nebyla nalezena
 
@@ -16,9 +13,6 @@ vytvorit stranku Help - popsat aplikaci (napr. novy radek pomoci shift+enter ...
 use Infinispan as a cache for users and maps
 
 opravit viewer pri uncollapse all, collapse all, uncollapse all ... v pripade ze je mapa dost velka (prostorove db) tak se nastavi sirka textu na MIN_WIDTH
-opravit kopirovani uzlu - provadi se i kdyz nema ... mam ruzne textfieldy kde se da klasicky kopirovat
-urcit vysku a sirku tlacitek v panelu ikon
-opet nefunguje pokud dam max_width content a pak ho zmensim tak se to neupravi na auto
 add method with @PreDestroy annotation to MongoDB bean
  - vytvorit metody pro vytvoreni a zruseni pripojeni s databazi v MongoDB, protoze se nevola close pri redeploy
  - nemit MongoDB jako @ApplicationScoped!!! - concurrent pripojeni by mohly delat problemy
@@ -71,3 +65,5 @@ DBAuth pres SSL
 management console/app - napr pro upravu balicku, zmena limitu apod
 sepsat use cases (pro studovani ...)
 smysluplne testovani
+podpora tabletu a mobilu - pouzit android emulator pro testovani
+presun inline stylu ve tridach do css

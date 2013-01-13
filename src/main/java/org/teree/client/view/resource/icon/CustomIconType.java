@@ -5,7 +5,9 @@ import com.google.gwt.core.client.GWT;
 
 public enum CustomIconType implements BaseIconType {
 
-    connector;
+    connector,
+    mindmap,
+    hierarchicalhorizontal;
 
     static {
         CustomIcons icons = GWT.create(CustomIcons.class);
