@@ -4,6 +4,8 @@ import org.teree.client.CurrentPresenter;
 import org.teree.client.CurrentUser;
 import org.teree.client.presenter.Presenter;
 import org.teree.client.presenter.Template;
+import org.teree.client.view.resource.PageStyle;
+
 import com.github.gwtbootstrap.client.ui.Alert;
 import com.github.gwtbootstrap.client.ui.constants.AlertType;
 import com.google.gwt.uibinder.client.UiField;
@@ -18,18 +20,23 @@ public abstract class TemplateScene extends Composite implements Template {
     
     @UiField
     Alert status;
+    
+	static {
+		PageStyle.INSTANCE.css().ensureInjected();
+	}
 	
 	public TemplateScene() {
 		header = new Header();
-		Presenter cp = CurrentPresenter.getInstance().getPresenter();
-		if (cp != null) {
-			Window.setTitle("teree - " + cp.getTitle());
-		}
 	}
 
 	@Override
 	public void setCurrentUser(CurrentUser user) {
 		header.setCurrentUser(user);
+		
+		Presenter cp = CurrentPresenter.getInstance().getPresenter();
+		if (cp != null) {
+			Window.setTitle("teree - " + cp.getTitle());
+		}
 	}
 
 	@Override

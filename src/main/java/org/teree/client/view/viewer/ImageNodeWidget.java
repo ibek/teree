@@ -45,6 +45,7 @@ public class ImageNodeWidget extends NodeWidget {
 
 	private void init() {
 		content = new Image();
+        content.setStylePrimaryName(resources.css().node());
 		content.getElement().getStyle().setPadding(5.0, Unit.PX);
 
 		content.addErrorHandler(new ErrorHandler() {

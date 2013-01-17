@@ -1,0 +1,124 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:view="urn:import:org.teree.client.view"
+	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui" xmlns:base="urn:import:com.github.gwtbootstrap.client.ui.base">
+
+	<ui:with field='res' type="org.teree.client.view.resource.PageStyle" />
+	<ui:with field="uic" type="org.teree.client.text.UIConstants" />
+	<ui:with field="cres" type="org.teree.client.view.resource.CommonResources" />
+
+	<ui:style>
+
+		.scene {
+			margin: 20px;
+		}
+
+	</ui:style>
+
+	<g:FlowPanel ui:field="panel">
+		<view:Header ui:field="header"/>
+		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
+		<g:FlowPanel addStyleNames="{style.scene}">
+			<b:PageHeader text="Help"/>
+			<b:Heading size="2" text="Viewer" />
+				<b:Paragraph>
+					<g:Label text="Nodes that are parent of any other nodes can be collapsed with left button click. The first character '+' signs that the node is collapsed and after left button click, the node will show its child nodes."/>
+					<b:Heading size="4" text="Connector" />
+					<base:UnorderedList>
+						<base:ListItem><g:Label text="seems to be a collapsed node but the connector is just lazy-load of the connected scheme"/></base:ListItem>
+					</base:UnorderedList>
+				</b:Paragraph>
+			<b:Heading size="2" text="Editor" />
+				<b:Paragraph>
+					<b:Heading size="4" text="Text node" />
+					<base:UnorderedList>
+						<base:ListItem><g:Label text="Shift + Enter = New line"/></base:ListItem>
+						<base:ListItem><g:Label text="Enter confirms the changes"/></base:ListItem>
+						<base:ListItem><g:Label text="Esc cancels the changes"/></base:ListItem>
+						<base:ListItem><b:Icon type="SIGN_BLANK" /><g:InlineLabel text=" icon will remove the set icon of the selected node"/></base:ListItem>
+					</base:UnorderedList>
+					<b:Heading size="4" text="Image node" />
+					<base:UnorderedList>
+						<base:ListItem><g:Label text="can be accessed only remotely by URL address"/></base:ListItem>
+					</base:UnorderedList>
+					<b:Heading size="4" text="Link node" />
+					<base:UnorderedList>
+						<base:ListItem><g:Label text="@ before node signs that the node is a link"/></base:ListItem>
+					</base:UnorderedList>
+					<b:Heading size="4" text="Math expression node" />
+					<base:UnorderedList>
+						<base:ListItem><g:Label text="math expressions are descriped by LaTeX notation"/></base:ListItem>
+						<base:ListItem><g:Label text="List of LaTeX symbols http://latex.wikia.com/wiki/List_of_LaTeX_symbols"/></base:ListItem>
+					</base:UnorderedList>
+					<b:Heading size="4" text="Connector" />
+					<base:UnorderedList>
+						<base:ListItem><g:Label text="a reference to any existing scheme"/></base:ListItem>
+						<base:ListItem><g:Label text="use OID of the scheme that should be connected or search that scheme through the Connector popup dialog [image]"/></base:ListItem>
+					</base:UnorderedList>
+				</b:Paragraph>
+			<b:Heading size="2" text="User Home" />
+				<b:Paragraph>
+					<b:Heading size="4" text="Set permissions for a scheme" />
+					<base:UnorderedList>
+						<base:ListItem><g:InlineLabel text="open set permissions dialog through the "/><b:Icon type="LOCK" /><g:InlineLabel text=" button"/></base:ListItem>
+						<base:ListItem><g:Label text="set global permissions if necessary or add users to assign the rights"/></base:ListItem>
+						<base:ListItem><g:Label text="3. user is identified by email address"/></base:ListItem>
+					</base:UnorderedList>
+				</b:Paragraph>
+			<b:Heading size="2" text="Key Shortcuts" />
+				<b:Paragraph>
+					<g:Grid ui:field="keyShortcuts" cellSpacing='50' cellPadding='10' borderWidth='1'>
+				        <g:row>
+				          <g:customCell>
+				            <g:Label text="Key"/>
+				          </g:customCell>
+				          <g:customCell>
+				            <g:Label text="Description"/>
+				          </g:customCell>
+				        </g:row>
+				        <g:row>
+				          <g:customCell>
+				            <g:Label text="Insert"/>
+				          </g:customCell>
+				          <g:customCell>
+				            <g:Label text="create text child node"/>
+				          </g:customCell>
+				        </g:row>
+				        <g:row>
+				          <g:customCell>
+				            <g:Label text="F2"/>
+				          </g:customCell>
+				          <g:customCell>
+				            <g:Label text="edit selected node"/>
+				          </g:customCell>
+				        </g:row>
+				        <g:row>
+				          <g:customCell>
+				            <g:Label text="Delete"/>
+				          </g:customCell>
+				          <g:customCell>
+				            <g:Label text="remove selected node with its child nodes"/>
+				          </g:customCell>
+				        </g:row>
+				        <g:row>
+				          <g:customCell>
+				            <g:Label text="Arrows"/>
+				          </g:customCell>
+				          <g:customCell>
+				            <g:Label text="change selected node"/>
+				          </g:customCell>
+				        </g:row>
+				        <g:row>
+				          <g:customCell>
+				            <g:Label text="CTRL + B"/>
+				          </g:customCell>
+				          <g:customCell>
+				            <g:Label text="make bold the selected node"/>
+				          </g:customCell>
+				        </g:row>
+				     </g:Grid>
+				</b:Paragraph>
+		</g:FlowPanel>
+	</g:FlowPanel>
+
+</ui:UiBinder> 

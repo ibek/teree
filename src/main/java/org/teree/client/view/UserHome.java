@@ -27,10 +27,6 @@ public class UserHome extends TemplateScene implements org.teree.client.presente
     interface ExplorerBinder extends UiBinder<Widget, UserHome> {
     }
     
-	static {
-		PageStyle.INSTANCE.css().ensureInjected(); 
-	}
-    
     @UiField
     Scene scene;
     

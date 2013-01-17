@@ -1,13 +1,17 @@
 package org.teree.client.view.viewer;
 
 import org.teree.client.text.UIConstants;
+import org.teree.client.view.resource.icon.CustomIconType;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.DropdownButton;
 import com.github.gwtbootstrap.client.ui.Form;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -31,6 +35,9 @@ public class ViewPanel extends Composite {
 	private NavLink exportFreeMind;
 	private NavLink exportJSON;
 
+	private DropdownButton type;
+	private NavLink mindmap;
+	private NavLink hierarchicalHorizontal;
 	private Button share;
 	private Button collapseAll;
 	private boolean collapsed;
@@ -52,17 +59,36 @@ public class ViewPanel extends Composite {
 		form.setEncoding(FormPanel.ENCODING_MULTIPART);
 		form.setMethod(FormPanel.METHOD_POST);
 		
-		Label space = new Label("");
-		space.getElement().getStyle().setMarginRight(20, Unit.PX);
-		container.add(space);
+		type = new DropdownButton(" ");
+		type.getElement().getStyle().setDisplay(Display.INLINE);
+		type.setBaseIcon(CustomIconType.mindmap);
+		mindmap = new NavLink("MindMap");
+		mindmap.setBaseIcon(CustomIconType.mindmap);
+		mindmap.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				type.setBaseIcon(CustomIconType.mindmap);
+			}
+		});
+		type.add(mindmap);
+		hierarchicalHorizontal = new NavLink("Hierarchical Horizontal Tree");
+		hierarchicalHorizontal.setBaseIcon(CustomIconType.hierarchicalhorizontal);
+		hierarchicalHorizontal.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				type.setBaseIcon(CustomIconType.hierarchicalhorizontal);
+			}
+		});
+		type.add(hierarchicalHorizontal);
+		container.add(type);
 		
 		collapseAll = new Button();
 		setCollapsed(true);
 		container.add(collapseAll);
 		
-		Label space2 = new Label("");
-		space2.getElement().getStyle().setMarginRight(20, Unit.PX);
-		container.add(space2);
+		Label space = new Label("");
+		space.getElement().getStyle().setMarginRight(20, Unit.PX);
+		container.add(space);
 		
 		exportAs = new DropdownButton(UIC.export_as());
 
@@ -96,6 +122,14 @@ public class ViewPanel extends Composite {
 		} else {
 			collapseAll.setText(UIC.collapse_all());
 		}
+	}
+	
+	public HasClickHandlers getMindMapButton() {
+		return mindmap;
+	}
+	
+	public HasClickHandlers getHierarchicalHorizontalButton() {
+		return hierarchicalHorizontal;
 	}
 	
 	public Button getCollapseAllButton() {

@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.io.FreeMind;
 import org.teree.client.presenter.SchemeViewer;
+import org.teree.client.scheme.SchemeType;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.client.view.viewer.Scene;
 import org.teree.client.view.viewer.ShareDialog;
@@ -26,10 +27,6 @@ public class Viewer extends TemplateScene implements SchemeViewer.Display {
 
     interface ViewerBinder extends UiBinder<Widget, Viewer> {
     }
-    
-	static {
-		PageStyle.INSTANCE.css().ensureInjected(); 
-	}
     
     @UiField(provided = true)
     Scene scene;
@@ -77,6 +74,22 @@ public class Viewer extends TemplateScene implements SchemeViewer.Display {
 			@Override
 			public void onClick(ClickEvent event) {
 				view.setCollapsed(scene.changeCollapseAll(!view.isCollapsed()));
+			}
+		});
+        
+        view.getMindMapButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scene.setSchemeType(SchemeType.MindMap);
+				scene.update();
+			}
+		});
+        
+        view.getHierarchicalHorizontalButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scene.setSchemeType(SchemeType.HierarchicalHorizontal);
+				scene.update();
 			}
 		});
         

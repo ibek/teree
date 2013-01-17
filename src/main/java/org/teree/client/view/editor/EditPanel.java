@@ -72,7 +72,7 @@ public class EditPanel extends Composite {
 			}
 		});
 		type.add(mindmap);
-		hierarchicalHorizontal = new NavLink("Hierarchical Horizontal");
+		hierarchicalHorizontal = new NavLink("Hierarchical Horizontal Tree");
 		hierarchicalHorizontal.setBaseIcon(CustomIconType.hierarchicalhorizontal);
 		hierarchicalHorizontal.addClickHandler(new ClickHandler() {
 			@Override

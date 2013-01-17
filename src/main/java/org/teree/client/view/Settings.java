@@ -31,10 +31,6 @@ public class Settings extends TemplateScene implements SettingsPage.Display {
 
     interface SettingsBinder extends UiBinder<Widget, Settings> {
     }
-    
-	static {
-		PageStyle.INSTANCE.css().ensureInjected(); 
-	}
 	
 	@UiField
 	FlowPanel panel;

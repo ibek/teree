@@ -15,10 +15,6 @@ public class ChangeLogs extends TemplateScene implements ChangeLogsPage.Display 
 
     interface ChangeLogsBinder extends UiBinder<Widget, ChangeLogs> {
     }
-    
-	static {
-		PageStyle.INSTANCE.css().ensureInjected();
-	}
 	
 	@PostConstruct
     public void init() {

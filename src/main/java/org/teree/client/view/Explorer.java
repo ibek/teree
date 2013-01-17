@@ -23,10 +23,6 @@ public class Explorer extends TemplateScene implements SchemeExplorer.Display {
     interface ExplorerBinder extends UiBinder<Widget, Explorer> {
     }
     
-	static {
-		PageStyle.INSTANCE.css().ensureInjected(); 
-	}
-    
     @UiField
     Scene scene;
     

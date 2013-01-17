@@ -21,10 +21,6 @@ public class Home extends TemplateScene implements HomePage.Display {
 
     interface HomeBinder extends UiBinder<Widget, Home> {
     }
-    
-	static {
-		PageStyle.INSTANCE.css().ensureInjected();
-	}
 	
 	@UiField
 	Anchor changeLogs;

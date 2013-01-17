@@ -11,6 +11,7 @@ public class Settings {
 	public static final String EXPLORE_LINK = "explore";
 	public static final String VIEW_LINK = "view/oid=";
 	public static final String CREATE_LINK = "create";
+	public static final String HELP_LINK = "help";
 	public static final String EDIT_LINK = "edit/oid=";
 	public static final String LOGIN_LINK = "login";
 	public static final String FAILED_LOGIN_LINK = "login?failed";

@@ -29,10 +29,6 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
     interface EditorBinder extends UiBinder<Widget, Editor> {
     }
     
-	static {
-		PageStyle.INSTANCE.css().ensureInjected(); 
-	}
-    
     @UiField(provided = true)
     Scene scene;
     

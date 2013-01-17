@@ -8,8 +8,6 @@ vyhledavani - pouze v root
 
 uzivatelsky privetive statusy a chybove hlasky
 
-vytvorit stranku Help - popsat aplikaci (napr. novy radek pomoci shift+enter ...)
-
 use Infinispan as a cache for users and maps
 
 opravit viewer pri uncollapse all, collapse all, uncollapse all ... v pripade ze je mapa dost velka (prostorove db) tak se nastavi sirka textu na MIN_WIDTH
@@ -18,6 +16,7 @@ add method with @PreDestroy annotation to MongoDB bean
  - nemit MongoDB jako @ApplicationScoped!!! - concurrent pripojeni by mohly delat problemy
 replace openshift app to enable scalability https://openshift.redhat.com/community/developers/scaling
 nelze importovat prostorove DB jako JSON
+mist @link a link ve view zobrazit primo URL adresu pokud neni pojmenovan
 
 ===============
 0.8:
@@ -39,6 +38,7 @@ ulozeni ruznych pohledu na mapu
  - vlevo ve sloupci ve view budou vetsi tlacitka jako pohledy pro prepnuti
  - vytvori se novy editor pohledu ktery bude nastavovat nody podle toho jak a zda se maji zobrazit
  - editor pohledu bude pristupny pres editor map - tlacitko pridat pohled, ...
+ - ruzne zvyrazneni uzlu
 
 ===============
 0.9:
@@ -50,6 +50,7 @@ ruzne typy nodu z hlediska vyznamu
  - klicove slovo (bude mozne ho najit ve vyhledavani, a lze tento podstrom oddelit od mapy), definice, priklad, ...
 
 moznost obarveni nodu dedicne - tzn i potomci budou mit danou barvu pokud nebude nastaven styl
+ - cascading formatting
 
 tvorba skupin - pratele, apod ... pro urceni prav na urcite mapy
 
@@ -67,3 +68,4 @@ sepsat use cases (pro studovani ...)
 smysluplne testovani
 podpora tabletu a mobilu - pouzit android emulator pro testovani
 presun inline stylu ve tridach do css
+pocitat s ruznymi verzemi JSON a dalsi formatu

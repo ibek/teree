@@ -31,10 +31,6 @@ public class Login extends TemplateScene implements LoginPage.Display {
 
     interface LoginBinder extends UiBinder<Widget, Login> {
     }
-    
-	static {
-		PageStyle.INSTANCE.css().ensureInjected(); 
-	}
 	
 	@UiField
 	FlowPanel panel;

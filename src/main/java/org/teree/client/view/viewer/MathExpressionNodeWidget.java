@@ -27,7 +27,6 @@ public class MathExpressionNodeWidget extends NodeWidget {
 		MathExpressionTools.renderLatexResult(content.getElement());
 		
         content.setStylePrimaryName(resources.css().node());
-        content.setStyleDependentName("view", true);
     	
     	content.addMouseDownHandler(new MouseDownHandler() {
 			@Override

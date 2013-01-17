@@ -77,6 +77,13 @@ public class Header extends Composite implements HeaderTemplate {
 			}
 		});
 		
+		help.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				History.newItem(Settings.HELP_LINK);
+			}
+		});
+		
 		search.addSubmitHandler(new SubmitHandler() {
 			@Override
 			public void onSubmit(SubmitEvent event) {

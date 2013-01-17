@@ -29,10 +29,6 @@ public class Join extends TemplateScene implements JoinPage.Display {
 
     interface JoinBinder extends UiBinder<Widget, Join> {
     }
-    
-	static {
-		PageStyle.INSTANCE.css().ensureInjected(); 
-	}
 	
 	@UiField
 	FlowPanel panel;

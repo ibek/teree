@@ -20,6 +20,7 @@ import org.teree.client.event.RefreshUserInfo;
 import org.teree.client.event.RefreshUserInfoHandler;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.presenter.ChangeLogsPage;
+import org.teree.client.presenter.HelpPage;
 import org.teree.client.presenter.HomePage;
 import org.teree.client.presenter.JoinPage;
 import org.teree.client.presenter.LoginPage;
@@ -189,6 +190,12 @@ public class TereeController implements ValueChangeHandler<String> {
 						presenter = bean.getInstance();
 						createScheme = true;
 					}
+				}
+			} else if (token.startsWith(Settings.HELP_LINK)) {
+				IOCBeanDef<HelpPage> bean = manager
+						.lookupBean(HelpPage.class);
+				if (bean != null) {
+					presenter = bean.getInstance();
 				}
 			} else if (token.startsWith(Settings.EDIT_LINK)) {
 				IOCBeanDef<SchemeEditor> bean = manager
