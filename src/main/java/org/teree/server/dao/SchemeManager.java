@@ -9,18 +9,18 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.bson.types.ObjectId;
-import org.teree.shared.data.scheme.Connector;
-import org.teree.shared.data.scheme.IconText;
-import org.teree.shared.data.scheme.ImageLink;
-import org.teree.shared.data.scheme.Link;
-import org.teree.shared.data.scheme.MathExpression;
-import org.teree.shared.data.scheme.Node;
-import org.teree.shared.data.scheme.NodeStyle;
-import org.teree.shared.data.scheme.Permissions;
-import org.teree.shared.data.scheme.Scheme;
-import org.teree.shared.data.scheme.Node.NodeLocation;
-import org.teree.shared.data.scheme.Node.NodeType;
-import org.teree.shared.data.scheme.UserPermissions;
+import org.teree.shared.data.common.Connector;
+import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.ImageLink;
+import org.teree.shared.data.common.Link;
+import org.teree.shared.data.common.MathExpression;
+import org.teree.shared.data.common.Node;
+import org.teree.shared.data.common.NodeStyle;
+import org.teree.shared.data.common.Permissions;
+import org.teree.shared.data.common.Scheme;
+import org.teree.shared.data.common.UserPermissions;
+import org.teree.shared.data.common.Node.NodeLocation;
+import org.teree.shared.data.common.Node.NodeType;
 import org.teree.shared.data.UserInfo;
 
 import com.mongodb.BasicDBList;
@@ -379,7 +379,7 @@ public class SchemeManager {
     	if (scheme == null) {
     		return null;
     	}
-        Scheme s = fromSchemeDBObjectInfo(scheme);
+    	Scheme s = fromSchemeDBObjectInfo(scheme);
 
         s.setRoot(fromNodeDBObject((BasicDBObject)scheme.get("root")));
         
@@ -387,7 +387,7 @@ public class SchemeManager {
     }
     
     private Scheme fromSchemeDBObjectInfo(DBObject scheme) {
-    	Scheme s = new Scheme();
+    	Tree s = new Tree();
         
         s.setSchemePicture((String)scheme.get("screen"));
         if (scheme.get("_id") != null) { // for import it is null

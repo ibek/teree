@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.teree.server.dao.SchemeManager;
-import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.common.Scheme;
 
 public class ShareSchemeServlet extends HttpServlet {
 

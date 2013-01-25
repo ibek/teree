@@ -8,20 +8,16 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Frame;
-import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.io.FreeMind;
-import org.teree.client.presenter.SchemeViewer;
-import org.teree.client.scheme.SchemeType;
-import org.teree.client.view.resource.PageStyle;
 import org.teree.client.view.viewer.Scene;
 import org.teree.client.view.viewer.ShareDialog;
 import org.teree.client.view.viewer.ViewPanel;
-import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.common.Scheme;
+import org.teree.shared.data.tree.Tree;
 
-public class Viewer extends TemplateScene implements SchemeViewer.Display {
+public class Viewer extends TemplateScene implements org.teree.client.presenter.Viewer.Display {
 
 	private static ViewerBinder uiBinder = GWT.create(ViewerBinder.class);
 
@@ -35,6 +31,7 @@ public class Viewer extends TemplateScene implements SchemeViewer.Display {
     ViewPanel view;
     
     private ShareDialog shareDialog;
+    private Scheme scheme;
     
     public Viewer() {
     	scene = new Scene();
@@ -47,14 +44,14 @@ public class Viewer extends TemplateScene implements SchemeViewer.Display {
         view.getExportImageButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				view.sendDownloadRequest(scene.getScheme().getRoot().getContent().toString(), scene.getSchemePicture());
+				view.sendDownloadRequest(scheme.getTitle(), scene.getSchemePicture());
 			}
 		});
         
         view.getExportFreeMindButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				sendDownloadRequest(scene.getScheme().getRoot().getContent().toString(), "freemind", new FreeMind().exportScheme(scene.getScheme().getRoot()));
+				sendDownloadRequest(scheme.getTitle(), "freemind", new FreeMind().exportScheme(scheme));
 			}
 		});
         
@@ -64,7 +61,7 @@ public class Viewer extends TemplateScene implements SchemeViewer.Display {
 				if (shareDialog == null) {
 					shareDialog = new ShareDialog();
 				}
-				shareDialog.setOid(scene.getScheme().getOid());
+				shareDialog.setOid(scheme.getOid());
 				shareDialog.setPopupPosition(view.getAbsoluteLeft()+view.getOffsetWidth()/2, view.getAbsoluteTop()+view.getOffsetHeight());
 				shareDialog.show();
 			}
@@ -73,23 +70,9 @@ public class Viewer extends TemplateScene implements SchemeViewer.Display {
         view.getCollapseAllButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				view.setCollapsed(scene.changeCollapseAll(!view.isCollapsed()));
-			}
-		});
-        
-        view.getMindMapButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				scene.setSchemeType(SchemeType.MindMap);
-				scene.update();
-			}
-		});
-        
-        view.getHierarchicalHorizontalButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				scene.setSchemeType(SchemeType.HierarchicalHorizontal);
-				scene.update();
+				boolean collapse = !view.isCollapsed();
+				scene.changeCollapseAll(collapse);
+				view.setCollapsed(collapse);
 			}
 		});
         
@@ -105,11 +88,6 @@ public class Viewer extends TemplateScene implements SchemeViewer.Display {
         scene.setScheme(scheme);
         view.getShareButton().setVisible(scheme.getPermissions().getWrite() != null);
     }
-
-	@Override
-	public Scheme getScheme() {
-		return scene.getScheme();
-	}
 
 	@Override
 	public HasClickHandlers getExportJSONButton() {

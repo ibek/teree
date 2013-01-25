@@ -5,11 +5,11 @@ import java.util.List;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.teree.client.CurrentPresenter;
 import org.teree.client.presenter.Presenter;
-import org.teree.client.presenter.SchemeEditor;
+import org.teree.client.presenter.Editor;
 import org.teree.client.text.UIConstants;
 import org.teree.client.view.common.TDialog;
-import org.teree.shared.data.scheme.IconText;
-import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.tree.Tree;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Image;
@@ -37,9 +37,9 @@ public class ConnectorDialog extends TDialog {
 	private Image preview;
 	private TextBox oid;
 	
-	private Scheme scheme;
+	private Tree scheme;
 	
-	private List<Scheme> searched;
+	private List<Tree> searched;
 	private int current = 0;
 
 	public ConnectorDialog() {
@@ -131,9 +131,9 @@ public class ConnectorDialog extends TDialog {
 		} else if (t.length() == 25 && !t.contains(" ")) { // it is oid
 			load(oid.getText());
 		} else {
-			((SchemeEditor)CurrentPresenter.getInstance().getPresenter()).searchFrom(null, t, new RemoteCallback<List<Scheme>>() {
+			((Editor)CurrentPresenter.getInstance().getPresenter()).searchFrom(null, t, new RemoteCallback<List<Tree>>() {
 				@Override
-				public void callback(List<Scheme> response) {
+				public void callback(List<Tree> response) {
 					if (response.isEmpty()) {
 						clearDialog();
 					} else {
@@ -194,13 +194,13 @@ public class ConnectorDialog extends TDialog {
 	
 	private void load(String o) {
 		if (o != null && !o.isEmpty()) {
-			SchemeEditor se = null;
+			Editor se = null;
 			Presenter cp = CurrentPresenter.getInstance().getPresenter();
-			if (cp instanceof SchemeEditor) {
-				se = (SchemeEditor)cp;
-				se.getScheme(o, new RemoteCallback<Scheme>() {
+			if (cp instanceof Editor) {
+				se = (Editor)cp;
+				se.getScheme(o, new RemoteCallback<Tree>() {
 					@Override
-					public void callback(Scheme response) {
+					public void callback(Tree response) {
 						scheme = response;
 						if (response != null) {
 							preview.setVisible(true);

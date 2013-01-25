@@ -2,10 +2,10 @@ package org.teree.client.view.editor;
 
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
-import org.teree.shared.data.scheme.Link;
-import org.teree.shared.data.scheme.Node;
-import org.teree.shared.data.scheme.NodeStyle;
-import org.teree.shared.data.scheme.Node.NodeLocation;
+import org.teree.shared.data.common.Link;
+import org.teree.shared.data.common.Node;
+import org.teree.shared.data.common.NodeStyle;
+import org.teree.shared.data.common.Node.NodeLocation;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.Scheduler;
@@ -55,7 +55,10 @@ public class LinkNodeWidget extends NodeWidget {
 	public void update() {
 		String text = nodeContent.getText();
 		if (text == null || text.isEmpty()) {
-			text = "link";
+			text = nodeContent.getUrl();
+			if (text == null || text.isEmpty()) {
+				text = "link";
+			}
 		}
 		content.setText("@"+text);
 	}

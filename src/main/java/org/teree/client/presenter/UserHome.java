@@ -26,8 +26,8 @@ import org.teree.shared.SchemeService;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.UserService;
 import org.teree.shared.data.UserInfo;
-import org.teree.shared.data.scheme.Node;
-import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.common.Node;
+import org.teree.shared.data.tree.Tree;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -44,7 +44,7 @@ public class UserHome implements Presenter {
 
 	public interface Display extends Template {
         Widget asWidget();
-        void setData(List<Scheme> slist);
+        void setData(List<Tree> slist);
         HasClickHandlers getNextButton();
         HasClickHandlers getPreviousButton();
         HasSchemeHandlers getScene();
@@ -139,7 +139,7 @@ public class UserHome implements Presenter {
 				switch (it) {
 					case FreeMind: {
 						Node root = new FreeMind().importScheme(data);
-						Scheme scheme = new Scheme();
+						Tree scheme = new Tree();
 						scheme.setRoot(root);
 						UserHome.this.importScheme(scheme);
 						break;
@@ -172,7 +172,7 @@ public class UserHome implements Presenter {
 		loadUserInfo();
 	}
 	
-	private void importScheme(final Scheme scheme) {
+	private void importScheme(final Tree scheme) {
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
@@ -183,9 +183,9 @@ public class UserHome implements Presenter {
 	}
 	
 	private void importJSON(String json) {
-		generalService.call(new RemoteCallback<Scheme>() {
+		generalService.call(new RemoteCallback<Tree>() {
             @Override
-            public void callback(Scheme response) {
+            public void callback(Tree response) {
             	if (response == null) {
             		display.error("Cannot import the scheme");
             	} else {
@@ -217,9 +217,9 @@ public class UserHome implements Presenter {
 	}
 	
 	private void loadData(String from_oid) {
-		generalService.call(new RemoteCallback<List<Scheme>>() {
+		generalService.call(new RemoteCallback<List<Tree>>() {
             @Override
-            public void callback(List<Scheme> response) {
+            public void callback(List<Tree> response) {
                 display.setData(response);
             }
         }, new ErrorCallback() {
@@ -232,9 +232,9 @@ public class UserHome implements Presenter {
 	}
 	
 	private void loadPreviousData(String to_oid) {
-		generalService.call(new RemoteCallback<List<Scheme>>() {
+		generalService.call(new RemoteCallback<List<Tree>>() {
             @Override
-            public void callback(List<Scheme> response) {
+            public void callback(List<Tree> response) {
                 display.setData(response);
             }
         }, new ErrorCallback() {

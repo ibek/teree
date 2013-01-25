@@ -2,12 +2,15 @@ package org.teree.client.io;
 
 import java.util.List;
 
-import org.teree.shared.data.scheme.IconText;
-import org.teree.shared.data.scheme.ImageLink;
-import org.teree.shared.data.scheme.Link;
-import org.teree.shared.data.scheme.Node;
-import org.teree.shared.data.scheme.NodeStyle;
-import org.teree.shared.data.scheme.Node.NodeLocation;
+import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.ImageLink;
+import org.teree.shared.data.common.Link;
+import org.teree.shared.data.common.Node;
+import org.teree.shared.data.common.NodeStyle;
+import org.teree.shared.data.common.Node.NodeLocation;
+import org.teree.shared.data.common.Scheme;
+import org.teree.shared.data.common.StructureType;
+import org.teree.shared.data.tree.Tree;
 
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
@@ -19,7 +22,13 @@ public class FreeMind {
 
 	private static final String VERSION = "0.9.0";
 	
-	public String exportScheme(Node root) {
+	public String exportScheme(Scheme scheme) {
+		Node root = null;
+		if (scheme.getStructure() == StructureType.Tree) {
+			root = ((Tree)scheme).getRoot();
+		} else {
+			return null;
+		}
 		Document doc = XMLParser.createDocument();
 		Element map = doc.createElement("map");
 		map.setAttribute("version", VERSION);

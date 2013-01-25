@@ -1,8 +1,8 @@
 package org.teree.shared;
 
-import org.teree.shared.data.scheme.IconText;
-import org.teree.shared.data.scheme.Node;
-import org.teree.shared.data.scheme.Node.NodeLocation;
+import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Node;
+import org.teree.shared.data.common.Node.NodeLocation;
 
 public class NodeGenerator {
 

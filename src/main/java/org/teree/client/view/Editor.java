@@ -12,17 +12,15 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.teree.client.presenter.SchemeEditor;
-import org.teree.client.scheme.SchemeType;
 import org.teree.client.view.editor.EditPanel;
 import org.teree.client.view.editor.NodeWidget;
 import org.teree.client.view.editor.Scene;
 import org.teree.client.view.editor.event.SelectedNodeListener;
-import org.teree.client.view.resource.PageStyle;
-import org.teree.shared.data.scheme.Node;
-import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.common.Scheme;
+import org.teree.shared.data.tree.Tree;
+import org.teree.shared.data.tree.TreeType;
 
-public class Editor extends TemplateScene implements SchemeEditor.Display {
+public class Editor extends TemplateScene implements org.teree.client.presenter.Editor.Display {
 	
 	private static EditorBinder uiBinder = GWT.create(EditorBinder.class);
 
@@ -46,6 +44,7 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
     public void init() {
         initWidget(uiBinder.createAndBindUi(this));
         bind();
+        scene.setTmpFrame(tmpFrame);
     }
     
     private void bind() {
@@ -116,23 +115,7 @@ public class Editor extends TemplateScene implements SchemeEditor.Display {
     	edit.setSelectIconHandler(new EditPanel.SelectIcon() {
 			@Override
 			public void select(IconType icon) {
-				scene.setSelectedIcon(icon);
-			}
-		});
-    	
-    	edit.getMindMapButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				scene.setSchemeType(SchemeType.MindMap);
-				scene.update(null);
-			}
-		});
-    	
-    	edit.getHierarchicalHorizontalButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				scene.setSchemeType(SchemeType.HierarchicalHorizontal);
-				scene.update(null);
+				scene.setNodeIcon(icon);
 			}
 		});
     	

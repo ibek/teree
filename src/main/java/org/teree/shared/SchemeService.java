@@ -3,7 +3,8 @@ package org.teree.shared;
 import java.util.List;
 
 import org.jboss.errai.bus.server.annotations.Remote;
-import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.common.Scheme;
+import org.teree.shared.data.tree.Tree;
 
 /**
 * Errai RPC interface that specifies which methods the client can invoke on the

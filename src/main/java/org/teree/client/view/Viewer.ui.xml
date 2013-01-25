@@ -13,10 +13,6 @@
 			margin-bottom: 10px;
 			padding-bottom: 5px;
 		}
-		
-		.move {
-			cursor: move;
-		}
 
 	</ui:style>
 
@@ -24,7 +20,7 @@
 		<view:Header ui:field="header"/>
 		<tw:ViewPanel ui:field="view" addStyleNames="{style.viewPanel}"></tw:ViewPanel>
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
-		<tw:Scene ui:field="scene" addStyleNames="{res.css.scene} {style.move}"></tw:Scene>
+		<tw:Scene ui:field="scene" addStyleNames="{res.css.scene}"></tw:Scene>
 	</g:FlowPanel>
 
 </ui:UiBinder> 

@@ -1,27 +1,18 @@
 package org.teree.client.view.viewer;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.teree.client.Settings;
-import org.teree.client.scheme.HierarchicalHotizontal;
-import org.teree.client.scheme.MindMap;
-import org.teree.client.scheme.SchemeType;
-import org.teree.client.scheme.Renderer;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.NodeChangedHandler;
-import org.teree.client.view.resource.MathExpressionTools;
+import org.teree.client.view.editor.type.BehaviorController;
+import org.teree.client.view.editor.type.TreeController;
 import org.teree.client.view.viewer.NodeWidget;
-import org.teree.shared.data.scheme.Connector;
-import org.teree.shared.data.scheme.Node;
-import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.common.Scheme;
+import org.teree.shared.data.tree.Tree;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -30,31 +21,22 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class Scene extends Composite {
 	
-	private Renderer<NodeWidget> renderer;
+	private BehaviorController<NodeWidget> controller;
 
     private AbsolutePanel container;
     private Canvas canvas;
-    private Scheme scheme;
     private boolean move = false;
     private Integer lastx;
     private Integer lasty;
-    private final List<NodeWidget> widgets;
     
     public Scene() {
-    	
-    	widgets = new ArrayList<NodeWidget>();
-    	
-        setSchemeType(Settings.DEFAULT_SCHEME_TYPE);
         
         container = new AbsolutePanel();
         Style style = container.getElement().getStyle();
@@ -63,10 +45,8 @@ public class Scene extends Composite {
         
         canvas = Canvas.createIfSupported();
         if (canvas == null) { // canvas is not supported
-            // deal with it
+            // TODO: canvas is not supported
         }
-        
-        container.add(canvas);
         
         final ScrollPanel sp = new ScrollPanel(container);
         sp.setWidth(Window.getClientWidth()+"px");
@@ -76,7 +56,7 @@ public class Scene extends Composite {
 			public void onResize(ResizeEvent event) {
                 sp.setWidth(event.getWidth() + "px");
                 sp.setHeight((event.getHeight()-Settings.SCENE_HEIGHT_LESS) + "px");
-                update();
+                controller.update(null);
             }
 		});
         
@@ -108,6 +88,7 @@ public class Scene extends Composite {
 				if (event.getNativeButton() == NativeEvent.BUTTON_LEFT) {
 					event.preventDefault();
 					move = true;
+					container.getElement().getStyle().setCursor(Cursor.MOVE);
 					lastx = null;
 					lasty = null;
 				}
@@ -117,151 +98,44 @@ public class Scene extends Composite {
         container.addDomHandler(new MouseUpHandler() {
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
-				move = false;
+				if (move) {
+					container.getElement().getStyle().clearCursor();
+					move = false;
+				}
 			}
 		}, MouseUpEvent.getType());
         
     	container.addHandler(new NodeChangedHandler() {
 			@Override
 			public void changed(NodeChanged event) {
-				if (event.getNode() == null) {
-					update();
-				} else {
-					setScheme(scheme); // scene has to be reinitialized because some nodes were added
-				}
+				controller.update(event.getNode());
 			}
 		}, NodeChanged.TYPE);
     }
     
-    public void setSchemeType(SchemeType type) {
-    	switch(type) {
-	    	case MindMap: {
-	    		renderer = new MindMap<NodeWidget>();
-	    		break;
-	    	}
-	    	case HierarchicalHorizontal: {
-	    		renderer = new HierarchicalHotizontal<NodeWidget>();
+    public void setScheme(Scheme scheme) {
+    	switch (scheme.getStructure()) {
+	    	case Tree: {
+	    		controller = new TreeController<NodeWidget>(NodeWidget.class, container, canvas, null, (Tree)scheme);
 	    		break;
 	    	}
     	}
-    }
-    
-    private boolean requiresRender = false;
-    public void setScheme(Scheme scheme) {
-    	this.scheme = scheme;
-    	container.clear();
-        container.add(canvas);
-        widgets.clear();
-        
-        init(scheme.getRoot());
-        
-        update();
-        if (requiresRender) { // to fix size and position of math expressions
-        	requiresRender = false;
-        	Timer t = new Timer() {
-				@Override
-				public void run() {
-					update();
-				}
-        	};
-        	t.schedule(1000);
-        }
-    }
-    
-    public void update() {
-    	renderer.renderViewer(canvas, widgets, scheme.getRoot());
-    }
-    
-    public Scheme getScheme() {
-    	return scheme;
     }
     
     public String getSchemePicture() {
         Canvas canvas = Canvas.createIfSupported();
         canvas.setCoordinateSpaceHeight(this.canvas.getOffsetHeight());
         canvas.setCoordinateSpaceWidth(this.canvas.getOffsetWidth());
-        renderer.renderPicture(canvas, widgets, scheme.getRoot());
+        controller.renderPicture(canvas, controller.getNodeWidgets());
         return canvas.toDataUrl();
     }
     
-    public boolean changeCollapseAll(boolean collapseAll) {
-		for (int i=1; i<widgets.size(); ++i) {
-			NodeWidget nw = widgets.get(i);
-			if (!collapseAll) { // for uncollapse update content - necessary for images
-				nw.update();
-			}
-			if (nw.getNode().getChildNodes() != null && 
-					!nw.getNode().getChildNodes().isEmpty() && 
-					nw.getNode().getParent().getParent() == null &&
-					!(nw instanceof LinkNodeWidget)) {
-				nw.setCollapsed(collapseAll);
-			}
-		}
-		update();
-		return collapseAll;
-    }
-
-    private boolean initMathScript = true;
-    private void init(Node node) {
-    	
-		NodeWidget nw = null;
-		switch(node.getType()){
-	        case IconText: {
-	            nw = new TextNodeWidget(node);
-	            nw.addDomHandler(new ClickHandler() {
-					@Override
-					public void onClick(ClickEvent event) {
-						Object src = event.getSource();
-						if (src instanceof TextNodeWidget) {
-							changeCollapseNode((TextNodeWidget) src);
-						}
-					}
-				}, ClickEvent.getType());
-	            break;
-	        }
-	        case ImageLink: {
-	        	nw = new ImageNodeWidget(node);
-	        	break;
-	        }
-	        case Link: {
-	        	nw = new LinkNodeWidget(node);
-	        	break;
-	        }
-	        case MathExpression: {
-	        	if (initMathScript) {
-	        		initMathScript = false;
-	        		MathExpressionTools.initScript();
-	        	}
-	        	requiresRender = true;
-	        	nw = new MathExpressionNodeWidget(node);
-	        	break;
-	        }
-	        case Connector: {
-	        	nw = new ConnectorNodeWidget(node);
-	        	nw.addDomHandler(new ClickHandler() {
-					@Override
-					public void onClick(ClickEvent event) {
-						Object src = event.getSource();
-						if (src instanceof ConnectorNodeWidget) {
-							changeCollapseNode((ConnectorNodeWidget) src);
-						}
-					}
-				}, ClickEvent.getType());
-	        	break;
-	        }
-	    }
-		container.add(nw,0,0);
-		widgets.add(nw);
-    	nw.update();
-		
-    	List<Node> cn = node.getChildNodes();
-    	for(int i=0; cn!=null && i<cn.size(); ++i){
-    		Node n = cn.get(i);
-    		init(n);
-    	}
+    public void changeCollapseAll(boolean collapseAll) {
+		controller.collapseAll(controller.getNodeWidgets(), collapseAll);
     }
     
-    private void changeCollapseNode(TextNodeWidget nw) {
+ // TODO: change collapse node - new event!
+    /**private void changeCollapseNode(TextNodeWidget nw) {
     	if (nw.getNode().getChildNodes() != null && !nw.getNode().getChildNodes().isEmpty() && nw.getNode().getParent() != null) { // has child nodes
 	    	nw.setCollapsed(!nw.isCollapsed());
 	    	if (!nw.isCollapsed()) {
@@ -269,6 +143,6 @@ public class Scene extends Composite {
 	    	}
 	        update();
     	}
-    }
+    }*/
     
 }

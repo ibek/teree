@@ -7,10 +7,10 @@ import org.teree.client.Settings;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.resource.IconTypeContent;
-import org.teree.shared.data.scheme.IconText;
-import org.teree.shared.data.scheme.Node;
-import org.teree.shared.data.scheme.Node.NodeLocation;
-import org.teree.shared.data.scheme.NodeStyle;
+import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Node;
+import org.teree.shared.data.common.NodeStyle;
+import org.teree.shared.data.common.Node.NodeLocation;
 
 import com.github.gwtbootstrap.client.ui.Icon;
 import com.github.gwtbootstrap.client.ui.constants.IconType;

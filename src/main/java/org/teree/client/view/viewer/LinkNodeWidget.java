@@ -1,7 +1,7 @@
 package org.teree.client.view.viewer;
 
-import org.teree.shared.data.scheme.Link;
-import org.teree.shared.data.scheme.Node;
+import org.teree.shared.data.common.Link;
+import org.teree.shared.data.common.Node;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.user.client.ui.Anchor;
@@ -32,7 +32,11 @@ public class LinkNodeWidget extends NodeWidget {
 		}
 		String text = link.getText();
 		if (text == null || text.isEmpty()) {
-			text = "@link";
+			if (url != null && !url.isEmpty()) {
+				text = "@" + url;
+			} else {
+				text = "@link";
+			}
 		}
 		content.setText(text);
 	}

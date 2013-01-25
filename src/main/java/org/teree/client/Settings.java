@@ -1,6 +1,6 @@
 package org.teree.client;
 
-import org.teree.client.scheme.SchemeType;
+import org.teree.shared.data.tree.TreeType;
 
 public class Settings {
 
@@ -38,6 +38,6 @@ public class Settings {
 	
 	public static final int SCHEME_COUNT_IN_EXPLORER = 10;
     
-    public static final SchemeType DEFAULT_SCHEME_TYPE = SchemeType.MindMap;
+    public static final TreeType DEFAULT_SCHEME_TYPE = TreeType.MindMap;
     
 }

@@ -10,7 +10,8 @@ import org.jboss.errai.bus.server.annotations.Service;
 import org.teree.server.dao.SchemeManager;
 import org.teree.shared.SchemeService;
 import org.teree.shared.UserService;
-import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.common.Scheme;
+import org.teree.shared.data.tree.Tree;
 
 @ApplicationScoped
 @Service

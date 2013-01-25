@@ -4,8 +4,8 @@ import org.teree.client.CurrentUser;
 import org.teree.client.Settings;
 import org.teree.client.text.UIConstants;
 import org.teree.shared.data.UserInfo;
-import org.teree.shared.data.scheme.Permissions;
-import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.common.Permissions;
+import org.teree.shared.data.tree.Tree;
 
 import com.github.gwtbootstrap.client.ui.Badge;
 import com.github.gwtbootstrap.client.ui.Button;
@@ -41,7 +41,7 @@ public class SchemeWidget extends Composite {
 	private Button view;
 	private Button permissions;
 	
-	private Scheme scheme;
+	private Tree scheme;
 	private PermissionsDialog pdialog;
 	
 	private UIConstants UIC = UIConstants.LANG;
@@ -163,7 +163,7 @@ public class SchemeWidget extends Composite {
 		
 	}
 	
-	public Scheme getScheme() {
+	public Tree getScheme() {
 		return scheme;
 	}
 	
@@ -175,7 +175,7 @@ public class SchemeWidget extends Composite {
 		pdialog.setVisible(false);
 	}
 	
-	public void setScheme(Scheme scheme) {
+	public void setScheme(Tree scheme) {
 		this.scheme = scheme;
 		if (scheme.getSchemePicture() != null) {
 			screen.setUrl(scheme.getSchemePicture());

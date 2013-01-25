@@ -18,7 +18,7 @@ import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.ImportSchemeHandler;
 import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.UserInfo;
-import org.teree.shared.data.scheme.Scheme;
+import org.teree.shared.data.tree.Tree;
 
 public class UserHome extends TemplateScene implements org.teree.client.presenter.UserHome.Display {
 
@@ -62,7 +62,7 @@ public class UserHome extends TemplateScene implements org.teree.client.presente
     }
 
 	@Override
-	public void setData(List<Scheme> slist) {
+	public void setData(List<Tree> slist) {
 		scene.setData(slist);
 	}
 

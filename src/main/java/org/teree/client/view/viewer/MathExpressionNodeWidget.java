@@ -1,7 +1,7 @@
 package org.teree.client.view.viewer;
 
 import org.teree.client.view.resource.MathExpressionTools;
-import org.teree.shared.data.scheme.Node;
+import org.teree.shared.data.common.Node;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.Element;

@@ -1,9 +1,9 @@
 package org.teree.client.view.editor;
 
-import org.teree.shared.data.scheme.Connector;
-import org.teree.shared.data.scheme.IconText;
-import org.teree.shared.data.scheme.Node;
-import org.teree.shared.data.scheme.Node.NodeLocation;
+import org.teree.shared.data.common.Connector;
+import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Node;
+import org.teree.shared.data.common.Node.NodeLocation;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

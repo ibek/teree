@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.teree.client.view.common.TDialog;
 import org.teree.shared.data.UserInfo;
-import org.teree.shared.data.scheme.Permissions;
-import org.teree.shared.data.scheme.UserPermissions;
+import org.teree.shared.data.common.Permissions;
+import org.teree.shared.data.common.UserPermissions;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.TextBox;
