@@ -1,4 +1,4 @@
-package org.teree.client.view.editor.type;
+package org.teree.client.view.type;
 
 import java.util.List;
 

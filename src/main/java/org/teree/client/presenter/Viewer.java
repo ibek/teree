@@ -50,7 +50,7 @@ public class Viewer implements Presenter {
 			public void received(SchemeReceived event) {
 				Scheme scheme = event.getScheme();
 				display.setScheme(scheme);
-				display.info(UIMessages.LANG.schemeReceived(scheme.getTitle()));
+				display.info(UIMessages.LANG.schemeReceived(scheme.toString()));
 			}
 		});
         
@@ -82,7 +82,7 @@ public class Viewer implements Presenter {
             	if (response == null) {
             		display.error(UIMessages.LANG.cannot_export_scheme());
             	} else {
-            		display.sendDownloadRequest(scheme.getTitle(), "application/json", response);
+            		display.sendDownloadRequest(scheme.toString(), "application/json", response);
             	}
             }
         }, new ErrorCallback() {

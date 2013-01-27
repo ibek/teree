@@ -62,7 +62,7 @@ public class Editor implements Presenter {
 			public void received(SchemeReceived event) {
 				scheme = event.getScheme();
 				display.setScheme(scheme);
-				display.info(UIMessages.LANG.schemeReceived(scheme.getTitle()));
+				display.info(UIMessages.LANG.schemeReceived(scheme.toString()));
 			}
 		});
     	
@@ -147,14 +147,14 @@ public class Editor implements Presenter {
                 @Override
                 public void callback(String response) {
                     scheme.setOid(response);
-                    display.info(UIMessages.LANG.schemeCreated(scheme.getTitle()));
+                    display.info(UIMessages.LANG.schemeCreated(scheme.toString()));
                 }
             });
     	} else {
     		securedSchemeService.call(new RemoteCallback<Void>() {
 	            @Override
 	            public void callback(Void response) {
-	                display.info(UIMessages.LANG.schemeUpdated(scheme.getTitle()));
+	                display.info(UIMessages.LANG.schemeUpdated(scheme.toString()));
 	            }
 	        }, new ErrorCallback() {
 				@Override

@@ -62,7 +62,7 @@ public class MindMap<T extends Widget & NodeInterface> extends TreeRenderer<T> {
 			 * width because of panel.setWidth (there wasn't any place 
 			 * for new node)
 			 */
-			int panelWidth = width + Settings.NODE_MAX_WIDTH; 
+			int panelWidth = width + Settings.NODE_MAX_WIDTH;
 			if (panelWidth >= Window.getClientWidth()) {
 				panel.setWidth(panelWidth + "px"); // to enable scrolling with
 											// horizontal scrollbar

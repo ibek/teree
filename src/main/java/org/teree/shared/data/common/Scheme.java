@@ -12,9 +12,8 @@ import org.teree.shared.data.UserInfo;
 public class Scheme {
 
 	private String oid;
-	private String title; // TODO: add title to db
 	private String schemePicture;
-	private StructureType structure; // TODO: add structure to db
+	private StructureType structure;
 
 	private UserInfo author;
 	private Permissions permissions = new Permissions();
@@ -33,14 +32,6 @@ public class Scheme {
 
 	public void setOid(String oid) {
 		this.oid = oid;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	public StructureType getStructure() {
@@ -65,6 +56,11 @@ public class Scheme {
 
 	public void setPermissions(Permissions permissions) {
 		this.permissions = permissions;
+	}
+	
+	@Override
+	public String toString() {
+		return "Scheme title";
 	}
 	
 }

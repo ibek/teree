@@ -1,4 +1,4 @@
-package org.teree.client.view.editor.type;
+package org.teree.client.view.type;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.teree.client.CurrentPresenter;
 import org.teree.client.presenter.Editor;
 import org.teree.client.view.NodeInterface;
+import org.teree.client.view.common.NodeWidgetFactory;
 import org.teree.client.view.editor.ConnectorNodeWidget;
 import org.teree.client.view.editor.ImageNodeWidget;
 import org.teree.client.view.editor.LinkNodeWidget;
@@ -53,12 +54,12 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
     private Node copied;
     private TreeRenderer<T> renderer;
 	
-	public TreeController(Class<T> clazz, AbsolutePanel container, Canvas canvas, Frame tmpFrame, Tree tree) {
-		super(clazz, container, canvas, tmpFrame);
+	public TreeController(AbsolutePanel container, Canvas canvas, Frame tmpFrame, NodeWidgetFactory<T> nodeFactory, Tree tree) {
+		super(container, canvas, tmpFrame, nodeFactory);
 
 		this.tree = tree;
-		init();
 		setTreeType(tree.getVisualization());
+		init();
 	}
 
 	@Override
@@ -418,11 +419,8 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
     	List<T> nodes = new ArrayList<T>();
     	while (it.hasNext()) {
     		Widget w = it.next();
-    		try {
-    			T tw = (T)w;
-    			nodes.add(tw); // there is the casting from Widget to NodeWidget
-    		} catch (ClassCastException cce) {
-    			// ignore
+    		if (w instanceof NodeInterface) {
+    			nodes.add((T)w); // there is the casting from Widget to NodeWidget
     		}
     	}
     	
@@ -437,7 +435,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
     	container.clear();
         container.add(canvas);
         
-        T nw = createNodeWidget(root);
+        T nw = nodeFactory.create(root);
         container.add(nw, 0, 0);
         
         update(root); // initialize
@@ -471,17 +469,6 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	    	}
     	}
     }
-	
-	private T createNodeWidget(Node node) {
-		T newnw = null;
-		try {
-			Method m = clazz.getMethod("createNodeWidget", Node.class);
-			newnw = (T)m.invoke(node);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return (newnw != null)?newnw:null;
-	}
 	
     private void selectPrevious() {
     	if (selected != null) {
@@ -555,7 +542,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
     }
     
     private int insertNode(Node node, int id) {
-    	T nw = createNodeWidget(node);
+    	T nw = nodeFactory.create(node);
     	if (id < container.getWidgetCount() - NODE_WIDGET_MARK) {
     		container.insert(nw, 0, 0, id + NODE_WIDGET_MARK);
     	} else {

@@ -179,32 +179,5 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 	public boolean isCollapsed() {
 		return collapsed;
 	}
-	
-	private static boolean initMathScript = true;
-	public static NodeWidget createNodeWidget(Node node) {
-    	switch(node.getType()){
-    		case IconText: {
-	            return new TextNodeWidget(node);
-	        }
-	        case ImageLink: {
-	        	return new ImageNodeWidget(node);
-	        }
-	        case Link: {
-	        	return new LinkNodeWidget(node);
-	        }
-	        case MathExpression: {
-	        	if (initMathScript) {
-	        		initMathScript = false;
-	        		MathExpressionTools.initScript();
-	        	}
-	        	return new MathExpressionNodeWidget(node);
-	        }
-	        case Connector:{
-	        	return new ConnectorNodeWidget(node);
-	        }
-	    }
-    	
-    	return null;
-    }
 
 }

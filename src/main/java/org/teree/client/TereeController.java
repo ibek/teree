@@ -36,6 +36,7 @@ import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.UserService;
 import org.teree.shared.data.AuthType;
 import org.teree.shared.data.UserInfo;
+import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.tree.Tree;
 import org.teree.shared.data.tree.TreeType;
 
@@ -257,8 +258,9 @@ public class TereeController implements ValueChangeHandler<String> {
 				
 				if (createScheme) {
 					Tree s = new Tree();
-					s.setRoot(NodeGenerator.complex()); // TODO: choose visualization type
-					s.setVisualization(TreeType.MindMap);
+					s.setRoot(NodeGenerator.complex());
+					s.setVisualization(TreeType.MindMap); // TODO: choose visualization type
+					s.setStructure(StructureType.Tree); // TODO: choose structure type
 					eventBus.fireEvent(new SchemeReceived(s));
 				}
 			}

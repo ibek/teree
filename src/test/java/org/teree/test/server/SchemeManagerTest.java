@@ -9,6 +9,7 @@ import org.teree.server.dao.MongoDB;
 import org.teree.server.dao.SchemeManager;
 import org.teree.server.dao.UserInfoManager;
 import org.teree.shared.data.UserInfo;
+import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.tree.Tree;
 
 import com.mongodb.DB;
@@ -66,11 +67,11 @@ public class SchemeManagerTest {
 		UserInfo ui = new UserInfo();
 		ui.setUserId("50e8a5efe4b09e11e18873c7");
 		//List<Scheme> s = sm.searchFrom(null, "vzor", 5, ui);
-		List<Tree> s = sm.allFrom(null, 5, ui);
+		List<Scheme> s = sm.allFrom(null, 5, ui);
 		System.out.println("ahoj");
-		for (Tree sc:s) {
+		for (Scheme sc:s) {
 			System.out.println("cau");
-			System.out.println(sc.getRoot().getContent().toString());
+			System.out.println(sc.toString());
 		}
 	}
 

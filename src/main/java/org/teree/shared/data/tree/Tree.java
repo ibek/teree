@@ -33,4 +33,9 @@ public class Tree extends Scheme {
 		this.visualization = visualization;
 	}
 	
+	@Override
+	public String toString() {
+		return root.getContent().toString();
+	}
+	
 }

@@ -44,14 +44,14 @@ public class Viewer extends TemplateScene implements org.teree.client.presenter.
         view.getExportImageButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				view.sendDownloadRequest(scheme.getTitle(), scene.getSchemePicture());
+				view.sendDownloadRequest(scheme.toString(), scene.getSchemePicture());
 			}
 		});
         
         view.getExportFreeMindButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				sendDownloadRequest(scheme.getTitle(), "freemind", new FreeMind().exportScheme(scheme));
+				sendDownloadRequest(scheme.toString(), "freemind", new FreeMind().exportScheme(scheme));
 			}
 		});
         

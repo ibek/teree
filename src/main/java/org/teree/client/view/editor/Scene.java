@@ -9,8 +9,8 @@ import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
 import org.teree.client.view.editor.event.SelectedNodeListener;
-import org.teree.client.view.editor.type.BehaviorController;
-import org.teree.client.view.editor.type.TreeController;
+import org.teree.client.view.type.BehaviorController;
+import org.teree.client.view.type.TreeController;
 import org.teree.shared.data.common.Connector;
 import org.teree.shared.data.common.IconText;
 import org.teree.shared.data.common.ImageLink;
@@ -103,7 +103,7 @@ public class Scene extends Composite {
     public void setScheme(Scheme scheme) {
     	switch (scheme.getStructure()) {
 	    	case Tree: {
-		    	controller = new TreeController<NodeWidget>(NodeWidget.class, container, canvas, tmpFrame, (Tree)scheme);
+		    	controller = new TreeController<NodeWidget>(container, canvas, tmpFrame, new EditorNodeWidgetFactory<NodeWidget>(), (Tree)scheme);
 		    	break;
 	    	}
     	}

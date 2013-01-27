@@ -18,9 +18,12 @@ import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeStyle;
 import org.teree.shared.data.common.Permissions;
 import org.teree.shared.data.common.Scheme;
+import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.common.UserPermissions;
 import org.teree.shared.data.common.Node.NodeLocation;
 import org.teree.shared.data.common.Node.NodeType;
+import org.teree.shared.data.tree.Tree;
+import org.teree.shared.data.tree.TreeType;
 import org.teree.shared.data.UserInfo;
 
 import com.mongodb.BasicDBList;
@@ -96,6 +99,7 @@ public class SchemeManager {
     		return null;
     	}
         DBObject dbo = toSchemeDBObject(s);
+        dbo.put("structure", s.getStructure().name());
         dbo.put("author", ui.getUserId());
         dbo.put("permissions", toPermissionsDBObject(new Permissions()));
         
@@ -310,7 +314,14 @@ public class SchemeManager {
     private BasicDBObject toSchemeDBObject(Scheme s) {
         BasicDBObject doc = new BasicDBObject();
         
-        doc.put("root", toNodeDBObject(s.getRoot()));
+        switch (s.getStructure()) {
+	        case Tree: {
+	        	Tree tree = (Tree)s;
+	            doc.put("root", toNodeDBObject(tree.getRoot()));
+	            doc.put("visualization", tree.getVisualization().name());
+	        	break;
+	        }
+        }
         
         if (s.getSchemePicture() != null) {
             doc.put("screen", s.getSchemePicture());
@@ -381,13 +392,41 @@ public class SchemeManager {
     	}
     	Scheme s = fromSchemeDBObjectInfo(scheme);
 
-        s.setRoot(fromNodeDBObject((BasicDBObject)scheme.get("root")));
+    	switch (s.getStructure()) {
+	        case Tree: {
+	        	Tree tree = (Tree)s;
+	            tree.setRoot(fromNodeDBObject((BasicDBObject)scheme.get("root")));
+	        	break;
+	        }
+    	}
         
         return s;
     }
     
     private Scheme fromSchemeDBObjectInfo(DBObject scheme) {
-    	Tree s = new Tree();
+    	Scheme s;
+    	StructureType type = StructureType.valueOf((String)scheme.get("structure"));
+    	
+    	switch (type) {
+	    	case Tree: {
+	    		Tree tree = new Tree();
+	        	Node root = new Node();
+	        	IconText it = new IconText();
+	        	DBObject r = (DBObject)scheme.get("root");
+	        	it.setText((String)r.get("text"));
+	        	it.setIconType((String)r.get("icon"));
+	        	root.setContent(it);
+	        	
+	        	tree.setRoot(root);
+	        	tree.setVisualization(TreeType.valueOf((String)scheme.get("visualization")));
+	        	
+	        	s = tree;
+	    		break;
+	    	}
+	    	default: {
+	    		return new Scheme();
+	    	}
+    	}
         
         s.setSchemePicture((String)scheme.get("screen"));
         if (scheme.get("_id") != null) { // for import it is null
@@ -395,13 +434,7 @@ public class SchemeManager {
         }
         s.setAuthor(_uim.selectByOid((String)scheme.get("author")));
     	s.setPermissions(fromPermissionsDBObject((DBObject)scheme.get("permissions")));
-    	Node root = new Node();
-    	IconText it = new IconText();
-    	DBObject r = (DBObject)scheme.get("root");
-    	it.setText((String)r.get("text"));
-    	it.setIconType((String)r.get("icon"));
-    	root.setContent(it);
-    	s.setRoot(root);
+    	s.setStructure(type);
         
         return s;
     }
