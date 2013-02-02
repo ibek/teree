@@ -4,13 +4,11 @@ import java.util.List;
 
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.teree.client.CurrentPresenter;
-import org.teree.client.presenter.Presenter;
 import org.teree.client.presenter.Editor;
 import org.teree.client.text.UIConstants;
 import org.teree.client.view.common.TDialog;
 import org.teree.shared.data.common.IconText;
-import org.teree.shared.data.tree.Tree;
-
+import org.teree.shared.data.common.Scheme;
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Image;
 import com.github.gwtbootstrap.client.ui.TextBox;
@@ -37,9 +35,9 @@ public class ConnectorDialog extends TDialog {
 	private Image preview;
 	private TextBox oid;
 	
-	private Tree scheme;
+	private Scheme scheme;
 	
-	private List<Tree> searched;
+	private List<Scheme> searched;
 	private int current = 0;
 
 	public ConnectorDialog() {
@@ -131,9 +129,9 @@ public class ConnectorDialog extends TDialog {
 		} else if (t.length() == 25 && !t.contains(" ")) { // it is oid
 			load(oid.getText());
 		} else {
-			((Editor)CurrentPresenter.getInstance().getPresenter()).searchFrom(null, t, new RemoteCallback<List<Tree>>() {
+			((Editor)CurrentPresenter.getInstance().getPresenter()).searchFrom(null, t, new RemoteCallback<List<Scheme>>() {
 				@Override
-				public void callback(List<Tree> response) {
+				public void callback(List<Scheme> response) {
 					if (response.isEmpty()) {
 						clearDialog();
 					} else {
@@ -194,29 +192,24 @@ public class ConnectorDialog extends TDialog {
 	
 	private void load(String o) {
 		if (o != null && !o.isEmpty()) {
-			Editor se = null;
-			Presenter cp = CurrentPresenter.getInstance().getPresenter();
-			if (cp instanceof Editor) {
-				se = (Editor)cp;
-				se.getScheme(o, new RemoteCallback<Tree>() {
-					@Override
-					public void callback(Tree response) {
-						scheme = response;
-						if (response != null) {
-							preview.setVisible(true);
-							if (scheme.getSchemePicture() != null) {
-								preview.setUrl(scheme.getSchemePicture());
-							}
+			CurrentPresenter.getInstance().getPresenter().getScheme(o, new RemoteCallback<Scheme>() {
+				@Override
+				public void callback(Scheme response) {
+					scheme = response;
+					if (response != null) {
+						preview.setVisible(true);
+						if (scheme.getSchemePicture() != null) {
+							preview.setUrl(scheme.getSchemePicture());
 						}
-						setOkButton();
 					}
-				});
-			}
+					setOkButton();
+				}
+			});
 		}
 	}
 	
 	public boolean isReady() {
-		return scheme != null && scheme.getRoot() != null;
+		return scheme != null;
 	}
 	
 	public HasClickHandlers getOk() {
@@ -224,11 +217,16 @@ public class ConnectorDialog extends TDialog {
 	}
 	
 	public IconText getRoot() {
-		return (scheme == null || scheme.getRoot() == null)?null:(IconText)scheme.getRoot().getContent();
+		IconText it = null;
+		if (scheme != null) {
+			it = new IconText();
+			it.setText(scheme.toString());
+		}
+		return it;
 	}
 	
 	public String getOid() {
-		return (scheme == null || scheme.getRoot() == null)?null:scheme.getOid();
+		return (scheme == null)?null:scheme.getOid();
 	}
 
 	public void setOid(String oid) {

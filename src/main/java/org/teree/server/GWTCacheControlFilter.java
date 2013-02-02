@@ -14,12 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 
 public class GWTCacheControlFilter implements Filter {
 
+	@Override
 	public void destroy() {
 	}
 
+	@Override
 	public void init(FilterConfig config) throws ServletException {
 	}
 
+	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain filterChain) throws IOException, ServletException {
 

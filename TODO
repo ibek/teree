@@ -3,21 +3,11 @@
 0.7:
 ===============
 
-vyhledavani - pouze v root
- - vlozit na hlavni stranku vyhledavani - takovy portal, vysledek bude, ze se bud premisti na prvni nalezenou mapu, nebo se oznami ze nebyla nalezena
+vyhledavani - explore stranka s urcenym scheme filtrem
 
-visualization type
- - ulozeni typu ve tride scheme a do DB
- - definovan pri tvorbe nove mapy
-
-
-lepsi ikony pro typy map
-opravit viewer pri uncollapse all, collapse all, uncollapse all ... v pripade ze je mapa dost velka (prostorove db) tak se nastavi sirka textu na MIN_WIDTH
 add method with @PreDestroy annotation to MongoDB bean
  - vytvorit metody pro vytvoreni a zruseni pripojeni s databazi v MongoDB, protoze se nevola close pri redeploy
  - nemit MongoDB jako @ApplicationScoped!!! - concurrent pripojeni by mohly delat problemy
-replace openshift app to enable scalability https://openshift.redhat.com/community/developers/scaling
-nelze importovat prostorove DB jako JSON
 pocitat s ruznymi verzemi JSON a dalsimi formaty
 upravit home stranku
  - technicke detaily
@@ -36,6 +26,10 @@ upravit explore aby zobrazoval jak posledne vlozene mapy tak i nejvice otevrene 
 pridat hodnoceni a pocet shlednuti mapy
 
 nastavit styl pro tisk
+
+dialog pro vytvoreni mapy - po stisknuti tlacitka create
+ - vyber struktury a typ vizualizace
+ - vlastni velke ikony
 
 ulozeni ruznych pohledu na mapu
  - nektere casti nejsou pro dany pohled dulezite a nebudou zobrazeny
@@ -67,6 +61,7 @@ various structure types - tree, list, n-dimension data, ...
 use Infinispan as a cache for users and maps
  - je potreba aby byl na openshiftu nejdrive umoznen domain mode https://openshift.redhat.com/community/content/jboss-as7-domain-mode
  - pouzit synchronizovanou distribuovanou Infinispan cache https://github.com/infinispan/infinispan-quickstart/tree/master/jboss-as7
+replace openshift app to enable scalability https://openshift.redhat.com/community/developers/scaling
 
 tvorba map z templates - nejake vyhody ? jake vzory napriklad?
 undo-redo funkce

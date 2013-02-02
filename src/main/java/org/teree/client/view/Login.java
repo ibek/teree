@@ -8,7 +8,6 @@ import org.jboss.errai.bus.client.protocols.SecurityCommands;
 import org.jboss.errai.bus.client.protocols.SecurityParts;
 import org.jboss.errai.common.client.protocols.MessageParts;
 import org.teree.client.presenter.LoginPage;
-import org.teree.client.view.resource.PageStyle;
 import org.teree.shared.data.AuthType;
 
 import com.github.gwtbootstrap.client.ui.Button;

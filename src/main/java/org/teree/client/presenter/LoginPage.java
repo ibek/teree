@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 @Dependent
-public class LoginPage implements Presenter {
+public class LoginPage extends Presenter {
 
 	public interface Display extends Template {
         HasClickHandlers getGoogleButton();

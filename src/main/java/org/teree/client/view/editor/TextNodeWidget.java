@@ -197,7 +197,8 @@ public class TextNodeWidget extends NodeWidget {
         fireSelect();
     }
     
-    public void update() {
+    @Override
+	public void update() {
 		String text = nodeContent.getText();
 		if (text == null || text.isEmpty()) {
 			text = "[empty]";

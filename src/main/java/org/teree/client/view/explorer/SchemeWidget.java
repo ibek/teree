@@ -5,8 +5,7 @@ import org.teree.client.Settings;
 import org.teree.client.text.UIConstants;
 import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.common.Permissions;
-import org.teree.shared.data.tree.Tree;
-
+import org.teree.shared.data.common.Scheme;
 import com.github.gwtbootstrap.client.ui.Badge;
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.ThumbnailLink;
@@ -41,7 +40,7 @@ public class SchemeWidget extends Composite {
 	private Button view;
 	private Button permissions;
 	
-	private Tree scheme;
+	private Scheme scheme;
 	private PermissionsDialog pdialog;
 	
 	private UIConstants UIC = UIConstants.LANG;
@@ -163,7 +162,7 @@ public class SchemeWidget extends Composite {
 		
 	}
 	
-	public Tree getScheme() {
+	public Scheme getScheme() {
 		return scheme;
 	}
 	
@@ -175,18 +174,16 @@ public class SchemeWidget extends Composite {
 		pdialog.setVisible(false);
 	}
 	
-	public void setScheme(Tree scheme) {
+	public void setScheme(Scheme scheme) {
 		this.scheme = scheme;
 		if (scheme.getSchemePicture() != null) {
 			screen.setUrl(scheme.getSchemePicture());
 		}
-		if (scheme.getRoot() != null) {
-			String t = scheme.getRoot().getContent().toString();
-			if (t.length() > 25) {
-				t = t.substring(0, 25) + "...";
-			}
-			root.setText(t);
+		String t = scheme.toString();
+		if (t.length() > 25) {
+			t = t.substring(0, 25) + "...";
 		}
+		root.setText(t);
 		if (scheme.getAuthor() != null) {
 			author.setText(scheme.getAuthor().getName());
 		}

@@ -1,20 +1,19 @@
 package org.teree.client.view.explorer.event;
 
-import org.teree.shared.data.tree.Tree;
-
+import org.teree.shared.data.common.Scheme;
 import com.google.gwt.event.shared.GwtEvent;
 
 public class RemoveScheme extends GwtEvent<RemoveSchemeHandler> {
     
     public static Type<RemoveSchemeHandler> TYPE = new Type<RemoveSchemeHandler>();
 
-    private Tree s;
+    private Scheme s;
     
-    public RemoveScheme(Tree s) {
+    public RemoveScheme(Scheme s) {
         this.s = s;
     }
     
-    public Tree getScheme() {
+    public Scheme getScheme() {
     	return s;
     }
     

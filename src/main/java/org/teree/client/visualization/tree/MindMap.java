@@ -5,14 +5,12 @@ import java.util.List;
 
 import org.teree.client.Settings;
 import org.teree.client.view.NodeInterface;
-import org.teree.client.visualization.Renderer;
 import org.teree.client.visualization.utils.Shapes;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.Node.NodeLocation;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -57,6 +55,9 @@ public class MindMap<T extends Widget & NodeInterface> extends TreeRenderer<T> {
 
 		if (!makePicture) {
 			AbsolutePanel panel = (AbsolutePanel) rw.getParent();
+			if (panel == null) {
+				return new int[] { rootX, rootY, width, height };
+			}
 			/**
 			 * the NODE_MAX_WIDTH fixes bug that last node had minimal
 			 * width because of panel.setWidth (there wasn't any place 

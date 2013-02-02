@@ -3,8 +3,6 @@ package org.teree.client.view;
 import javax.annotation.PostConstruct;
 
 import org.teree.client.presenter.ChangeLogsPage;
-import org.teree.client.view.resource.PageStyle;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Widget;

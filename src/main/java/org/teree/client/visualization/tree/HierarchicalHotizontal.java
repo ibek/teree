@@ -5,14 +5,12 @@ import java.util.List;
 
 import org.teree.client.Settings;
 import org.teree.client.view.NodeInterface;
-import org.teree.client.visualization.Renderer;
 import org.teree.client.visualization.utils.Shapes;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.Node.NodeLocation;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -131,11 +129,13 @@ public class HierarchicalHotizontal<T extends Widget & NodeInterface> extends Tr
 
 	}
 	
+	@Override
 	protected int getWidth(T rw, int leftw, int rightw) {
 		int w = (leftw > rightw)?leftw:rightw;
 		return rw.getOffsetWidth() + w + MARGIN + 5;
 	}
 	
+	@Override
 	protected int getHeight(T rw, int lefth, int righth) {
 		int max_y = lefth + righth;
 

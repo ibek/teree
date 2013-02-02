@@ -2,7 +2,6 @@ package org.teree.client.visualization.tree;
 
 import java.util.List;
 
-import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.Node.NodeLocation;
 
 import com.google.gwt.canvas.dom.client.Context2d;

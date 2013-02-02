@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 @Dependent
-public class HomePage implements Presenter {
+public class HomePage extends Presenter {
 
 	public interface Display extends Template {
         Widget asWidget();

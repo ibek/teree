@@ -2,28 +2,21 @@ package org.teree.client.presenter;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
-import org.jboss.errai.ioc.client.api.Caller;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.event.SchemeReceivedHandler;
 import org.teree.client.text.UIMessages;
-import org.teree.shared.SchemeService;
 import org.teree.shared.data.common.Scheme;
-import org.teree.shared.data.tree.Tree;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 @Dependent
-public class Viewer implements Presenter {
+public class Viewer extends Presenter {
 
     public interface Display extends Template {
         Widget asWidget();
@@ -32,12 +25,6 @@ public class Viewer implements Presenter {
         HasClickHandlers getExportJSONButton();
     }
     
-    @Inject @Named(value="eventBus")
-    private HandlerManager eventBus;
-	
-	@Inject
-	private Caller<SchemeService> generalService;
-    
     @Inject
     private Display display;
     
@@ -45,7 +32,7 @@ public class Viewer implements Presenter {
     
     public void bind() {
     	
-        eventBus.addHandler(SchemeReceived.TYPE, new SchemeReceivedHandler() {
+        getEventBus().addHandler(SchemeReceived.TYPE, new SchemeReceivedHandler() {
 			@Override
 			public void received(SchemeReceived event) {
 				Scheme scheme = event.getScheme();
@@ -76,7 +63,7 @@ public class Viewer implements Presenter {
 	}
 	
 	private void exportJSON(String oid) {
-		generalService.call(new RemoteCallback<String>() {
+		getGeneralService().call(new RemoteCallback<String>() {
             @Override
             public void callback(String response) {
             	if (response == null) {
@@ -93,16 +80,6 @@ public class Viewer implements Presenter {
 			}
 		}).exportJSON(oid);
 	}
-	
-	public void getScheme(String oid, RemoteCallback<Scheme> callback) {
-    	generalService.call(callback, new ErrorCallback() {
-			@Override
-			public boolean error(Message message, Throwable throwable) {
-				display.error(message.toString());
-				return false;
-			}
-		}).getScheme(oid);
-    }
 
 	@Override
 	public String getTitle() {

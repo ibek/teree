@@ -15,7 +15,6 @@ import org.teree.server.dao.SchemeManager;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.UserService;
 import org.teree.shared.data.common.Scheme;
-import org.teree.shared.data.tree.Tree;
 import org.teree.shared.data.tree.SchemeChange;
 
 @ApplicationScoped

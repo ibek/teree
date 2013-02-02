@@ -1,6 +1,5 @@
 package org.teree.client.view.type;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,16 +10,12 @@ import org.teree.client.presenter.Editor;
 import org.teree.client.view.NodeInterface;
 import org.teree.client.view.common.NodeWidgetFactory;
 import org.teree.client.view.editor.ConnectorNodeWidget;
-import org.teree.client.view.editor.ImageNodeWidget;
 import org.teree.client.view.editor.LinkNodeWidget;
-import org.teree.client.view.editor.MathExpressionNodeWidget;
 import org.teree.client.view.editor.NodeWidget;
 import org.teree.client.view.editor.Scene;
 import org.teree.client.view.editor.TextNodeWidget;
 import org.teree.client.view.editor.event.SelectedNodeListener;
-import org.teree.client.view.resource.MathExpressionTools;
 import org.teree.client.view.resource.PageStyle;
-import org.teree.client.visualization.Renderer;
 import org.teree.client.visualization.tree.HierarchicalHotizontal;
 import org.teree.client.visualization.tree.MindMap;
 import org.teree.client.visualization.tree.TreeRenderer;
@@ -29,10 +24,10 @@ import org.teree.shared.data.common.IconText;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeStyle;
 import org.teree.shared.data.common.Node.NodeLocation;
+import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.tree.Tree;
 import org.teree.shared.data.tree.TreeType;
 
-import com.github.gwtbootstrap.client.ui.constants.BaseIconType;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.Scheduler;
@@ -240,7 +235,8 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
         }
 	}
 
-    public void selectNode(NodeWidget node) {
+    @Override
+	public void selectNode(NodeWidget node) {
         if (selected != null) { // only one node can be selected
         	selected = selected.unselect();
         }
@@ -254,7 +250,8 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
     }
     
     private List<SelectedNodeListener> slisteners;
-    public void addSelectedNodeListener(SelectedNodeListener snl) {
+    @Override
+	public void addSelectedNodeListener(SelectedNodeListener snl) {
     	if (slisteners == null) {
     		slisteners = new ArrayList<SelectedNodeListener>();
     	}
@@ -377,27 +374,34 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 			final Node n = selected.getNode();
 			Connector con = (Connector)n.getContent();
 	        final NodeWidget oldSelected = selected;
-			((Editor)CurrentPresenter.getInstance().getPresenter()).getScheme(con.getOid(), new RemoteCallback<Tree>() {
+			CurrentPresenter.getInstance().getPresenter().getScheme(con.getOid(), new RemoteCallback<Scheme>() {
 				@Override
-				public void callback(Tree response) {
-					List<Node> childNodes = response.getRoot().getChildNodes();
-					for (int i=0; childNodes != null && i<childNodes.size(); ++i) {
-						childNodes.get(i).setLocation(n.getLocation());
+				public void callback(Scheme response) {
+					switch(response.getStructure()) {
+						case Tree: {
+							Tree tree = (Tree)response;
+							List<Node> childNodes = tree.getRoot().getChildNodes();
+							for (int i=0; childNodes != null && i<childNodes.size(); ++i) {
+								childNodes.get(i).setLocation(n.getLocation());
+							}
+							insertNodeBefore(tree.getRoot());
+			                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+			        	        @Override
+			        	        public void execute() {
+			        	        	selected = oldSelected;
+			        	        	removeNode();
+			        	        }
+			                });
+							break;
+						}
 					}
-					insertNodeBefore(response.getRoot());
-	                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-	        	        @Override
-	        	        public void execute() {
-	        	        	selected = oldSelected;
-	        	        	removeNode();
-	        	        }
-	                });
 				}
 			});
 		}
 	}
     
-    public void collapseAll(List<T> widgets, boolean collapse) {
+    @Override
+	public void collapseAll(List<T> widgets, boolean collapse) {
     	for (int i=1; i<widgets.size(); ++i) {
 			T nw = widgets.get(i);
 			if (!collapse) { // for uncollapse update content - necessary for images

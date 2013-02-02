@@ -52,6 +52,7 @@ public class LinkNodeWidget extends NodeWidget {
 		
 	}
 
+	@Override
 	public void update() {
 		String text = nodeContent.getText();
 		if (text == null || text.isEmpty()) {

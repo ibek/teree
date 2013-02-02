@@ -3,12 +3,11 @@ package org.teree.server.dao;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Pattern;
-
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.bson.types.ObjectId;
+import org.teree.server.util.MongoDBFilter;
 import org.teree.shared.data.common.Connector;
 import org.teree.shared.data.common.IconText;
 import org.teree.shared.data.common.ImageLink;
@@ -18,6 +17,7 @@ import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeStyle;
 import org.teree.shared.data.common.Permissions;
 import org.teree.shared.data.common.Scheme;
+import org.teree.shared.data.common.SchemeFilter;
 import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.common.UserPermissions;
 import org.teree.shared.data.common.Node.NodeLocation;
@@ -111,54 +111,21 @@ public class SchemeManager {
         
     }
 
-	public List<Scheme> allFrom(String from_oid, int limit, UserInfo ui) {
+	public List<Scheme> selectFrom(String fromOid, SchemeFilter schemeFilter, int limit, UserInfo ui) {
     	DBObject keys = new BasicDBObject();
     	keys.put("root.childNodes", 0);
-    	DBObject ref = new BasicDBObject();
-    	if (from_oid != null) {
-    		ref.put("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
-    	}
-    	putSelectSecurityConditions(ref, ui);
-    	return allFrom(ref, keys, limit, ui);
-    }
-    
-    public List<Scheme> allTo(String to_oid, int limit, UserInfo ui) {
-    	DBObject keys = new BasicDBObject();
-    	keys.put("root.childNodes", 0);
-    	DBObject ref = new BasicDBObject();
-    	if (to_oid != null) {
-    		ref.put("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
-    	}
-    	putSelectSecurityConditions(ref, ui);
-    	return allTo(ref, keys, limit, ui);
-    }
 
-	public List<Scheme> allFromUser(String from_oid, int limit, String userid, UserInfo ui) {
-    	DBObject keys = new BasicDBObject();
-    	keys.put("root.childNodes", 0);
-    	DBObject ref = new BasicDBObject("author", userid);
-    	if (from_oid != null) {
-    		ref.put("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
+		MongoDBFilter mdbfilter = new MongoDBFilter();
+		mdbfilter.setSchemeFilter(schemeFilter);
+		DBObject filter = mdbfilter.getFilter();
+    	if (fromOid != null) {
+    		filter.put("_id", new BasicDBObject("$lt", new ObjectId(fromOid)));
     	}
-    	putSelectSecurityConditions(ref, ui);
-    	return allFrom(ref, keys, limit, ui);
-    }
-    
-    public List<Scheme> allToUser(String to_oid, int limit, String userid, UserInfo ui) {
-    	DBObject keys = new BasicDBObject();
-    	keys.put("root.childNodes", 0);
-    	DBObject ref = new BasicDBObject("author", userid);
-    	if (to_oid != null) {
-    		ref.put("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
-    	}
-    	putSelectSecurityConditions(ref, ui);
-    	return allTo(ref, keys, limit, ui);
-    }
-
-    private List<Scheme> allFrom(DBObject ref, DBObject keys, int limit, UserInfo ui) {
+    	putSelectSecurityConditions(filter, ui);
+    	
     	List<Scheme> res = new ArrayList<Scheme>();
     	DBCollection coll = getCollection();
-        DBCursor found = coll.find(ref, keys)
+        DBCursor found = coll.find(filter, keys)
         		.sort(new BasicDBObject("_id", -1))
         		.limit(limit);
         while(found.hasNext()) {
@@ -167,11 +134,22 @@ public class SchemeManager {
         }
         return res;
     }
-
-    private List<Scheme> allTo(DBObject ref, DBObject keys, int limit, UserInfo ui) {
+    
+    public List<Scheme> selectTo(String toOid, SchemeFilter schemeFilter, int limit, UserInfo ui) {
+    	DBObject keys = new BasicDBObject();
+    	keys.put("root.childNodes", 0);
+    	
+		MongoDBFilter mdbfilter = new MongoDBFilter();
+		mdbfilter.setSchemeFilter(schemeFilter);
+		DBObject filter = mdbfilter.getFilter();
+    	if (toOid != null) {
+    		filter.put("_id", new BasicDBObject("$gt", new ObjectId(toOid)));
+    	}
+    	putSelectSecurityConditions(filter, ui);
+    	
     	List<Scheme> res = new ArrayList<Scheme>();
     	DBCollection coll = getCollection();
-        DBCursor found = coll.find(ref, keys)
+        DBCursor found = coll.find(filter, keys)
         		.sort(new BasicDBObject("_id", 1))
         		.limit(limit);
         while(found.hasNext()) {
@@ -243,48 +221,6 @@ public class SchemeManager {
     	}
     	
     	return null;
-    }
-
-	public List<Scheme> searchFrom(String from_oid, String text, int limit, UserInfo ui) {
-    	if (text == null || text.isEmpty()) {
-    		return new ArrayList<Scheme>();
-    	}
-    	DBObject keys = new BasicDBObject();
-    	
-    	DBObject ref = new BasicDBObject();
-    	String[] parts = text.split(" ");
-    	BasicDBList pl = new BasicDBList();
-    	for (String p:parts) {
-    		pl.add(Pattern.compile(".*" + p + ".*", Pattern.CASE_INSENSITIVE));
-    	}
-    	ref.put("root.text", new BasicDBObject("$in", pl));
-    	
-    	if (from_oid != null) {
-    		ref.put("_id", new BasicDBObject("$lt", new ObjectId(from_oid)));
-    	}
-    	putSelectSecurityConditions(ref, ui);
-    	return allFrom(ref, keys, limit, ui);
-    }
-    
-    public List<Scheme> searchTo(String to_oid, String text, int limit, UserInfo ui) {
-    	if (text == null || text.isEmpty()) {
-    		return new ArrayList<Scheme>();
-    	}
-    	DBObject keys = new BasicDBObject();
-    	
-    	DBObject ref = new BasicDBObject();
-    	String[] parts = text.split(" ");
-    	BasicDBList pl = new BasicDBList();
-    	for (String p:parts) {
-    		pl.add(Pattern.compile(".*" + p + ".*", Pattern.CASE_INSENSITIVE));
-    	}
-    	ref.put("root.text", new BasicDBObject("$in", pl));
-    	
-    	if (to_oid != null) {
-    		ref.put("_id", new BasicDBObject("$gt", new ObjectId(to_oid)));
-    	}
-    	putSelectSecurityConditions(ref, ui);
-    	return allTo(ref, keys, limit, ui);
     }
     
     private DBObject putSelectSecurityConditions(DBObject req, UserInfo ui) {

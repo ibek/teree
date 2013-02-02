@@ -3,8 +3,6 @@ package org.teree.client.visualization;
 import java.util.List;
 
 import org.teree.client.view.NodeInterface;
-import org.teree.shared.data.common.Node;
-
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.user.client.ui.Widget;
 

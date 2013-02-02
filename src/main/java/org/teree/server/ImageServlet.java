@@ -18,6 +18,7 @@ public class ImageServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (request.getHeader("host").equals("127.0.0.1:8080") ||
 				request.getHeader("host").equals("www.teree.org")) {

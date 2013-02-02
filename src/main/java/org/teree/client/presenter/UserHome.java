@@ -4,15 +4,7 @@ import java.util.List;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.jboss.errai.bus.client.api.ErrorCallback;
-import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.RemoteCallback;
-import org.jboss.errai.ioc.client.api.Caller;
-import org.teree.client.Settings;
-import org.teree.client.event.RefreshUserInfo;
-import org.teree.client.event.SchemeReceived;
 import org.teree.client.io.FreeMind;
 import org.teree.client.text.UIMessages;
 import org.teree.client.view.explorer.PrivatePanel.ImportType;
@@ -22,29 +14,24 @@ import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
 import org.teree.client.view.explorer.event.UpdateSchemePermissions;
 import org.teree.client.view.explorer.event.UpdateSchemePermissionsHandler;
-import org.teree.shared.SchemeService;
-import org.teree.shared.SecuredSchemeService;
-import org.teree.shared.UserService;
 import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.common.Node;
+import org.teree.shared.data.common.Scheme;
+import org.teree.shared.data.common.SchemeFilter;
 import org.teree.shared.data.tree.Tree;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 @Dependent
-public class UserHome implements Presenter {
+public class UserHome extends Presenter {
 
 	public interface Display extends Template {
         Widget asWidget();
-        void setData(List<Tree> slist);
+        void setData(List<Scheme> slist);
         HasClickHandlers getNextButton();
         HasClickHandlers getPreviousButton();
         HasSchemeHandlers getScene();
@@ -53,18 +40,6 @@ public class UserHome implements Presenter {
         void setImportSchemeHandler(ImportSchemeHandler handler);
         void setUser(UserInfo ui);
     }
-	
-    @Inject @Named(value="eventBus")
-    private HandlerManager eventBus;
-	
-	@Inject
-	private Caller<SecuredSchemeService> securedService;
-	
-	@Inject
-	private Caller<SchemeService> generalService;
-	
-	@Inject
-	private Caller<UserService> userService;
     
     @Inject
     private Display display;
@@ -77,7 +52,7 @@ public class UserHome implements Presenter {
 			public void onClick(ClickEvent event) {
 				String from = display.getLastOid();
 				if (from != null) {
-					loadData(from);
+					selectFrom(from);
 				}
 			}
 		});
@@ -87,7 +62,7 @@ public class UserHome implements Presenter {
 			public void onClick(ClickEvent event) {
 				String to = display.getFirstOid();
 				if (to != null) {
-					loadPreviousData(to);
+					selectTo(to);
 				}
 			}
 		});
@@ -95,41 +70,14 @@ public class UserHome implements Presenter {
 		display.getScene().addRemoveHandler(new RemoveSchemeHandler() {
 			@Override
 			public void remove(final RemoveScheme event) {
-				securedService.call(new RemoteCallback<Boolean>() {
-					@Override
-					public void callback(Boolean response) {
-						if (response) {
-							display.info(UIMessages.LANG.schemeRemoved(event.getScheme().getOid()));
-							loadData(null);
-						} else {
-							display.error("You are not owner or author of the scheme.");
-						}
-					}
-				}, new ErrorCallback() {
-					@Override
-					public boolean error(Message message, Throwable throwable) {
-						display.error(UIMessages.LANG.connectionIssue());
-						return false;
-					}
-				}).removeScheme(event.getScheme().getOid());
+				removeScheme(event.getScheme());
 			}
 		});
 		
 		display.getScene().addUpdatePermissionsHandler(new UpdateSchemePermissionsHandler() {
 			@Override
 			public void updatePermissions(UpdateSchemePermissions event) {
-				securedService.call(new RemoteCallback<Void>() {
-		            @Override
-		            public void callback(Void response) {
-		                display.info("Scheme permissions updated");
-		            }
-		        }, new ErrorCallback() {
-					@Override
-					public boolean error(Message message, Throwable throwable) {
-						display.error(UIMessages.LANG.connectionIssue());
-						return false;
-					}
-				}).updateSchemePermissions(event.getScheme());
+				UserHome.this.updatePermissions(event.getScheme());
 			}
 		});
 		
@@ -141,7 +89,7 @@ public class UserHome implements Presenter {
 						Node root = new FreeMind().importScheme(data);
 						Tree scheme = new Tree();
 						scheme.setRoot(root);
-						UserHome.this.importScheme(scheme);
+						UserHome.this.createScheme(scheme);
 						break;
 					}
 					case JSON: {
@@ -157,7 +105,7 @@ public class UserHome implements Presenter {
 	@Override
 	public void go(HasWidgets container) {
 		bind();
-		loadData(null);
+		selectFrom(null);
         container.clear();
         container.add(display.asWidget());
 	}
@@ -172,78 +120,45 @@ public class UserHome implements Presenter {
 		loadUserInfo();
 	}
 	
-	private void importScheme(final Tree scheme) {
-		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+	public void selectFrom(String fromOid) {
+		selectFrom(fromOid, new SchemeFilter(), new RemoteCallback<List<Scheme>>() {
             @Override
-            public void execute() {
-            	History.newItem(Settings.CREATE_LINK);
-            	eventBus.fireEvent(new SchemeReceived(scheme));
+            public void callback(List<Scheme> response) {
+                display.setData(response);
             }
         });
 	}
 	
-	private void importJSON(String json) {
-		generalService.call(new RemoteCallback<Tree>() {
+	public void selectTo(String toOid) {
+		selectTo(toOid, new SchemeFilter(), new RemoteCallback<List<Scheme>>() {
             @Override
-            public void callback(Tree response) {
-            	if (response == null) {
-            		display.error("Cannot import the scheme");
-            	} else {
-            		importScheme(response);
-            	}
+            public void callback(List<Scheme> response) {
+                display.setData(response);
             }
-        }, new ErrorCallback() {
-			@Override
-			public boolean error(Message message, Throwable throwable) {
-				display.error(UIMessages.LANG.connectionIssue());
-				return false;
-			}
-		}).importJSON(json);
+        });
 	}
 	
-	private void loadUserInfo() {
-		userService.call(new RemoteCallback<UserInfo>() {
+	public void removeScheme(final Scheme scheme) {
+		removeScheme(scheme, new RemoteCallback<Boolean>() {
+			@Override
+			public void callback(Boolean response) {
+				if (response) {
+					display.info(UIMessages.LANG.schemeRemoved(scheme.getOid()));
+					selectFrom(null);
+				} else {
+					display.error("You are not author of the scheme.");
+				}
+			}
+		});
+	}
+	
+	public void loadUserInfo() {
+		getUserInfo(userid, new RemoteCallback<UserInfo>() {
 			@Override
 			public void callback(UserInfo response) {
 				display.setUser(response);
 			}
-		}, new ErrorCallback() {
-			@Override
-			public boolean error(Message message, Throwable throwable) {
-				display.error(UIMessages.LANG.connectionIssue());
-				return false;
-			}
-		}).getUserInfo(userid);
-	}
-	
-	private void loadData(String from_oid) {
-		generalService.call(new RemoteCallback<List<Tree>>() {
-            @Override
-            public void callback(List<Tree> response) {
-                display.setData(response);
-            }
-        }, new ErrorCallback() {
-			@Override
-			public boolean error(Message message, Throwable throwable) {
-				display.error(UIMessages.LANG.connectionIssue());
-				return false;
-			}
-		}).getAllFromUser(from_oid, Settings.SCHEME_COUNT_IN_EXPLORER, userid);
-	}
-	
-	private void loadPreviousData(String to_oid) {
-		generalService.call(new RemoteCallback<List<Tree>>() {
-            @Override
-            public void callback(List<Tree> response) {
-                display.setData(response);
-            }
-        }, new ErrorCallback() {
-			@Override
-			public boolean error(Message message, Throwable throwable) {
-				display.error(UIMessages.LANG.connectionIssue());
-				return false;
-			}
-		}).getAllToUser(to_oid, Settings.SCHEME_COUNT_IN_EXPLORER, userid);
+		});
 	}
 
 	@Override

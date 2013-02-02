@@ -2,13 +2,9 @@ package org.teree.client.view.editor;
 
 import org.teree.client.view.NodeInterface;
 import org.teree.client.view.editor.event.NodeChanged;
-import org.teree.client.view.resource.MathExpressionTools;
 import org.teree.client.view.resource.NodeCssStyle;
 import org.teree.shared.data.common.Node;
-import org.teree.shared.data.common.Node.NodeType;
 import org.teree.shared.data.common.NodeStyle;
-import org.teree.shared.data.tree.TreeType;
-
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.DragEnterEvent;

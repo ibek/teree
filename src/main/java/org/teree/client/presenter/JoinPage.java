@@ -2,25 +2,18 @@ package org.teree.client.presenter;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import org.jboss.errai.bus.client.api.ErrorCallback;
-import org.jboss.errai.bus.client.api.Message;
-import org.jboss.errai.bus.client.api.RemoteCallback;
-import org.jboss.errai.ioc.client.api.Caller;
-import org.teree.client.Settings;
-import org.teree.shared.UserService;
 import org.teree.shared.data.UserInfo;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 @Dependent
-public class JoinPage implements Presenter {
+public class JoinPage extends Presenter {
 
 	public interface Display extends Template {
         HasClickHandlers getGoogleButton();
@@ -30,9 +23,6 @@ public class JoinPage implements Presenter {
         UserInfo getUserInfo();
         String getPassword();
     }
-	
-	@Inject
-	private Caller<UserService> userService;
     
     @Inject
     private Display display;
@@ -42,22 +32,7 @@ public class JoinPage implements Presenter {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (display.validate()) {
-					userService.call(new RemoteCallback<Boolean>() {
-						@Override
-						public void callback(Boolean response) {
-							if (response) {
-								History.newItem(Settings.LOGIN_LINK);
-							} else {
-								display.error("Cannot create user, username and email must be unique.");
-							}
-						}
-					}, new ErrorCallback() {
-						@Override
-						public boolean error(Message message, Throwable throwable) {
-							display.error(throwable.getMessage());
-							return false;
-						}
-					}).register(display.getUserInfo(), display.getPassword());
+					registerUser(display.getUserInfo(), display.getPassword());
 				}
 			}
 		});

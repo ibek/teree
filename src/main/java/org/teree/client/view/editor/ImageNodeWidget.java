@@ -85,6 +85,7 @@ public class ImageNodeWidget extends NodeWidget {
 		
 	}
 
+	@Override
 	public void update() {
 		if (nodeContent != null) {
 			final String url = nodeContent.getUrl();

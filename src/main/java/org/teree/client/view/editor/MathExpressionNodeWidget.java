@@ -185,7 +185,8 @@ public class MathExpressionNodeWidget extends NodeWidget {
         fireSelect();
     }
     
-    public void update() {
+    @Override
+	public void update() {
 		String expr = nodeContent.getExpression();
 		if (expr.isEmpty()) {
 			expr = "[empty]";

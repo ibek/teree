@@ -8,9 +8,7 @@ import org.teree.client.view.resource.IconTypeContent;
 import org.teree.client.view.resource.icon.CustomIconType;
 
 import com.github.gwtbootstrap.client.ui.Button;
-import com.github.gwtbootstrap.client.ui.Dropdown;
 import com.github.gwtbootstrap.client.ui.DropdownButton;
-import com.github.gwtbootstrap.client.ui.ListBox;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.SplitDropdownButton;
 import com.github.gwtbootstrap.client.ui.Tooltip;
@@ -29,9 +27,6 @@ public class EditPanel extends Composite {
 
 	private HorizontalPanel container;
 	private Button save;
-	private DropdownButton type;
-	private NavLink mindmap;
-	private NavLink hierarchicalHorizontal;
 	private Button refresh;
 	private Button createText;
 	private Button createImg;
@@ -60,28 +55,6 @@ public class EditPanel extends Composite {
 		Label space2 = new Label("");
 		space2.getElement().getStyle().setMarginRight(20, Unit.PX);
 		
-		type = new DropdownButton(" ");
-		type.getElement().getStyle().setDisplay(Display.INLINE);
-		type.setBaseIcon(CustomIconType.mindmap);
-		mindmap = new NavLink("MindMap");
-		mindmap.setBaseIcon(CustomIconType.mindmap);
-		mindmap.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				type.setBaseIcon(CustomIconType.mindmap);
-			}
-		});
-		type.add(mindmap);
-		hierarchicalHorizontal = new NavLink("Hierarchical Horizontal Tree");
-		hierarchicalHorizontal.setBaseIcon(CustomIconType.hierarchicalhorizontal);
-		hierarchicalHorizontal.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				type.setBaseIcon(CustomIconType.hierarchicalhorizontal);
-			}
-		});
-		type.add(hierarchicalHorizontal);
-		
 		createText = new Button("", IconType.PLUS);
 		createImg = new Button("", IconType.PICTURE);
 		createLink = new Button("", IconType.LINK);
@@ -107,8 +80,6 @@ public class EditPanel extends Composite {
 
 		container.add(save);
 		container.add(space);
-		
-		container.add(type);
 		
 		Tooltip tre = new Tooltip(UIConstants.LANG.refresh_scheme());
 		tre.add(refresh);
@@ -138,8 +109,6 @@ public class EditPanel extends Composite {
         tccon.add(createConnector);
 		container.add(tccon);
 		
-		// TODO: add here the split button
-		
 		container.add(space4);
 
         Tooltip tcb = new Tooltip(UIMessages.LANG.bold_text());
@@ -151,8 +120,6 @@ public class EditPanel extends Composite {
 		container.add(ti);
 		
 		initWidget(container);
-		
-		type.setHeight(save.getOffsetHeight()+"px");
 		
 	}
 	
@@ -193,14 +160,6 @@ public class EditPanel extends Composite {
 	
 	public HasClickHandlers getSaveButton() {
 		return save;
-	}
-	
-	public HasClickHandlers getMindMapButton() {
-		return mindmap;
-	}
-	
-	public HasClickHandlers getHierarchicalHorizontalButton() {
-		return hierarchicalHorizontal;
 	}
 	
 	public HasClickHandlers getRefreshButton() {

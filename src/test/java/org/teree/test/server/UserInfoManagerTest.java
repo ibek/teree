@@ -1,12 +1,5 @@
 package org.teree.test.server;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.teree.server.dao.MongoDB;
-import org.teree.shared.data.UserInfo;
-
 public class UserInfoManagerTest {
 
 	/**private static MockUserInfoManager uim;

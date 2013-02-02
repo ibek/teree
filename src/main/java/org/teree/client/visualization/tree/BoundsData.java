@@ -2,8 +2,6 @@ package org.teree.client.visualization.tree;
 
 import java.util.List;
 
-import org.teree.shared.data.common.Node;
-
 public class BoundsData<T> {
 	
 	private List<T> nodes;

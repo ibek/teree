@@ -1,20 +1,19 @@
 package org.teree.client.view.explorer.event;
 
-import org.teree.shared.data.tree.Tree;
-
+import org.teree.shared.data.common.Scheme;
 import com.google.gwt.event.shared.GwtEvent;
 
 public class UpdateSchemePermissions extends GwtEvent<UpdateSchemePermissionsHandler> {
     
     public static Type<UpdateSchemePermissionsHandler> TYPE = new Type<UpdateSchemePermissionsHandler>();
 
-    private Tree s;
+    private Scheme s;
     
-    public UpdateSchemePermissions(Tree s) {
+    public UpdateSchemePermissions(Scheme s) {
         this.s = s;
     }
     
-    public Tree getScheme() {
+    public Scheme getScheme() {
     	return s;
     }
     

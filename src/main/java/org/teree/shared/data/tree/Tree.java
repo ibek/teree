@@ -1,9 +1,7 @@
 package org.teree.shared.data.tree;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
-import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.common.Node;
-import org.teree.shared.data.common.Permissions;
 import org.teree.shared.data.common.Scheme;
 
 /**

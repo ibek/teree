@@ -20,6 +20,7 @@ import org.teree.client.event.RefreshUserInfo;
 import org.teree.client.event.RefreshUserInfoHandler;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.presenter.ChangeLogsPage;
+import org.teree.client.presenter.Presenter;
 import org.teree.client.presenter.HelpPage;
 import org.teree.client.presenter.HomePage;
 import org.teree.client.presenter.JoinPage;
@@ -28,7 +29,6 @@ import org.teree.client.presenter.UserHome;
 import org.teree.client.presenter.Explorer;
 import org.teree.client.presenter.Editor;
 import org.teree.client.presenter.Viewer;
-import org.teree.client.presenter.Presenter;
 import org.teree.client.presenter.SettingsPage;
 import org.teree.shared.NodeGenerator;
 import org.teree.shared.SchemeService;
@@ -36,6 +36,7 @@ import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.UserService;
 import org.teree.shared.data.AuthType;
 import org.teree.shared.data.UserInfo;
+import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.tree.Tree;
 import org.teree.shared.data.tree.TreeType;
@@ -50,22 +51,11 @@ import com.google.gwt.user.client.ui.HasWidgets;
 
 @ApplicationScoped
 public class TereeController implements ValueChangeHandler<String> {
+	
+    private static HandlerManager eventBus = new HandlerManager(null);
 
 	@Inject
 	private IOCBeanManager manager;
-
-	@Inject
-	@Named(value = "eventBus")
-	private HandlerManager eventBus;
-
-	@Inject
-	private Caller<SchemeService> generalService;
-	
-	@Inject
-	private Caller<SecuredSchemeService> securedScheme;
-
-	@Inject
-	private Caller<UserService> userService;
 
 	private Keyboard keyboard;
 	
@@ -142,7 +132,7 @@ public class TereeController implements ValueChangeHandler<String> {
 	}
 
 	/**
-	 * @see org.teree.client.presenter.Presenter
+	 * @see org.teree.client.presenter.PresenterA
 	 */
 	public void go(HasWidgets container) {
 		this.container = container;
@@ -179,7 +169,17 @@ public class TereeController implements ValueChangeHandler<String> {
 						.lookupBean(Viewer.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
-					loadScheme(token.substring(Settings.VIEW_LINK.length()));
+					presenter.getScheme(token.substring(Settings.VIEW_LINK.length()), new RemoteCallback<Scheme>() {
+						@Override
+						public void callback(Scheme response) {
+							if (response == null || response.getOid() == null) {
+								History.newItem(Settings.HOME_LINK);
+								TereeController.this.presenter.getTemplate().error("The scheme does not exist.");
+							} else {
+								eventBus.fireEvent(new SchemeReceived(response));
+							}
+						}
+					});
 				}
 			} else if (token.startsWith(Settings.CREATE_LINK)) {
 				IOCBeanDef<Editor> bean = manager
@@ -204,7 +204,17 @@ public class TereeController implements ValueChangeHandler<String> {
 						.lookupBean(Editor.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
-					loadSchemeToEdit(token.substring(Settings.EDIT_LINK.length()));
+					presenter.getSchemeToEdit(token.substring(Settings.EDIT_LINK.length()), new RemoteCallback<Scheme>() {
+						@Override
+						public void callback(Scheme response) {
+							if (response == null) {
+								History.newItem(Settings.HOME_LINK);
+								TereeController.this.presenter.getTemplate().error("You don't have any rights to edit the scheme");
+							} else {
+								eventBus.fireEvent(new SchemeReceived(response));
+							}
+						}
+					});
 				}
 			} else if (token.startsWith(Settings.LOGIN_LINK)) {
 				IOCBeanDef<LoginPage> bean = manager
@@ -269,7 +279,9 @@ public class TereeController implements ValueChangeHandler<String> {
 	}
 	
 	private void setPresenter(Presenter presenter) {
+		presenter.setEventBus(eventBus);
 		if (this.presenter == null && currentUser.getUserInfo() == null) { // for page reload
+			this.presenter = presenter;
 			loadUserInfoData();
 		}
 		this.presenter = presenter;
@@ -282,50 +294,10 @@ public class TereeController implements ValueChangeHandler<String> {
 		}
 		presenter.getTemplate().setCurrentUser(currentUser);
 	}
-
-	private void loadScheme(final String oid) {
-		generalService.call(new RemoteCallback<Tree>() {
-			@Override
-			public void callback(Tree response) {
-				if (response == null || response.getRoot() == null || response.getRoot().getContent() == null) {
-					History.newItem(Settings.HOME_LINK);
-					presenter.getTemplate().error("The scheme does not exist.");
-				} else {
-					eventBus.fireEvent(new SchemeReceived(response));
-				}
-			}
-		}, new ErrorCallback() {
-			@Override
-			public boolean error(Message message, Throwable throwable) {
-				presenter.getTemplate().error("Error while getting the respond. Please try reload the page.");
-				return false;
-			}
-		}).getScheme(oid);
-	}
-
-	private void loadSchemeToEdit(final String oid) {
-		securedScheme.call(new RemoteCallback<Tree>() {
-			@Override
-			public void callback(Tree response) {
-				if (response == null) {
-					History.newItem(Settings.HOME_LINK);
-					presenter.getTemplate().error("You don't have any rights to edit the scheme");
-				} else {
-					eventBus.fireEvent(new SchemeReceived(response));
-				}
-			}
-		}, new ErrorCallback() {
-			@Override
-			public boolean error(Message message, Throwable throwable) {
-				presenter.getTemplate().error("Error while getting the respond. Please try reload the page.");
-				return false;
-			}
-		}).getScheme(oid);
-	}
 	
 	private void loadUserInfoData() {
-		
-		userService.call(new RemoteCallback<UserInfo>() {
+		if (presenter != null) {
+			presenter.getUserInfo(new RemoteCallback<UserInfo>() {
 			@Override
 			public void callback(UserInfo response) {
 				currentUser.setUserInfo(response);
@@ -338,14 +310,8 @@ public class TereeController implements ValueChangeHandler<String> {
 					presenter.getTemplate().setCurrentUser(currentUser);
 				}
 			}
-		}, new ErrorCallback() {
-			@Override
-			public boolean error(Message message, Throwable throwable) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		}).getUserInfo();
-		
+		});
+		}
 	}
 
 }

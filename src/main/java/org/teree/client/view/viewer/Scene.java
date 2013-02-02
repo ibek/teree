@@ -6,6 +6,8 @@ import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.type.BehaviorController;
 import org.teree.client.view.type.TreeController;
 import org.teree.client.view.viewer.NodeWidget;
+import org.teree.client.view.viewer.event.CollapseNode;
+import org.teree.client.view.viewer.event.CollapseNodeHandler;
 import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.tree.Tree;
 
@@ -111,6 +113,14 @@ public class Scene extends Composite {
 				controller.update(event.getNode());
 			}
 		}, NodeChanged.TYPE);
+    	
+    	container.addHandler(new CollapseNodeHandler() {
+			@Override
+			public void collapse(CollapseNode event) {
+				changeCollapseNode(event.getNode());
+			}
+		}, CollapseNode.TYPE);
+    	
     }
     
     public void setScheme(Scheme scheme) {
@@ -134,15 +144,14 @@ public class Scene extends Composite {
 		controller.collapseAll(controller.getNodeWidgets(), collapseAll);
     }
     
- // TODO: change collapse node - new event!
-    /**private void changeCollapseNode(TextNodeWidget nw) {
+    private void changeCollapseNode(NodeWidget nw) {
     	if (nw.getNode().getChildNodes() != null && !nw.getNode().getChildNodes().isEmpty() && nw.getNode().getParent() != null) { // has child nodes
 	    	nw.setCollapsed(!nw.isCollapsed());
 	    	if (!nw.isCollapsed()) {
 	    		nw.update();
 	    	}
-	        update();
+	        controller.update(null);
     	}
-    }*/
+    }
     
 }

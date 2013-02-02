@@ -3,7 +3,6 @@ package org.teree.client.view;
 import javax.annotation.PostConstruct;
 
 import org.teree.client.presenter.JoinPage;
-import org.teree.client.view.resource.PageStyle;
 import org.teree.client.view.validate.FormValidator;
 import org.teree.shared.data.UserInfo;
 

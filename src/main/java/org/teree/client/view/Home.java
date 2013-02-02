@@ -4,8 +4,6 @@ import javax.annotation.PostConstruct;
 
 import org.teree.client.Settings;
 import org.teree.client.presenter.HomePage;
-import org.teree.client.view.resource.PageStyle;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

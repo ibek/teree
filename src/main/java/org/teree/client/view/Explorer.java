@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import org.teree.client.view.explorer.Scene;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
-import org.teree.shared.data.tree.Tree;
+import org.teree.shared.data.common.Scheme;
 
 public class Explorer extends TemplateScene implements org.teree.client.presenter.Explorer.Display {
 
@@ -35,7 +35,7 @@ public class Explorer extends TemplateScene implements org.teree.client.presente
     }
 
 	@Override
-	public void setData(List<Tree> slist) {
+	public void setData(List<Scheme> slist) {
 		scene.setData(slist);
 	}
 

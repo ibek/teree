@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 @Dependent
-public class ChangeLogsPage implements Presenter {
+public class ChangeLogsPage extends Presenter {
 
 	public interface Display extends Template {
         Widget asWidget();

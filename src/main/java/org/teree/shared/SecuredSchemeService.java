@@ -2,7 +2,6 @@ package org.teree.shared;
 
 import org.jboss.errai.bus.server.annotations.Remote;
 import org.teree.shared.data.common.Scheme;
-import org.teree.shared.data.tree.Tree;
 import org.teree.shared.data.tree.SchemeChange;
 
 @Remote

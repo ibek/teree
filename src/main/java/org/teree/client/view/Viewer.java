@@ -15,7 +15,6 @@ import org.teree.client.view.viewer.Scene;
 import org.teree.client.view.viewer.ShareDialog;
 import org.teree.client.view.viewer.ViewPanel;
 import org.teree.shared.data.common.Scheme;
-import org.teree.shared.data.tree.Tree;
 
 public class Viewer extends TemplateScene implements org.teree.client.presenter.Viewer.Display {
 

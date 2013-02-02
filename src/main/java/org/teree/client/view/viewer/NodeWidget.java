@@ -1,13 +1,9 @@
 package org.teree.client.view.viewer;
 
 import org.teree.client.view.NodeInterface;
-import org.teree.client.view.resource.MathExpressionTools;
 import org.teree.client.view.resource.NodeCssStyle;
 import org.teree.shared.data.common.Node;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 
@@ -33,7 +29,8 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
         initWidget(container);
     }
     
-    public void update() {
+    @Override
+	public void update() {
     	
     }
 
@@ -52,6 +49,7 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 		return getWidget().getOffsetHeight();
 	}
 	
+	@Override
 	public void setCollapsed(boolean collapsed) {
 		this.collapsed = collapsed;
 	}

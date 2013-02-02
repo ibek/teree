@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.jboss.errai.bus.server.annotations.Remote;
 import org.teree.shared.data.common.Scheme;
-import org.teree.shared.data.tree.Tree;
+import org.teree.shared.data.common.SchemeFilter;
 
 /**
 * Errai RPC interface that specifies which methods the client can invoke on the
@@ -15,17 +15,9 @@ import org.teree.shared.data.tree.Tree;
 @Remote
 public interface SchemeService {
 
-	public List<Scheme> getAllFrom(String fromOid, int limit);
+	public List<Scheme> selectFrom(String fromOid, SchemeFilter filter, int limit);
 	
-	public List<Scheme> getAllTo(String toOid, int limit);
-
-	public List<Scheme> getAllFromUser(String fromOid, int limit, String userid);
-	
-	public List<Scheme> getAllToUser(String toOid, int limit, String userid);
-
-	public List<Scheme> searchFrom(String fromOid, String text, int limit);
-	
-	public List<Scheme> searchTo(String toOid, String text, int limit);
+	public List<Scheme> selectTo(String toOid, SchemeFilter filter, int limit);
     
     public Scheme getScheme(String oid);
     

@@ -10,8 +10,7 @@ import org.teree.server.dao.SchemeManager;
 import org.teree.server.dao.UserInfoManager;
 import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.common.Scheme;
-import org.teree.shared.data.tree.Tree;
-
+import org.teree.shared.data.common.SchemeFilter;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
 
@@ -67,7 +66,7 @@ public class SchemeManagerTest {
 		UserInfo ui = new UserInfo();
 		ui.setUserId("50e8a5efe4b09e11e18873c7");
 		//List<Scheme> s = sm.searchFrom(null, "vzor", 5, ui);
-		List<Scheme> s = sm.allFrom(null, 5, ui);
+		List<Scheme> s = sm.selectFrom(null, new SchemeFilter(), 5, ui);
 		System.out.println("ahoj");
 		for (Scheme sc:s) {
 			System.out.println("cau");

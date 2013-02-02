@@ -11,8 +11,7 @@ import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
 import org.teree.client.view.explorer.event.UpdateSchemePermissions;
 import org.teree.client.view.explorer.event.UpdateSchemePermissionsHandler;
-import org.teree.shared.data.tree.Tree;
-
+import org.teree.shared.data.common.Scheme;
 import com.github.gwtbootstrap.client.ui.Heading;
 import com.github.gwtbootstrap.client.ui.Pager;
 import com.github.gwtbootstrap.client.ui.Thumbnails;
@@ -93,7 +92,7 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		initWidget(w);
 	}
 	
-	public void setData(List<Tree> slist) {
+	public void setData(List<Scheme> slist) {
 		if (slist == null || slist.size() == 0) {
 			if (page == 0) {
 				setComponents(false);
@@ -109,7 +108,7 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		setComponents(true);
 		schemeContainer.clear();
 		for(int i=0; i<slist.size(); ++i) {
-			Tree s = slist.get(i);
+			Scheme s = slist.get(i);
 			final SchemeWidget sw = new SchemeWidget();
 			sw.setScheme(s);
 			sw.getRemoveButton().addClickHandler(new ClickHandler() {

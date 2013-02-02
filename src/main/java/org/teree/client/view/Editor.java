@@ -17,8 +17,6 @@ import org.teree.client.view.editor.NodeWidget;
 import org.teree.client.view.editor.Scene;
 import org.teree.client.view.editor.event.SelectedNodeListener;
 import org.teree.shared.data.common.Scheme;
-import org.teree.shared.data.tree.Tree;
-import org.teree.shared.data.tree.TreeType;
 
 public class Editor extends TemplateScene implements org.teree.client.presenter.Editor.Display {
 	

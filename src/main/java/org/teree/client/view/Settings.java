@@ -4,7 +4,6 @@ import javax.annotation.PostConstruct;
 
 import org.teree.client.CurrentUser;
 import org.teree.client.presenter.SettingsPage;
-import org.teree.client.view.resource.PageStyle;
 import org.teree.client.view.validate.FormValidator;
 import org.teree.shared.data.UserInfo;
 

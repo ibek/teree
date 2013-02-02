@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class ViewNodeWidgetFactory<T extends Widget & NodeInterface> implements NodeWidgetFactory<T> {
 
 	private boolean initMathScript = true;
+	@Override
 	public T create(Node node) {
 		NodeWidget nw = null;
 		switch(node.getType()){

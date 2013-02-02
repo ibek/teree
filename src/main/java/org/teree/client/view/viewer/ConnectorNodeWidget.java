@@ -4,19 +4,16 @@ import java.util.List;
 
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.teree.client.CurrentPresenter;
-import org.teree.client.presenter.Viewer;
 import org.teree.client.view.editor.event.NodeChanged;
+import org.teree.client.view.viewer.event.CollapseNode;
 import org.teree.shared.data.common.Connector;
-import org.teree.shared.data.common.Link;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.tree.Tree;
 
-import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Anchor;
 
 public class ConnectorNodeWidget extends TextNodeWidget {
 
@@ -37,7 +34,7 @@ public class ConnectorNodeWidget extends TextNodeWidget {
 				if (node.getChildNodes() == null || node.getChildNodes().isEmpty()) {
 					event.stopPropagation();
 					// get scheme from server
-					((Viewer)CurrentPresenter.getInstance().getPresenter()).getScheme(((Connector)node.getContent()).getOid(), new RemoteCallback<Scheme>() {
+					CurrentPresenter.getInstance().getPresenter().getScheme(((Connector)node.getContent()).getOid(), new RemoteCallback<Scheme>() {
 						@Override
 						public void callback(Scheme response) {
 							if (response.getStructure() == StructureType.Tree) {
@@ -63,7 +60,7 @@ public class ConnectorNodeWidget extends TextNodeWidget {
 			public void onClick(ClickEvent event) {
 				Object src = event.getSource();
 				if (src instanceof ConnectorNodeWidget) {
-					//changeCollapseNode((ConnectorNodeWidget) src); // TODO: change collapse node - new event!
+					ConnectorNodeWidget.this.getParent().fireEvent(new CollapseNode((ConnectorNodeWidget)src));
 				}
 			}
 		}, ClickEvent.getType());
