@@ -34,6 +34,8 @@ public class Explorer extends Presenter {
     
     @Inject
     private Display display;
+    
+    private String searchText;
 	
 	public void bind() {
 		display.getNextButton().addClickHandler(new ClickHandler() {
@@ -86,8 +88,14 @@ public class Explorer extends Presenter {
 		return display;
 	}
 	
+	public void setSearchText(String searchText) {
+		this.searchText = searchText;
+	}
+	
 	public void selectFrom(String fromOid) {
-		selectFrom(fromOid, new SchemeFilter(), new RemoteCallback<List<Scheme>>() {
+		SchemeFilter filter = new SchemeFilter();
+		filter.setSearchText(searchText);
+		selectFrom(fromOid, filter, new RemoteCallback<List<Scheme>>() {
             @Override
             public void callback(List<Scheme> response) {
                 display.setData(response);
@@ -96,7 +104,9 @@ public class Explorer extends Presenter {
 	}
 	
 	public void selectTo(String toOid) {
-		selectTo(toOid, new SchemeFilter(), new RemoteCallback<List<Scheme>>() {
+		SchemeFilter filter = new SchemeFilter();
+		filter.setSearchText(searchText);
+		selectTo(toOid, filter, new RemoteCallback<List<Scheme>>() {
             @Override
             public void callback(List<Scheme> response) {
                 display.setData(response);

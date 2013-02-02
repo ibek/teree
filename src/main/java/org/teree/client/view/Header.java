@@ -1,16 +1,22 @@
 package org.teree.client.view;
 
+import javax.annotation.PostConstruct;
+
 import org.teree.client.CurrentUser;
 import org.teree.client.Settings;
 import org.teree.client.presenter.HeaderTemplate;
 import org.teree.shared.data.UserInfo;
 
 import com.github.gwtbootstrap.client.ui.Brand;
+import com.github.gwtbootstrap.client.ui.Form.SubmitCompleteEvent;
+import com.github.gwtbootstrap.client.ui.Form.SubmitCompleteHandler;
 import com.github.gwtbootstrap.client.ui.Form.SubmitEvent;
 import com.github.gwtbootstrap.client.ui.Form.SubmitHandler;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.NavSearch;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -50,7 +56,7 @@ public class Header extends Composite implements HeaderTemplate {
         search.getTextBox().getElement().getStyle().setProperty("borderRadius", "0px");
         search.getTextBox().getElement().getStyle().setProperty("MozBorderRadius", "0px");
         search.getTextBox().getElement().getStyle().setProperty("WebkitBorderRadius", "0px");
-        
+
         bind();
     }
     
@@ -87,7 +93,8 @@ public class Header extends Composite implements HeaderTemplate {
 		search.addSubmitHandler(new SubmitHandler() {
 			@Override
 			public void onSubmit(SubmitEvent event) {
-				System.out.println("search " + search.getTextBox().getText());
+				event.cancel();
+				History.newItem(Settings.SEARCH_LINK + search.getTextBox().getText());
 			}
 		});
 		

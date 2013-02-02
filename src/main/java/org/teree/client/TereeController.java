@@ -163,6 +163,9 @@ public class TereeController implements ValueChangeHandler<String> {
 						.lookupBean(Explorer.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
+					if (token.startsWith(Settings.SEARCH_LINK)) {
+						((Explorer)presenter).setSearchText(token.substring(Settings.SEARCH_LINK.length()));
+					}
 				}
 			} else if (token.startsWith(Settings.VIEW_LINK)) {
 				IOCBeanDef<Viewer> bean = manager

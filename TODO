@@ -3,11 +3,6 @@
 0.7:
 ===============
 
-vyhledavani - explore stranka s urcenym scheme filtrem
-
-add method with @PreDestroy annotation to MongoDB bean
- - vytvorit metody pro vytvoreni a zruseni pripojeni s databazi v MongoDB, protoze se nevola close pri redeploy
- - nemit MongoDB jako @ApplicationScoped!!! - concurrent pripojeni by mohly delat problemy
 pocitat s ruznymi verzemi JSON a dalsimi formaty
 upravit home stranku
  - technicke detaily
@@ -30,6 +25,9 @@ nastavit styl pro tisk
 dialog pro vytvoreni mapy - po stisknuti tlacitka create
  - vyber struktury a typ vizualizace
  - vlastni velke ikony
+ - pozor na import - potreba vyber vizualizace
+ 
+ nove typy vizualizace Hierarchical Horizontal Tree a Hierarchical Vertical Tree
 
 ulozeni ruznych pohledu na mapu
  - nektere casti nejsou pro dany pohled dulezite a nebudou zobrazeny
@@ -40,6 +38,7 @@ ulozeni ruznych pohledu na mapu
  - ruzne zvyrazneni uzlu
  - moznost obarveni nodu dedicne - tzn i potomci budou mit danou barvu pokud nebude nastaven styl
    - cascading formatting
+ - ruzne typy nodu z hlediska vyznamu - klicove slovo, definice, priklad, ...
 
 ===============
 0.9:
@@ -47,10 +46,22 @@ ulozeni ruznych pohledu na mapu
 
 collaboration
 
-ruzne typy nodu z hlediska vyznamu
- - klicove slovo, definice, priklad, ...
-
 tvorba skupin - pratele, apod ... pro urceni prav na urcite mapy
+uskupeni vice map do skupin - napr v ramci projektu
+
+use Infinispan as a cache for users and maps
+ - je potreba aby byl na openshiftu nejdrive umoznen domain mode https://openshift.redhat.com/community/content/jboss-as7-domain-mode
+ - pouzit synchronizovanou distribuovanou Infinispan cache https://github.com/infinispan/infinispan-quickstart/tree/master/jboss-as7
+replace openshift app to enable scalability https://openshift.redhat.com/community/developers/scaling
+
+===============
+1.0:
+===============
+
+novy typ struktury - graf
+novy typ vizualizace - vztahy mezi polozkami v kruhu
+
+sepsat use cases (pro studovani ...) a vlozit na stranky
 
 ===============
 future:
@@ -58,19 +69,12 @@ future:
 
 various structure types - tree, list, n-dimension data, ...
 
-use Infinispan as a cache for users and maps
- - je potreba aby byl na openshiftu nejdrive umoznen domain mode https://openshift.redhat.com/community/content/jboss-as7-domain-mode
- - pouzit synchronizovanou distribuovanou Infinispan cache https://github.com/infinispan/infinispan-quickstart/tree/master/jboss-as7
-replace openshift app to enable scalability https://openshift.redhat.com/community/developers/scaling
-
 tvorba map z templates - nejake vyhody ? jake vzory napriklad?
 undo-redo funkce
 fulltextove vyhledavani
  - v budoucnu bude vysledkem vygenerovana mapa s odkazy a cestami na mapy kde se hledane slovo nachazi
 DBAuth pres SSL
 management console/app - napr pro upravu balicku, zmena limitu apod
-sepsat use cases (pro studovani ...)
 smysluplne testovani
 podpora tabletu a mobilu - pouzit android emulator pro testovani
 presun inline stylu ve tridach do css
-uskupeni vice map do skupin - napr v ramci projektu

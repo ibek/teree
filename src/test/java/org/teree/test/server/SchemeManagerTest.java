@@ -1,7 +1,10 @@
 package org.teree.test.server;
 
 import java.lang.reflect.Field;
+import java.net.UnknownHostException;
 import java.util.List;
+
+import javax.annotation.PostConstruct;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,6 +16,7 @@ import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.common.SchemeFilter;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
+import com.mongodb.MongoException;
 
 public class SchemeManagerTest {
 	
@@ -27,7 +31,7 @@ public class SchemeManagerTest {
 			public DB getDatabase() {
 				if (db == null) {
 					try {
-					    Mongo mongodb = new Mongo("127.0.0.1");
+					    mongodb = new Mongo("127.0.0.1");
 					    db = mongodb.getDB("teree");
 					} catch (Exception e) {
 					    e.printStackTrace();

@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.Composite;
 
 public abstract class TemplateScene extends Composite implements Template {
 	
-	@UiField(provided = true)
+	@UiField
 	Header header;
     
     @UiField
@@ -26,7 +26,7 @@ public abstract class TemplateScene extends Composite implements Template {
 	}
 	
 	public TemplateScene() {
-		header = new Header();
+		
 	}
 
 	@Override

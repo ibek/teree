@@ -84,6 +84,7 @@ public class Viewer extends TemplateScene implements org.teree.client.presenter.
 
     @Override
     public void setScheme(Scheme scheme) {
+    	this.scheme = scheme;
         scene.setScheme(scheme);
         view.getShareButton().setVisible(scheme.getPermissions().getWrite() != null);
     }

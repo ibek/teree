@@ -24,7 +24,7 @@
 
 	<b:Navbar addStyleNames="{style.header}">
 		<b:Brand ui:field='home' addStyleNames="{style.brand}">teree <small>beta</small></b:Brand>
-		<b:NavSearch ui:field='search' size="2" placeholder="{uic.search}"/>
+		<b:NavSearch ui:field='search' size="2" placeholder="{uic.search}" target="_self"/>
 		<b:Nav>
 			<b:NavLink ui:field='create' text="{uic.create}" />
 			<b:NavLink ui:field="explore" text="{uic.explore}" />
