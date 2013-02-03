@@ -3,7 +3,9 @@
 0.7:
 ===============
 
-pocitat s ruznymi verzemi JSON a dalsimi formaty
+problem s prekreslenim kdyz odstranim levy uzel ktery ma 2 radky a potomka se 2 radky - tim posunem vlevo je rozpoznana chybna sirka
+ - pomuze zmenseni okna a maximalizace
+
 upravit home stranku
  - technicke detaily
  - features - velke popisky s obrazky

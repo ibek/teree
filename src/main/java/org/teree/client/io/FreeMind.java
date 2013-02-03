@@ -2,6 +2,7 @@ package org.teree.client.io;
 
 import java.util.List;
 
+import org.teree.client.CurrentPresenter;
 import org.teree.shared.data.common.IconText;
 import org.teree.shared.data.common.ImageLink;
 import org.teree.shared.data.common.Link;
@@ -11,6 +12,7 @@ import org.teree.shared.data.common.Node.NodeLocation;
 import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.tree.Tree;
+import org.teree.shared.data.tree.TreeType;
 
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
@@ -18,16 +20,17 @@ import com.google.gwt.xml.client.NamedNodeMap;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
-public class FreeMind {
+public class FreeMind implements ISchemeImport, ISchemeExport {
 
 	private static final String VERSION = "0.9.0";
-	
-	public String exportScheme(Scheme scheme) {
+
+	@Override
+	public void exportScheme(Scheme scheme) {
 		Node root = null;
 		if (scheme.getStructure() == StructureType.Tree) {
 			root = ((Tree)scheme).getRoot();
 		} else {
-			return null;
+			return;
 		}
 		Document doc = XMLParser.createDocument();
 		Element map = doc.createElement("map");
@@ -41,7 +44,28 @@ public class FreeMind {
 		
 		doc.appendChild(map);
 		
-		return doc.toString();
+		CurrentPresenter.getInstance()
+			.getPresenter()
+			.getTemplate()
+			.sendDownloadRequest(scheme.toString(), "freemind", doc.toString());
+	}
+
+	@Override
+	public void importScheme(String data) throws Exception {
+		Node root = new Node();
+		Document doc = XMLParser.parse(data);
+		com.google.gwt.xml.client.Node r = getFirstNode(doc.getChildNodes().item(0).getChildNodes());
+		if (r != null) {
+			String content = r.getAttributes().getNamedItem("TEXT").getNodeValue();
+			IconText it = new IconText();
+			it.setText(content);
+			root.setContent(it);
+			insertChildNodes(root, r.getChildNodes());
+		}
+		Tree scheme = new Tree();
+		scheme.setRoot(root);
+		scheme.setVisualization(TreeType.MindMap);
+		CurrentPresenter.getInstance().getPresenter().createScheme(scheme);
 	}
 	
 	private void createElements(Node root, Document doc, Element parent) {
@@ -102,24 +126,6 @@ public class FreeMind {
 			}
 		}
 		return n;
-	}
-	
-	public Node importScheme(String data) {
-		Node root = new Node();
-		try {
-			Document doc = XMLParser.parse(data);
-			com.google.gwt.xml.client.Node r = getFirstNode(doc.getChildNodes().item(0).getChildNodes());
-			if (r != null) {
-				String content = r.getAttributes().getNamedItem("TEXT").getNodeValue();
-				IconText it = new IconText();
-				it.setText(content);
-				root.setContent(it);
-				insertChildNodes(root, r.getChildNodes());
-			}
-		} catch(Exception ex) {
-			root = null;
-		}
-		return root;
 	}
 	
 	private void insertChildNodes(Node root, NodeList nl) {

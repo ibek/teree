@@ -62,7 +62,7 @@
 					<base:UnorderedList>
 						<base:ListItem><g:InlineLabel text="open set permissions dialog through the "/><b:Icon type="LOCK" /><g:InlineLabel text=" button"/></base:ListItem>
 						<base:ListItem><g:Label text="set global permissions if necessary or add users to assign the rights"/></base:ListItem>
-						<base:ListItem><g:Label text="3. user is identified by email address"/></base:ListItem>
+						<base:ListItem><g:Label text="user is identified by email address"/></base:ListItem>
 					</base:UnorderedList>
 				</b:Paragraph>
 			<b:Heading size="2" text="Key Shortcuts" />

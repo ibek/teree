@@ -6,4 +6,6 @@ public interface NodeWidgetFactory<T> {
 
 	public T create(Node node);
 	
+	public boolean needsRender();
+	
 }

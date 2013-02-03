@@ -9,8 +9,6 @@ import org.teree.client.text.UIMessages;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
-import org.teree.client.view.explorer.event.UpdateSchemePermissions;
-import org.teree.client.view.explorer.event.UpdateSchemePermissionsHandler;
 import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.common.SchemeFilter;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -58,19 +56,10 @@ public class Explorer extends Presenter {
 			}
 		});
 		
-		// TODO: move following actions into views and call the functions through current presenter
-		
 		display.getScene().addRemoveHandler(new RemoveSchemeHandler() {
 			@Override
 			public void remove(final RemoveScheme event) {
 				removeScheme(event.getScheme());
-			}
-		});
-		
-		display.getScene().addUpdatePermissionsHandler(new UpdateSchemePermissionsHandler() {
-			@Override
-			public void updatePermissions(UpdateSchemePermissions event) {
-				Explorer.this.updatePermissions(event.getScheme());
 			}
 		});
 	}

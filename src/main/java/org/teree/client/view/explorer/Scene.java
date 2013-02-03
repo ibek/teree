@@ -3,14 +3,13 @@ package org.teree.client.view.explorer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.teree.client.CurrentPresenter;
 import org.teree.client.Settings;
 import org.teree.client.text.UIConstants;
 import org.teree.client.text.UIMessages;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
 import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
-import org.teree.client.view.explorer.event.UpdateSchemePermissions;
-import org.teree.client.view.explorer.event.UpdateSchemePermissionsHandler;
 import org.teree.shared.data.common.Scheme;
 import com.github.gwtbootstrap.client.ui.Heading;
 import com.github.gwtbootstrap.client.ui.Pager;
@@ -38,7 +37,6 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	private MultipleButtonHandler prev;
 
 	private HandlerManager removeManager;
-	private HandlerManager updatePermissionsManager;
 	
 	/**
 	 * To prevent unnecessary calls for next and previous page.
@@ -57,7 +55,6 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		schemeContainer.getElement().getStyle().setPaddingRight(5, Unit.PX);
 
 		removeManager = new HandlerManager(schemeContainer);
-		updatePermissionsManager = new HandlerManager(schemeContainer);
 		
 		pagerTop = new Pager((char)0xf060+" "+UIC.back(), UIC.next()+" "+(char)0xf061);
 		pagerTop.getElement().getStyle().setProperty("fontFamily", "FontAwesome");
@@ -100,7 +97,6 @@ public class Scene extends Composite implements HasSchemeHandlers {
 				page--;
 			}
 			lastPage = true;
-			// TODO: inform user that it's last page
 			pagerTop.getRight().setVisible(false);
 			pagerBottom.getRight().setVisible(false);
 			return;
@@ -125,7 +121,7 @@ public class Scene extends Composite implements HasSchemeHandlers {
 					if (!sw.getScheme().getPermissions().equals(sw.getPermissions())) {
 						sw.getScheme().setPermissions(sw.getPermissions());
 						sw.closePermissionsDialog();
-						updatePermissionsManager.fireEvent(new UpdateSchemePermissions(sw.getScheme()));
+						CurrentPresenter.getInstance().getPresenter().updatePermissions(sw.getScheme());
 					}
 				}
 			});
@@ -176,12 +172,6 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	@Override
 	public HandlerRegistration addRemoveHandler(RemoveSchemeHandler handler) {
 		return removeManager.addHandler(RemoveScheme.TYPE, handler);
-	}
-
-	@Override
-	public HandlerRegistration addUpdatePermissionsHandler(
-			UpdateSchemePermissionsHandler handler) {
-		return updatePermissionsManager.addHandler(UpdateSchemePermissions.TYPE, handler);
 	}
 	
 	private class MultipleButtonHandler implements HasClickHandlers {

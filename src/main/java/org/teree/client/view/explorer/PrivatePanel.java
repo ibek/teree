@@ -1,7 +1,9 @@
 package org.teree.client.view.explorer;
 
+import org.teree.client.CurrentPresenter;
+import org.teree.client.io.IOFactory;
+import org.teree.client.io.IOType;
 import org.teree.client.text.UIConstants;
-import org.teree.client.view.explorer.event.ImportSchemeHandler;
 import org.vectomatic.file.FileReader;
 import org.vectomatic.file.FileUploadExt;
 import org.vectomatic.file.events.ErrorEvent;
@@ -28,8 +30,6 @@ public class PrivatePanel extends Composite {
 
 	private FileUploadExt file;
 	private FileReader reader;
-	
-	private ImportSchemeHandler handler;
 
 	public PrivatePanel() {
 
@@ -58,13 +58,13 @@ public class PrivatePanel extends Composite {
 
 	}
 
-	private ImportType it;
+	private IOType it;
 	private void bind() {
 		
 		importJSON.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				it = ImportType.JSON;
+				it = IOType.JSON;
 				file.click();
 			}
 		});
@@ -72,7 +72,7 @@ public class PrivatePanel extends Composite {
 		importFreeMind.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				it = ImportType.FreeMind;
+				it = IOType.FreeMind;
 				file.click();
 			}
 		});
@@ -82,7 +82,11 @@ public class PrivatePanel extends Composite {
 			public void onLoadEnd(LoadEndEvent event) {
 				if (reader.getError() == null) {
 					String data = reader.getStringResult();
-					handler.importScheme(data, it);
+					try {
+						IOFactory.getImporter(it).importScheme(data);
+					} catch (Exception ex) {
+						CurrentPresenter.getInstance().getPresenter().displayError("Cannot import the scheme");
+					}
 				}
 			}
 		});
@@ -104,15 +108,6 @@ public class PrivatePanel extends Composite {
 	
 	public FileReader getReader() {
 		return reader;
-	}
-	
-	public void setImportSchemeHandler(ImportSchemeHandler handler) {
-		this.handler = handler;
-	}
-	
-	public enum ImportType {
-		FreeMind,
-		JSON
 	}
 
 }

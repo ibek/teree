@@ -5,20 +5,13 @@ import java.util.List;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import org.jboss.errai.bus.client.api.RemoteCallback;
-import org.teree.client.io.FreeMind;
 import org.teree.client.text.UIMessages;
-import org.teree.client.view.explorer.PrivatePanel.ImportType;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
-import org.teree.client.view.explorer.event.ImportSchemeHandler;
 import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
-import org.teree.client.view.explorer.event.UpdateSchemePermissions;
-import org.teree.client.view.explorer.event.UpdateSchemePermissionsHandler;
 import org.teree.shared.data.UserInfo;
-import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.common.SchemeFilter;
-import org.teree.shared.data.tree.Tree;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -37,7 +30,6 @@ public class UserHome extends Presenter {
         HasSchemeHandlers getScene();
         String getFirstOid();
         String getLastOid();
-        void setImportSchemeHandler(ImportSchemeHandler handler);
         void setUser(UserInfo ui);
     }
     
@@ -71,32 +63,6 @@ public class UserHome extends Presenter {
 			@Override
 			public void remove(final RemoveScheme event) {
 				removeScheme(event.getScheme());
-			}
-		});
-		
-		display.getScene().addUpdatePermissionsHandler(new UpdateSchemePermissionsHandler() {
-			@Override
-			public void updatePermissions(UpdateSchemePermissions event) {
-				UserHome.this.updatePermissions(event.getScheme());
-			}
-		});
-		
-		display.setImportSchemeHandler(new ImportSchemeHandler() {
-			@Override
-			public void importScheme(String data, ImportType it) {
-				switch (it) {
-					case FreeMind: {
-						Node root = new FreeMind().importScheme(data);
-						Tree scheme = new Tree();
-						scheme.setRoot(root);
-						UserHome.this.createScheme(scheme);
-						break;
-					}
-					case JSON: {
-						UserHome.this.importJSON(data);
-						break;
-					}
-				}
 			}
 		});
 		

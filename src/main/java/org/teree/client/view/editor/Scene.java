@@ -26,9 +26,17 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.ImageData;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
@@ -44,6 +52,10 @@ public class Scene extends Composite {
     private AbsolutePanel container;
     private Canvas canvas;
     private Frame tmpFrame;
+    
+    private boolean move = false;
+    private Integer lastx;
+    private Integer lasty;
 
 	public Scene() {
         
@@ -78,10 +90,47 @@ public class Scene extends Composite {
 		}, ClickEvent.getType());
         
         bind();
+    	
+        container.addDomHandler(new MouseMoveHandler() {
+			@Override
+			public void onMouseMove(MouseMoveEvent event) {
+				if (move) {
+					if (lastx != null && lasty != null) {
+						sp.setHorizontalScrollPosition(sp.getHorizontalScrollPosition() - (event.getX() - lastx));
+						sp.setVerticalScrollPosition(sp.getVerticalScrollPosition() - (event.getY() - lasty));
+					}
+					lastx = event.getX();
+					lasty = event.getY();
+				}
+			}
+		}, MouseMoveEvent.getType());
         
     }
     
     private void bind() {
+        
+        container.addDomHandler(new MouseDownHandler() {
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				if (event.getNativeButton() == NativeEvent.BUTTON_LEFT) {
+					event.preventDefault();
+					move = true;
+					container.getElement().getStyle().setCursor(Cursor.MOVE);
+					lastx = null;
+					lasty = null;
+				}
+			}
+		}, MouseDownEvent.getType());
+    	
+        container.addDomHandler(new MouseUpHandler() {
+			@Override
+			public void onMouseUp(MouseUpEvent event) {
+				if (move) {
+					container.getElement().getStyle().clearCursor();
+					move = false;
+				}
+			}
+		}, MouseUpEvent.getType());
         
     	container.addHandler(new SelectNodeHandler() {
             @Override
@@ -280,7 +329,7 @@ public class Scene extends Composite {
     private void collapseForSample(List<NodeWidget> widgets, boolean collapse) {
     	for (int i=1; i<widgets.size(); ++i) {
     		NodeWidget nw = widgets.get(i);
-    		if ((nw.getNode().getParent().getParent() == null || nw.getNode().getParent().getParent().getParent() == null) && // collapse first or second level of nodes 
+    		if (nw.getNode().getParent() != null &&
     				nw.getNode().getChildNodes() != null && 
     				nw.getNode().getChildNodes().size() > 2) {
     			nw.setCollapsed(collapse);

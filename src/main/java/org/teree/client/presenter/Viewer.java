@@ -21,14 +21,10 @@ public class Viewer extends Presenter {
     public interface Display extends Template {
         Widget asWidget();
         void setScheme(Scheme scheme);
-        void sendDownloadRequest(String name, String type, String data);
-        HasClickHandlers getExportJSONButton();
     }
     
     @Inject
     private Display display;
-    
-    private Scheme scheme;
     
     public void bind() {
     	
@@ -38,13 +34,6 @@ public class Viewer extends Presenter {
 				Scheme scheme = event.getScheme();
 				display.setScheme(scheme);
 				display.info(UIMessages.LANG.schemeReceived(scheme.toString()));
-			}
-		});
-        
-        display.getExportJSONButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				exportJSON(scheme.getOid());
 			}
 		});
         
@@ -60,25 +49,6 @@ public class Viewer extends Presenter {
 	@Override
 	public Template getTemplate() {
 		return display;
-	}
-	
-	private void exportJSON(String oid) {
-		getGeneralService().call(new RemoteCallback<String>() {
-            @Override
-            public void callback(String response) {
-            	if (response == null) {
-            		display.error(UIMessages.LANG.cannot_export_scheme());
-            	} else {
-            		display.sendDownloadRequest(scheme.toString(), "application/json", response);
-            	}
-            }
-        }, new ErrorCallback() {
-			@Override
-			public boolean error(Message message, Throwable throwable) {
-				display.error(UIMessages.LANG.connectionIssue());
-				return false;
-			}
-		}).exportJSON(oid);
 	}
 
 	@Override

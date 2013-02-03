@@ -62,6 +62,8 @@ public interface Actions<T> {
 	
 	public void collapseAll(List<T> widgets, boolean collapse);
 	
+	public void center();
+	
 	public List<T> getNodeWidgets();
 	
 }

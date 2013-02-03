@@ -23,6 +23,7 @@ import org.teree.shared.data.common.Connector;
 import org.teree.shared.data.common.IconText;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeStyle;
+import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.common.Node.NodeLocation;
 import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.tree.Tree;
@@ -37,6 +38,7 @@ import com.google.gwt.dom.client.FrameElement;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Frame;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TreeController<T extends Widget & NodeInterface> extends BehaviorController<T> {
@@ -105,8 +107,15 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 
 	@Override
 	public void insertNodeAfter(Node inserted) {
-		// TODO Auto-generated method stub
-		
+		if (selected.getParent() != null) {
+			NodeLocation loc = selected.getNode().getLocation();
+			inserted.setLocation(loc);
+			selected.getNode().insertAfter(inserted);
+			int id = container.getWidgetIndex(selected);
+			update(inserted);
+			// select new child node
+			selectNode((NodeWidget)container.getWidget(id+1));
+		}
 	}
 	
 	@Override
@@ -123,6 +132,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 		if (selected.getNode().getParent() != null) {
 			selected = null;
 		}
+		update(null);
 	}
 	
 	/**
@@ -329,7 +339,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 		        @Override
 		        public void execute() {
-		        	t.setSchemePicture(scene.getSchemePicture());
+		        	t.setSchemePicture(scene.getSchemeSamplePicture());
 		        	
 		    		FrameElement frameElt = tmpFrame.getElement().cast();
 		    		Document frameDoc = frameElt.getContentDocument();
@@ -416,6 +426,26 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 		}
 		update(null);
     }
+
+	@Override
+	public void center() {
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+	        @Override
+	        public void execute() {
+	    		Widget w = container.getParent();
+	    		if (w instanceof ScrollPanel && container.getWidgetCount() > 1) {
+	    			ScrollPanel sp = (ScrollPanel)w;
+	    			Widget root = container.getWidget(1);
+	    			int hsp = root.getAbsoluteLeft() - sp.getOffsetWidth()/2 + root.getOffsetWidth()/2;
+	    			int vsp = root.getAbsoluteTop() - sp.getOffsetHeight()/2 - root.getOffsetHeight()/2;
+	    			hsp = (hsp > 0)?hsp:0;
+	    			vsp = (vsp > 0)?vsp:0;
+	    			sp.setHorizontalScrollPosition(hsp);
+	    			sp.setVerticalScrollPosition(vsp);
+	    		}
+	        }
+        });
+	}
     
 	@Override
     public List<T> getNodeWidgets() {
@@ -459,6 +489,8 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	        	selectNode(null); // to call listeners and in edit panel check the buttons to disable unnecessary
 	        }
         });
+        
+        center();
 	}
     
     private void setTreeType(TreeType type) {
@@ -553,6 +585,16 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
     		container.add(nw, 0, 0);
     	}
     	id++;
+    	
+    	if (nodeFactory.needsRender()) {
+    		Timer t = new Timer() {
+				@Override
+				public void run() {
+					update(null);
+				}
+        	};
+        	t.schedule(1000);
+    	}
     	
     	List<Node> cn = node.getChildNodes();
         for(int i=0; cn != null && i<cn.size(); ++i){

@@ -15,7 +15,6 @@ import org.teree.client.CurrentUser;
 import org.teree.client.view.explorer.PrivatePanel;
 import org.teree.client.view.explorer.Scene;
 import org.teree.client.view.explorer.event.HasSchemeHandlers;
-import org.teree.client.view.explorer.event.ImportSchemeHandler;
 import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.common.Scheme;
 
@@ -88,11 +87,6 @@ public class UserHome extends TemplateScene implements org.teree.client.presente
 	@Override
 	public HasSchemeHandlers getScene() {
 		return scene;
-	}
-
-	@Override
-	public void setImportSchemeHandler(ImportSchemeHandler handler) {
-		privatePanel.setImportSchemeHandler(handler);
 	}
 	
 	@Override

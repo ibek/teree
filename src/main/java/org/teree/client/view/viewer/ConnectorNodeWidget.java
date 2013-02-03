@@ -45,6 +45,7 @@ public class ConnectorNodeWidget extends TextNodeWidget {
 									node.addChild(n);
 								}
 								ConnectorNodeWidget.this.getParent().fireEvent(new NodeChanged(node));
+								removeFromParent();
 							}
 						}
 					});
@@ -60,6 +61,7 @@ public class ConnectorNodeWidget extends TextNodeWidget {
 			public void onClick(ClickEvent event) {
 				Object src = event.getSource();
 				if (src instanceof ConnectorNodeWidget) {
+					System.out.println("ahoj");
 					ConnectorNodeWidget.this.getParent().fireEvent(new CollapseNode((ConnectorNodeWidget)src));
 				}
 			}

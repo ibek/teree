@@ -10,7 +10,10 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 
+import org.teree.client.CurrentPresenter;
 import org.teree.client.io.FreeMind;
+import org.teree.client.io.IOFactory;
+import org.teree.client.io.IOType;
 import org.teree.client.view.viewer.Scene;
 import org.teree.client.view.viewer.ShareDialog;
 import org.teree.client.view.viewer.ViewPanel;
@@ -40,17 +43,39 @@ public class Viewer extends TemplateScene implements org.teree.client.presenter.
     public void init() {
         initWidget(uiBinder.createAndBindUi(this));
         
+        bind();
+    }
+    
+    private void bind() {
         view.getExportImageButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				view.sendDownloadRequest(scheme.toString(), scene.getSchemePicture());
+				CurrentPresenter.getInstance()
+					.getPresenter()
+					.getTemplate()
+					.sendDownloadRequest(scheme.toString(), scene.getSchemePicture());
 			}
 		});
         
         view.getExportFreeMindButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				sendDownloadRequest(scheme.toString(), "freemind", new FreeMind().exportScheme(scheme));
+				try {
+					IOFactory.getExporter(IOType.FreeMind).exportScheme(scheme);
+				} catch (Exception ex) {
+					error("Cannot export the scheme");
+				}
+			}
+		});
+        
+        view.getExportJSONButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				try {
+					IOFactory.getExporter(IOType.JSON).exportScheme(scheme);
+				} catch (Exception ex) {
+					error("Cannot export the scheme");
+				}
 			}
 		});
         
@@ -74,7 +99,6 @@ public class Viewer extends TemplateScene implements org.teree.client.presenter.
 				view.setCollapsed(collapse);
 			}
 		});
-        
     }
     
     @Override
@@ -88,15 +112,5 @@ public class Viewer extends TemplateScene implements org.teree.client.presenter.
         scene.setScheme(scheme);
         view.getShareButton().setVisible(scheme.getPermissions().getWrite() != null);
     }
-
-	@Override
-	public HasClickHandlers getExportJSONButton() {
-		return view.getExportJSONButton();
-	}
-
-	@Override
-	public void sendDownloadRequest(String name, String type, String data) {
-		view.sendDownloadRequest(name, type, data);
-	}
 
 }

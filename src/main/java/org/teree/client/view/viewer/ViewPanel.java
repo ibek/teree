@@ -15,15 +15,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
 public class ViewPanel extends Composite {
-	
-	private static final String DOWNLOAD_TARGET = "download";
 
 	private HorizontalPanel container;
-	
-    private Form form;
-    private Hidden file;
-    private Hidden fileName;
-    private Hidden fileType;
     
 	private DropdownButton exportAs;
 	private NavLink exportImage;
@@ -39,17 +32,6 @@ public class ViewPanel extends Composite {
 	public ViewPanel() {
 		
 		container = new HorizontalPanel();
-		
-		form = new Form();
-		fileName = new Hidden("fileName");
-		form.add(fileName);
-		fileType = new Hidden("fileType");
-		form.add(fileType);
-		file = new Hidden("file");
-		form.add(file);
-		form.setAction(DOWNLOAD_TARGET);
-		form.setEncoding(FormPanel.ENCODING_MULTIPART);
-		form.setMethod(FormPanel.METHOD_POST);
 		
 		collapseAll = new Button();
 		setCollapsed(true);
@@ -111,19 +93,6 @@ public class ViewPanel extends Composite {
 	
 	public Button getShareButton() {
 		return share;
-	}
-	
-	public void sendDownloadRequest(String name, String dataUrl) {
-		String type = dataUrl.substring(0, dataUrl.indexOf(';'));
-		String base64Data = dataUrl.substring(dataUrl.lastIndexOf(',')+1);
-		sendDownloadRequest(name, type, base64Data);
-	}
-	
-	public void sendDownloadRequest(String name, String type, String data) {
-		fileName.setValue(name);
-		fileType.setValue(type);
-		file.setValue(data);
-		form.submit();
 	}
 	
 }

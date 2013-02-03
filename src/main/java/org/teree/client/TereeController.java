@@ -270,10 +270,9 @@ public class TereeController implements ValueChangeHandler<String> {
 				setPresenter(presenter);
 				
 				if (createScheme) {
-					Tree s = new Tree();
+					Tree s = new Tree(); // TODO: choose structure type
 					s.setRoot(NodeGenerator.complex());
 					s.setVisualization(TreeType.MindMap); // TODO: choose visualization type
-					s.setStructure(StructureType.Tree); // TODO: choose structure type
 					eventBus.fireEvent(new SchemeReceived(s));
 				}
 			}

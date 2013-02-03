@@ -34,6 +34,7 @@ public class Scene extends Composite {
 
     private AbsolutePanel container;
     private Canvas canvas;
+    
     private boolean move = false;
     private Integer lastx;
     private Integer lasty;

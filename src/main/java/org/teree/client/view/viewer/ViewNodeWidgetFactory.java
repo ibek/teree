@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class ViewNodeWidgetFactory<T extends Widget & NodeInterface> implements NodeWidgetFactory<T> {
 
-	private boolean initMathScript = true;
+	private boolean render = false;
 	@Override
 	public T create(Node node) {
 		NodeWidget nw = null;
@@ -27,11 +27,7 @@ public class ViewNodeWidgetFactory<T extends Widget & NodeInterface> implements 
 	        	break;
 	        }
 	        case MathExpression: {
-	        	if (initMathScript) {
-	        		initMathScript = false;
-	        		MathExpressionTools.initScript();
-	        	}
-	        	//requiresRender = true; // TODO: needs to be updated!!
+	        	render = MathExpressionTools.initScript();
 	        	nw = new MathExpressionNodeWidget(node);
 	        	break;
 	        }
@@ -41,6 +37,11 @@ public class ViewNodeWidgetFactory<T extends Widget & NodeInterface> implements 
 	        }
 	    }
 		return (T)nw;
+	}
+	
+	@Override
+	public boolean needsRender() {
+		return render;
 	}
 	
 }

@@ -6,7 +6,5 @@ import com.google.gwt.event.shared.HasHandlers;
 public interface HasSchemeHandlers extends HasHandlers {
 
 	  HandlerRegistration addRemoveHandler(RemoveSchemeHandler handler);
-
-	  HandlerRegistration addUpdatePermissionsHandler(UpdateSchemePermissionsHandler handler);
 	  
 }

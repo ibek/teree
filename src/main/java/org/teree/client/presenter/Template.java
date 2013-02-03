@@ -6,4 +6,8 @@ public interface Template extends HeaderTemplate {
 	
 	public void error(String msg);
 	
+	public void sendDownloadRequest(String name, String dataUrl);
+	
+	public void sendDownloadRequest(String name, String type, String data);
+	
 }

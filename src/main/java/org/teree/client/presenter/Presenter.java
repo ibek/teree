@@ -175,6 +175,25 @@ public abstract class Presenter {
 		}).importJSON(json);
 	}
 	
+	public void exportJSON(String oid, final String title) {
+		getGeneralService().call(new RemoteCallback<String>() {
+            @Override
+            public void callback(String response) {
+            	if (response == null) {
+            		displayError(UIMessages.LANG.cannot_export_scheme());
+            	} else {
+            		getTemplate().sendDownloadRequest(title, "application/json", response);
+            	}
+            }
+        }, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				displayError(UIMessages.LANG.connectionIssue());
+				return false;
+			}
+		}).exportJSON(oid);
+	}
+	
 	public void updatePermissions(Scheme scheme) {
 		securedService.call(new RemoteCallback<Void>() {
             @Override

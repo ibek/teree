@@ -370,7 +370,6 @@ public class SchemeManager {
         }
         s.setAuthor(_uim.selectByOid((String)scheme.get("author")));
     	s.setPermissions(fromPermissionsDBObject((DBObject)scheme.get("permissions")));
-    	s.setStructure(type);
         
         return s;
     }
