@@ -37,19 +37,6 @@ public class LinkNodeWidget extends NodeWidget {
 		content = new Label();
         content.setStylePrimaryName(resources.css().node());
         content.setStyleDependentName("view", true);
-
-		content.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				event.stopPropagation();
-				if (selected) {
-					edit();
-				} else { // first click - select this node
-	                fireSelect();
-	            }
-			}
-		});
-		
 	}
 
 	@Override
@@ -63,10 +50,6 @@ public class LinkNodeWidget extends NodeWidget {
 		}
 		content.setText("@"+text);
 	}
-	
-	private void fireSelect() {
-    	getParent().fireEvent(new SelectNode(this));
-    }
 
 	@Override
 	public void edit() {

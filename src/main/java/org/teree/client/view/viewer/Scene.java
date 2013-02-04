@@ -143,6 +143,7 @@ public class Scene extends Composite {
     
     public void changeCollapseAll(boolean collapseAll) {
 		controller.collapseAll(controller.getNodeWidgets(), collapseAll);
+		controller.update(null);
     }
     
     private void changeCollapseNode(NodeWidget nw) {

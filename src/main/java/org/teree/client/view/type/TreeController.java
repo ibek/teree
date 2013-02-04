@@ -11,7 +11,6 @@ import org.teree.client.view.NodeInterface;
 import org.teree.client.view.common.NodeWidgetFactory;
 import org.teree.client.view.editor.ConnectorNodeWidget;
 import org.teree.client.view.editor.LinkNodeWidget;
-import org.teree.client.view.editor.NodeWidget;
 import org.teree.client.view.editor.Scene;
 import org.teree.client.view.editor.TextNodeWidget;
 import org.teree.client.view.editor.event.SelectedNodeListener;
@@ -47,7 +46,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 
 	private Tree tree;
 
-    private NodeWidget selected;
+    private T selected;
     private Node copied;
     private TreeRenderer<T> renderer;
 	
@@ -89,32 +88,32 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 		int newid = container.getWidgetIndex(selected) + offset;
 		update(childNode);
 		// select new child node
-		selectNode((NodeWidget)container.getWidget(newid));
+		selectNode((T)container.getWidget(newid));
 	}
 
 	@Override
 	public void insertNodeBefore(Node inserted) {
-		if (selected.getParent() != null) {
+		if (selected.getNode().getParent() != null) {
 			NodeLocation loc = selected.getNode().getLocation();
 			inserted.setLocation(loc);
 			selected.getNode().insertBefore(inserted);
 			int id = container.getWidgetIndex(selected);
 			update(inserted);
 			// select new child node
-			selectNode((NodeWidget)container.getWidget(id));
+			selectNode((T)container.getWidget(id));
 		}
 	}
 
 	@Override
 	public void insertNodeAfter(Node inserted) {
-		if (selected.getParent() != null) {
+		if (selected.getNode().getParent() != null) {
 			NodeLocation loc = selected.getNode().getLocation();
 			inserted.setLocation(loc);
 			selected.getNode().insertAfter(inserted);
 			int id = container.getWidgetIndex(selected);
 			update(inserted);
 			// select new child node
-			selectNode((NodeWidget)container.getWidget(id+1));
+			selectNode((T)container.getWidget(id+1));
 		}
 	}
 	
@@ -141,26 +140,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
      */
 	@Override
 	public void update(Node changed) {
-		int id = 1;
-    	
-    	Node root = tree.getRoot();
-    	List<Node> cn = root.getChildNodes();
-    	List<Node> right = new ArrayList<Node>();
-    	for (int i=0; cn!=null && i<cn.size(); ++i){
-    		Node n = cn.get(i);
-    		if (n.getLocation() == NodeLocation.LEFT) {
-    			id = update(n, changed, id);
-    		} else {
-    			right.add(n);
-    		}
-    	}
-    	
-    	for (int i=0; i<right.size(); ++i){
-    		Node n = right.get(i);
-    		id = update(n, changed, id);
-    	}
-    	
-    	renderer.renderEditor(canvas, getNodeWidgets(), root);
+		updateAndCollapse(changed, false);
 	}
 
 	@Override
@@ -197,7 +177,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	    			selectNext();
 	    		} else {
 	    			int id = container.getWidgetIndex(selected);
-	                NodeWidget next = (NodeWidget)container.getWidget(id + selected.getNode().getNumberOfLeftChildNodes() + 1);
+	                T next = (T)container.getWidget(id + selected.getNode().getNumberOfLeftChildNodes() + 1);
 	            	selectNode(next);
 	    		}
 				break;
@@ -229,7 +209,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
         }
         
         if (n != null) {
-            NodeWidget upper = (NodeWidget)container.getWidget(id - n.getNumberOfChildNodes() - 1);
+            T upper = (T)container.getWidget(id - n.getNumberOfChildNodes() - 1);
             if (upper.getNode().getParent() == selected.getNode().getParent()) { // has upper node
             	selectNode(upper);
             }
@@ -239,31 +219,38 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	@Override
 	public void selectUnderNode() {
 		int id = container.getWidgetIndex(selected);
-        NodeWidget under = (NodeWidget)container.getWidget(id + selected.getNode().getNumberOfChildNodes() + 1);
+        T under = (T)container.getWidget(id + selected.getNode().getNumberOfChildNodes() + 1);
         if (under.getNode().getParent() == selected.getNode().getParent()) { // has upper node
         	selectNode(under);
         }
 	}
 
     @Override
-	public void selectNode(NodeWidget node) {
+	public void selectNode(T node) {
         if (selected != null) { // only one node can be selected
-        	selected = selected.unselect();
+        	selected.unselect();
+        	selected = null;
         }
 
     	fireSelectedNode(node);
         if (node != null) {
-            selected = node.select();
+            selected = node;
+            selected.select();
         } else {
         	selected = null;
         }
     }
     
-    private List<SelectedNodeListener> slisteners;
     @Override
-	public void addSelectedNodeListener(SelectedNodeListener snl) {
+    public T getSelectedNode() {
+    	return selected;
+    }
+    
+    private List<SelectedNodeListener<T>> slisteners;
+    @Override
+	public void addSelectedNodeListener(SelectedNodeListener<T> snl) {
     	if (slisteners == null) {
-    		slisteners = new ArrayList<SelectedNodeListener>();
+    		slisteners = new ArrayList<SelectedNodeListener<T>>();
     	}
     	slisteners.add(snl);
     }
@@ -291,11 +278,11 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	}
 
 	@Override
-	public boolean setNodeIcon(IconType icon) {
+	public void setNodeIcon(IconType icon) {
 		boolean updateReq = false;
 		if (selected != null && selected instanceof TextNodeWidget) {
     		IconText it = (IconText)selected.getNode().getContent();
-    		updateReq = it.getIconType() == null;
+    		updateReq = (it.getIconType() == null || it.getIconType().isEmpty());
     		if (it.getIconType() != null && (icon == IconType.SIGN_BLANK || icon == IconType.valueOf(it.getIconType()))) {
        		 	// remove icon
 				it.setIconType(null);
@@ -305,7 +292,9 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
     		}
 			((TextNodeWidget) selected).update();
     	}
-		return updateReq;
+		if (updateReq) {
+			update(null);
+		}
 	}
 
 	@Override
@@ -345,7 +334,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 		    		Document frameDoc = frameElt.getContentDocument();
 		    		frameDoc.getBody().removeChild(scene.getElement());
 		    		
-		            final NodeWidget oldSelected = selected;
+		            final T oldSelected = selected;
 		    		((Editor)CurrentPresenter.getInstance().getPresenter()).insertScheme(t, new RemoteCallback<String>() {
 		                @Override
 		                public void callback(String response) {
@@ -367,8 +356,10 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 		                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 		            	        @Override
 		            	        public void execute() {
+		            	        	T tmpSelected = selected;
 		            	        	selected = oldSelected;
 		            	        	removeNode();
+		            	        	selected = tmpSelected;
 		            	        }
 		                    });
 		                }
@@ -383,7 +374,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 		if (selected instanceof ConnectorNodeWidget) {
 			final Node n = selected.getNode();
 			Connector con = (Connector)n.getContent();
-	        final NodeWidget oldSelected = selected;
+	        final T oldSelected = selected;
 			CurrentPresenter.getInstance().getPresenter().getScheme(con.getOid(), new RemoteCallback<Scheme>() {
 				@Override
 				public void callback(Scheme response) {
@@ -419,12 +410,11 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 			}
 			if (nw.getNode().getChildNodes() != null && 
 					!nw.getNode().getChildNodes().isEmpty() && 
-					nw.getNode().getParent().getParent() == null &&
+					nw.getNode().getParent() != null &&
 					!(nw instanceof LinkNodeWidget)) {
 				nw.setCollapsed(collapse);
 			}
 		}
-		update(null);
     }
 
 	@Override
@@ -471,8 +461,8 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
         
         T nw = nodeFactory.create(root);
         container.add(nw, 0, 0);
-        
-        update(root); // initialize
+
+		updateAndCollapse(root, true);
         if (requiresRender) { // to fix size and position of math expressions
         	requiresRender = false;
         	Timer t = new Timer() {
@@ -528,7 +518,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 		        }
     		}
 	        
-	        NodeWidget prev = (NodeWidget)container.getWidget(id - count - 1);
+	        T prev = (T)container.getWidget(id - count - 1);
 	        if (prev.getNode() == selected.getNode().getParent()) { // selected is child of previous node
 	        	selectNode(prev);
 	        }
@@ -538,14 +528,14 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
     private void selectNext() {
     	if (selected != null) {
     		int id = container.getWidgetIndex(selected);
-            NodeWidget next = (NodeWidget)container.getWidget(id + 1);
+            T next = (T)container.getWidget(id + 1);
             if (next.getNode().getParent() == selected.getNode()) { // selected is parent of next node
             	selectNode(next);
             }
     	}
     }
     
-    private void removeNodeWidget(NodeWidget nw) {
+    private void removeNodeWidget(T nw) {
     	int id = container.getWidgetIndex(nw);
     	int count = nw.getNode().getNumberOfChildNodes();
     	int i = -1; 
@@ -558,6 +548,34 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
     		container.remove(id);
     	}
     }
+	
+	private void updateAndCollapse(Node changed, boolean collapse) {
+		int id = 1;
+    	
+    	Node root = tree.getRoot();
+    	List<Node> cn = root.getChildNodes();
+    	List<Node> right = new ArrayList<Node>();
+    	for (int i=0; cn!=null && i<cn.size(); ++i){
+    		Node n = cn.get(i);
+    		if (n.getLocation() == NodeLocation.LEFT) {
+    			id = update(n, changed, id);
+    		} else {
+    			right.add(n);
+    		}
+    	}
+    	
+    	for (int i=0; i<right.size(); ++i){
+    		Node n = right.get(i);
+    		id = update(n, changed, id);
+    	}
+    	
+    	List<T> nw = getNodeWidgets();
+    	if (collapse) {
+    		collapseAll(nw, collapse);
+    	}
+    	
+    	renderer.renderEditor(canvas, nw, root);
+	}
     
     private int update(Node current, Node changed, int id) {
     	
@@ -604,7 +622,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
     	return id;
     }
     
-    private void fireSelectedNode(NodeWidget nw) {
+    private void fireSelectedNode(T nw) {
     	for (int i=0; slisteners != null && i<slisteners.size(); ++i) {
     		slisteners.get(i).selected(nw);
     	}

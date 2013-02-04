@@ -39,11 +39,13 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Scene extends Composite {
     
@@ -60,6 +62,7 @@ public class Scene extends Composite {
 	public Scene() {
         
         container = new AbsolutePanel();
+        container.getElement().setId(DOM.createUniqueId());
         Style style = container.getElement().getStyle();
         style.setProperty("margin", "0 auto");
         style.setProperty("textAlign", "center");
@@ -85,6 +88,7 @@ public class Scene extends Composite {
         sp.getParent().addDomHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				
 				controller.selectNode(null);
 			}
 		}, ClickEvent.getType());
@@ -132,9 +136,9 @@ public class Scene extends Composite {
 			}
 		}, MouseUpEvent.getType());
         
-    	container.addHandler(new SelectNodeHandler() {
+    	container.addHandler(new SelectNodeHandler<NodeWidget>() {
             @Override
-            public void select(SelectNode event) {
+            public void select(SelectNode<NodeWidget> event) {
             	controller.selectNode(event.getNodeWidget());
             }
             
@@ -308,7 +312,7 @@ public class Scene extends Composite {
     	controller.setNodeIcon(icon);
     }
     
-    public void addSelectedNodeListener(SelectedNodeListener snl) {
+    public void addSelectedNodeListener(SelectedNodeListener<NodeWidget> snl) {
     	controller.addSelectedNodeListener(snl);
     }
     

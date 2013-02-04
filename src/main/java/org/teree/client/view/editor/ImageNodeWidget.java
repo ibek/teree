@@ -54,18 +54,6 @@ public class ImageNodeWidget extends NodeWidget {
         content.getElement().setDraggable(Element.DRAGGABLE_TRUE);
         initDragging(content);
 
-		content.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				event.stopPropagation();
-				if (selected) {
-					edit();
-				} else { // first click - select this node
-	                fireSelect();
-	            }
-			}
-		});
-
 		content.addErrorHandler(new ErrorHandler() {
 			@Override
 			public void onError(ErrorEvent event) {
@@ -94,10 +82,6 @@ public class ImageNodeWidget extends NodeWidget {
 			}
 		}
 	}
-	
-	private void fireSelect() {
-    	getParent().fireEvent(new SelectNode(this));
-    }
 
 	@Override
 	public void edit() {

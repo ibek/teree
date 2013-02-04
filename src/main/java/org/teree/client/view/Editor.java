@@ -133,7 +133,7 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 	public void setScheme(Scheme scheme) {
 		scene.setScheme(scheme);
     	
-    	scene.addSelectedNodeListener(new SelectedNodeListener() {
+    	scene.addSelectedNodeListener(new SelectedNodeListener<NodeWidget>() {
 			@Override
 			public void selected(NodeWidget nw) {
 				edit.checkSelectedNode(nw);

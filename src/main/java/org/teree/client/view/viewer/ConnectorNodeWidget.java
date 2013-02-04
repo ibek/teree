@@ -1,11 +1,8 @@
 package org.teree.client.view.viewer;
 
-import java.util.List;
-
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.teree.client.CurrentPresenter;
 import org.teree.client.view.editor.event.NodeChanged;
-import org.teree.client.view.viewer.event.CollapseNode;
 import org.teree.shared.data.common.Connector;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.Scheme;
@@ -14,6 +11,7 @@ import org.teree.shared.data.tree.Tree;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Widget;
 
 public class ConnectorNodeWidget extends TextNodeWidget {
 
@@ -21,7 +19,6 @@ public class ConnectorNodeWidget extends TextNodeWidget {
 		super(node);
 		init();
 		setCollapsed(!(node.getChildNodes() != null && node.getChildNodes().size() > 0));
-		bind();
 	}
 
 	private void init() {
@@ -37,15 +34,21 @@ public class ConnectorNodeWidget extends TextNodeWidget {
 					CurrentPresenter.getInstance().getPresenter().getScheme(((Connector)node.getContent()).getOid(), new RemoteCallback<Scheme>() {
 						@Override
 						public void callback(Scheme response) {
-							if (response.getStructure() == StructureType.Tree) {
-								List<Node> childNodes = ((Tree)response).getRoot().getChildNodes();
+							if (response == null || response.getStructure() == null) {
+								CurrentPresenter.getInstance().getPresenter().displayError("Cannot open connected scheme");
+							} else if (response.getStructure() == StructureType.Tree) {
+								/**List<Node> childNodes = ((Tree)response).getRoot().getChildNodes();
 								for (int i=0; childNodes != null && i<childNodes.size(); ++i) {
 									Node n = childNodes.get(i);
 									n.setLocation(node.getLocation());
 									node.addChild(n);
-								}
-								ConnectorNodeWidget.this.getParent().fireEvent(new NodeChanged(node));
+								}*/
+								Node root = ((Tree)response).getRoot();
+								node.insertBefore(root);
+								node.remove();
+								Widget p = ConnectorNodeWidget.this.getParent();
 								removeFromParent();
+								p.fireEvent(new NodeChanged(root));
 							}
 						}
 					});
@@ -53,19 +56,6 @@ public class ConnectorNodeWidget extends TextNodeWidget {
 			}
 		}, ClickEvent.getType());
 		
-	}
-	
-	private void bind() {
-		addDomHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				Object src = event.getSource();
-				if (src instanceof ConnectorNodeWidget) {
-					System.out.println("ahoj");
-					ConnectorNodeWidget.this.getParent().fireEvent(new CollapseNode((ConnectorNodeWidget)src));
-				}
-			}
-		}, ClickEvent.getType());
 	}
 	
 }

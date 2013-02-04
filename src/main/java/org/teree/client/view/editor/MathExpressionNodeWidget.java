@@ -118,8 +118,8 @@ public class MathExpressionNodeWidget extends NodeWidget {
         container.remove(content);
         container.add(editContent);
         
-        // to prevent the conflict between copy of text and nodes while this node is edited
-        getParent().fireEvent(new SelectNode(null));
+        // only for better look
+        getParent().fireEvent(new SelectNode<MathExpressionNodeWidget>(null));
         
     }
     
@@ -127,17 +127,6 @@ public class MathExpressionNodeWidget extends NodeWidget {
     	if (content == null) {
     		
 	        content = new HTML();
-	        content.addClickHandler(new ClickHandler() {
-	            @Override
-	            public void onClick(ClickEvent event) {
-	            	event.stopPropagation();
-	                if (selected) { // second click - edit this node
-	                    edit();
-	                } else { // first click - select this node
-	                    fireSelect();
-	                }
-	            }
-	        });
 	        
 	        content.getElement().setDraggable(Element.DRAGGABLE_TRUE);
 	        initDragging(content);
@@ -159,10 +148,6 @@ public class MathExpressionNodeWidget extends NodeWidget {
         
     }
     
-    private void fireSelect() {
-    	getParent().fireEvent(new SelectNode(this));
-    }
-    
     private void confirmChanges() {
         String newexpr = editContent.getText();
         
@@ -182,7 +167,8 @@ public class MathExpressionNodeWidget extends NodeWidget {
 			};
 			t.schedule(1000);
         }
-        fireSelect();
+
+    	getParent().fireEvent(new SelectNode<MathExpressionNodeWidget>(this));
     }
     
     @Override

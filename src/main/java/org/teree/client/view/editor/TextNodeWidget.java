@@ -94,6 +94,13 @@ public class TextNodeWidget extends NodeWidget {
                 }
             });
             
+            editContent.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					event.stopPropagation(); // prevents from nodewidget call
+				}
+			});
+            
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {
@@ -139,9 +146,9 @@ public class TextNodeWidget extends NodeWidget {
         
         container.remove(content);
         container.add(editContent);
-        
-        // to prevent the conflict between copy of text and nodes while this node is edited
-        getParent().fireEvent(new SelectNode(null));
+
+        // only for better look
+        getParent().fireEvent(new SelectNode<TextNodeWidget>(null));
         
     }
     
@@ -149,17 +156,6 @@ public class TextNodeWidget extends NodeWidget {
     	if (content == null) {
     		
 	        content = new HTML(nodeContent.getText());
-	        content.addClickHandler(new ClickHandler() {
-	            @Override
-	            public void onClick(ClickEvent event) {
-	            	event.stopPropagation();
-	                if (selected) { // second click - edit this node
-	                    edit();
-	                } else { // first click - select this node
-	                    fireSelect();
-	                }
-	            }
-	        });
 	        
 	        content.getElement().setDraggable(Element.DRAGGABLE_TRUE);
 	        initDragging(content);
@@ -181,10 +177,6 @@ public class TextNodeWidget extends NodeWidget {
         
     }
     
-    private void fireSelect() {
-    	getParent().fireEvent(new SelectNode(this));
-    }
-    
     private void confirmChanges() {
         String newtext = editContent.getText();
         
@@ -194,7 +186,7 @@ public class TextNodeWidget extends NodeWidget {
         }
         
         view();
-        fireSelect();
+    	getParent().fireEvent(new SelectNode<TextNodeWidget>(this));
     }
     
     @Override
@@ -301,6 +293,16 @@ public class TextNodeWidget extends NodeWidget {
 			ns.setBold(false);
 			getElement().getStyle().setFontWeight(FontWeight.NORMAL);
 		}
+	}
+
+	@Override
+	public void setCollapsed(boolean collapsed) {
+		if (collapsed) {
+			content.setText("+ "+node.getContent().toString());
+		} else {
+			content.setText(node.getContent().toString());
+		}
+		this.collapsed = collapsed;
 	}
 
 }

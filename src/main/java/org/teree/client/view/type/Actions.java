@@ -2,7 +2,6 @@ package org.teree.client.view.type;
 
 import java.util.List;
 
-import org.teree.client.view.editor.NodeWidget;
 import org.teree.client.view.editor.event.SelectedNodeListener;
 import org.teree.shared.data.common.Node;
 
@@ -36,9 +35,11 @@ public interface Actions<T> {
 	
 	public void selectUnderNode();
 	
-	public void selectNode(NodeWidget node);
+	public void selectNode(T node);
 	
-	public void addSelectedNodeListener(SelectedNodeListener snl);
+	public T getSelectedNode();
+	
+	public void addSelectedNodeListener(SelectedNodeListener<T> snl);
 	
 	public void copyNode();
 	
@@ -46,13 +47,7 @@ public interface Actions<T> {
 	
 	public void pasteNode();
 
-	/**
-	 * 
-	 * @param node
-	 * @param icon
-	 * @return update request
-	 */
-	public boolean setNodeIcon(IconType icon);
+	public void setNodeIcon(IconType icon);
 	
 	public void boldNode();
 	

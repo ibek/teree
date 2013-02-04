@@ -330,7 +330,7 @@ public abstract class TreeRenderer<T extends Widget & NodeInterface> {
 
 			if (data.isMakePicture()) {
 				nw.draw(data.getContext(), x, y + nw.getOffsetHeight() / 2 - 5);
-			} else {
+			} else if (panel != null) {
 				panel.setWidgetPosition(nw, left + x,
 						top + y - nw.getOffsetHeight() / 2);
 				DOM.setStyleAttribute(nw.getElement(), "visibility", "visible");

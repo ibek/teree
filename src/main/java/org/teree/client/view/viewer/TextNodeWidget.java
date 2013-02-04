@@ -59,11 +59,6 @@ public class TextNodeWidget extends NodeWidget {
 		} else {
 			getElement().getStyle().setFontWeight(FontWeight.NORMAL);
 		}
-		
-		// at start all nodes are collapsed
-		if (node.getParent() != null && node.getParent().getParent() == null && node.getNumberOfChildNodes() > 0) {
-			setCollapsed(true);
-		}
         
         container.add(content);
         
@@ -75,7 +70,7 @@ public class TextNodeWidget extends NodeWidget {
 			public void onClick(ClickEvent event) {
 				Object src = event.getSource();
 				if (src instanceof TextNodeWidget) {
-					TextNodeWidget.this.getParent().fireEvent(new CollapseNode((TextNodeWidget)src));
+					TextNodeWidget.this.getParent().fireEvent(new CollapseNode(TextNodeWidget.this));
 				}
 			}
 		}, ClickEvent.getType());

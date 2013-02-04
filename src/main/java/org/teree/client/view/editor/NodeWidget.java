@@ -2,11 +2,14 @@ package org.teree.client.view.editor;
 
 import org.teree.client.view.NodeInterface;
 import org.teree.client.view.editor.event.NodeChanged;
+import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.resource.NodeCssStyle;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeStyle;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DragEnterEvent;
 import com.google.gwt.event.dom.client.DragEnterHandler;
 import com.google.gwt.event.dom.client.DragLeaveEvent;
@@ -18,6 +21,8 @@ import com.google.gwt.event.dom.client.DragStartHandler;
 import com.google.gwt.event.dom.client.DropEvent;
 import com.google.gwt.event.dom.client.DropHandler;
 import com.google.gwt.event.dom.client.HasAllDragAndDropHandlers;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -42,16 +47,40 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
         
         initWidget(container);
         
+        bind();
+        
         changeStyle(node.getStyle());
         
     	DOM.setStyleAttribute(getElement(), "visibility", "hidden");
     }
 	
-	public abstract void edit();
-	
-	public abstract void changeStyle(NodeStyle style);
+	private void bind() {
+
+        addDomHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+            	event.stopPropagation();
+                if (selected) { // second click - edit this node
+                    edit();
+                } else { // first click - select this node
+                	getParent().fireEvent(new SelectNode<NodeWidget>(NodeWidget.this));
+    				if (collapsed) {
+    					setCollapsed(false);
+    					NodeWidget.this.getParent().fireEvent(new NodeChanged(null));
+    				}
+                }
+			}
+		}, ClickEvent.getType());
+        
+        addDomHandler(new MouseDownHandler() {
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				event.stopPropagation(); // prevents the moving handler in scene
+			}
+		}, MouseDownEvent.getType());
+	}
     
-    public NodeWidget select() {
+    public void select() {
     	//container.getElement().getStyle().setBackgroundColor("#7FAF47");
     	container.getElement().getStyle().setBorderStyle(BorderStyle.DASHED);
     	container.getElement().getStyle().setBorderWidth(2.0, Unit.PX);
@@ -59,14 +88,12 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
     	container.getElement().getStyle().setProperty("borderBottom", "none");
     	container.getElement().getStyle().setProperty("borderTop", "none");
         selected = true;
-        return this;
     }
     
-    public NodeWidget unselect() {
+    public void unselect() {
     	container.getElement().getStyle().setBackgroundColor(null);
     	container.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
         selected = false;
-        return null;
     }
     
     protected void initDragging(HasAllDragAndDropHandlers content) {

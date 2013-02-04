@@ -1,6 +1,7 @@
 package org.teree.client.view;
 
 import org.teree.shared.data.common.Node;
+import org.teree.shared.data.common.NodeStyle;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 
@@ -19,5 +20,13 @@ public interface NodeInterface {
 	public void setCollapsed(boolean collapsed);
 	
 	public boolean isCollapsed();
+	
+	public void edit();
+	
+	public void select();
+	
+	public void unselect();
+	
+	public void changeStyle(NodeStyle style);
 	
 }

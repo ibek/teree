@@ -1,9 +1,7 @@
 package org.teree.client.view.editor.event;
 
-import org.teree.client.view.editor.NodeWidget;
+public interface SelectedNodeListener<T> {
 
-public interface SelectedNodeListener {
-
-	public void selected(NodeWidget nw);
+	public void selected(T nw);
 	
 }
