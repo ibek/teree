@@ -10,9 +10,13 @@ import org.teree.shared.data.common.Node.NodeLocation;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 
 public class LinkNodeWidget extends NodeWidget {
@@ -36,7 +40,10 @@ public class LinkNodeWidget extends NodeWidget {
 	private void init() {
 		content = new Label();
         content.setStylePrimaryName(resources.css().node());
-        content.setStyleDependentName("view", true);
+        content.addStyleName(resources.css().nodeView());
+        
+        content.getElement().setDraggable(Element.DRAGGABLE_TRUE);
+        initDragging(content);
 	}
 
 	@Override

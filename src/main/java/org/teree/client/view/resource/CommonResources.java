@@ -8,7 +8,22 @@ public interface CommonResources extends Resources {
 	
 	public static final CommonResources RESOURCES = GWT.create(CommonResources.class);
 
+	@Source("img/features.png")
+    ImageResource features();
+	
+	@Source("img/email.png")
     ImageResource email();
-    ImageResource screenshot();
+	
+	@Source("img/texticon.png")
+    ImageResource texticon();
+	
+	@Source("img/image.png")
+    ImageResource image();
+	
+	@Source("img/link.png")
+    ImageResource link();
+	
+	@Source("img/mathexpr.png")
+    ImageResource mathexpr();
     
 }

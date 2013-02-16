@@ -80,7 +80,7 @@ public class TextNodeWidget extends NodeWidget {
     	String iconType = it.getIconType();
     	if (iconType != null) {
 	    	icon.setType(IconType.valueOf(iconType));
-	    	container.insert(icon, 0, 0, 0);
+	    	container.insert(icon, 0, 5, 0);
 			content.getElement().getStyle().setPaddingLeft(Settings.ICON_WIDTH, Unit.PX);
     	}
     }

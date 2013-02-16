@@ -23,17 +23,7 @@ public interface UIMessages extends Messages {
     String attention_testing();
     String new1();
     String new2();
-    
-    String feature1();
-    String feature2();
-    String feature3();
-    String feature4();
-    String feature5();
-    String feature6();
-    
-    String technical_detail1();
-    String technical_detail2();
-    String technical_detail3();
+    String new3();
     
     String no_scheme();
     

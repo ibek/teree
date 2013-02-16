@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.Image;
 public class ImageNodeWidget extends NodeWidget {
 
 	interface Resources extends ClientBundle {
-		@Source("../resource/load_image.png")
+		@Source("../resource/img/load_image.png")
 		ImageResource noImage();
 	}
 
@@ -52,7 +52,7 @@ public class ImageNodeWidget extends NodeWidget {
 			@Override
 			public void onError(ErrorEvent event) {
 				((ImageLink) node.getContent()).setUrl(null);
-				content.setResource(res.noImage());
+				content.setUrl(res.noImage().getSafeUri());
 			}
 		});
 		
@@ -69,7 +69,7 @@ public class ImageNodeWidget extends NodeWidget {
 		super.update();
 		
 		final String url = ((ImageLink) node.getContent()).getUrl();
-		if (url != null) {
+		if (url != null && !url.isEmpty()) {
 			Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 	            @Override
 	            public void execute() {
@@ -77,7 +77,7 @@ public class ImageNodeWidget extends NodeWidget {
 	            }
 	        });
 		} else {
-			content.setResource(res.noImage());
+			content.setUrl(res.noImage().getSafeUri());
 		}
 	}
 

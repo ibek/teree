@@ -63,11 +63,11 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
                 if (selected) { // second click - edit this node
                     edit();
                 } else { // first click - select this node
-                	getParent().fireEvent(new SelectNode<NodeWidget>(NodeWidget.this));
     				if (collapsed) {
     					setCollapsed(false);
     					NodeWidget.this.getParent().fireEvent(new NodeChanged(null));
     				}
+                	getParent().fireEvent(new SelectNode<NodeWidget>(NodeWidget.this));
                 }
 			}
 		}, ClickEvent.getType());

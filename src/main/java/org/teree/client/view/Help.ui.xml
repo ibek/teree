@@ -31,6 +31,7 @@
 			<b:Heading size="2" text="Editor" />
 				<b:Paragraph>
 					<b:Heading size="4" text="Text node" />
+					<b:Image resource="{cres.texticon}"/>
 					<base:UnorderedList>
 						<base:ListItem><g:Label text="Shift + Enter = New line"/></base:ListItem>
 						<base:ListItem><g:Label text="Enter confirms the changes"/></base:ListItem>
@@ -38,14 +39,17 @@
 						<base:ListItem><b:Icon type="SIGN_BLANK" /><g:InlineLabel text=" icon will remove the set icon of the selected node"/></base:ListItem>
 					</base:UnorderedList>
 					<b:Heading size="4" text="Image node" />
+					<b:Image resource="{cres.image}"/>
 					<base:UnorderedList>
 						<base:ListItem><g:Label text="can be accessed only remotely by URL address"/></base:ListItem>
 					</base:UnorderedList>
 					<b:Heading size="4" text="Link node" />
+					<b:Image resource="{cres.link}"/>
 					<base:UnorderedList>
 						<base:ListItem><g:Label text="@ before node signs that the node is a link"/></base:ListItem>
 					</base:UnorderedList>
 					<b:Heading size="4" text="Math expression node" />
+					<b:Image resource="{cres.mathexpr}"/>
 					<base:UnorderedList>
 						<base:ListItem><g:Label text="math expressions are descriped by LaTeX notation"/></base:ListItem>
 						<base:ListItem><g:Label text="List of LaTeX symbols http://latex.wikia.com/wiki/List_of_LaTeX_symbols"/></base:ListItem>

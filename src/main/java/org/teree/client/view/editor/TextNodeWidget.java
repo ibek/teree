@@ -201,7 +201,7 @@ public class TextNodeWidget extends NodeWidget {
 			icon.setType(IconType.valueOf(nodeContent.getIconType()));
 			
 			if (container.getWidgetIndex(icon) < 0) {
-				container.insert(icon, 0, 0, 0);
+				container.insert(icon, 0, 5, 0);
 				content.getElement().getStyle().setPaddingLeft(Settings.ICON_WIDTH, Unit.PX);
 			}
 		} else {
@@ -260,7 +260,7 @@ public class TextNodeWidget extends NodeWidget {
 		
 		for (int i=0; i<ly.size(); ++i) {
 			text = ls.get(i);
-	        if (collapsed && i==0) {
+	        if (collapsed && i==0 && !text.startsWith("+")) {
 	        	text = "+" + text;
 	        	x -= context.measureText("+").getWidth();
 	        }

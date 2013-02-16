@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Image;
 public class ImageNodeWidget extends NodeWidget {
 
 	interface Resources extends ClientBundle {
-		@Source("../resource/load_image.png")
+		@Source("../resource/img/load_image.png")
 		ImageResource noImage();
 	}
 
@@ -77,8 +77,10 @@ public class ImageNodeWidget extends NodeWidget {
 	public void update() {
 		if (nodeContent != null) {
 			final String url = nodeContent.getUrl();
-			if (url != null) {
+			if (url != null && !url.isEmpty()) {
 				content.setUrl(Settings.HOST + "getImage?url=" + url);
+			} else {
+				content.setUrl(res.noImage().getSafeUri());
 			}
 		}
 	}
