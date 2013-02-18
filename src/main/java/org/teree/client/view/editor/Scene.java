@@ -1,5 +1,6 @@
 package org.teree.client.view.editor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.teree.client.Settings;
@@ -270,7 +271,7 @@ public class Scene extends Composite {
         canvas.setCoordinateSpaceWidth((int)(this.canvas.getOffsetWidth()*scale));
         canvas.getContext2d().scale(scale, scale);
         List<NodeWidget> nw = controller.getNodeWidgets();
-        collapseForSample(nw, true);
+        List<Boolean> collapsed = collapseForSample(nw, true);
         int[] rp = controller.renderPicture(canvas, nw);
         NodeWidget rw = nw.get(0);
         int x,y,w,h;
@@ -302,7 +303,11 @@ public class Scene extends Composite {
         canvasTmp.setCoordinateSpaceWidth(data.getWidth());
         Context2d context = canvasTmp.getContext2d();
         context.putImageData(data, 0, 0);
-        collapseForSample(nw, false);
+        
+        for (int i=1; i<nw.size(); ++i) { // return the state of collapsed nodes before rendering
+        	nw.get(i).setCollapsed(collapsed.get(i-1));
+        }
+        
         update(null);
         
         return canvasTmp.toDataUrl();
@@ -330,15 +335,18 @@ public class Scene extends Composite {
         });
     }
     
-    private void collapseForSample(List<NodeWidget> widgets, boolean collapse) {
+    private List<Boolean> collapseForSample(List<NodeWidget> widgets, boolean collapse) {
+    	List<Boolean> tmp = new ArrayList<Boolean>();
     	for (int i=1; i<widgets.size(); ++i) {
     		NodeWidget nw = widgets.get(i);
+    		tmp.add(nw.isCollapsed());
     		if (nw.getNode().getParent() != null &&
     				nw.getNode().getChildNodes() != null && 
     				nw.getNode().getChildNodes().size() > 2) {
     			nw.setCollapsed(collapse);
     		}
     	}
+    	return tmp;
     }
     
 }

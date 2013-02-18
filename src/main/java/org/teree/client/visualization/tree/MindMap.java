@@ -21,19 +21,20 @@ public class MindMap<T extends Widget & NodeInterface> extends TreeRenderer<T> {
 	@Override
 	protected int[] render(Canvas canvas, List<T> nodes, Node root,
 			boolean makePicture, boolean editable) {
-		
-		List<List<Integer>>leftBounds = new ArrayList<List<Integer>>();
+
+		List<List<Integer>> leftBounds = new ArrayList<List<Integer>>();
 		leftBounds.add(new ArrayList<Integer>());
 		List<List<Integer>> rightBounds = new ArrayList<List<Integer>>();
 		rightBounds.add(new ArrayList<Integer>());
-		Integer[] widths = new Integer[]{0,0};
+		Integer[] widths = new Integer[] { 0, 0 };
 		setBoundsAndWidths(nodes, root, leftBounds, rightBounds, widths);
 
 		List<Node> lcn = new ArrayList<Node>(); // left child nodes
 		List<Node> rcn = new ArrayList<Node>(); // right child nodes
-		Integer[] heights = new Integer[]{0,0};
-		setChildNodesByLocationAndHeights(root, lcn, rcn, leftBounds, rightBounds, heights);
-		
+		Integer[] heights = new Integer[] { 0, 0 };
+		setChildNodesByLocationAndHeights(root, lcn, rcn, leftBounds,
+				rightBounds, heights);
+
 		int leftw = widths[LEFT]; // left width
 		int rightw = widths[RIGHT]; // right width
 		int lefth = heights[LEFT]; // left height
@@ -59,27 +60,20 @@ public class MindMap<T extends Widget & NodeInterface> extends TreeRenderer<T> {
 				return new int[] { rootX, rootY, width, height };
 			}
 			/**
-			 * the NODE_MAX_WIDTH fixes bug that last node had minimal
-			 * width because of panel.setWidth (there wasn't any place 
-			 * for new node)
+			 * the NODE_MAX_WIDTH fixes bug that last node had minimal width because of panel.setWidth (there wasn't any place for new node)
 			 */
 			int panelWidth = width + Settings.NODE_MAX_WIDTH;
-			if (panelWidth >= Window.getClientWidth()) {
-				panel.setWidth(panelWidth + "px"); // to enable scrolling with
-											// horizontal scrollbar
-			} else {
-				panel.setWidth("auto");
+			if (panelWidth >= Window.getClientWidth() && panel.getOffsetWidth() < panelWidth) {
+				panel.setWidth(panelWidth + "px"); // to enable scrolling with horizontal scrollbar
 			}
 
 			left = canvas.getAbsoluteLeft()
 					- canvas.getParent().getAbsoluteLeft(); // getRelativeLeft
-			top = canvas.getAbsoluteTop()
-					- canvas.getParent().getAbsoluteTop(); // getRelativeTop
+			top = canvas.getAbsoluteTop() - canvas.getParent().getAbsoluteTop(); // getRelativeTop
 
 			rootX = left + leftw;
 			rootY = top + height / 2 - rw.getOffsetHeight() / 2;
-			panel.setWidgetPosition(rw, rootX, rootY); // set root node into middle of
-													// scene
+			panel.setWidgetPosition(rw, rootX, rootY); // set root node into middle of scene
 			DOM.setStyleAttribute(rw.getElement(), "visibility", "visible");
 
 		}
@@ -96,23 +90,28 @@ public class MindMap<T extends Widget & NodeInterface> extends TreeRenderer<T> {
 		}
 
 		int id = 1;
-		GenerateData<T> data = new GenerateData<T>(nodes, leftBounds, columns, NodeLocation.LEFT, context, makePicture);
-		id = generate(data, lcn, leftw, height / 2, left, top, 0, startLeftChildNodeY, id);
-		
+		GenerateData<T> data = new GenerateData<T>(nodes, leftBounds, columns,
+				NodeLocation.LEFT, context, makePicture);
+		id = generate(data, lcn, leftw, height / 2, left, top, 0,
+				startLeftChildNodeY, id);
+
 		columns.clear();
 		for (int i = 0; i < rightBounds.size(); ++i) {
 			columns.add(0);
 		}
 
-		data = new GenerateData<T>(nodes, rightBounds, columns, NodeLocation.RIGHT, context, makePicture);
-		generate(data, rcn, leftw + rw.getOffsetWidth(), height / 2, left, top, 0, startRightChildNodeY, id);
+		data = new GenerateData<T>(nodes, rightBounds, columns,
+				NodeLocation.RIGHT, context, makePicture);
+		generate(data, rcn, leftw + rw.getOffsetWidth(), height / 2, left, top,
+				0, startRightChildNodeY, id);
 
 		context.stroke(); // draw the arrows
 
-		int ellipseHeight = rw.getOffsetHeight()*2;
-		Shapes.drawEllipse(context, leftw - ELLIPSE_OVERFLOW_WIDTH/2, height / 2 - ellipseHeight / 2,
-				rw.getOffsetWidth() + ELLIPSE_OVERFLOW_WIDTH, ellipseHeight); // ellipse for the root node
-		
+		int ellipseHeight = rw.getOffsetHeight() * 2;
+		Shapes.drawEllipse(context, leftw - ELLIPSE_OVERFLOW_WIDTH / 2, height
+				/ 2 - ellipseHeight / 2, rw.getOffsetWidth()
+				+ ELLIPSE_OVERFLOW_WIDTH, ellipseHeight); // ellipse for the root node
+
 		if (makePicture) {
 
 			rootX = leftw;
@@ -124,12 +123,12 @@ public class MindMap<T extends Widget & NodeInterface> extends TreeRenderer<T> {
 		return new int[] { rootX, rootY, width, height };
 
 	}
-	
+
 	@Override
 	protected int getWidth(T rw, int leftw, int rightw) {
 		return leftw + rw.getOffsetWidth() + rightw;
 	}
-	
+
 	@Override
 	protected int getHeight(T rw, int lefth, int righth) {
 		int max_y = (lefth > righth) ? lefth : righth;
