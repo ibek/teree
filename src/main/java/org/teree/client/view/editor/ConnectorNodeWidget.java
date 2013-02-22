@@ -24,6 +24,12 @@ public class ConnectorNodeWidget extends TextNodeWidget {
 	}
 	
 	@Override
+	public void view() {
+		super.view();
+		update();
+	}
+	
+	@Override
     public void update() {
 		super.update();
 		String text = connector.toString();
@@ -65,6 +71,16 @@ public class ConnectorNodeWidget extends TextNodeWidget {
 		
 		connectorDialog.setPopupPosition(getAbsoluteLeft() + x, 
 				getAbsoluteTop() + content.getOffsetHeight()/2 - connectorDialog.getOffsetHeight()/2);
+	}
+	
+	@Override
+	public void setCollapsed(boolean collapsed) {
+		if (collapsed) {
+			content.setText("+ "+node.getContent().toString());
+		} else {
+			content.setText("╠>" + node.getContent().toString());
+		}
+		this.collapsed = collapsed;
 	}
 
 }

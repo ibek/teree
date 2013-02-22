@@ -14,6 +14,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ConnectorNodeWidget extends TextNodeWidget {
+	
+	private boolean firstLoad = true;
 
 	public ConnectorNodeWidget(Node node) {
 		super(node);
@@ -28,8 +30,9 @@ public class ConnectorNodeWidget extends TextNodeWidget {
 		addDomHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				if (node.getChildNodes() == null || node.getChildNodes().isEmpty()) {
+				if (firstLoad) {
 					event.stopPropagation();
+					firstLoad = false;
 					// get scheme from server
 					CurrentPresenter.getInstance().getPresenter().getScheme(((Connector)node.getContent()).getOid(), new RemoteCallback<Scheme>() {
 						@Override
@@ -37,13 +40,8 @@ public class ConnectorNodeWidget extends TextNodeWidget {
 							if (response == null || response.getStructure() == null) {
 								CurrentPresenter.getInstance().getPresenter().displayError("Cannot open connected scheme");
 							} else if (response.getStructure() == StructureType.Tree) {
-								/**List<Node> childNodes = ((Tree)response).getRoot().getChildNodes();
-								for (int i=0; childNodes != null && i<childNodes.size(); ++i) {
-									Node n = childNodes.get(i);
-									n.setLocation(node.getLocation());
-									node.addChild(n);
-								}*/
 								Node root = ((Tree)response).getRoot();
+								root.setLocation(node.getLocation());
 								node.insertBefore(root);
 								node.remove();
 								Widget p = ConnectorNodeWidget.this.getParent();

@@ -1,9 +1,5 @@
 
 ===============
-0.7:
-===============
-
-===============
 0.8:
 ===============
 
@@ -41,7 +37,7 @@ ulozeni ruznych pohledu na mapu
 
 collaboration
 
-tvorba skupin - pratele, apod ... pro urceni prav na urcite mapy
+tvorba skupin (tymu) - pratele, apod ... pro urceni prav na urcite mapy
 uskupeni vice map do skupin - napr v ramci projektu
 
 use Infinispan as a cache for users and maps

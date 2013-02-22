@@ -32,6 +32,9 @@ public interface UIConstants extends Messages {
     String next();
     String back();
     String save();
+    String createConnector();
+    String mergeConnector();
+    String splitNodeAndConnect();
     String refresh_scheme();
     String share();
     String collapse_all();

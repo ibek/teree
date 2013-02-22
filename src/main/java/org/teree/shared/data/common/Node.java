@@ -58,6 +58,12 @@ public class Node implements Cloneable {
         	childNodes.add(child);
         }
     }
+	
+	public void addChildNodes(List<Node> childNodes) {
+        for(int i=0; childNodes != null && i<childNodes.size(); ++i){
+            addChild(childNodes.get(i));
+        }
+	}
     
     public void insertBefore(Node node) {
         int index = parent.childNodes.indexOf(this);
@@ -131,9 +137,10 @@ public class Node implements Cloneable {
     }
     
     public void setChildNodes(List<Node> childNodes) {
-        for(int i=0; i<childNodes.size(); ++i){
-            addChild(childNodes.get(i));
-        }
+    	if (this.childNodes != null) {
+    		this.childNodes.clear();
+    	}
+        addChildNodes(childNodes);
     }
     
     public NodeType getType() {

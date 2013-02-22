@@ -12,6 +12,11 @@
 		.scene {
 			margin: 20px;
 		}
+		
+		.headerCell {
+			font-weight: bold;
+			border-bottom: 2px solid;
+		}
 
 	</ui:style>
 
@@ -24,6 +29,7 @@
 				<b:Paragraph>
 					<g:Label text="Nodes that are parent of any other nodes can be collapsed with left button click. The first character '+' signs that the node is collapsed and after left button click, the node will show its child nodes."/>
 					<b:Heading size="4" text="Connector" />
+					<b:Image resource="{cres.connectorView}"/>
 					<base:UnorderedList>
 						<base:ListItem><g:Label text="seems to be a collapsed node but the connector is just lazy-load of the connected scheme"/></base:ListItem>
 					</base:UnorderedList>
@@ -55,9 +61,16 @@
 						<base:ListItem><g:Label text="List of LaTeX symbols http://latex.wikia.com/wiki/List_of_LaTeX_symbols"/></base:ListItem>
 					</base:UnorderedList>
 					<b:Heading size="4" text="Connector" />
+					<b:Image resource="{cres.connector}"/>
 					<base:UnorderedList>
 						<base:ListItem><g:Label text="a reference to any existing scheme"/></base:ListItem>
-						<base:ListItem><g:Label text="use OID of the scheme that should be connected or search that scheme through the Connector popup dialog [image]"/></base:ListItem>
+						<base:ListItem><g:Label text="2 options how to set reference to desired scheme"/>
+							<base:UnorderedList>
+								<base:ListItem><g:Label text="use OID of the scheme that should be connected"/></base:ListItem>
+								<base:ListItem><g:Label text="search the scheme through the Connector popup dialog [image]"/>
+								<b:Image resource="{cres.connectorDialog}"/></base:ListItem>
+							</base:UnorderedList>
+						</base:ListItem>
 					</base:UnorderedList>
 				</b:Paragraph>
 			<b:Heading size="2" text="User Home" />
@@ -66,7 +79,7 @@
 					<base:UnorderedList>
 						<base:ListItem><g:InlineLabel text="open set permissions dialog through the "/><b:Icon type="LOCK" /><g:InlineLabel text=" button"/></base:ListItem>
 						<base:ListItem><g:Label text="set global permissions if necessary or add users to assign the rights"/></base:ListItem>
-						<base:ListItem><g:Label text="user is identified by email address"/></base:ListItem>
+						<base:ListItem><g:Label text="user is identified by the email address that was used in registration"/></base:ListItem>
 					</base:UnorderedList>
 				</b:Paragraph>
 			<b:Heading size="2" text="Key Shortcuts" />
@@ -74,10 +87,10 @@
 					<g:Grid ui:field="keyShortcuts" cellSpacing='50' cellPadding='10' borderWidth='1'>
 				        <g:row>
 				          <g:customCell>
-				            <g:Label text="Key"/>
+				            <g:Label text="Key" addStyleNames="{style.headerCell}"/>
 				          </g:customCell>
 				          <g:customCell>
-				            <g:Label text="Description"/>
+				            <g:Label text="Description" addStyleNames="{style.headerCell}"/>
 				          </g:customCell>
 				        </g:row>
 				        <g:row>

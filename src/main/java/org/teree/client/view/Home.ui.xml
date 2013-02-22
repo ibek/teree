@@ -42,7 +42,7 @@
 			<b:Image resource="{cres.features}" addStyleNames="{style.picture}"/>
 			<b:AlertBlock type="ERROR" heading="{uic.attention}" text="{uim.attention_testing}" close="true" addStyleNames="{style.alert}" />
 			<b:AlertBlock type="INFO" heading="{uic.news}" close="true" addStyleNames="{style.alert}">
-				2013-02-24
+				2013-02-22
 				<ul>
 					<li><bb:InlineLabel text="{uim.new3}"/> <g:Anchor ui:field="changeLogs2" text='{uic.change_logs}' addStyleNames="{style.innerlink}"/></li>
 				</ul>

@@ -60,8 +60,8 @@ public class EditPanel extends Composite {
 		createLink = new Button("", IconType.LINK);
 		createMathExpr = new Button("Σ");
 		createConnector = new SplitDropdownButton("");
-		mergeConnector = new NavLink("Merge connector");
-		splitConnector = new NavLink("Split node and connect");
+		mergeConnector = new NavLink(UIConstants.LANG.mergeConnector());
+		splitConnector = new NavLink(UIConstants.LANG.splitNodeAndConnect());
 		createConnector.add(mergeConnector);
 		createConnector.add(splitConnector);
 		
@@ -105,7 +105,7 @@ public class EditPanel extends Composite {
 		
 		container.add(space3);
 
-        Tooltip tccon = new Tooltip("Create connector");
+        Tooltip tccon = new Tooltip(UIConstants.LANG.createConnector());
         tccon.add(createConnector);
 		container.add(tccon);
 		
@@ -156,6 +156,15 @@ public class EditPanel extends Composite {
 				!(nw.getNode().getChildNodes() != null && nw.getNode().getChildNodes().size() > 0));
 		bold.setEnabled(nw != null && ( 
 				(nw instanceof TextNodeWidget && !(nw instanceof ConnectorNodeWidget)) || nw instanceof LinkNodeWidget));
+		disableNewChildNodes(nw instanceof ConnectorNodeWidget || nw instanceof LinkNodeWidget);
+	}
+	
+	private void disableNewChildNodes(boolean disable) {
+		createText.setEnabled(!disable);
+		createLink.setEnabled(!disable);
+		createImg.setEnabled(!disable);
+		createMathExpr.setEnabled(!disable);
+		((Button)createConnector.getWidget(0)).setEnabled(!disable);
 	}
 	
 	public HasClickHandlers getSaveButton() {

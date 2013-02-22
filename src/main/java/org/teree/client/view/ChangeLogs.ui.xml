@@ -20,7 +20,7 @@
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<g:FlowPanel addStyleNames="{style.scene}">
 			<b:Heading size="2" text="{uic.change_logs}" />
-			<b:Heading size="4" text="v0.7 2013-02-24" />
+			<b:Heading size="4" text="v0.7 2013-02-22" />
 				<b:Paragraph>
 					<b:Badge>-</b:Badge><b:Badge text="New types of nodes - Connector" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="Ability to split text node from the current scheme into a new scheme and connect them with connector" /><br/>

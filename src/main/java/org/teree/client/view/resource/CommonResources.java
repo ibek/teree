@@ -25,5 +25,14 @@ public interface CommonResources extends Resources {
 	
 	@Source("img/mathexpr.png")
     ImageResource mathexpr();
+	
+	@Source("img/connector.png")
+    ImageResource connector();
+	
+	@Source("img/connectorDialog.png")
+    ImageResource connectorDialog();
+	
+	@Source("img/connectorView.png")
+    ImageResource connectorView();
     
 }

@@ -324,15 +324,18 @@ public class Scene extends Composite {
     /**======================================================*/
     
     private void createChildNode(Node childNode) {
-    	controller.insertChildNode(childNode);
-    	
-	   	 // to ensure that the node can be focused after insert
-	   	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-	        @Override
-	        public void execute() {
-	   			editSelectedNode();
-	        }
-        });
+    	if (!(controller.getSelectedNode() instanceof ConnectorNodeWidget) &&
+    		!(controller.getSelectedNode() instanceof LinkNodeWidget)) {
+	    	controller.insertChildNode(childNode);
+	    	
+		   	 // to ensure that the node can be focused after insert
+		   	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+		        @Override
+		        public void execute() {
+		   			editSelectedNode();
+		        }
+	        });
+    	}
     }
     
     private List<Boolean> collapseForSample(List<NodeWidget> widgets, boolean collapse) {

@@ -192,7 +192,7 @@ public class SchemeWidget extends Composite {
 			if (ui != null && scheme.getAuthor().getUserId().equals(ui.getUserId())) {
 				permissions.setVisible(true);
 				remove.setVisible(true);
-				root.setWidth((Settings.SAMPLE_MAX_WIDTH - 100)+"px");
+				root.setWidth((Settings.SAMPLE_MAX_WIDTH - 110)+"px");
 				edit.setVisible(true);
 			} else if (scheme.getPermissions().canEdit(ui)) {
 				edit.setVisible(true);
