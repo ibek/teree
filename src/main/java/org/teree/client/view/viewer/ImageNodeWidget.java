@@ -38,6 +38,7 @@ public class ImageNodeWidget extends NodeWidget {
 		super(node);
 
 		init();
+		update();
 
 		container.add(content);
 
