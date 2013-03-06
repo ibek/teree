@@ -1,13 +1,20 @@
 package org.teree.client.view.viewer;
 
+import java.io.IOException;
+
 import org.teree.client.text.UIConstants;
+import org.teree.shared.data.common.Viewpoint;
+
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.DropdownButton;
 import com.github.gwtbootstrap.client.ui.Form;
 import com.github.gwtbootstrap.client.ui.NavLink;
+import com.github.gwtbootstrap.client.ui.ValueListBox;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.text.shared.AbstractRenderer;
+import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Hidden;
@@ -17,7 +24,10 @@ import com.google.gwt.user.client.ui.Label;
 public class ViewPanel extends Composite {
 
 	private HorizontalPanel container;
-    
+
+	private ValueListBox<Viewpoint> viewpoint;
+	private Button addViewpoint;
+	
 	private DropdownButton exportAs;
 	private NavLink exportImage;
 	private NavLink exportFreeMind;
@@ -32,6 +42,13 @@ public class ViewPanel extends Composite {
 	public ViewPanel() {
 		
 		container = new HorizontalPanel();
+		
+		viewpoint = new ValueListBox<Viewpoint>(new AbstractRenderer<Viewpoint>() {
+			@Override
+			public String render(Viewpoint object) {
+				return object.getName();
+			}
+		});
 		
 		collapseAll = new Button();
 		setCollapsed(true);

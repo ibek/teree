@@ -1,5 +1,7 @@
 package org.teree.shared.data.common;
 
+import java.util.List;
+
 import org.jboss.errai.common.client.api.annotations.Portable;
 import org.teree.shared.data.UserInfo;
 
@@ -17,6 +19,8 @@ public class Scheme {
 
 	private UserInfo author;
 	private Permissions permissions = new Permissions();
+	
+	private List<Viewpoint> viewpoints;
 
 	public String getSchemePicture() {
         return schemePicture;
@@ -58,6 +62,14 @@ public class Scheme {
 		this.permissions = permissions;
 	}
 	
+	public List<Viewpoint> getViewpoints() {
+		return viewpoints;
+	}
+
+	public void setViewpoints(List<Viewpoint> viewpoints) {
+		this.viewpoints = viewpoints;
+	}
+
 	@Override
 	public String toString() {
 		return "Scheme title";

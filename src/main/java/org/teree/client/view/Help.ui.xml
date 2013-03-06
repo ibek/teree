@@ -67,7 +67,7 @@
 						<base:ListItem><g:Label text="2 options how to set reference to desired scheme"/>
 							<base:UnorderedList>
 								<base:ListItem><g:Label text="use OID of the scheme that should be connected"/></base:ListItem>
-								<base:ListItem><g:Label text="search the scheme through the Connector popup dialog [image]"/>
+								<base:ListItem><g:Label text="search the scheme through the Connector popup dialog"/>
 								<b:Image resource="{cres.connectorDialog}"/></base:ListItem>
 							</base:UnorderedList>
 						</base:ListItem>

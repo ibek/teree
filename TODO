@@ -8,6 +8,9 @@ PercentNodeWidget - zobrazi graficky 0-100%, pri editaci se vlozi cislo 0-100 do
 
 umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
 
+oznacit cekani na prihlaseni
+oznacit cekani na mapy v explore
+
 upravit explore aby zobrazoval jak posledne vlozene mapy tak i nejvice otevrene za tyden apod.
 pridat hodnoceni a pocet shlednuti mapy
 
@@ -23,13 +26,14 @@ dialog pro vytvoreni mapy - po stisknuti tlacitka create
 ulozeni ruznych pohledu na mapu
  - nektere casti nejsou pro dany pohled dulezite a nebudou zobrazeny
  - jine nody budou collapsed apod
- - vlevo ve sloupci ve view budou vetsi tlacitka jako pohledy pro prepnuti
  - vytvori se novy editor pohledu ktery bude nastavovat nody podle toho jak a zda se maji zobrazit
- - editor pohledu bude pristupny pres editor map - tlacitko pridat pohled, ...
+ - editor pohledu bude pristupny pres viewer - tlacitko pridat pohled, ...
  - ruzne zvyrazneni uzlu
  - moznost obarveni nodu dedicne - tzn i potomci budou mit danou barvu pokud nebude nastaven styl
    - cascading formatting
  - ruzne typy nodu z hlediska vyznamu - klicove slovo, definice, priklad, ...
+ 
+ - jak se budou ukladat barvy? RGB?
 
 ===============
 0.9:

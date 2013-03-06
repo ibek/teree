@@ -14,7 +14,7 @@ public class Node implements Cloneable {
     private Object content;
     private NodeType type;
     private NodeLocation location;
-    private NodeStyle style;
+    private List<NodeStyle> style;
     
     public Node() {
     	
@@ -29,7 +29,11 @@ public class Node implements Cloneable {
         root.setContent(content);
         root.setLocation(location);
         if (style != null) {
-        	root.setStyle(style.clone());
+        	List<NodeStyle> styleClones = new ArrayList<NodeStyle>();
+        	for (NodeStyle ns : style) {
+        		styleClones.add(ns.clone());
+        	}
+        	root.setStyle(styleClones);
         }
         for(int i=0; childNodes != null && i<childNodes.size(); ++i){
             root.addChild(childNodes.get(i).clone());
@@ -188,22 +192,33 @@ public class Node implements Cloneable {
         this.location = location;
     }
     
-    public NodeStyle getStyle() {
-		return style;
-	}
-    
-    public NodeStyle getStyleOrCreate() {
-    	if (style == null) {
-    		style = new NodeStyle();
-    	}
-		return style;
+    public List<NodeStyle> getStyle() {
+    	return style;
+    }
+
+    /**
+     * 
+     * @param id of viewpoint
+     * @return
+     */
+    public NodeStyle getStyle(int id) {
+		return style.get(id);
 	}
 
-	public void setStyle(NodeStyle style) {
+	public void setStyle(List<NodeStyle> style) {
 		this.style = style;
 	}
 
-    public enum NodeType {
+	/**
+	 * 
+	 * @param id of viewpoint
+	 * @param style
+	 */
+	public void setStyle(int id, NodeStyle style) {
+		this.style.set(id, style);
+	}
+
+	public enum NodeType {
         None,
         IconText,
         Link,

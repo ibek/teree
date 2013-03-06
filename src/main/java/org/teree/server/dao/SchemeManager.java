@@ -22,6 +22,7 @@ import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.common.UserPermissions;
 import org.teree.shared.data.common.Node.NodeLocation;
 import org.teree.shared.data.common.Node.NodeType;
+import org.teree.shared.data.common.Viewpoint;
 import org.teree.shared.data.tree.Tree;
 import org.teree.shared.data.tree.TreeType;
 import org.teree.shared.data.UserInfo;
@@ -263,6 +264,8 @@ public class SchemeManager {
             doc.put("screen", s.getSchemePicture());
         }
         
+        doc.put("viewpoints", toViewpointsDBList(s.getViewpoints()));
+        
         return doc;
     }
     
@@ -309,10 +312,20 @@ public class SchemeManager {
             doc.put("location", root.getLocation().name());
         }
         
-        NodeStyle ns = root.getStyle();
-        if (ns != null && !ns.isDefault()) {
-        	BasicDBObject style = new BasicDBObject();
-        	style.put("bold", ns.isBold());
+        List<NodeStyle> nsList = root.getStyle();
+        if (nsList != null) {
+        	BasicDBList style = new BasicDBList();
+        	
+        	for (NodeStyle ns : nsList) {
+        		BasicDBObject s = new BasicDBObject();
+        		if (!ns.isDefault()) {
+        			s.put("visible", ns.isVisible());
+        			s.put("bold", ns.isBold());
+        			s.put("cascading", ns.isCascading());
+        			s.put("collapsed", ns.isCollapsed());
+        		}
+        		style.add(s);
+        	}
         	
         	doc.put("style", style);
         }
@@ -327,6 +340,7 @@ public class SchemeManager {
     		return null;
     	}
     	Scheme s = fromSchemeDBObjectInfo(scheme);
+    	s.setViewpoints(fromViewpointsDBList((BasicDBList)scheme.get("viewpoints")));
 
     	switch (s.getStructure()) {
 	        case Tree: {
@@ -373,8 +387,8 @@ public class SchemeManager {
         
         return s;
     }
-    
-    private Node fromNodeDBObject(BasicDBObject root) {
+
+	private Node fromNodeDBObject(BasicDBObject root) {
     	if (root == null) {
     		return null;
     	}
@@ -425,11 +439,20 @@ public class SchemeManager {
             node.setLocation(NodeLocation.valueOf(location));
         }
         
-        BasicDBObject style = (BasicDBObject)root.get("style");
+        BasicDBList style = (BasicDBList)root.get("style");
         if(style != null){
-        	NodeStyle ns = new NodeStyle();
-            ns.setBold(style.getBoolean("bold"));
-        	node.setStyle(ns);
+        	List<NodeStyle> nsList = new ArrayList<NodeStyle>();
+        	Iterator<Object> it = style.iterator();
+	        while(it.hasNext()){
+	        	DBObject nso = (BasicDBObject)it.next();
+	        	NodeStyle ns = new NodeStyle();
+	            ns.setVisible((Boolean)nso.get("visible"));
+	            ns.setBold((Boolean)nso.get("bold"));
+	            ns.setCascading((Boolean)nso.get("cascading"));
+	            ns.setCollapsed((Boolean)nso.get("collapsed"));
+	            nsList.add(ns);
+	        }
+        	node.setStyle(nsList);
         }
         node.setChildNodes(fromDBList((BasicDBList)root.get("childNodes")));
         
@@ -486,11 +509,35 @@ public class SchemeManager {
         return doc;
 	}
     
+    private List<Viewpoint> fromViewpointsDBList(BasicDBList basicDBList) {
+    	List<Viewpoint> viewpoints = new ArrayList<Viewpoint>();
+    	Iterator<Object> it = basicDBList.iterator();
+        while(it.hasNext()){
+        	BasicDBObject bov = (BasicDBObject)it.next();
+        	Viewpoint vp = new Viewpoint();
+        	vp.setName(bov.getString("name"));
+            viewpoints.add(vp);
+        }
+		return viewpoints;
+	}
+    
+    private BasicDBList toViewpointsDBList(List<Viewpoint> viewpoints) {
+        BasicDBList doc = new BasicDBList();
+        if(viewpoints != null){
+            for(Viewpoint vp : viewpoints){
+            	BasicDBObject bov = new BasicDBObject();
+            	bov.put("name", vp.getName());
+                doc.add(bov);
+            }
+        }
+        return doc;
+    }
+    
     private BasicDBList toDBList(List<Node> childNodes) {
         BasicDBList doc = new BasicDBList();
         if(childNodes != null){
-            for(int i=0; i<childNodes.size(); ++i){
-                doc.add(toNodeDBObject(childNodes.get(i)));
+            for(Node n : childNodes){
+                doc.add(toNodeDBObject(n));
             }
         }
         return doc;
