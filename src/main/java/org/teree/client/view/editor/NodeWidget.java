@@ -49,8 +49,6 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
         
         bind();
         
-        changeStyle(node.getStyle());
-        
     	DOM.setStyleAttribute(getElement(), "visibility", "hidden");
     }
 	

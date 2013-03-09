@@ -43,32 +43,40 @@ public class NodeStyle implements Cloneable {
 		return bold;
 	}
 
-	public void setBold(boolean bold) {
-		this.bold = bold;
+	public void setBold(Boolean bold) {
+		if (bold != null) {
+			this.bold = bold;
+		}
 	}
 
 	public boolean isVisible() {
 		return visible;
 	}
 
-	public void setVisible(boolean visible) {
-		this.visible = visible;
+	public void setVisible(Boolean visible) {
+		if (visible != null) {
+			this.visible = visible;
+		}
 	}
 
 	public boolean isCascading() {
 		return cascading;
 	}
 
-	public void setCascading(boolean cascading) {
-		this.cascading = cascading;
+	public void setCascading(Boolean cascading) {
+		if (cascading != null) {
+			this.cascading = cascading;
+		}
 	}
 
 	public boolean isCollapsed() {
 		return collapsed;
 	}
 
-	public void setCollapsed(boolean collapsed) {
-		this.collapsed = collapsed;
+	public void setCollapsed(Boolean collapsed) {
+		if (collapsed != null) {
+			this.collapsed = collapsed;
+		}
 	}
 
 }

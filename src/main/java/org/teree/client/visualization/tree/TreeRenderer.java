@@ -14,6 +14,7 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -44,7 +45,7 @@ public abstract class TreeRenderer<T extends Widget & NodeInterface> {
     protected abstract int[] render(Canvas canvas, List<T> nodes, Node root, boolean makePicture, boolean editable);
     
 
-    public void renderEditor(final Canvas canvas, final List<T> nodes, final Node root) {
+    public void render(final Canvas canvas, final List<T> nodes, final Node root) {
     	prepare(nodes);
     	Scheduler.get().scheduleDeferred(new ScheduledCommand() { // to ensure that widget automatically resized size is already set
             @Override
@@ -54,15 +55,6 @@ public abstract class TreeRenderer<T extends Widget & NodeInterface> {
                     resize(nodes);
                 }
             	render(canvas, nodes, root, false, true);
-            }
-        });
-    }
-
-    public void renderViewer(final Canvas canvas, final List<T> nodes, final Node root) {
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() { // to ensure that widget automatically resized size is already set
-            @Override
-            public void execute() {
-                render(canvas, nodes, root, false, false);
             }
         });
     }

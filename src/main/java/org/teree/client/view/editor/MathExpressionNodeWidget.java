@@ -194,9 +194,4 @@ public class MathExpressionNodeWidget extends NodeWidget {
         }
     }
 
-	@Override
-	public void changeStyle(NodeStyle style) {
-		// nothing to be set
-	}
-
 }

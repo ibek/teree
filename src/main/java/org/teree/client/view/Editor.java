@@ -103,13 +103,6 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 			}
 		});
     	
-    	edit.getBoldButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				scene.changeBoldOfSelectedNode();
-			}
-		});
-    	
     	edit.setSelectIconHandler(new EditPanel.SelectIcon() {
 			@Override
 			public void select(IconType icon) {
@@ -195,10 +188,5 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
     public String getSchemeSamplePicture() {
         return scene.getSchemeSamplePicture();
     }
-
-	@Override
-	public void bold() {
-		scene.changeBoldOfSelectedNode();
-	}
 
 }

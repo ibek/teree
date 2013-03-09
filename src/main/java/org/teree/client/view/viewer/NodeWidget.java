@@ -74,10 +74,9 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 	public void unselect() {
 		// TODO Auto-generated method stub
 	}
-
-	@Override
-	public void changeStyle(NodeStyle style) {
-		// TODO Auto-generated method stub
+	
+	public void changeViewpoint(int index) {
+		
 	}
 
 }

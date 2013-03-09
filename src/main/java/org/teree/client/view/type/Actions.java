@@ -49,8 +49,6 @@ public interface Actions<T> {
 
 	public void setNodeIcon(IconType icon);
 	
-	public void boldNode();
-	
 	public void splitAndConnectNode();
 	
 	public void mergeConnectorNode();

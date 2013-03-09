@@ -33,7 +33,7 @@ public class Permissions {
 		if (write != null && write) {
 			return true;
 		}
-		if (users != null) {
+		if (users != null && ui != null) {
 			for (UserPermissions up : users) {
 				if (up.getUser().getUserId().equals(ui.getUserId()) && up.getWrite()) {
 					return true;

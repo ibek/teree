@@ -1,5 +1,7 @@
 package org.teree.client.view.viewer;
 
+import java.util.List;
+
 import org.teree.client.Settings;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.NodeChangedHandler;
@@ -144,6 +146,14 @@ public class Scene extends Composite {
     public void changeCollapseAll(boolean collapseAll) {
 		controller.collapseAll(controller.getNodeWidgets(), collapseAll);
 		controller.update(null);
+    }
+    
+    public void changeViewpoint(int index) {
+    	List<NodeWidget> widgets = controller.getNodeWidgets();
+    	for (NodeWidget nw : widgets) {
+    		nw.changeViewpoint(index);
+    	}
+    	controller.update(null);
     }
     
     private void changeCollapseNode(NodeWidget nw) {

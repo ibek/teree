@@ -512,11 +512,14 @@ public class SchemeManager {
     private List<Viewpoint> fromViewpointsDBList(BasicDBList basicDBList) {
     	List<Viewpoint> viewpoints = new ArrayList<Viewpoint>();
     	Iterator<Object> it = basicDBList.iterator();
+    	int id = 0;
         while(it.hasNext()){
         	BasicDBObject bov = (BasicDBObject)it.next();
         	Viewpoint vp = new Viewpoint();
+        	vp.setId(id);
         	vp.setName(bov.getString("name"));
             viewpoints.add(vp);
+            id++;
         }
 		return viewpoints;
 	}

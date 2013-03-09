@@ -13,9 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public interface Renderer<T extends Widget & NodeInterface> {
 
-    public void renderEditor(final Canvas canvas, final List<T> nodes);
-
-    public void renderViewer(final Canvas canvas, final List<T> nodes);
+    public void render(final Canvas canvas, final List<T> nodes);
 
     /**
      * 

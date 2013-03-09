@@ -14,8 +14,6 @@ public interface KeyAction {
     
     void paste();
     
-    void bold();
-    
     void up();
     
     void down();

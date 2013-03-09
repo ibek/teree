@@ -76,10 +76,6 @@ public class Editor extends Presenter {
 				{
                 	//display.paste();
                 }
-				else if (key == 66 && e.getCtrlKey())
-				{
-                	display.bold();
-                }
 				else if (key == KeyCodes.KEY_UP)
 				{
                 	display.up();

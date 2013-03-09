@@ -104,8 +104,14 @@ public class FreeMind implements ISchemeImport, ISchemeExport {
 		}
 	}
 	
+	/**
+	 * TODO style for FreeMind - from the first visualization?
+	 * @param node
+	 * @param doc
+	 * @param enode
+	 */
 	private void setElementStyle(Node node, Document doc, Element enode) {
-		NodeStyle ns = node.getStyle();
+		/**NodeStyle ns = node.getStyle();
 		if (ns != null) {
 			if (ns.isBold()) {
 				Element font = doc.createElement("font");
@@ -114,7 +120,7 @@ public class FreeMind implements ISchemeImport, ISchemeExport {
 				font.setAttribute("SIZE", "12");
 				enode.appendChild(font);
 			}
-		}
+		}*/
 	}
 	
 	private com.google.gwt.xml.client.Node getFirstNode(NodeList list) {

@@ -252,10 +252,6 @@ public class Scene extends Composite {
     	controller.selectRightNode();
     }
     
-    public void changeBoldOfSelectedNode() {
-    	controller.boldNode();
-    }
-    
     public String getSchemePicture() {
         Canvas canvas = Canvas.createIfSupported();
         canvas.setCoordinateSpaceHeight(this.canvas.getOffsetHeight());

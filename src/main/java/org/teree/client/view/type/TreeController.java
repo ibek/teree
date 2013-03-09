@@ -59,13 +59,8 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	}
 
 	@Override
-	public void renderEditor(Canvas canvas, List<T> nodes) {
-		renderer.renderEditor(canvas, nodes, tree.getRoot());
-	}
-
-	@Override
-	public void renderViewer(Canvas canvas, List<T> nodes) {
-		renderer.renderViewer(canvas, nodes, tree.getRoot());
+	public void render(Canvas canvas, List<T> nodes) {
+		renderer.render(canvas, nodes, tree.getRoot());
 	}
 
 	@Override
@@ -298,13 +293,6 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	}
 
 	@Override
-	public void boldNode() {
-		NodeStyle style = selected.getNode().getStyleOrCreate();
-		style.setBold(!style.isBold());
-		selected.changeStyle(style);
-	}
-
-	@Override
 	public void splitAndConnectNode() {
 		if (selected instanceof TextNodeWidget && !(selected instanceof ConnectorNodeWidget)) {
 			final Tree t = new Tree();
@@ -347,10 +335,6 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 		                    con.setRoot(it);
 		                    con.setOid(response);
 		                    connector.setContent(con);
-		                    NodeStyle ns = t.getRoot().getStyle();
-		                    if (ns != null) {
-		                    	connector.setStyle(ns.clone());
-		                    }
 		                    
 		                    insertNodeBefore(connector);
 		                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
@@ -574,7 +558,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
     		collapseAll(nw, collapse);
     	}
     	
-    	renderer.renderEditor(canvas, nw, root);
+    	renderer.render(canvas, nw, root);
 	}
     
     private int update(Node current, Node changed, int id) {

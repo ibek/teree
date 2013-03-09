@@ -9,6 +9,7 @@ import org.teree.client.view.viewer.event.CollapseNode;
 import org.teree.shared.data.common.IconText;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeStyle;
+import org.teree.shared.data.common.Viewpoint;
 
 import com.github.gwtbootstrap.client.ui.Icon;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
@@ -50,15 +51,6 @@ public class TextNodeWidget extends NodeWidget {
 				event.stopPropagation(); // it prevents map moving
 			}
 		});
-    	
-        // set node style
-		NodeStyle ns = node.getStyleOrCreate();
-		
-		if (ns.isBold()) {
-			getElement().getStyle().setFontWeight(FontWeight.BOLD);
-		} else {
-			getElement().getStyle().setFontWeight(FontWeight.NORMAL);
-		}
         
         container.add(content);
         
@@ -151,6 +143,21 @@ public class TextNodeWidget extends NodeWidget {
 			content.setText(node.getContent().toString());
 		}
 		this.collapsed = collapsed;
+	}
+	
+	@Override
+	public void changeViewpoint(int index) {
+		System.out.println(index);
+		List<NodeStyle> styles = node.getStyle();
+		
+		getElement().getStyle().setFontWeight(FontWeight.NORMAL); // default
+		
+		if (index >= 0 && styles != null && index < styles.size()) {
+			NodeStyle ns = styles.get(index);
+			if (ns.isBold()) {
+				getElement().getStyle().setFontWeight(FontWeight.BOLD);
+			}
+		}
 	}
 
 }

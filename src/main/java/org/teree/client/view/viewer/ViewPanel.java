@@ -1,6 +1,8 @@
 package org.teree.client.view.viewer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.teree.client.text.UIConstants;
 import org.teree.shared.data.common.Viewpoint;
@@ -10,9 +12,12 @@ import com.github.gwtbootstrap.client.ui.DropdownButton;
 import com.github.gwtbootstrap.client.ui.Form;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.ValueListBox;
+import com.github.gwtbootstrap.client.ui.constants.AlternateSize;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.client.ui.Composite;
@@ -46,15 +51,25 @@ public class ViewPanel extends Composite {
 		viewpoint = new ValueListBox<Viewpoint>(new AbstractRenderer<Viewpoint>() {
 			@Override
 			public String render(Viewpoint object) {
-				return object.getName();
+				return (object == null)?"None":object.getName();
 			}
 		});
+		viewpoint.setAlternateSize(AlternateSize.MEDIUM);
+		container.add(viewpoint);
+		
+		addViewpoint = new Button("", IconType.PLUS);
+		addViewpoint.setVisible(false);
+		container.add(addViewpoint);
+		
+		Label space = new Label("");
+		space.getElement().getStyle().setMarginRight(20, Unit.PX);
+		container.add(space);
 		
 		collapseAll = new Button();
 		setCollapsed(true);
 		container.add(collapseAll);
 		
-		Label space = new Label("");
+		space = new Label("");
 		space.getElement().getStyle().setMarginRight(20, Unit.PX);
 		container.add(space);
 		
@@ -110,6 +125,25 @@ public class ViewPanel extends Composite {
 	
 	public Button getShareButton() {
 		return share;
+	}
+	
+	public Button getAddViewpointButton() {
+		return addViewpoint;
+	}
+	
+	public ValueListBox<Viewpoint> getViewpoints() {
+		return viewpoint; 
+	}
+	
+	public void setViewpoints(List<Viewpoint> viewpoints) {
+		if (viewpoints == null) {
+			viewpoints = new ArrayList<Viewpoint>();
+		}
+		/**Viewpoint vp = new Viewpoint();
+		vp.setId(-1);
+		vp.setName("Default");
+		viewpoints.add(0, vp);*/
+		viewpoint.setAcceptableValues(viewpoints);
 	}
 	
 }

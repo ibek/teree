@@ -123,9 +123,4 @@ public class ImageNodeWidget extends NodeWidget {
         context.restore();
     }
 
-	@Override
-	public void changeStyle(NodeStyle style) {
-		// nothing to be set
-	}
-
 }

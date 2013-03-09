@@ -27,6 +27,4 @@ public interface NodeInterface {
 	
 	public void unselect();
 	
-	public void changeStyle(NodeStyle style);
-	
 }

@@ -279,23 +279,6 @@ public class TextNodeWidget extends NodeWidget {
     }
 
 	@Override
-	public void changeStyle(NodeStyle style) {
-		if (style == null) {
-			return;
-		}
-		
-		NodeStyle ns = node.getStyleOrCreate();
-		
-		if (style.isBold()) {
-			ns.setBold(true);
-			getElement().getStyle().setFontWeight(FontWeight.BOLD);
-		} else {
-			ns.setBold(false);
-			getElement().getStyle().setFontWeight(FontWeight.NORMAL);
-		}
-	}
-
-	@Override
 	public void setCollapsed(boolean collapsed) {
 		if (collapsed) {
 			content.setText("+ "+node.getContent().toString());
