@@ -82,6 +82,13 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 			}
 		});
     	
+    	edit.getCreatePercentButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scene.createPercentChildNode();
+			}
+		});
+    	
     	edit.getCreateConnectorButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

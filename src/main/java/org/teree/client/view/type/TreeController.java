@@ -21,7 +21,6 @@ import org.teree.client.visualization.tree.TreeRenderer;
 import org.teree.shared.data.common.Connector;
 import org.teree.shared.data.common.IconText;
 import org.teree.shared.data.common.Node;
-import org.teree.shared.data.common.NodeStyle;
 import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.common.Node.NodeLocation;
 import org.teree.shared.data.common.Scheme;

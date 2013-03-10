@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.teree.client.text.UIConstants;
-import org.teree.shared.data.common.Viewpoint;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.DropdownButton;
@@ -29,9 +28,6 @@ import com.google.gwt.user.client.ui.Label;
 public class ViewPanel extends Composite {
 
 	private HorizontalPanel container;
-
-	private ValueListBox<Viewpoint> viewpoint;
-	private Button addViewpoint;
 	
 	private DropdownButton exportAs;
 	private NavLink exportImage;
@@ -48,28 +44,11 @@ public class ViewPanel extends Composite {
 		
 		container = new HorizontalPanel();
 		
-		viewpoint = new ValueListBox<Viewpoint>(new AbstractRenderer<Viewpoint>() {
-			@Override
-			public String render(Viewpoint object) {
-				return (object == null)?"None":object.getName();
-			}
-		});
-		viewpoint.setAlternateSize(AlternateSize.MEDIUM);
-		container.add(viewpoint);
-		
-		addViewpoint = new Button("", IconType.PLUS);
-		addViewpoint.setVisible(false);
-		container.add(addViewpoint);
-		
-		Label space = new Label("");
-		space.getElement().getStyle().setMarginRight(20, Unit.PX);
-		container.add(space);
-		
 		collapseAll = new Button();
 		setCollapsed(true);
 		container.add(collapseAll);
 		
-		space = new Label("");
+		Label space = new Label("");
 		space.getElement().getStyle().setMarginRight(20, Unit.PX);
 		container.add(space);
 		
@@ -125,25 +104,6 @@ public class ViewPanel extends Composite {
 	
 	public Button getShareButton() {
 		return share;
-	}
-	
-	public Button getAddViewpointButton() {
-		return addViewpoint;
-	}
-	
-	public ValueListBox<Viewpoint> getViewpoints() {
-		return viewpoint; 
-	}
-	
-	public void setViewpoints(List<Viewpoint> viewpoints) {
-		if (viewpoints == null) {
-			viewpoints = new ArrayList<Viewpoint>();
-		}
-		/**Viewpoint vp = new Viewpoint();
-		vp.setId(-1);
-		vp.setName("Default");
-		viewpoints.add(0, vp);*/
-		viewpoint.setAcceptableValues(viewpoints);
 	}
 	
 }

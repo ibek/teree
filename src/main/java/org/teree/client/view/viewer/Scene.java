@@ -148,14 +148,6 @@ public class Scene extends Composite {
 		controller.update(null);
     }
     
-    public void changeViewpoint(int index) {
-    	List<NodeWidget> widgets = controller.getNodeWidgets();
-    	for (NodeWidget nw : widgets) {
-    		nw.changeViewpoint(index);
-    	}
-    	controller.update(null);
-    }
-    
     private void changeCollapseNode(NodeWidget nw) {
     	if (nw.getNode().getChildNodes() != null && !nw.getNode().getChildNodes().isEmpty() && nw.getNode().getParent() != null) { // has child nodes
 	    	nw.setCollapsed(!nw.isCollapsed());

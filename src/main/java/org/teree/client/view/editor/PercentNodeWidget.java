@@ -10,10 +10,14 @@ import org.teree.client.view.resource.IconTypeContent;
 import org.teree.shared.data.common.IconText;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.Node.NodeLocation;
+import org.teree.shared.data.common.PercentText;
 
 import com.github.gwtbootstrap.client.ui.Icon;
+import com.github.gwtbootstrap.client.ui.ProgressBar;
+import com.github.gwtbootstrap.client.ui.TextBox;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.canvas.dom.client.TextMetrics;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -39,31 +43,29 @@ import com.google.gwt.user.client.ui.TextArea;
  * @author ibek
  *
  */
-public class TextNodeWidget extends NodeWidget {
+public class PercentNodeWidget extends NodeWidget {
 	
-	protected Icon icon;
+	private static final int threshold = 20;
+	
     protected HTML content;
-    protected TextArea editContent;
+    protected TextBox editContent;
+    protected ProgressBar percentage;
     
-    protected IconText nodeContent;
+    protected PercentText nodeContent;
     
-    public TextNodeWidget(Node node) {
+    public PercentNodeWidget(Node node) {
         super(node);
-
-		icon = new Icon();
-		icon.getElement().getStyle().setZIndex(100);
 		
-        if (node.getContent() instanceof IconText) {
-        	nodeContent = (IconText)node.getContent();
-            view();
-        }
+    	nodeContent = (PercentText)node.getContent();
+        view();
         
     }
     
     @Override
     public void edit() {
         if (editContent == null) {
-            editContent = new TextArea();
+            editContent = new TextBox();
+            editContent.setMaxLength(32);
             
             editContent.addKeyUpHandler(new KeyUpHandler() {
                 @Override
@@ -114,26 +116,10 @@ public class TextNodeWidget extends NodeWidget {
         
         editContent.setText(nodeContent.getText());
 
-        if (getOffsetWidth() > Settings.NODE_DEFAULT_WIDTH) {
-        	editContent.setWidth((getOffsetWidth()+4)+"px");
-        } else {
-            if (node.getLocation() == NodeLocation.LEFT) {
-            	container.getElement().getStyle().setMarginLeft(getOffsetWidth() - Settings.NODE_DEFAULT_WIDTH, Unit.PX);
-            }
-        	editContent.setWidth(Settings.NODE_DEFAULT_WIDTH+"px");
-        	container.setWidth(Settings.NODE_DEFAULT_WIDTH+"px");
-        }
-        if (getOffsetHeight() > Settings.NODE_DEFAULT_HEIGHT) {
-            editContent.setHeight(getOffsetHeight()+"px");
-        } else {
-            editContent.setHeight(Settings.NODE_DEFAULT_HEIGHT+"px");
-        }
-        
-        if (nodeContent.getIconType() != null) {
-			editContent.getElement().getStyle().setPaddingLeft(Settings.ICON_WIDTH, Unit.PX);
-        } else {
-			editContent.getElement().getStyle().setPaddingLeft(0.0, Unit.PX);
-        }
+        editContent.getElement().getStyle().setPadding(0.0, Unit.PX);
+        editContent.getElement().getStyle().setMargin(0.0, Unit.PX);
+        editContent.setWidth(content.getOffsetWidth() + "px");
+        editContent.setHeight(content.getOffsetHeight() + "px");
         
         // to ensure that the editContent will be focused after all events (key F2)
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
@@ -144,16 +130,15 @@ public class TextNodeWidget extends NodeWidget {
         });
         
         container.remove(content);
-        container.add(editContent);
+        container.insert(editContent, 0);
 
         // only for better look
-        getParent().fireEvent(new SelectNode<TextNodeWidget>(null));
+        getParent().fireEvent(new SelectNode<PercentNodeWidget>(null));
         
     }
     
     public void view() {
     	if (content == null) {
-    		
 	        content = new HTML(nodeContent.getText());
 	        
 	        content.getElement().setDraggable(Element.DRAGGABLE_TRUE);
@@ -165,6 +150,26 @@ public class TextNodeWidget extends NodeWidget {
     	}
     	container.getElement().getStyle().setMarginLeft(0, Unit.PX);
     	container.setWidth("auto");
+    	
+    	if (percentage == null) {
+            percentage = new ProgressBar();
+            percentage.addDomHandler(new ClickHandler() {
+    			@Override
+    			public void onClick(ClickEvent event) {
+    				event.stopPropagation();
+    				int percent = (int)((event.getRelativeX(percentage.getElement())/(double)percentage.getOffsetWidth())*100);
+					percent += threshold/2;
+    				percent = (percent/threshold)*threshold;
+    				nodeContent.setPercentage(percent);
+    				update();
+    			}
+    		}, ClickEvent.getType());
+            percentage.getElement().getStyle().setMargin(0.0, Unit.PX);
+            percentage.getElement().getStyle().setMarginBottom(2.0, Unit.PX);
+            percentage.setHeight("10px");
+            percentage.getElement().getStyle().setProperty("lineHeight", "10px");
+            container.add(percentage);
+    	}
 
     	update();
         
@@ -172,21 +177,21 @@ public class TextNodeWidget extends NodeWidget {
             container.remove(editContent);
         }
         
-        container.add(content);
+        container.insert(content, 0);
         
     }
     
     private void confirmChanges() {
         String newtext = editContent.getText();
         String oldtext = nodeContent.getText();
-        
+
         if (oldtext == null || newtext.compareTo(oldtext) != 0) {
         	nodeContent.setText(newtext);
 			getParent().fireEvent(new NodeChanged(null)); // null because nothing was inserted
         }
         
         view();
-    	getParent().fireEvent(new SelectNode<TextNodeWidget>(this));
+    	getParent().fireEvent(new SelectNode<PercentNodeWidget>(this));
     }
     
     @Override
@@ -196,20 +201,8 @@ public class TextNodeWidget extends NodeWidget {
 			text = "[empty]";
 		}
 		content.setText(text);
-		if (nodeContent.getIconType() != null) {
-			
-			icon.setType(IconType.valueOf(nodeContent.getIconType()));
-			
-			if (container.getWidgetIndex(icon) < 0) {
-				container.insert(icon, 0, 5, 0);
-				content.getElement().getStyle().setPaddingLeft(Settings.ICON_WIDTH, Unit.PX);
-			}
-		} else {
-			if (container.getWidgetIndex(icon) >= 0) {
-				container.remove(icon);
-				content.getElement().getStyle().setPaddingLeft(0.0, Unit.PX);
-			}
-		}
+        percentage.setPercent(nodeContent.getPercentage());
+        percentage.setText(String.valueOf(nodeContent.getPercentage()) + "%");
     }
 
     @Override
@@ -219,61 +212,22 @@ public class TextNodeWidget extends NodeWidget {
         context.setFillStyle("#000000");
 
         String text = content.getText();
-        String[] words = text.split(" ");
-        String line = "";
-        int lineHeight = 14;
-        int mw = getOffsetWidth() + 10;
-        int py = y;
-        List<Integer> ly = new ArrayList<Integer>();
-        List<String> ls = new ArrayList<String>();
-        for (int n=0; n<words.length; ++n) {
-        	String[] lines = words[n].split("\n");
-        	if (lines.length == 1) {
-	        	String testLine = line + words[n] + " ";
-	        	TextMetrics tm = context.measureText(testLine);
-	        	double testWidth = tm.getWidth();
-	        	if (testWidth > mw) {
-	        		ls.add(line);
-	        		ly.add(py);
-	                line = words[n] + ' ';
-	                py += lineHeight;
-	        	} else {
-	                line = testLine;
-	            }
-        	} else {
-        		for (int i=0; i<lines.length-1; ++i) {
-        			ls.add(line + lines[i]);
-	        		ly.add(py);
-	                line = "";
-	                py += lineHeight;
-        		}
-        		line = lines[lines.length-1];
-        	}
+        int px = x;
+        y -= percentage.getOffsetHeight() - 5;
+        
+        if (collapsed && !text.startsWith("+")) {
+        	text = "+" + text;
+        	px -= context.measureText("+").getWidth();
         }
-		ls.add(line);
-		ly.add(py);
-		int m = ly.size()*lineHeight - lineHeight;
+        context.fillText(text, px, y);
 		
-		if (icon.getIconType() != null) {
-        	x += Settings.ICON_WIDTH;
-		}
+		y += 5;
 		
-		for (int i=0; i<ly.size(); ++i) {
-			text = ls.get(i);
-	        if (collapsed && i==0 && !text.startsWith("+")) {
-	        	text = "+" + text;
-	        	x -= context.measureText("+").getWidth();
-	        }
-	        context.fillText(text, x, ly.get(i) - m);
-		}
-		
-        if (icon.getIconType() != null) {
-        	context.setFont("14px FontAwesome");
-        	String c = "";
-        	c += IconTypeContent.get(icon.getIconType());
-        	context.fillText(c, x - Settings.ICON_WIDTH, y - m);
-        	context.setFont("14px monospace");
-    	}
+		context.setFillStyle(CssColor.make("#08C"));
+		context.fillRect(x, y, percentage.getPercent()/100.0*percentage.getOffsetWidth(), percentage.getOffsetHeight());
+
+        context.setFillStyle("#FFFFFF");
+		context.fillText(String.valueOf(percentage.getPercent()) + "%", x, y + percentage.getOffsetHeight());
     	
         context.restore();
     }

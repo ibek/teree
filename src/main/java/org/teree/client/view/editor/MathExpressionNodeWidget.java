@@ -6,7 +6,6 @@ import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.resource.MathExpressionTools;
 import org.teree.shared.data.common.MathExpression;
 import org.teree.shared.data.common.Node;
-import org.teree.shared.data.common.NodeStyle;
 import org.teree.shared.data.common.Node.NodeLocation;
 
 import com.google.gwt.canvas.dom.client.Context2d;

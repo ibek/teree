@@ -14,7 +14,6 @@ public class Node implements Cloneable {
     private Object content;
     private NodeType type;
     private NodeLocation location;
-    private List<NodeStyle> style;
     
     public Node() {
     	
@@ -28,13 +27,6 @@ public class Node implements Cloneable {
         Node root = new Node();
         root.setContent(content);
         root.setLocation(location);
-        if (style != null) {
-        	List<NodeStyle> styleClones = new ArrayList<NodeStyle>();
-        	for (NodeStyle ns : style) {
-        		styleClones.add(ns.clone());
-        	}
-        	root.setStyle(styleClones);
-        }
         for(int i=0; childNodes != null && i<childNodes.size(); ++i){
             root.addChild(childNodes.get(i).clone());
         }
@@ -123,6 +115,9 @@ public class Node implements Cloneable {
         else if (content instanceof Connector) {
         	type = NodeType.Connector;
         }
+        else if (content instanceof PercentText) {
+        	type = NodeType.Percent;
+        }
         else {
         	type = NodeType.None;
         }
@@ -191,32 +186,6 @@ public class Node implements Cloneable {
     public void setLocation(NodeLocation location) {
         this.location = location;
     }
-    
-    public List<NodeStyle> getStyle() {
-    	return style;
-    }
-
-    /**
-     * 
-     * @param id of viewpoint
-     * @return
-     */
-    public NodeStyle getStyle(int id) {
-		return style.get(id);
-	}
-
-	public void setStyle(List<NodeStyle> style) {
-		this.style = style;
-	}
-
-	/**
-	 * 
-	 * @param id of viewpoint
-	 * @param style
-	 */
-	public void setStyle(int id, NodeStyle style) {
-		this.style.set(id, style);
-	}
 
 	public enum NodeType {
         None,
@@ -224,7 +193,8 @@ public class Node implements Cloneable {
         Link,
         ImageLink,
         MathExpression,
-        Connector;
+        Connector,
+        Percent;
     }
 
     public enum NodeLocation implements Serializable {

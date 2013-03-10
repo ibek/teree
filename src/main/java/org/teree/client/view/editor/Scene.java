@@ -18,6 +18,7 @@ import org.teree.shared.data.common.ImageLink;
 import org.teree.shared.data.common.Link;
 import org.teree.shared.data.common.MathExpression;
 import org.teree.shared.data.common.Node;
+import org.teree.shared.data.common.PercentText;
 import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.tree.Tree;
 
@@ -213,6 +214,13 @@ public class Scene extends Composite {
     	Connector con = new Connector();
     	con.setRoot(new IconText());
     	child.setContent(con);
+    	createChildNode(child);
+    }
+    
+    public void createPercentChildNode() {
+    	Node child = new Node();
+    	PercentText pt = new PercentText();
+    	child.setContent(pt);
     	createChildNode(child);
     }
     

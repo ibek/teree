@@ -7,7 +7,6 @@ import org.teree.shared.data.common.IconText;
 import org.teree.shared.data.common.ImageLink;
 import org.teree.shared.data.common.Link;
 import org.teree.shared.data.common.Node;
-import org.teree.shared.data.common.NodeStyle;
 import org.teree.shared.data.common.Node.NodeLocation;
 import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.common.StructureType;
@@ -80,7 +79,8 @@ public class FreeMind implements ISchemeImport, ISchemeExport {
 			switch (node.getType()) {
 				case IconText:
 				case MathExpression:
-				case Connector: {
+				case Connector:
+				case Percent: {
 					en.setAttribute("TEXT", node.getContent().toString());
 					parent.appendChild(en);
 					break;
@@ -105,7 +105,7 @@ public class FreeMind implements ISchemeImport, ISchemeExport {
 	}
 	
 	/**
-	 * TODO style for FreeMind - from the first visualization?
+	 * TODO style for FreeMind - from the category
 	 * @param node
 	 * @param doc
 	 * @param enode

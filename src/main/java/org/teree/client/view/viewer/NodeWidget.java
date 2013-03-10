@@ -3,7 +3,6 @@ package org.teree.client.view.viewer;
 import org.teree.client.view.NodeInterface;
 import org.teree.client.view.resource.NodeCssStyle;
 import org.teree.shared.data.common.Node;
-import org.teree.shared.data.common.NodeStyle;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -73,10 +72,6 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 	@Override
 	public void unselect() {
 		// TODO Auto-generated method stub
-	}
-	
-	public void changeViewpoint(int index) {
-		
 	}
 
 }

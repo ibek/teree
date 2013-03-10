@@ -14,7 +14,7 @@ import org.teree.shared.data.common.ImageLink;
 import org.teree.shared.data.common.Link;
 import org.teree.shared.data.common.MathExpression;
 import org.teree.shared.data.common.Node;
-import org.teree.shared.data.common.NodeStyle;
+import org.teree.shared.data.common.PercentText;
 import org.teree.shared.data.common.Permissions;
 import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.common.SchemeFilter;
@@ -22,7 +22,6 @@ import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.common.UserPermissions;
 import org.teree.shared.data.common.Node.NodeLocation;
 import org.teree.shared.data.common.Node.NodeType;
-import org.teree.shared.data.common.Viewpoint;
 import org.teree.shared.data.tree.Tree;
 import org.teree.shared.data.tree.TreeType;
 import org.teree.shared.data.UserInfo;
@@ -264,8 +263,6 @@ public class SchemeManager {
             doc.put("screen", s.getSchemePicture());
         }
         
-        doc.put("viewpoints", toViewpointsDBList(s.getViewpoints()));
-        
         return doc;
     }
     
@@ -306,28 +303,16 @@ public class SchemeManager {
             	doc.put("conid", con.getOid());
             	break;
             }
+            case Percent: {
+                PercentText pt = (PercentText)value;
+                doc.put("text", pt.getText());
+                doc.put("percentage", pt.getPercentage());
+                break;
+            }
         }
         
         if (root.getLocation() != null) {
             doc.put("location", root.getLocation().name());
-        }
-        
-        List<NodeStyle> nsList = root.getStyle();
-        if (nsList != null) {
-        	BasicDBList style = new BasicDBList();
-        	
-        	for (NodeStyle ns : nsList) {
-        		BasicDBObject s = new BasicDBObject();
-        		if (!ns.isDefault()) {
-        			s.put("visible", ns.isVisible());
-        			s.put("bold", ns.isBold());
-        			s.put("cascading", ns.isCascading());
-        			s.put("collapsed", ns.isCollapsed());
-        		}
-        		style.add(s);
-        	}
-        	
-        	doc.put("style", style);
         }
         
         doc.put("childNodes", toDBList(root.getChildNodes()));
@@ -340,7 +325,6 @@ public class SchemeManager {
     		return null;
     	}
     	Scheme s = fromSchemeDBObjectInfo(scheme);
-    	s.setViewpoints(fromViewpointsDBList((BasicDBList)scheme.get("viewpoints")));
 
     	switch (s.getStructure()) {
 	        case Tree: {
@@ -432,6 +416,13 @@ public class SchemeManager {
             	node.setContent(con);
             	break;
             }
+            case Percent: {
+                PercentText pt = new PercentText();
+                pt.setText(root.getString("text"));
+                pt.setPercentage(root.getInt("percentage"));
+                node.setContent(pt);
+                break;
+            }
         }
         
         String location = root.getString("location");
@@ -439,21 +430,6 @@ public class SchemeManager {
             node.setLocation(NodeLocation.valueOf(location));
         }
         
-        BasicDBList style = (BasicDBList)root.get("style");
-        if(style != null){
-        	List<NodeStyle> nsList = new ArrayList<NodeStyle>();
-        	Iterator<Object> it = style.iterator();
-	        while(it.hasNext()){
-	        	DBObject nso = (BasicDBObject)it.next();
-	        	NodeStyle ns = new NodeStyle();
-	            ns.setVisible((Boolean)nso.get("visible"));
-	            ns.setBold((Boolean)nso.get("bold"));
-	            ns.setCascading((Boolean)nso.get("cascading"));
-	            ns.setCollapsed((Boolean)nso.get("collapsed"));
-	            nsList.add(ns);
-	        }
-        	node.setStyle(nsList);
-        }
         node.setChildNodes(fromDBList((BasicDBList)root.get("childNodes")));
         
         return node;
@@ -508,33 +484,6 @@ public class SchemeManager {
         
         return doc;
 	}
-    
-    private List<Viewpoint> fromViewpointsDBList(BasicDBList basicDBList) {
-    	List<Viewpoint> viewpoints = new ArrayList<Viewpoint>();
-    	Iterator<Object> it = basicDBList.iterator();
-    	int id = 0;
-        while(it.hasNext()){
-        	BasicDBObject bov = (BasicDBObject)it.next();
-        	Viewpoint vp = new Viewpoint();
-        	vp.setId(id);
-        	vp.setName(bov.getString("name"));
-            viewpoints.add(vp);
-            id++;
-        }
-		return viewpoints;
-	}
-    
-    private BasicDBList toViewpointsDBList(List<Viewpoint> viewpoints) {
-        BasicDBList doc = new BasicDBList();
-        if(viewpoints != null){
-            for(Viewpoint vp : viewpoints){
-            	BasicDBObject bov = new BasicDBObject();
-            	bov.put("name", vp.getName());
-                doc.add(bov);
-            }
-        }
-        return doc;
-    }
     
     private BasicDBList toDBList(List<Node> childNodes) {
         BasicDBList doc = new BasicDBList();

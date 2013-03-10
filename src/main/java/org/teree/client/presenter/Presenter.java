@@ -145,6 +145,14 @@ public abstract class Presenter {
 			}).updateScheme(scheme);
     	}
     }
+    
+    /**
+     * TODO save viewpoint
+     * @param scheme
+     */
+    public void saveViewpoint(final Scheme scheme) {
+    	
+    }
 	
 	public void removeScheme(final Scheme scheme, RemoteCallback<Boolean> callback) {
 		securedService.call(callback, new ErrorCallback() {

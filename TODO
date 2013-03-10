@@ -3,18 +3,15 @@
 0.8:
 ===============
 
-PercentNodeWidget - zobrazi graficky 0-100%, pri editaci se vlozi cislo 0-100 do integerboxu
- - vytvorit dropdown button ktery bude obsahovat mene pouzivane typy uzlu jako tento a Math Expression
+PercentNodeWidget - zobrazi graficky 0-100%
+ - vypocet nadrazeneho uzlu z potomku
+ - pri kliku mysi probehne kontrola zda nektery potom neobsahuje uzel s procenty, 
+   pokud ne, nastavi se hodnota a zavola se update vsech widgetu s procenty
 
 umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
 
 oznacit cekani na prihlaseni
 oznacit cekani na mapy v explore
-
-upravit explore aby zobrazoval jak posledne vlozene mapy tak i nejvice otevrene za tyden apod.
-pridat hodnoceni a pocet shlednuti mapy
-
-nastavit styl pro tisk
 
 dialog pro vytvoreni mapy - po stisknuti tlacitka create
  - vyber struktury a typ vizualizace
@@ -23,23 +20,20 @@ dialog pro vytvoreni mapy - po stisknuti tlacitka create
  
  nove typy vizualizace Hierarchical Horizontal Tree a Hierarchical Vertical Tree
 
-ulozeni ruznych pohledu na mapu
- - nektere casti nejsou pro dany pohled dulezite a nebudou zobrazeny
- - jine nody budou collapsed apod
- - vytvori se novy editor pohledu ktery bude nastavovat nody podle toho jak a zda se maji zobrazit
- - editor pohledu bude pristupny pres viewer - tlacitko pridat pohled, ...
- - ruzne zvyrazneni uzlu
- - moznost obarveni nodu dedicne - tzn i potomci budou mit danou barvu pokud nebude nastaven styl
-   - cascading formatting
- - ruzne typy nodu z hlediska vyznamu - klicove slovo, definice, priklad, ...
- 
- - jak se budou ukladat barvy? RGB?
+kategorizace uzlu
+ - ruzne typy nodu z hlediska vyznamu (kategorizace) - klicove slovo, definice, priklad, ...
+ - kategorizace v editoru
 
 ===============
 0.9:
 ===============
 
 collaboration
+
+upravit explore aby zobrazoval jak posledne vlozene mapy tak i nejvice otevrene za tyden apod.
+pridat hodnoceni a pocet shlednuti mapy
+
+nastavit styl pro tisk
 
 tvorba skupin (tymu) - pratele, apod ... pro urceni prav na urcite mapy
 uskupeni vice map do skupin - napr v ramci projektu
@@ -73,3 +67,4 @@ management console/app - napr pro upravu balicku, zmena limitu apod
 smysluplne testovani
 podpora tabletu a mobilu - pouzit android emulator pro testovani
 presun inline stylu ve tridach do css
+ulozeni ruznych pohledu na mapu - pokud najdu lepsi vyuziti nez jen urceni visibility a collapsed state

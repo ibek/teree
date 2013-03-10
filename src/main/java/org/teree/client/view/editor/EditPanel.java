@@ -32,10 +32,10 @@ public class EditPanel extends Composite {
 	private Button createImg;
 	private Button createLink;
 	private Button createMathExpr;
+	private Button createPercent;
 	private SplitDropdownButton createConnector;
 	private NavLink mergeConnector;
 	private NavLink splitConnector;
-	private Button bold;
 	private DropdownButton icon;
 	
 	private SelectIcon iconHandler;
@@ -59,6 +59,7 @@ public class EditPanel extends Composite {
 		createImg = new Button("", IconType.PICTURE);
 		createLink = new Button("", IconType.LINK);
 		createMathExpr = new Button("Σ");
+		createPercent = new Button("%");
 		createConnector = new SplitDropdownButton("");
 		mergeConnector = new NavLink(UIConstants.LANG.mergeConnector());
 		splitConnector = new NavLink(UIConstants.LANG.splitNodeAndConnect());
@@ -72,8 +73,6 @@ public class EditPanel extends Composite {
 
 		Label space4 = new Label("");
 		space4.getElement().getStyle().setMarginRight(20, Unit.PX);
-		
-		bold = new Button("", IconType.BOLD);
 		
 		icon = new DropdownButton("icon");
 		loadIcons();
@@ -102,6 +101,10 @@ public class EditPanel extends Composite {
         Tooltip tcme = new Tooltip(UIMessages.LANG.create_math());
         tcme.add(createMathExpr);
 		container.add(tcme);
+
+        Tooltip tcp = new Tooltip("Create percentual node");
+        tcp.add(createPercent);
+		container.add(tcp);
 		
 		container.add(space3);
 
@@ -110,10 +113,6 @@ public class EditPanel extends Composite {
 		container.add(tccon);
 		
 		container.add(space4);
-
-        Tooltip tcb = new Tooltip(UIMessages.LANG.bold_text());
-        tcb.add(bold);
-		container.add(tcb);
 		
         Tooltip ti = new Tooltip(UIMessages.LANG.choose_icon());
         ti.add(icon);
@@ -154,8 +153,6 @@ public class EditPanel extends Composite {
 		mergeConnector.setDisabled(nw == null || !(nw instanceof ConnectorNodeWidget));
 		splitConnector.setDisabled(nw == null || !(nw instanceof TextNodeWidget) || nw instanceof ConnectorNodeWidget || 
 				!(nw.getNode().getChildNodes() != null && nw.getNode().getChildNodes().size() > 0));
-		bold.setEnabled(nw != null && ( 
-				(nw instanceof TextNodeWidget && !(nw instanceof ConnectorNodeWidget)) || nw instanceof LinkNodeWidget));
 		disableNewChildNodes(nw instanceof ConnectorNodeWidget || nw instanceof LinkNodeWidget);
 	}
 	
@@ -191,6 +188,10 @@ public class EditPanel extends Composite {
 		return createMathExpr;
 	}
 	
+	public HasClickHandlers getCreatePercentButton() {
+		return createPercent;
+	}
+	
 	public HasClickHandlers getCreateConnectorButton() {
 		return createConnector;
 	}
@@ -201,10 +202,6 @@ public class EditPanel extends Composite {
 	
 	public HasClickHandlers getSplitConnectorButton() {
 		return splitConnector;
-	}
-	
-	public HasClickHandlers getBoldButton() {
-		return bold;
 	}
 	
 	public void setSelectIconHandler(SelectIcon handler) {

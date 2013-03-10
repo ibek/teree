@@ -2,13 +2,10 @@ package org.teree.client;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import org.jboss.errai.ioc.client.api.Caller;
 import org.jboss.errai.ioc.client.container.IOCBeanDef;
 import org.jboss.errai.ioc.client.container.IOCBeanManager;
 import org.jboss.errai.bus.client.ErraiBus;
-import org.jboss.errai.bus.client.api.ErrorCallback;
 import org.jboss.errai.bus.client.api.Message;
 import org.jboss.errai.bus.client.api.MessageCallback;
 import org.jboss.errai.bus.client.api.RemoteCallback;
@@ -31,13 +28,9 @@ import org.teree.client.presenter.Editor;
 import org.teree.client.presenter.Viewer;
 import org.teree.client.presenter.SettingsPage;
 import org.teree.shared.NodeGenerator;
-import org.teree.shared.SchemeService;
-import org.teree.shared.SecuredSchemeService;
-import org.teree.shared.UserService;
 import org.teree.shared.data.AuthType;
 import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.common.Scheme;
-import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.tree.Tree;
 import org.teree.shared.data.tree.TreeType;
 

@@ -70,7 +70,7 @@ public class SchemeWidget extends Composite {
 		fscreen.add(screen);
 		
 		edit = new Button(UIC.edit());
-		edit.setVisible(false);
+		edit.setEnabled(false);
 		edit.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -193,9 +193,9 @@ public class SchemeWidget extends Composite {
 				permissions.setVisible(true);
 				remove.setVisible(true);
 				root.setWidth((Settings.SAMPLE_MAX_WIDTH - 110)+"px");
-				edit.setVisible(true);
+				edit.setEnabled(true);
 			} else if (scheme.getPermissions().canEdit(ui)) {
-				edit.setVisible(true);
+				edit.setEnabled(true);
 			}
 		}
 	}
