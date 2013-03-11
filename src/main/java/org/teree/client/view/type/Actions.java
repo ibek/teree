@@ -27,6 +27,8 @@ public interface Actions<T> {
 	
 	public void update(Node changed);
 	
+	public void checkAllNodes();
+	
 	public void selectLeftNode();
 	
 	public void selectRightNode();

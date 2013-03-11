@@ -136,6 +136,18 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	public void update(Node changed) {
 		updateAndCollapse(changed, false);
 	}
+	
+	@Override
+	public void checkAllNodes() {
+		Iterator<Widget> it = container.iterator();
+    	while (it.hasNext()) {
+    		Widget w = it.next();
+    		if (w instanceof NodeInterface) {
+        		T nw = (T)w;
+    			nw.update();
+    		}
+    	}
+	}
 
 	@Override
 	public void selectLeftNode() {

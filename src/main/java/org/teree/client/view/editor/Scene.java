@@ -10,6 +10,8 @@ import org.teree.client.view.editor.event.NodeChangedHandler;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.editor.event.SelectNodeHandler;
 import org.teree.client.view.editor.event.SelectedNodeListener;
+import org.teree.client.view.editor.event.CheckNode;
+import org.teree.client.view.editor.event.CheckNodeHandler;
 import org.teree.client.view.type.BehaviorController;
 import org.teree.client.view.type.TreeController;
 import org.teree.shared.data.common.Connector;
@@ -152,6 +154,13 @@ public class Scene extends Composite {
 				update(event.getNode());
 			}
 		}, NodeChanged.TYPE);
+        
+        container.addHandler(new CheckNodeHandler() {
+			@Override
+			public void check(CheckNode event) {
+				controller.checkAllNodes();
+			}
+		}, CheckNode.TYPE);
         
     }
     

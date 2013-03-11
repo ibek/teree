@@ -35,6 +35,10 @@ public class ViewNodeWidgetFactory<T extends Widget & NodeInterface> implements 
 	        	nw = new ConnectorNodeWidget(node);
 	        	break;
 	        }
+	        case Percent: {
+	        	nw = new PercentNodeWidget(node);
+	        	break;
+	        }
 	    }
 		return (T)nw;
 	}

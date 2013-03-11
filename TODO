@@ -3,11 +3,6 @@
 0.8:
 ===============
 
-PercentNodeWidget - zobrazi graficky 0-100%
- - vypocet nadrazeneho uzlu z potomku
- - pri kliku mysi probehne kontrola zda nektery potom neobsahuje uzel s procenty, 
-   pokud ne, nastavi se hodnota a zavola se update vsech widgetu s procenty
-
 umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
 
 oznacit cekani na prihlaseni
