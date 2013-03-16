@@ -49,7 +49,9 @@ public class TAuthAdapter implements AuthenticationAdapter {
 	            
 	            String hashed = uim.getHashedPassword(username);
 	            
-	            if (!BCrypt.checkpw(password, hashed)) { // authentication failed
+	            if (password == null || password.isEmpty() || 
+	            	username == null || username.isEmpty() ||
+	            	!BCrypt.checkpw(password, hashed)) { // authentication failed
 	            	MessageBuilder.createConversation(message)
 	                .subjectProvided()
 	                .command(SecurityCommands.FailedAuth)

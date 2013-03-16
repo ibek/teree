@@ -11,6 +11,7 @@ import org.teree.client.presenter.LoginPage;
 import org.teree.shared.data.AuthType;
 
 import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.Image;
 import com.github.gwtbootstrap.client.ui.PasswordTextBox;
 import com.github.gwtbootstrap.client.ui.SubmitButton;
 import com.github.gwtbootstrap.client.ui.TextBox;
@@ -47,6 +48,9 @@ public class Login extends TemplateScene implements LoginPage.Display {
     SubmitButton signin;
     
     @UiField
+    Image wait;
+    
+    @UiField
     Button btnGoogle;
 	
 	@PostConstruct
@@ -56,6 +60,7 @@ public class Login extends TemplateScene implements LoginPage.Display {
 	
 	@UiHandler("signin")
     void onClick(ClickEvent event) {
+		wait.setVisible(true);
 		MessageBuilder.createMessage("AuthenticationService")
 	        .command(SecurityCommands.AuthRequest)
 	        .with(MessageParts.ReplyTo, "LoginClient")

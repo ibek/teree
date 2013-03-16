@@ -33,6 +33,7 @@
 						placeholder="{uic.password}" />
 					<b:FormActions>
 						<b:SubmitButton type="PRIMARY" ui:field="signin" text="{uic.sign_in}" />
+						<b:Image ui:field="wait" url="resources/gfx/loader.gif" visible="false"/>
 					</b:FormActions>
 				</b:WellForm>
 			</g:FlowPanel>

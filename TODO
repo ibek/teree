@@ -5,9 +5,6 @@
 
 umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
 
-oznacit cekani na prihlaseni
-oznacit cekani na mapy v explore
-
 dialog pro vytvoreni mapy - po stisknuti tlacitka create
  - vyber struktury a typ vizualizace
  - vlastni velke ikony

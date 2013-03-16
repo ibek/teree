@@ -12,6 +12,7 @@ import org.teree.client.view.explorer.event.RemoveScheme;
 import org.teree.client.view.explorer.event.RemoveSchemeHandler;
 import org.teree.shared.data.common.Scheme;
 import com.github.gwtbootstrap.client.ui.Heading;
+import com.github.gwtbootstrap.client.ui.Image;
 import com.github.gwtbootstrap.client.ui.Pager;
 import com.github.gwtbootstrap.client.ui.Thumbnails;
 import com.github.gwtbootstrap.client.ui.Well;
@@ -30,6 +31,7 @@ public class Scene extends Composite implements HasSchemeHandlers {
 	private VerticalPanel container;
 	private Thumbnails schemeContainer;
 	private Heading empty;
+	private Image wait;
 	
 	private Pager pagerTop;
 	private Pager pagerBottom;
@@ -67,16 +69,31 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		next = new MultipleButtonHandler();
 		next.addButton(pagerTop.getRight());
 		next.addButton(pagerBottom.getRight());
+		next.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				wait.setVisible(true);
+			}
+		});
 		prev = new MultipleButtonHandler();
 		prev.addButton(pagerTop.getLeft());
 		prev.addButton(pagerBottom.getLeft());
+		prev.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				wait.setVisible(true);
+			}
+		});
 		
 		empty = new Heading(4, UIM.no_scheme());
+		empty.setVisible(false);
+		wait = new Image("resources/gfx/loader.gif");
 		
 		setComponents(false);
 
 		container.add(pagerTop);
 		container.add(empty);
+		container.add(wait);
 		container.add(schemeContainer);
 		container.add(pagerBottom);
 
@@ -137,6 +154,7 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		pagerTop.getRight().setVisible(!lastPage && schemeContainer.getWidgetCount() == Settings.SCHEME_COUNT_IN_EXPLORER);
 		pagerBottom.getRight().setVisible(!lastPage && schemeContainer.getWidgetCount() == Settings.SCHEME_COUNT_IN_EXPLORER);
 		empty.setVisible(!display);
+		wait.setVisible(false);
 	}
 	
 	public String getFirstOid() {
