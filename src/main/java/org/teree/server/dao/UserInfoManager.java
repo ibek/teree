@@ -22,9 +22,6 @@ public class UserInfoManager {
 
 	@Inject
     MongoDB _mdb;
-	
-	@Inject
-	UserPackageManager _upm;
     
     protected DBCollection getCollection() {
     	DB db = _mdb.getDatabase();
@@ -39,16 +36,11 @@ public class UserInfoManager {
         return coll;
     }
     
-    protected UserPackageManager getUserPackageManager() {
-    	return _upm;
-    }
-    
     public boolean insert(UserInfo ui, String password) {
         DBObject doc = toUserInfoDBObject(ui);
 
         doc.put("username", ui.getUsername());
         doc.put("password", BCrypt.hashpw(password, BCrypt.gensalt(12)));
-        doc.put("package", getUserPackageManager().getFreePackage().getName());
         doc.put("joined", DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date(System.currentTimeMillis())));
         
         DBCollection coll = getCollection();
@@ -61,7 +53,6 @@ public class UserInfoManager {
         DBObject doc = toUserInfoDBObject(ui);
         
         doc.put("googleid", googleid);
-        doc.put("package", _upm.getFreePackage().getName());
         doc.put("joined", DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date(System.currentTimeMillis())));
         
         DBCollection coll = getCollection();

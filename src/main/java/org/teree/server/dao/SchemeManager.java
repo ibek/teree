@@ -14,6 +14,7 @@ import org.teree.shared.data.common.ImageLink;
 import org.teree.shared.data.common.Link;
 import org.teree.shared.data.common.MathExpression;
 import org.teree.shared.data.common.Node;
+import org.teree.shared.data.common.NodeCategory;
 import org.teree.shared.data.common.PercentText;
 import org.teree.shared.data.common.Permissions;
 import org.teree.shared.data.common.Scheme;
@@ -42,6 +43,9 @@ public class SchemeManager {
     
 	@Inject
 	UserInfoManager _uim;
+    
+	@Inject
+	NodeCategoryManager _ncm;
     
     private DBCollection getCollection() {
     	DB db = _mdb.getDatabase();
@@ -169,7 +173,7 @@ public class SchemeManager {
     	DBCollection coll = getCollection();
         DBObject removeBy = new BasicDBObject("_id", new ObjectId(oid));
         removeBy.put("author", ui.getUserId()); // only author can remove scheme
-        fromSchemeDBObject(coll.findOne(removeBy));
+        //fromSchemeDBObject(coll.findOne(removeBy));
         boolean removed = coll.remove(removeBy).getLastError().ok();
         if (!removed) {
         	return removed;
@@ -314,6 +318,7 @@ public class SchemeManager {
         if (root.getLocation() != null) {
             doc.put("location", root.getLocation().name());
         }
+        doc.put("category", root.getCategory().getOid());
         
         doc.put("childNodes", toDBList(root.getChildNodes()));
         
@@ -330,6 +335,21 @@ public class SchemeManager {
 	        case Tree: {
 	        	Tree tree = (Tree)s;
 	            tree.setRoot(fromNodeDBObject((BasicDBObject)scheme.get("root")));
+	            String[] oids = new String[categories.size()];
+	            for (int i=0; i<categories.size(); ++i) {
+	            	oids[i] = categories.get(i).getOid();
+	            }
+	            List<NodeCategory> nclist = _ncm.selectByOids(oids);
+	            for (NodeCategory nc : categories) {
+	            	for (NodeCategory updated : nclist) {
+	            		if (nc.getOid().equals(updated.getOid())) {
+	            			nc.set(updated);
+	            			nclist.remove(updated); // optimization - won't be necessary any more
+	            			break;
+	            		}
+	            	}
+	            }
+	            categories.clear(); // categories are set in fromNodeDBObject method
 	        	break;
 	        }
     	}
@@ -372,6 +392,7 @@ public class SchemeManager {
         return s;
     }
 
+    private List<NodeCategory> categories = new ArrayList<NodeCategory>();
 	private Node fromNodeDBObject(BasicDBObject root) {
     	if (root == null) {
     		return null;
@@ -429,6 +450,10 @@ public class SchemeManager {
         if(location != null){
             node.setLocation(NodeLocation.valueOf(location));
         }
+        NodeCategory nc = new NodeCategory();
+        nc.setOid(root.getString("category")); // fully loaded later
+        categories.add(nc);
+        node.setCategory(nc);
         
         node.setChildNodes(fromDBList((BasicDBList)root.get("childNodes")));
         

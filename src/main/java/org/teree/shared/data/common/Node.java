@@ -14,6 +14,7 @@ public class Node implements Cloneable {
     private Object content;
     private NodeType type;
     private NodeLocation location;
+    private NodeCategory category;
     
     public Node() {
     	
@@ -186,6 +187,14 @@ public class Node implements Cloneable {
     public void setLocation(NodeLocation location) {
         this.location = location;
     }
+
+	public NodeCategory getCategory() {
+		return category;
+	}
+
+	public void setCategory(NodeCategory category) {
+		this.category = category;
+	}
 
 	public enum NodeType {
         None,
