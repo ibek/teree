@@ -1,6 +1,7 @@
 package org.teree.client.view.viewer;
 
 import org.teree.client.view.NodeInterface;
+import org.teree.client.view.common.NodeCategoryStyle;
 import org.teree.client.view.resource.NodeCssStyle;
 import org.teree.shared.data.common.Node;
 
@@ -27,6 +28,8 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
         resources.css().ensureInjected();
         
         initWidget(container);
+    	
+    	NodeCategoryStyle.set(this, node.getCategory());
     }
     
     @Override

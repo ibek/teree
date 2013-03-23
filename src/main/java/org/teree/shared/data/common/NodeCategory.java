@@ -66,11 +66,19 @@ public class NodeCategory {
 	}
 	
 	public void set(NodeCategory category) {
+		if (category == null) {
+			return;
+		}
 		this.oid = category.getOid();
 		this.owner = category.getOwner();
 		this.name = category.getName();
 		this.bold = category.isBold();
 		this.iconType = category.getIconType();
+	}
+	
+	@Override
+	public String toString() {
+		return name;
 	}
 	
 }

@@ -10,6 +10,7 @@ import org.teree.client.view.resource.icon.CustomIconType;
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.DropdownButton;
 import com.github.gwtbootstrap.client.ui.NavLink;
+import com.github.gwtbootstrap.client.ui.NavList;
 import com.github.gwtbootstrap.client.ui.SplitDropdownButton;
 import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
@@ -37,6 +38,7 @@ public class EditPanel extends Composite {
 	private NavLink mergeConnector;
 	private NavLink splitConnector;
 	private DropdownButton icon;
+	private Button categories;
 	
 	private SelectIcon iconHandler;
 	
@@ -76,6 +78,8 @@ public class EditPanel extends Composite {
 		
 		icon = new DropdownButton("icon");
 		loadIcons();
+		
+		categories = new Button("", IconType.EYE_OPEN);
 
 		container.add(save);
 		container.add(space);
@@ -117,6 +121,10 @@ public class EditPanel extends Composite {
         Tooltip ti = new Tooltip(UIMessages.LANG.choose_icon());
         ti.add(icon);
 		container.add(ti);
+		
+        Tooltip tc = new Tooltip("Show categories");
+        tc.add(categories);
+		container.add(tc);
 		
 		initWidget(container);
 		
@@ -202,6 +210,10 @@ public class EditPanel extends Composite {
 	
 	public HasClickHandlers getSplitConnectorButton() {
 		return splitConnector;
+	}
+	
+	public HasClickHandlers getCategoriesButton() {
+		return categories;
 	}
 	
 	public void setSelectIconHandler(SelectIcon handler) {

@@ -1,10 +1,13 @@
 package org.teree.client.view.editor;
 
 import org.teree.client.view.NodeInterface;
+import org.teree.client.view.common.NodeCategoryStyle;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.resource.NodeCssStyle;
 import org.teree.shared.data.common.Node;
+import org.teree.shared.data.common.NodeCategory;
+
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -45,6 +48,8 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
         resources.css().ensureInjected();
         
         initWidget(container);
+    	
+    	NodeCategoryStyle.set(this, node.getCategory());
         
         bind();
         
@@ -198,6 +203,11 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 	@Override
 	public boolean isCollapsed() {
 		return collapsed;
+	}
+	
+	public void setNodeCategory(NodeCategory nc) {
+		node.setCategory(nc);
+    	NodeCategoryStyle.set(this, nc);
 	}
 
 }

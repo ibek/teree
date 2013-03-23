@@ -39,15 +39,14 @@ public class NodeCategoryManager {
         return coll;
     }
     
-    public boolean insert(NodeCategory category) {
+    public String insert(NodeCategory category) {
         DBObject doc = toCategoryDBObject(category);
 
         doc.put("owner", category.getOwner().getUserId());
         
         DBCollection coll = getCollection();
         coll.insert(doc);
-        List<NodeCategory> inserted = selectByOids(((ObjectId)doc.get("_id")).toStringMongod());
-        return inserted != null && !inserted.isEmpty() && inserted.get(0).getName().equals(category.getName());
+        return ((ObjectId)doc.get("_id")).toStringMongod();
     }
     
     public void update(NodeCategory category, UserInfo ui) {
@@ -69,10 +68,6 @@ public class NodeCategoryManager {
         removeBy.put("owner", ui.getUserId());
         //fromCategoryDBObject(coll.findOne(removeBy));
         boolean removed = coll.remove(removeBy).getLastError().ok();
-        if (!removed) {
-        	return removed;
-        }
-        
         return removed;
     }
     
@@ -81,7 +76,7 @@ public class NodeCategoryManager {
     	BasicDBList idlist = new BasicDBList();
         DBObject search = new BasicDBObject("$or", idlist);
         for (String o: oids) {
-        	idlist.put("_id", new ObjectId(o));
+        	idlist.add(new BasicDBObject("_id", new ObjectId(o)));
         }
     	
         DBCursor found = coll.find(search);
@@ -94,11 +89,14 @@ public class NodeCategoryManager {
     }
     
     public List<NodeCategory> selectAll(UserInfo ui) {
+        List<NodeCategory> res = new ArrayList<NodeCategory>();
+        if (ui == null) {
+        	return res;
+        }
     	DBCollection coll = getCollection();
         DBObject search = new BasicDBObject("owner", ui.getUserId());
     	
         DBCursor found = coll.find(search);
-        List<NodeCategory> res = new ArrayList<NodeCategory>();
         while(found.hasNext()) {
         	DBObject dbo = found.next();
         	res.add(fromCategoryDBObject(dbo));

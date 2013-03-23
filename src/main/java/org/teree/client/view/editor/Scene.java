@@ -92,7 +92,6 @@ public class Scene extends Composite {
         sp.getParent().addDomHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				
 				controller.selectNode(null);
 			}
 		}, ClickEvent.getType());
@@ -328,6 +327,10 @@ public class Scene extends Composite {
     
     public void setNodeIcon(IconType icon) {
     	controller.setNodeIcon(icon);
+    }
+    
+    public NodeWidget getSelectedNodeWidget() {
+    	return controller.getSelectedNode();
     }
     
     public void addSelectedNodeListener(SelectedNodeListener<NodeWidget> snl) {

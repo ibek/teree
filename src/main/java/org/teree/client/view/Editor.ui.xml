@@ -13,14 +13,22 @@
 			margin-bottom: 10px;
 			padding-bottom: 5px;
 		}
+		
+		.rightPanel {
+			position: absolute;
+			right: 5px;
+			width: 220px;
+			z-index: 100;
+		}
 
 	</ui:style>
   
 	<g:FlowPanel>
 		<view:Header ui:field="header"/>
+		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<edit:EditPanel ui:field="edit" addStyleNames="{style.editPanel}"></edit:EditPanel>
 		<g:Frame ui:field="tmpFrame" addStyleNames="{res.css.invisibleFrame}"/>
-		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
+		<b:WellNavList ui:field="nodeCategory" addStyleNames="{style.rightPanel}" visible="false"/>
 		<edit:Scene ui:field="scene" addStyleNames="{res.css.scene}"></edit:Scene>
 	</g:FlowPanel>
 

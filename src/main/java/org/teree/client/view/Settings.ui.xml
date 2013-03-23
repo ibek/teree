@@ -49,8 +49,8 @@
                         </b:ControlGroup>
                         
                         <b:FormActions>
-							<b:SubmitButton type="PRIMARY" ui:field="updateProfile" text="{uic.update}" />
 							<b:Button ui:field="resetPForm" text="{uic.reset}" />
+							<b:SubmitButton type="PRIMARY" ui:field="updateProfile" text="{uic.update}" />
 						</b:FormActions>
                     </b:Fieldset>
                     </b:WellForm>
@@ -90,8 +90,8 @@
                         </b:ControlGroup>
                         
                         <b:FormActions>
-							<b:SubmitButton type="PRIMARY" ui:field="changePassword" text="{uic.change}" />
 							<b:Button ui:field="resetCPForm" text="{uic.reset}" />
+							<b:SubmitButton type="PRIMARY" ui:field="changePassword" text="{uic.change}" />
 						</b:FormActions>
                     </b:Fieldset>
                     </b:WellForm>

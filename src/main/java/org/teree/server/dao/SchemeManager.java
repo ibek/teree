@@ -1,8 +1,12 @@
 package org.teree.server.dao;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -318,7 +322,9 @@ public class SchemeManager {
         if (root.getLocation() != null) {
             doc.put("location", root.getLocation().name());
         }
-        doc.put("category", root.getCategory().getOid());
+        if (root.getCategory() != null) {
+        	doc.put("category", root.getCategory().getOid());
+        }
         
         doc.put("childNodes", toDBList(root.getChildNodes()));
         
@@ -336,11 +342,13 @@ public class SchemeManager {
 	        	Tree tree = (Tree)s;
 	            tree.setRoot(fromNodeDBObject((BasicDBObject)scheme.get("root")));
 	            String[] oids = new String[categories.size()];
-	            for (int i=0; i<categories.size(); ++i) {
-	            	oids[i] = categories.get(i).getOid();
+	            Collection<NodeCategory> ncv = categories.values();
+	            int i = 0;
+	            for (NodeCategory nc : ncv) {
+	            	oids[i] = nc.getOid();
 	            }
 	            List<NodeCategory> nclist = _ncm.selectByOids(oids);
-	            for (NodeCategory nc : categories) {
+	            for (NodeCategory nc : categories.values()) {
 	            	for (NodeCategory updated : nclist) {
 	            		if (nc.getOid().equals(updated.getOid())) {
 	            			nc.set(updated);
@@ -392,7 +400,7 @@ public class SchemeManager {
         return s;
     }
 
-    private List<NodeCategory> categories = new ArrayList<NodeCategory>();
+    private Map<String, NodeCategory> categories = new HashMap<String, NodeCategory>();
 	private Node fromNodeDBObject(BasicDBObject root) {
     	if (root == null) {
     		return null;
@@ -450,9 +458,16 @@ public class SchemeManager {
         if(location != null){
             node.setLocation(NodeLocation.valueOf(location));
         }
-        NodeCategory nc = new NodeCategory();
-        nc.setOid(root.getString("category")); // fully loaded later
-        categories.add(nc);
+        String ncoid = root.getString("category");
+    	NodeCategory nc = new NodeCategory();
+        if (ncoid != null) {
+        	if (!categories.containsKey(ncoid)) {
+		        nc.setOid(ncoid); // fully loaded later
+		        categories.put(ncoid, nc);
+        	} else {
+        		nc = categories.get(ncoid);
+        	}
+        }
         node.setCategory(nc);
         
         node.setChildNodes(fromDBList((BasicDBList)root.get("childNodes")));

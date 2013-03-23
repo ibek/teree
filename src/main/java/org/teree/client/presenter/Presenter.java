@@ -14,10 +14,12 @@ import org.teree.client.Settings;
 import org.teree.client.event.RefreshUserInfo;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.text.UIMessages;
+import org.teree.shared.NodeCategoryService;
 import org.teree.shared.SchemeService;
 import org.teree.shared.SecuredSchemeService;
 import org.teree.shared.UserService;
 import org.teree.shared.data.UserInfo;
+import org.teree.shared.data.common.NodeCategory;
 import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.common.SchemeFilter;
 import com.google.gwt.core.client.Scheduler;
@@ -38,6 +40,9 @@ public abstract class Presenter {
 	
 	@Inject
 	private Caller<UserService> userService;
+	
+	@Inject
+	private Caller<NodeCategoryService> nodeCategoryService;
 	
 	public Presenter() {
 		
@@ -111,6 +116,16 @@ public abstract class Presenter {
 		}).getScheme(oid);
     }
 	
+	public void getNodeCategories(RemoteCallback<List<NodeCategory>> callback) {
+		nodeCategoryService.call(callback, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				displayError(message.toString());
+				return false;
+			}
+		}).selectAll();
+	}
+	
     public void insertScheme(Scheme scheme, RemoteCallback<String> callback) {
     	securedService.call(callback, new ErrorCallback() {
 			@Override
@@ -119,6 +134,16 @@ public abstract class Presenter {
 				return false;
 			}
 		}).insertScheme(scheme);
+    }
+    
+    public void insertNodeCategory(NodeCategory category, RemoteCallback<String> callback) {
+    	nodeCategoryService.call(callback, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				displayError(message.toString());
+				return false;
+			}
+		}).insertNodeCategory(category);
     }
     
     public void saveScheme(final Scheme scheme) {
@@ -146,12 +171,14 @@ public abstract class Presenter {
     	}
     }
     
-    /**
-     * TODO save viewpoint
-     * @param scheme
-     */
-    public void saveViewpoint(final Scheme scheme) {
-    	
+    public void updateNodeCategory(final NodeCategory category, RemoteCallback<Void> callback) {
+    	nodeCategoryService.call(callback, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				displayError(message.toString());
+				return false;
+			}
+		}).updateNodeCategory(category);
     }
 	
 	public void removeScheme(final Scheme scheme, RemoteCallback<Boolean> callback) {
@@ -162,6 +189,16 @@ public abstract class Presenter {
 				return false;
 			}
 		}).removeScheme(scheme.getOid());
+	}
+	
+	public void removeNodeCategory(final NodeCategory category, RemoteCallback<Boolean> callback) {
+		nodeCategoryService.call(callback, new ErrorCallback() {
+			@Override
+			public boolean error(Message message, Throwable throwable) {
+				displayError(UIMessages.LANG.connectionIssue());
+				return false;
+			}
+		}).removeNodeCategory(category.getOid());
 	}
 	
 	public void importJSON(String json) {

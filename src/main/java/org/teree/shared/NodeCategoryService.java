@@ -18,7 +18,7 @@ public interface NodeCategoryService {
 
 	public List<NodeCategory> selectAll();
 	
-	public boolean insertNodeCategory(NodeCategory category);
+	public String insertNodeCategory(NodeCategory category);
 	
 	public void updateNodeCategory(NodeCategory category);
 	

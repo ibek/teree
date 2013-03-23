@@ -85,8 +85,8 @@
                         </b:ControlGroup>
                         
 						<b:FormActions>
-							<b:SubmitButton type="PRIMARY" ui:field="register" text="{uic.register}" />
 							<b:Button ui:field="clear" text="{uic.clear}" />
+							<b:SubmitButton type="PRIMARY" ui:field="register" text="{uic.register}" />
 						</b:FormActions>
                     </b:Fieldset>
 				</b:WellForm>
