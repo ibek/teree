@@ -86,10 +86,10 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		});
 		
 		empty = new Heading(4, UIM.no_scheme());
-		empty.setVisible(false);
 		wait = new Image("resources/gfx/loader.gif");
 		
 		setComponents(false);
+		empty.setVisible(false); // must be after setComponents method
 
 		container.add(pagerTop);
 		container.add(empty);

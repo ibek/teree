@@ -7,8 +7,8 @@ import org.teree.shared.data.UserInfo;
 public class NodeCategory {
 	
 	public static final boolean DEFAULT_BOLD = false;
-	public static final String DEFAULT_COLOR = "000000";
-	public static final String DEFAULT_BACKGROUND = "FFFFFF";
+	public static final String DEFAULT_COLOR = "#000000";
+	public static final String DEFAULT_BACKGROUND = "#ffffff";
 
 	private String oid;
 	private String name;
@@ -65,6 +65,14 @@ public class NodeCategory {
 		this.owner = owner;
 	}
 	
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
 	public void set(NodeCategory category) {
 		if (category == null) {
 			return;

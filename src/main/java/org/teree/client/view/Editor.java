@@ -286,8 +286,13 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 			public void onClick(ClickEvent event) {
 				NodeWidget nw = scene.getController().getSelectedNode();
 				if (nw != null) {
-					nw.setNodeCategory(nc);
-					setActiveNodeCategory(nc);
+					if (nc.getOid() != null && nc.getOid().equals(nw.getNode().getCategory().getOid())) {
+						nw.setNodeCategory(new NodeCategory());
+						setActiveNodeCategory(null);
+					} else {
+						nw.setNodeCategory(nc);
+						setActiveNodeCategory(nc);
+					}
 				}
 			}
 		});
@@ -303,9 +308,16 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 	                @Override
 	                public void callback(Boolean response) {
 	                	if (response == null || response) {
-	                		// TODO remove categories from nodes ... also on server side
-	                		((NavList)nodeCategory.getWidget(0)).remove(categoryLinks.get(oid));
+	                		((NavList)nodeCategory.getWidget(0)).remove(categoryLinks.get(oid)); // remobe category from list
+	                		NodeCategory old = nodeCategories.get(oid);
+	                		if (old == null) {
+	                			old = nc;
+	                		} else {
+	                			nodeCategories.remove(oid); // remove category from map where are all the categories loaded in scheme
+	                		}
+                			old.set(new NodeCategory()); // reset category
 	                		categoryLinks.remove(oid);
+							scene.getController().checkAllNodes();
 	                    	info("Removed node category");
 	                	} else {
 	                		error("Node category wasn't removed");
@@ -364,7 +376,10 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 			            @Override
 			            public void callback(Void response) {
 							nc.set(newnc); // update the node category that was newly set
-							nodeCategories.get(newnc.getOid()).set(newnc); // update another instance of node category set in scheme
+							NodeCategory old = nodeCategories.get(newnc.getOid());
+							if (old != null) {
+								old.set(newnc); // update another instance of node category set in scheme
+							}
 							categoryLinks.get(newnc.getOid()).setText(newnc.getName());
 							scene.getController().checkAllNodes();
 			                info("Updated node category");

@@ -116,6 +116,7 @@ public class NodeCategoryManager {
         nc.setOwner(_uim.selectByOid((String)category.get("owner")));
         nc.setBold((Boolean)category.get("bold"));
         nc.setIconType((String)category.get("icontype"));
+        nc.setColor((String)category.get("color"));
         
         return nc;
     }
@@ -126,6 +127,7 @@ public class NodeCategoryManager {
         doc.put("name", category.getName());
         doc.put("bold", category.isBold());
         doc.put("icontype", category.getIconType());
+        doc.put("color", category.getColor());
         
         return doc;
     }

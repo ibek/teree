@@ -1,5 +1,6 @@
 package org.teree.client.view.editor;
 
+import org.teree.client.view.common.ColorPicker;
 import org.teree.shared.data.common.IconText;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeCategory;
@@ -17,6 +18,7 @@ import com.github.gwtbootstrap.client.ui.Well;
 import com.github.gwtbootstrap.client.ui.WellForm;
 import com.github.gwtbootstrap.client.ui.constants.ButtonType;
 import com.github.gwtbootstrap.client.ui.constants.FormType;
+import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -25,6 +27,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 
 public class NodeCategoryDialog extends Composite {
 
@@ -37,6 +40,9 @@ public class NodeCategoryDialog extends Composite {
 	
 	private TextBox name;
 	private CheckBox bold;
+	private String color;
+	private Button colorButton;
+	private ColorPicker colorPicker;
 	
 	private NodeCategory original;
 	private TextNodeWidget preview;
@@ -49,15 +55,14 @@ public class NodeCategoryDialog extends Composite {
 		Fieldset fs = new Fieldset();
 		fs.add(createName());
 		fs.add(createBold());
+		fs.add(createFGColor());
 		form.add(fs);
 		
 		reset = new Button("Reset");
 		reset.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				if (original != null) {
-					setNodeCategory(original);
-				}
+				setNodeCategory(original);
 			}
 		});
 		save = new Button("Save");
@@ -96,13 +101,15 @@ public class NodeCategoryDialog extends Composite {
 		this.original = nc;
 		if (nc == null) {
 			window.setTitle("Add node category");
+			nc = new NodeCategory();
 		} else {
 			window.setTitle("Edit node category");
-			name.setText(nc.getName());
-			bold.setValue(nc.isBold());
-			
-			updatePreview();
 		}
+		name.setText(nc.getName());
+		bold.setValue(nc.isBold());
+		color = nc.getColor();
+		colorButton.getElement().getStyle().setColor(color);
+		updatePreview();
 	}
 	
 	public NodeCategory getNodeCategory() {
@@ -110,6 +117,7 @@ public class NodeCategoryDialog extends Composite {
 		nc.set(original);
 		nc.setName(name.getText());
 		nc.setBold(bold.getValue());
+		nc.setColor(color);
 		return nc;
 	}
 	
@@ -145,6 +153,41 @@ public class NodeCategoryDialog extends Composite {
 			}
 		});
 		controls.add(bold);
+		cg.add(controls);
+		return cg;
+	}
+	
+	private ControlGroup createFGColor() {
+		ControlGroup cg = new ControlGroup();
+		ControlLabel cl = new ControlLabel();
+		cl.add(new Label("Foreground color"));
+		cg.add(cl);
+		Controls controls = new Controls();
+		colorPicker = new ColorPicker();
+		colorButton = new Button("", IconType.SIGN_BLANK);
+		
+		colorPicker.addColorHandler(new ColorPicker.ColorHandler() {
+			@Override
+			public void newColorSelected(String color) {
+				NodeCategoryDialog.this.color = color;
+				colorButton.getElement().getStyle().setColor(color);
+				updatePreview();
+			}
+		});
+		colorButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				colorPicker.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+					@Override
+					public void setPosition(int offsetWidth, int offsetHeight) {
+						int left = colorButton.getAbsoluteLeft() - offsetWidth + colorButton.getOffsetWidth();
+		                int top = colorButton.getAbsoluteTop() + colorButton.getOffsetHeight();
+		                colorPicker.setPopupPosition(left, top);
+					}
+				});
+			}
+		});
+		controls.add(colorButton);
 		cg.add(controls);
 		return cg;
 	}
