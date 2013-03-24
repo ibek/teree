@@ -10,6 +10,7 @@ import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Divider;
 import com.github.gwtbootstrap.client.ui.NavHeader;
 import com.github.gwtbootstrap.client.ui.NavLink;
+import com.github.gwtbootstrap.client.ui.NavList;
 import com.github.gwtbootstrap.client.ui.Thumbnail;
 import com.github.gwtbootstrap.client.ui.WellNavList;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
@@ -30,6 +31,7 @@ import org.teree.client.view.editor.NodeCategoryDialog;
 import org.teree.client.view.editor.NodeWidget;
 import org.teree.client.view.editor.Scene;
 import org.teree.client.view.editor.event.SelectedNodeListener;
+import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeCategory;
 import org.teree.shared.data.common.Scheme;
 
@@ -52,7 +54,8 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
     @UiField
     WellNavList nodeCategory;
     
-    private Map<String, NavLink> categories;
+    private Map<String, NavLink> categoryLinks;
+    private Map<String, NodeCategory> nodeCategories;
     private NavLink activeCategory;
     private NodeCategoryDialog ncg;
     
@@ -72,7 +75,7 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
     	edit.getRefreshButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				scene.update(null);
+				scene.getController().update(null);
 			}
 		});
     	
@@ -121,28 +124,28 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
     	edit.getMergeConnectorButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				scene.mergeSelectedConnector();
+				scene.getController().mergeConnectorNode();
 			}
 		});
     	
     	edit.getSplitConnectorButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				scene.splitSelectedNode(tmpFrame);
+				scene.getController().splitAndConnectNode();
 			}
 		});
     	
     	edit.getCategoriesButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				if (categories != null && !categories.isEmpty()) {
+				if (categoryLinks != null && !categoryLinks.isEmpty()) {
 					nodeCategory.setVisible(!nodeCategory.isVisible());
 				} else {
 					CurrentPresenter.getInstance().getPresenter().getNodeCategories(new RemoteCallback<List<NodeCategory>>() {
 						@Override
 						public void callback(List<NodeCategory> response) {
 							if (response != null) {
-								setNodeCategories(response);
+								setCategoryLinks(response);
 							}
 						}
 					});
@@ -153,7 +156,7 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
     	edit.setSelectIconHandler(new EditPanel.SelectIcon() {
 			@Override
 			public void select(IconType icon) {
-				scene.setNodeIcon(icon);
+				scene.getController().setNodeIcon(icon);
 			}
 		});
     	
@@ -173,7 +176,7 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 	public void setScheme(Scheme scheme) {
 		scene.setScheme(scheme);
     	
-    	scene.addSelectedNodeListener(new SelectedNodeListener<NodeWidget>() {
+    	scene.getController().addSelectedNodeListener(new SelectedNodeListener<NodeWidget>() {
 			@Override
 			public void selected(NodeWidget nw) {
 				edit.checkSelectedNode(nw);
@@ -185,16 +188,23 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 			}
 		});
     	
+    	if (nodeCategories == null) {
+    		nodeCategories = new HashMap<String, NodeCategory>();
+    	}
+    	nodeCategories.clear();
+    	setNodeCategories(scheme.getFirst());
+    	
 	}
 
 	@Override
 	public void edit() {
-		scene.editSelectedNode();
+		scene.getController().editNode();
 	}
 
 	@Override
 	public void delete() {
-		scene.removeSelectedNode();
+    	scene.getController().removeNode();
+    	scene.getController().update(null);
 	}
 
 	@Override
@@ -204,37 +214,37 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 
 	@Override
 	public void copy() {
-		scene.copySelectedNode();
+		scene.getController().copyNode();
 	}
 
 	@Override
 	public void cut() {
-		scene.cutSelectedNode();
+		scene.getController().cutNode();
 	}
 
 	@Override
 	public void paste() {
-		scene.pasteNode();
+		scene.getController().pasteNode();
 	}
 
 	@Override
 	public void up() {
-		scene.selectUpperNode();
+		scene.getController().selectUpperNode();
 	}
 
 	@Override
 	public void down() {
-		scene.selectUnderNode();
+		scene.getController().selectUnderNode();
 	}
 
 	@Override
 	public void left() {
-		scene.selectLeftNode();
+		scene.getController().selectLeftNode();
 	}
 
 	@Override
 	public void right() {
-		scene.selectRightNode();
+		scene.getController().selectRightNode();
 	}
 
     @Override
@@ -242,19 +252,19 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
         return scene.getSchemeSamplePicture();
     }
 
-	private void setNodeCategories(List<NodeCategory> categories) {
+	private void setCategoryLinks(List<NodeCategory> categories) {
 		nodeCategory.clear();
 		NavHeader header = new NavHeader("Node Categories");
 		header.getElement().getStyle().setProperty("textAlign", "center");
 		nodeCategory.add(header);
-		if (this.categories == null) {
-			this.categories = new HashMap<String, NavLink>();
+		if (this.categoryLinks == null) {
+			this.categoryLinks = new HashMap<String, NavLink>();
 		} else {
-			this.categories.clear();
+			this.categoryLinks.clear();
 		}
 		for (NodeCategory nc : categories) {
 			addNodeCategory(nc);
-			nodeCategory.add(this.categories.get(nc.getOid()));
+			nodeCategory.add(this.categoryLinks.get(nc.getOid()));
 		}
 		NavLink addNodeCategory = new NavLink();
 		addNodeCategory.getElement().getStyle().setProperty("textAlign", "center");
@@ -274,7 +284,7 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 		nl.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				NodeWidget nw = scene.getSelectedNodeWidget();
+				NodeWidget nw = scene.getController().getSelectedNode();
 				if (nw != null) {
 					nw.setNodeCategory(nc);
 					setActiveNodeCategory(nc);
@@ -288,12 +298,14 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 			@Override
 			public void onClick(ClickEvent event) {
 				event.stopPropagation();
+				final String oid = nc.getOid(); 
 				CurrentPresenter.getInstance().getPresenter().removeNodeCategory(nc, new RemoteCallback<Boolean>() {
 	                @Override
 	                public void callback(Boolean response) {
 	                	if (response == null || response) {
-	                		// TODO remove categories from nodes
-	                		// TODO remove category from list
+	                		// TODO remove categories from nodes ... also on server side
+	                		((NavList)nodeCategory.getWidget(0)).remove(categoryLinks.get(oid));
+	                		categoryLinks.remove(oid);
 	                    	info("Removed node category");
 	                	} else {
 	                		error("Node category wasn't removed");
@@ -314,7 +326,7 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 			}
 		});
 		nl.add(editIcon);
-		this.categories.put(nc.getOid(), nl);
+		this.categoryLinks.put(nc.getOid(), nl);
 	}
     
     private void setActiveNodeCategory(NodeCategory nc) {
@@ -322,8 +334,8 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 			activeCategory.setActive(false);
 			activeCategory = null;
 		}
-    	if (categories != null && nc != null) {
-    		NavLink nl = categories.get(nc.getOid());
+    	if (categoryLinks != null && nc != null) {
+    		NavLink nl = categoryLinks.get(nc.getOid());
     		if (nl != null) {
     			activeCategory = nl;
     			activeCategory.setActive(true);
@@ -343,7 +355,7 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 		                public void callback(String response) {
 		                	newnc.setOid(response);
 		                    addNodeCategory(newnc);
-		        			nodeCategory.insert(categories.get(newnc.getOid()), categories.size());
+		        			nodeCategory.insert(categoryLinks.get(newnc.getOid()), categoryLinks.size());
 		                    info("Created node category");
 		                }
 		            });
@@ -351,8 +363,10 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 					CurrentPresenter.getInstance().getPresenter().updateNodeCategory(newnc, new RemoteCallback<Void>() {
 			            @Override
 			            public void callback(Void response) {
-							nc.set(newnc);
-							// TODO promote the change into node widgets
+							nc.set(newnc); // update the node category that was newly set
+							nodeCategories.get(newnc.getOid()).set(newnc); // update another instance of node category set in scheme
+							categoryLinks.get(newnc.getOid()).setText(newnc.getName());
+							scene.getController().checkAllNodes();
 			                info("Updated node category");
 			            }
 			        });
@@ -362,6 +376,20 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 		});
     	ncg.setNodeCategory(nc);
     	ncg.show();
+    }
+    
+    private void setNodeCategories(Node root) {
+    	NodeCategory nc = root.getCategory();
+    	if (nc != null && nc.getName() != null) {
+    		NodeCategory nc2 = nodeCategories.get(nc.getOid());
+    		if (nc2 == null) {
+    			nodeCategories.put(nc.getOid(), nc);
+    		}
+    	}
+    	List<Node> childNodes = root.getChildNodes();
+    	for (int i=0; childNodes != null && i<childNodes.size(); ++i) {
+    		setNodeCategories(childNodes.get(i));
+    	}
     }
 
 }

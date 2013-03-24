@@ -48,8 +48,6 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
         resources.css().ensureInjected();
         
         initWidget(container);
-    	
-    	NodeCategoryStyle.set(this, node.getCategory());
         
         bind();
         
@@ -185,15 +183,11 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 	public int getWidgetHeight() {
 		return getWidget().getOffsetHeight();
 	}
-    
-    private void dragData(DragStartEvent event) {
-    	if (node.getParent() == null) { // cannot drag root
-    		event.stopPropagation();
-    		return;
-    	}
-    	event.setData("id", String.valueOf(((AbsolutePanel)getParent()).getWidgetIndex(this)));
-        event.getDataTransfer().setDragImage(container.getElement(), 10, 10);
-    }
+	
+	@Override
+	public void update() {
+    	NodeCategoryStyle.set(this, node.getCategory());
+	}
     
     @Override
     public void setCollapsed(boolean collapsed) {
@@ -209,5 +203,14 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 		node.setCategory(nc);
     	NodeCategoryStyle.set(this, nc);
 	}
+    
+    private void dragData(DragStartEvent event) {
+    	if (node.getParent() == null) { // cannot drag root
+    		event.stopPropagation();
+    		return;
+    	}
+    	event.setData("id", String.valueOf(((AbsolutePanel)getParent()).getWidgetIndex(this)));
+        event.getDataTransfer().setDragImage(container.getElement(), 10, 10);
+    }
 
 }

@@ -366,7 +366,7 @@ public class SchemeManager {
     }
     
     private Scheme fromSchemeDBObjectInfo(DBObject scheme) {
-    	Scheme s;
+    	Scheme s = null;
     	StructureType type = StructureType.valueOf((String)scheme.get("structure"));
     	
     	switch (type) {
@@ -384,9 +384,6 @@ public class SchemeManager {
 	        	
 	        	s = tree;
 	    		break;
-	    	}
-	    	default: {
-	    		return new Scheme();
 	    	}
     	}
         

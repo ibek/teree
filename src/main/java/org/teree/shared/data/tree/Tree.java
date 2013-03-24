@@ -24,6 +24,11 @@ public class Tree extends Scheme {
         return root;
     }
 
+	@Override
+	public Node getFirst() {
+		return root;
+	}
+
     public void setRoot(Node root) {
         this.root = root;
     }

@@ -193,6 +193,7 @@ public class TextNodeWidget extends NodeWidget {
     
     @Override
 	public void update() {
+    	super.update();
 		String text = nodeContent.getText();
 		if (text == null || text.isEmpty()) {
 			text = "[empty]";
@@ -212,6 +213,7 @@ public class TextNodeWidget extends NodeWidget {
 				content.getElement().getStyle().setPaddingLeft(0.0, Unit.PX);
 			}
 		}
+		setCollapsed(collapsed);
     }
 
     @Override

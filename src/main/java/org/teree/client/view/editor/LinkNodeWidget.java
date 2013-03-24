@@ -47,6 +47,7 @@ public class LinkNodeWidget extends NodeWidget {
 
 	@Override
 	public void update() {
+    	super.update();
 		String text = nodeContent.getText();
 		if (text == null || text.isEmpty()) {
 			text = nodeContent.getUrl();

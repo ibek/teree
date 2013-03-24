@@ -172,6 +172,7 @@ public class MathExpressionNodeWidget extends NodeWidget {
     
     @Override
 	public void update() {
+    	super.update();
 		String expr = nodeContent.getExpression();
 		if (expr.isEmpty()) {
 			expr = "[empty]";

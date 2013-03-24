@@ -1,5 +1,7 @@
 package org.teree.client.view.editor;
 
+import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeCategory;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -11,12 +13,16 @@ import com.github.gwtbootstrap.client.ui.Fieldset;
 import com.github.gwtbootstrap.client.ui.FormActions;
 import com.github.gwtbootstrap.client.ui.Modal;
 import com.github.gwtbootstrap.client.ui.TextBox;
+import com.github.gwtbootstrap.client.ui.Well;
 import com.github.gwtbootstrap.client.ui.WellForm;
 import com.github.gwtbootstrap.client.ui.constants.ButtonType;
 import com.github.gwtbootstrap.client.ui.constants.FormType;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 
@@ -33,6 +39,7 @@ public class NodeCategoryDialog extends Composite {
 	private CheckBox bold;
 	
 	private NodeCategory original;
+	private TextNodeWidget preview;
 	
 	public NodeCategoryDialog() {
 		window = new Modal(false);
@@ -62,6 +69,19 @@ public class NodeCategoryDialog extends Composite {
 		
 		window.add(form);
 		
+		Node n = new Node();
+		n.setCategory(new NodeCategory());
+		IconText it = new IconText();
+		it.setText("Test node");
+		n.setContent(it);
+		preview = new TextNodeWidget(n);
+		DOM.setStyleAttribute(preview.getElement(), "visibility", "visible");
+		
+		Well wp = new Well();
+		wp.add(preview);
+		
+		window.add(wp);
+		
 	}
 	
 	public void show() {
@@ -80,6 +100,8 @@ public class NodeCategoryDialog extends Composite {
 			window.setTitle("Edit node category");
 			name.setText(nc.getName());
 			bold.setValue(nc.isBold());
+			
+			updatePreview();
 		}
 	}
 	
@@ -102,7 +124,7 @@ public class NodeCategoryDialog extends Composite {
 		cg.add(cl);
 		Controls controls = new Controls();
 		name = new TextBox();
-		name.setMaxLength(20);
+		name.setMaxLength(16);
 		controls.add(name);
 		cg.add(controls);
 		return cg;
@@ -116,9 +138,20 @@ public class NodeCategoryDialog extends Composite {
 		Controls controls = new Controls();
 		bold = new CheckBox();
 		bold.setValue(false);
+		bold.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				updatePreview();
+			}
+		});
 		controls.add(bold);
 		cg.add(controls);
 		return cg;
+	}
+	
+	private void updatePreview() {
+		preview.getNode().setCategory(getNodeCategory());
+		preview.update();
 	}
 	
 }

@@ -13,9 +13,7 @@ dialog pro vytvoreni mapy - po stisknuti tlacitka create
  nove typy vizualizace Hierarchical Horizontal Tree a Hierarchical Vertical Tree
 
 kategorizace uzlu
- - propagace zmeny categorie do node widgetu
- - odstraneni categorie - odstraneni kategorie z uzlu na klientovi a serveru (vcetne vsech map)
- - nahled uzlu v dialogu
+ - odstraneni categorie - odstraneni kategorie z uzlu na klientovi a serveru (ze vsech map)
 
 ===============
 0.9:

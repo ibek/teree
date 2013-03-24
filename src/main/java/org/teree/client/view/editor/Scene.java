@@ -12,6 +12,7 @@ import org.teree.client.view.editor.event.SelectNodeHandler;
 import org.teree.client.view.editor.event.SelectedNodeListener;
 import org.teree.client.view.editor.event.CheckNode;
 import org.teree.client.view.editor.event.CheckNodeHandler;
+import org.teree.client.view.type.Actions;
 import org.teree.client.view.type.BehaviorController;
 import org.teree.client.view.type.TreeController;
 import org.teree.shared.data.common.Connector;
@@ -84,7 +85,7 @@ public class Scene extends Composite {
 			public void onResize(ResizeEvent event) {
                 sp.setWidth(event.getWidth() + "px");
                 sp.setHeight((event.getHeight()-Settings.SCENE_HEIGHT_LESS) + "px");
-                update(null);
+                controller.update(null);
             }
 		});
         initWidget(sp);
@@ -150,7 +151,7 @@ public class Scene extends Composite {
         container.addHandler(new NodeChangedHandler() {
 			@Override
 			public void changed(NodeChanged event) {
-				update(event.getNode());
+				controller.update(event.getNode());
 			}
 		}, NodeChanged.TYPE);
         
@@ -175,19 +176,6 @@ public class Scene extends Composite {
 	public void setTmpFrame(Frame tmpFrame) {
 		this.tmpFrame = tmpFrame;
 	}
-    
-    public void update(Node changed) {
-    	controller.update(changed);
-    }
-    
-    public void editSelectedNode() {
-    	controller.editNode();
-    }
-    
-    public void removeSelectedNode() {
-    	controller.removeNode();
-		update(null);
-    }
     
     public void createTextChildNode() {
     	Node child = new Node();
@@ -230,42 +218,6 @@ public class Scene extends Composite {
     	PercentText pt = new PercentText();
     	child.setContent(pt);
     	createChildNode(child);
-    }
-    
-    public void mergeSelectedConnector() {
-		controller.mergeConnectorNode();
-    }
-    
-    public void splitSelectedNode(Frame tmpFrame) {
-    	controller.splitAndConnectNode();
-    }
-    
-    public void copySelectedNode() {
-    	controller.copyNode();
-    }
-    
-    public void cutSelectedNode() {
-    	controller.cutNode();
-    }
-    
-    public void pasteNode() {
-    	controller.pasteNode();
-    }
-    
-    public void selectUpperNode() {
-    	controller.selectUpperNode();
-    }
-    
-    public void selectUnderNode() {
-    	controller.selectUnderNode();
-    }
-    
-    public void selectLeftNode() {
-    	controller.selectLeftNode();
-    }
-    
-    public void selectRightNode() {
-    	controller.selectRightNode();
     }
     
     public String getSchemePicture() {
@@ -320,21 +272,13 @@ public class Scene extends Composite {
         	nw.get(i).setCollapsed(collapsed.get(i-1));
         }
         
-        update(null);
+        controller.update(null);
         
         return canvasTmp.toDataUrl();
     }
     
-    public void setNodeIcon(IconType icon) {
-    	controller.setNodeIcon(icon);
-    }
-    
-    public NodeWidget getSelectedNodeWidget() {
-    	return controller.getSelectedNode();
-    }
-    
-    public void addSelectedNodeListener(SelectedNodeListener<NodeWidget> snl) {
-    	controller.addSelectedNodeListener(snl);
+    public Actions<NodeWidget> getController() {
+    	return controller;
     }
     
     /**======================================================*/
@@ -348,7 +292,7 @@ public class Scene extends Composite {
 		   	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 		        @Override
 		        public void execute() {
-		   			editSelectedNode();
+		   			controller.editNode();
 		        }
 	        });
     	}

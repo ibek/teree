@@ -1,7 +1,5 @@
 package org.teree.shared.data.common;
 
-import java.util.List;
-
 import org.jboss.errai.common.client.api.annotations.Portable;
 import org.teree.shared.data.UserInfo;
 
@@ -58,6 +56,10 @@ public class Scheme {
 
 	public void setPermissions(Permissions permissions) {
 		this.permissions = permissions;
+	}
+	
+	public Node getFirst() {
+		return null;
 	}
 
 	@Override
