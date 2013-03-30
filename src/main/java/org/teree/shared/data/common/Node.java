@@ -28,6 +28,7 @@ public class Node implements Cloneable {
         Node root = new Node();
         root.setContent(content);
         root.setLocation(location);
+        root.setCategory(category);
         for(int i=0; childNodes != null && i<childNodes.size(); ++i){
             root.addChild(childNodes.get(i).clone());
         }

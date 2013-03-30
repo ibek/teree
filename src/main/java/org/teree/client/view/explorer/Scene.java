@@ -90,6 +90,7 @@ public class Scene extends Composite implements HasSchemeHandlers {
 		
 		setComponents(false);
 		empty.setVisible(false); // must be after setComponents method
+		wait.setVisible(true);
 
 		container.add(pagerTop);
 		container.add(empty);

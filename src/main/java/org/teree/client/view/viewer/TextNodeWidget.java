@@ -54,6 +54,8 @@ public class TextNodeWidget extends NodeWidget {
         
         container.add(content);
         
+        update();
+        
     }
     
     private void bind() {

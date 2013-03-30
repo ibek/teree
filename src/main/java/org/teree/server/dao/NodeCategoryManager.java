@@ -76,7 +76,7 @@ public class NodeCategoryManager {
     	BasicDBList idlist = new BasicDBList();
         DBObject search = new BasicDBObject("$or", idlist);
         for (String o: oids) {
-        	idlist.add(new BasicDBObject("_id", new ObjectId(o)));
+    		idlist.add(new BasicDBObject("_id", new ObjectId(o)));
         }
     	
         DBCursor found = coll.find(search);
@@ -116,7 +116,9 @@ public class NodeCategoryManager {
         nc.setOwner(_uim.selectByOid((String)category.get("owner")));
         nc.setBold((Boolean)category.get("bold"));
         nc.setIconType((String)category.get("icontype"));
+        nc.setTransparency((Integer)category.get("transparency"));
         nc.setColor((String)category.get("color"));
+        nc.setBackground((String)category.get("background"));
         
         return nc;
     }
@@ -127,7 +129,9 @@ public class NodeCategoryManager {
         doc.put("name", category.getName());
         doc.put("bold", category.isBold());
         doc.put("icontype", category.getIconType());
+        doc.put("transparency", category.getTransparency());
         doc.put("color", category.getColor());
+        doc.put("background", category.getBackground());
         
         return doc;
     }

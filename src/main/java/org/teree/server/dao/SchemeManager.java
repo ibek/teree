@@ -345,12 +345,17 @@ public class SchemeManager {
 	            Collection<NodeCategory> ncv = categories.values();
 	            int i = 0;
 	            for (NodeCategory nc : ncv) {
-	            	oids[i] = nc.getOid();
+	            	String oid = nc.getOid();
+	            	if (oid != null) {
+		            	oids[i] = oid;
+		            	i++;
+	            	}
 	            }
 	            List<NodeCategory> nclist = _ncm.selectByOids(oids);
-	            for (NodeCategory nc : categories.values()) {
+	            for (NodeCategory nc : ncv) {
 	            	for (NodeCategory updated : nclist) {
-	            		if (nc.getOid().equals(updated.getOid())) {
+	            		String oid = nc.getOid();
+	            		if (oid != null && oid.equals(updated.getOid())) {
 	            			nc.set(updated);
 	            			nclist.remove(updated); // optimization - won't be necessary any more
 	            			break;

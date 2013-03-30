@@ -13,6 +13,8 @@ dialog pro vytvoreni mapy - po stisknuti tlacitka create
  nove typy vizualizace Hierarchical Horizontal Tree a Hierarchical Vertical Tree
 
 kategorizace uzlu
+ - kresleni na canvas pro nahled a export obrazku
+ - vyzkouset na vsech typech uzlu
  - odstraneni kategorie z uzlu na serveru (ze vsech map) - jakmile to bude mozne provest pro vsechny naraz https://jira.mongodb.org/browse/SERVER-1243
 
 ===============

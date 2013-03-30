@@ -167,14 +167,14 @@ public class TextNodeWidget extends NodeWidget {
     	}
     	container.getElement().getStyle().setMarginLeft(0, Unit.PX);
     	container.setWidth("auto");
-
-    	update();
         
         if (editContent != null) {
             container.remove(editContent);
         }
         
         container.add(content);
+
+    	update();
         
     }
     

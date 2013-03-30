@@ -161,7 +161,7 @@ public class EditPanel extends Composite {
 		mergeConnector.setDisabled(nw == null || !(nw instanceof ConnectorNodeWidget));
 		splitConnector.setDisabled(nw == null || !(nw instanceof TextNodeWidget) || nw instanceof ConnectorNodeWidget || 
 				!(nw.getNode().getChildNodes() != null && nw.getNode().getChildNodes().size() > 0));
-		disableNewChildNodes(nw instanceof ConnectorNodeWidget || nw instanceof LinkNodeWidget);
+		disableNewChildNodes(nw == null || nw instanceof ConnectorNodeWidget || nw instanceof LinkNodeWidget);
 	}
 	
 	private void disableNewChildNodes(boolean disable) {
@@ -169,6 +169,8 @@ public class EditPanel extends Composite {
 		createLink.setEnabled(!disable);
 		createImg.setEnabled(!disable);
 		createMathExpr.setEnabled(!disable);
+		createPercent.setEnabled(!disable);
+		icon.getTriggerWidget().setEnabled(!disable);
 		((Button)createConnector.getWidget(0)).setEnabled(!disable);
 	}
 	

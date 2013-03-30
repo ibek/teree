@@ -28,13 +28,11 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
         resources.css().ensureInjected();
         
         initWidget(container);
-    	
-    	NodeCategoryStyle.set(this, node.getCategory());
     }
     
     @Override
 	public void update() {
-    	
+    	NodeCategoryStyle.set(container, node.getCategory());
     }
 
 	@Override

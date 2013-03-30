@@ -284,7 +284,8 @@ public class Scene extends Composite {
     /**======================================================*/
     
     private void createChildNode(Node childNode) {
-    	if (!(controller.getSelectedNode() instanceof ConnectorNodeWidget) &&
+    	if (controller.getSelectedNode() != null &&
+    		!(controller.getSelectedNode() instanceof ConnectorNodeWidget) &&
     		!(controller.getSelectedNode() instanceof LinkNodeWidget)) {
 	    	controller.insertChildNode(childNode);
 	    	

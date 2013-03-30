@@ -8,13 +8,15 @@ public class NodeCategory {
 	
 	public static final boolean DEFAULT_BOLD = false;
 	public static final String DEFAULT_COLOR = "#000000";
-	public static final String DEFAULT_BACKGROUND = "#ffffff";
+	public static final String DEFAULT_BACKGROUND = "transparent";
+	public static final int MAX_TRANSPARENCY = 100;
 
 	private String oid;
 	private String name;
     private String iconType;
     private String color = DEFAULT_COLOR;
     private String background = DEFAULT_BACKGROUND;
+    private int transparency = MAX_TRANSPARENCY; // 0 - 100%
 	private boolean bold = DEFAULT_BOLD;
 	
 	private UserInfo owner;
@@ -70,7 +72,29 @@ public class NodeCategory {
 	}
 
 	public void setColor(String color) {
-		this.color = color;
+		if (color != null) {
+			this.color = color;
+		}
+	}
+
+	public String getBackground() {
+		return background;
+	}
+
+	public void setBackground(String background) {
+		if (background != null) {
+			this.background = background;
+		}
+	}
+
+	public int getTransparency() {
+		return transparency;
+	}
+
+	public void setTransparency(Integer transparency) {
+		if (transparency != null && transparency >= 0 && transparency <= MAX_TRANSPARENCY) {
+			this.transparency = transparency;
+		}
 	}
 
 	public void set(NodeCategory category) {
@@ -82,6 +106,9 @@ public class NodeCategory {
 		this.name = category.getName();
 		this.bold = category.isBold();
 		this.iconType = category.getIconType();
+		this.transparency = category.getTransparency();
+		this.color = category.getColor();
+		this.background = category.getBackground();
 	}
 	
 	@Override

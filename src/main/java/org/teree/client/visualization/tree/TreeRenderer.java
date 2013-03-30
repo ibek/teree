@@ -270,7 +270,7 @@ public abstract class TreeRenderer<T extends Widget & NodeInterface> {
 		context.beginPath(); // of lines
 
 		// support content
-		context.setFillStyle("white");
+		context.setFillStyle("transparent");
 		context.fillRect(0, 0, width, height);
 
 		context.setLineWidth(2.0);

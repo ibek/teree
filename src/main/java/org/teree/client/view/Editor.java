@@ -286,7 +286,8 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 			public void onClick(ClickEvent event) {
 				NodeWidget nw = scene.getController().getSelectedNode();
 				if (nw != null) {
-					if (nc.getOid() != null && nc.getOid().equals(nw.getNode().getCategory().getOid())) {
+					Node n = nw.getNode();
+					if (nc.getOid() != null && n.getCategory() != null && nc.getOid().equals(n.getCategory().getOid())) { // reset
 						nw.setNodeCategory(new NodeCategory());
 						setActiveNodeCategory(null);
 					} else {
@@ -361,6 +362,9 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 			@Override
 			public void onClick(ClickEvent event) {
 				final NodeCategory newnc = ncg.getNodeCategory();
+				if (newnc == null) {
+					return;
+				}
 				if (newnc.getOid() == null) {
 					CurrentPresenter.getInstance().getPresenter().insertNodeCategory(newnc, new RemoteCallback<String>() {
 		                @Override

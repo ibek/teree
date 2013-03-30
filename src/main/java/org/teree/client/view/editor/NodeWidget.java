@@ -8,6 +8,7 @@ import org.teree.client.view.resource.NodeCssStyle;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeCategory;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -82,17 +83,18 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
     
     public void select() {
     	//container.getElement().getStyle().setBackgroundColor("#7FAF47");
-    	container.getElement().getStyle().setBorderStyle(BorderStyle.DASHED);
-    	container.getElement().getStyle().setBorderWidth(2.0, Unit.PX);
-    	container.getElement().getStyle().setBorderColor("#08C");
-    	container.getElement().getStyle().setProperty("borderBottom", "none");
-    	container.getElement().getStyle().setProperty("borderTop", "none");
+    	Style css = container.getElement().getStyle();
+    	css.setBorderStyle(BorderStyle.DASHED);
+    	css.setBorderWidth(2.0, Unit.PX);
+    	css.setBorderColor("#08C");
+    	css.setProperty("borderBottom", "none");
+    	css.setProperty("borderTop", "none");
         selected = true;
     }
     
     public void unselect() {
-    	container.getElement().getStyle().setBackgroundColor(null);
-    	container.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+    	Style css = container.getElement().getStyle();
+    	css.setBorderStyle(BorderStyle.NONE);
         selected = false;
     }
     
@@ -114,21 +116,29 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
         content.addDragEnterHandler(new DragEnterHandler() {
 			@Override
 			public void onDragEnter(DragEnterEvent event) {
-				container.getElement().getStyle().setBackgroundColor("#7FAF47");
+				container.getWidget(0).getElement().getStyle().setBackgroundColor("#7FAF47");
 			}
 		});
         
         content.addDragLeaveHandler(new DragLeaveHandler() {
 			@Override
 			public void onDragLeave(DragLeaveEvent event) {
-		    	container.getElement().getStyle().setBackgroundColor(null);
+		    	if (node.getCategory() != null) {
+		    		update();
+		    	} else {
+		    		container.getWidget(0).getElement().getStyle().setBackgroundColor("transparent");
+		    	}
 			}
 		});
         
         content.addDropHandler(new DropHandler() {
 			@Override
 			public void onDrop(DropEvent event) {
-		    	container.getElement().getStyle().setBackgroundColor(null);
+		    	if (node.getCategory() != null) {
+		    		update();
+		    	} else {
+		    		container.getWidget(0).getElement().getStyle().setBackgroundColor("transparent");
+		    	}
                 dropData(event);
 			}
 		});
@@ -186,7 +196,7 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 	
 	@Override
 	public void update() {
-    	NodeCategoryStyle.set(this, node.getCategory());
+    	NodeCategoryStyle.set(container, node.getCategory());
 	}
     
     @Override
@@ -201,7 +211,7 @@ public abstract class NodeWidget extends Composite implements NodeInterface {
 	
 	public void setNodeCategory(NodeCategory nc) {
 		node.setCategory(nc);
-    	NodeCategoryStyle.set(this, nc);
+    	NodeCategoryStyle.set(container, nc);
 	}
     
     private void dragData(DragStartEvent event) {
