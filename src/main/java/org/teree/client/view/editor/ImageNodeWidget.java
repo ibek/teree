@@ -1,6 +1,7 @@
 package org.teree.client.view.editor;
 
 import org.teree.client.Settings;
+import org.teree.client.view.common.NodePainter;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.shared.data.common.ImageLink;
@@ -36,22 +37,21 @@ public class ImageNodeWidget extends NodeWidget {
 
 	public ImageNodeWidget(Node node) {
 		super(node);
-		
-		nodeContent = (ImageLink)node.getContent();
+
+		nodeContent = (ImageLink) node.getContent();
 
 		init();
-		update();
-
 		container.add(content);
+		update();
 
 	}
 
 	private void init() {
 		content = new Image();
 		content.getElement().getStyle().setPadding(5.0, Unit.PX);
-        
-        content.getElement().setDraggable(Element.DRAGGABLE_TRUE);
-        initDragging(content);
+
+		content.getElement().setDraggable(Element.DRAGGABLE_TRUE);
+		initDragging(content);
 
 		content.addErrorHandler(new ErrorHandler() {
 			@Override
@@ -60,21 +60,21 @@ public class ImageNodeWidget extends NodeWidget {
 				content.setUrl(res.noImage().getSafeUri());
 			}
 		});
-		
+
 		content.addLoadHandler(new LoadHandler() {
 			@Override
 			public void onLoad(LoadEvent event) {
 				getParent().fireEvent(new NodeChanged(null)); // null because nothing was inserted
 			}
 		});
-		
+
 		content.setUrl(res.noImage().getSafeUri());
-		
+
 	}
 
 	@Override
 	public void update() {
-    	super.update();
+		super.update();
 		if (nodeContent != null) {
 			final String url = nodeContent.getUrl();
 			if (url != null && !url.isEmpty()) {
@@ -90,18 +90,18 @@ public class ImageNodeWidget extends NodeWidget {
 		if (contentDialog == null) {
 			contentDialog = new ContentDialog("Set image url");
 			contentDialog.setTextFieldVisible(false);
-			
+
 			contentDialog.getOk().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
 					nodeContent.setUrl(contentDialog.getUrlField());
-	            	update();
+					update();
 					contentDialog.hide();
 				}
 			});
-			
+
 		}
-		
+
 		contentDialog.setUrlField(nodeContent.getUrl());
 		contentDialog.show();
 
@@ -111,16 +111,17 @@ public class ImageNodeWidget extends NodeWidget {
 		} else {
 			x = content.getOffsetWidth();
 		}
-		
-		contentDialog.setPopupPosition(getAbsoluteLeft() + x, 
-				getAbsoluteTop() + content.getOffsetHeight()/2 - contentDialog.getOffsetHeight()/2);
+
+		contentDialog.setPopupPosition(getAbsoluteLeft() + x,
+				getAbsoluteTop() + content.getOffsetHeight() / 2
+						- contentDialog.getOffsetHeight() / 2);
 	}
 
-    @Override
-    public void draw(Context2d context, int x, int y) {
-    	context.save();
-    	context.drawImage(ImageElement.as(content.getElement()), x, y-content.getHeight());
-        context.restore();
-    }
+	@Override
+	public void draw(Context2d context, int x, int y) {
+		NodePainter.drawImageNode(context, x, y,
+				ImageElement.as(content.getElement()), getOffsetWidth(), content.getHeight(),
+				node.getCategory());
+	}
 
 }

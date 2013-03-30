@@ -1,5 +1,6 @@
 package org.teree.client.view.viewer;
 
+import org.teree.client.view.common.NodePainter;
 import org.teree.client.view.resource.MathExpressionTools;
 import org.teree.shared.data.common.Node;
 
@@ -18,6 +19,7 @@ public class MathExpressionNodeWidget extends NodeWidget {
     protected MathExpressionNodeWidget(Node node) {
         super(node);
         init();
+        update();
     }
     
     public void init() {
@@ -43,11 +45,8 @@ public class MathExpressionNodeWidget extends NodeWidget {
         NodeList<Element> nl = content.getElement().getElementsByTagName("div");
         if (nl.getLength() > 0) {
         	Element e = nl.getItem(0);
-	    	context.save();
-	    	context.setFont("14px monospace");
-	        context.setFillStyle("#000000");
-	        context.fillText(e.getInnerText(), x, y);
-	        context.restore();
+			NodePainter.drawSingleLine(context, x, y, e.getInnerText(),
+					getOffsetWidth(), getOffsetHeight(), node.getCategory());
         }
     }
 

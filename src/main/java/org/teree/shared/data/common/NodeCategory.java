@@ -8,7 +8,7 @@ public class NodeCategory {
 	
 	public static final boolean DEFAULT_BOLD = false;
 	public static final String DEFAULT_COLOR = "#000000";
-	public static final String DEFAULT_BACKGROUND = "transparent";
+	public static final String DEFAULT_BACKGROUND = "#ffffff";
 	public static final int MAX_TRANSPARENCY = 100;
 
 	private String oid;
@@ -72,7 +72,7 @@ public class NodeCategory {
 	}
 
 	public void setColor(String color) {
-		if (color != null) {
+		if (color != null && !color.isEmpty()) {
 			this.color = color;
 		}
 	}
@@ -82,7 +82,7 @@ public class NodeCategory {
 	}
 
 	public void setBackground(String background) {
-		if (background != null) {
+		if (background != null && !background.isEmpty()) {
 			this.background = background;
 		}
 	}

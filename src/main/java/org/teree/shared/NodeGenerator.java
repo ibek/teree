@@ -2,6 +2,7 @@ package org.teree.shared;
 
 import org.teree.shared.data.common.IconText;
 import org.teree.shared.data.common.Node;
+import org.teree.shared.data.common.NodeCategory;
 import org.teree.shared.data.common.Node.NodeLocation;
 
 public class NodeGenerator {
@@ -71,6 +72,7 @@ public class NodeGenerator {
         it.setText(text);
         n.setContent(it);
         n.setLocation(loc);
+        n.setCategory(new NodeCategory());
         return n;
     }
     

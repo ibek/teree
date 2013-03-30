@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.teree.client.Settings;
+import org.teree.client.view.common.NodePainter;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.resource.IconTypeContent;
@@ -41,91 +42,73 @@ import com.google.gwt.user.client.ui.TextArea;
  * Parent of TextNodeWidget has to be AbsolutePanel.
  * 
  * @author ibek
- *
+ * 
  */
 public class PercentNodeWidget extends NodeWidget {
-	
-    protected HTML content;
-    protected TextBox editContent;
-    protected ProgressBar percentage;
-    
-    protected PercentText nodeContent;
-    
-    public PercentNodeWidget(Node node) {
-        super(node);
-		
-    	nodeContent = (PercentText)node.getContent();
-        view();
-        
-    }
-    
-    public void view() {
-    	if (content == null) {
-	        content = new HTML(nodeContent.getText());
-	        
-	        content.setStylePrimaryName(resources.css().node());
-	        content.addStyleName(resources.css().nodeView());
-        
-    	}
-    	container.getElement().getStyle().setMarginLeft(0, Unit.PX);
-    	container.setWidth("auto");
-    	
-    	if (percentage == null) {
-            percentage = new ProgressBar();
-            percentage.getElement().getStyle().setMargin(0.0, Unit.PX);
-            percentage.getElement().getStyle().setMarginBottom(2.0, Unit.PX);
-            percentage.setHeight("10px");
-            percentage.getElement().getStyle().setProperty("lineHeight", "10px");
-            container.add(percentage);
-    	}
+
+	protected HTML content;
+	protected TextBox editContent;
+	protected ProgressBar percentage;
+
+	protected PercentText nodeContent;
+
+	public PercentNodeWidget(Node node) {
+		super(node);
+
+		nodeContent = (PercentText) node.getContent();
+		view();
+		update();
+	}
+
+	public void view() {
+		if (content == null) {
+			content = new HTML(nodeContent.getText());
+
+			content.setStylePrimaryName(resources.css().node());
+			content.addStyleName(resources.css().nodeView());
+
+		}
+		container.getElement().getStyle().setMarginLeft(0, Unit.PX);
+		container.setWidth("auto");
+
+		if (percentage == null) {
+			percentage = new ProgressBar();
+			percentage.getElement().getStyle().setMargin(0.0, Unit.PX);
+			percentage.getElement().getStyle().setMarginBottom(2.0, Unit.PX);
+			percentage.setHeight("10px");
+			percentage.getElement().getStyle()
+					.setProperty("lineHeight", "10px");
+			container.add(percentage);
+		}
 
 		String text = nodeContent.getText();
 		if (text == null || text.isEmpty()) {
 			text = "[empty]";
 		}
 		content.setText(text);
-        percentage.setPercent(nodeContent.getPercentage());
-        percentage.setText(String.valueOf(nodeContent.getPercentage()) + "%");
-        
-        if (editContent != null) {
-            container.remove(editContent);
-        }
-        
-        container.insert(content, 0);
-        
-    }
+		percentage.setPercent(nodeContent.getPercentage());
+		percentage.setText(String.valueOf(nodeContent.getPercentage()) + "%");
 
-    @Override
-    public void draw(Context2d context, int x, int y) {
-    	context.save();
-    	context.setFont("14px monospace");
-        context.setFillStyle("#000000");
+		if (editContent != null) {
+			container.remove(editContent);
+		}
 
-        String text = content.getText();
-        int px = x;
-        y -= percentage.getOffsetHeight() + 5;
-        
-        if (collapsed && !text.startsWith("+")) {
-        	text = "+" + text;
-        	px -= context.measureText("+").getWidth();
-        }
-        context.fillText(text, px, y);
-		
-		y += 5;
-		
-		context.setFillStyle(CssColor.make("#08C"));
-		context.fillRect(x, y, percentage.getPercent()/100.0*percentage.getOffsetWidth(), percentage.getOffsetHeight());
+		container.insert(content, 0);
 
-        context.setFillStyle("#FFFFFF");
-		context.fillText(String.valueOf(percentage.getPercent()) + "%", x, y + percentage.getOffsetHeight());
-    	
-        context.restore();
-    }
+	}
+
+	@Override
+	public void draw(Context2d context, int x, int y) {
+		NodePainter.drawPercentNode(context, x, y, content.getText(),
+				percentage.getPercent(), collapsed,
+				percentage.getOffsetWidth(), percentage.getOffsetHeight(),
+				getOffsetWidth(), getOffsetHeight(), node.getCategory());
+	}
 
 	@Override
 	public void setCollapsed(boolean collapsed) {
 		if (collapsed) {
-			content.setText("+ "+node.getContent().toString());
+			content.setText("+ " + node.getContent().toString());
 		} else {
 			content.setText(node.getContent().toString());
 		}

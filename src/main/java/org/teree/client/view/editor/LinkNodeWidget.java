@@ -1,5 +1,6 @@
 package org.teree.client.view.editor;
 
+import org.teree.client.view.common.NodePainter;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.shared.data.common.Link;
@@ -30,9 +31,8 @@ public class LinkNodeWidget extends NodeWidget {
 		nodeContent = (Link)node.getContent();
 
 		init();
-		update();
-
 		container.add(content);
+		update();
 
 	}
 
@@ -99,11 +99,8 @@ public class LinkNodeWidget extends NodeWidget {
 
     @Override
     public void draw(Context2d context, int x, int y) {
-    	context.save();
-    	context.setFont("14px monospace");
-        context.setFillStyle("#000000");
-        context.fillText(content.getText(), x, y);
-        context.restore();
+		NodePainter.drawSingleLine(context, x, y, content.getText(),
+				getOffsetWidth(), getOffsetHeight(), node.getCategory());
     }
 
 }

@@ -293,6 +293,9 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 					} else {
 						nw.setNodeCategory(nc);
 						setActiveNodeCategory(nc);
+						if (nw.getNode().getParent() == null) { // root
+							scene.getController().update(null);
+						}
 					}
 				}
 			}

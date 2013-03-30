@@ -109,7 +109,7 @@ public class MindMap<T extends Widget & NodeInterface> extends TreeRenderer<T> {
 
 		int ellipseHeight = rw.getOffsetHeight() * 2;
 		context.save();
-		context.setFillStyle("white");
+		context.setFillStyle(rw.getNode().getCategory().getBackground());
 		Shapes.drawEllipse(context, leftw - ELLIPSE_OVERFLOW_WIDTH / 2, height
 				/ 2 - ellipseHeight / 2, rw.getOffsetWidth()
 				+ ELLIPSE_OVERFLOW_WIDTH, ellipseHeight); // ellipse for the root node

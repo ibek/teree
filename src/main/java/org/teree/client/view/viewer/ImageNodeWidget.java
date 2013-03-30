@@ -1,6 +1,7 @@
 package org.teree.client.view.viewer;
 
 import org.teree.client.Settings;
+import org.teree.client.view.common.NodePainter;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.shared.data.common.ImageLink;
 import org.teree.shared.data.common.Node;
@@ -38,9 +39,8 @@ public class ImageNodeWidget extends NodeWidget {
 		super(node);
 
 		init();
-		update();
-
 		container.add(content);
+		update();
 
 	}
 
@@ -84,9 +84,9 @@ public class ImageNodeWidget extends NodeWidget {
 
     @Override
     public void draw(Context2d context, int x, int y) {
-    	context.save();
-    	context.drawImage(ImageElement.as(content.getElement()), x, y-content.getHeight());
-        context.restore();
+		NodePainter.drawImageNode(context, x, y,
+				ImageElement.as(content.getElement()), getOffsetWidth(), content.getHeight(),
+				node.getCategory());
     }
 
 }

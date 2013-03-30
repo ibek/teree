@@ -1,5 +1,6 @@
 package org.teree.client.view.viewer;
 
+import org.teree.client.view.common.NodePainter;
 import org.teree.shared.data.common.Link;
 import org.teree.shared.data.common.Node;
 
@@ -16,14 +17,15 @@ public class LinkNodeWidget extends NodeWidget {
 		init();
 
 		container.add(content);
+		update();
 
 	}
 
 	private void init() {
 		content = new Anchor();
 		content.setTarget("_blank");
-        content.setStylePrimaryName(resources.css().node());
-        content.setStyleDependentName("view", true);
+		content.setStylePrimaryName(resources.css().node());
+		content.setStyleDependentName("view", true);
 
 		Link link = (Link) node.getContent();
 		String url = link.getUrl();
@@ -41,13 +43,10 @@ public class LinkNodeWidget extends NodeWidget {
 		content.setText(text);
 	}
 
-    @Override
-    public void draw(Context2d context, int x, int y) {
-    	context.save();
-    	context.setFont("14px monospace");
-        context.setFillStyle("#000000");
-        context.fillText(content.getText(), x, y);
-        context.restore();
-    }
+	@Override
+	public void draw(Context2d context, int x, int y) {
+		NodePainter.drawSingleLine(context, x, y, content.getText(),
+				getOffsetWidth(), getOffsetHeight(), node.getCategory());
+	}
 
 }
