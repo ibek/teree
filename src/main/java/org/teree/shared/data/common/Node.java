@@ -14,7 +14,7 @@ public class Node implements Cloneable {
     private Object content;
     private NodeType type;
     private NodeLocation location;
-    private NodeCategory category;
+    private NodeCategory category = new NodeCategory();
     
     public Node() {
     	

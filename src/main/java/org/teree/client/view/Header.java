@@ -1,22 +1,22 @@
 package org.teree.client.view;
 
-import javax.annotation.PostConstruct;
-
+import org.teree.client.CurrentPresenter;
 import org.teree.client.CurrentUser;
 import org.teree.client.Settings;
 import org.teree.client.presenter.HeaderTemplate;
+import org.teree.client.presenter.Presenter;
+import org.teree.client.view.editor.CreateDialog;
 import org.teree.shared.data.UserInfo;
+import org.teree.shared.data.common.Scheme;
+import org.teree.shared.data.common.StructureType;
+import org.teree.shared.data.common.Node.NodeType;
 
 import com.github.gwtbootstrap.client.ui.Brand;
-import com.github.gwtbootstrap.client.ui.Form.SubmitCompleteEvent;
-import com.github.gwtbootstrap.client.ui.Form.SubmitCompleteHandler;
 import com.github.gwtbootstrap.client.ui.Form.SubmitEvent;
 import com.github.gwtbootstrap.client.ui.Form.SubmitHandler;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.NavSearch;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -50,6 +50,8 @@ public class Header extends Composite implements HeaderTemplate {
     @UiField
     UserWidget user;
     
+    CreateDialog createDialog;
+    
     public Header() {
         initWidget(uiBinder.createAndBindUi(this));
 
@@ -72,7 +74,16 @@ public class Header extends Composite implements HeaderTemplate {
 		create.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				History.newItem(Settings.CREATE_LINK);
+				if (createDialog == null) {
+					createDialog = new CreateDialog();
+					createDialog.setCreateSchemeHandler(new CreateDialog.CreateSchemeHandler() {
+						@Override
+						public void create(Scheme scheme) {
+							CurrentPresenter.getInstance().getPresenter().createScheme(scheme);
+						}
+					});
+				}
+				createDialog.show();
 			}
 		});
 		

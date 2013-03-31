@@ -72,6 +72,10 @@ public class NodeCategoryManager {
     }
     
     public List<NodeCategory> selectByOids(String... oids) {
+        List<NodeCategory> res = new ArrayList<NodeCategory>();
+        if (oids.length == 0) {
+        	return res;
+        }
     	DBCollection coll = getCollection();
     	BasicDBList idlist = new BasicDBList();
         DBObject search = new BasicDBObject("$or", idlist);
@@ -80,7 +84,6 @@ public class NodeCategoryManager {
         }
     	
         DBCursor found = coll.find(search);
-        List<NodeCategory> res = new ArrayList<NodeCategory>();
         while(found.hasNext()) {
         	DBObject dbo = found.next();
         	res.add(fromCategoryDBObject(dbo));

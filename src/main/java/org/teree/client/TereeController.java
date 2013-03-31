@@ -143,8 +143,6 @@ public class TereeController implements ValueChangeHandler<String> {
 		String token = event.getValue();
 		if (token != null) {
 			Presenter presenter = null;
-			
-			boolean createScheme = false;
 
 			if (token.equals(Settings.HOME_LINK)) {
 				IOCBeanDef<HomePage> bean = manager.lookupBean(HomePage.class);
@@ -177,18 +175,6 @@ public class TereeController implements ValueChangeHandler<String> {
 						}
 					});
 				}
-			} else if (token.startsWith(Settings.CREATE_LINK)) {
-				IOCBeanDef<Editor> bean = manager
-						.lookupBean(Editor.class);
-				if (bean != null) {
-					if (tmpPresenter != null) {
-						presenter = tmpPresenter;
-						tmpPresenter = null;
-					} else {
-						presenter = bean.getInstance();
-						createScheme = true;
-					}
-				}
 			} else if (token.startsWith(Settings.HELP_LINK)) {
 				IOCBeanDef<HelpPage> bean = manager
 						.lookupBean(HelpPage.class);
@@ -200,17 +186,24 @@ public class TereeController implements ValueChangeHandler<String> {
 						.lookupBean(Editor.class);
 				if (bean != null) {
 					presenter = bean.getInstance();
-					presenter.getSchemeToEdit(token.substring(Settings.EDIT_LINK.length()), new RemoteCallback<Scheme>() {
-						@Override
-						public void callback(Scheme response) {
-							if (response == null) {
-								History.newItem(Settings.HOME_LINK);
-								TereeController.this.presenter.getTemplate().error("You don't have any rights to edit the scheme");
-							} else {
-								eventBus.fireEvent(new SchemeReceived(response));
+					if (token.contains(Settings.OID_PARAM)) { // edit existing scheme
+						presenter.getSchemeToEdit(token.substring(Settings.EDIT_LINK.length() + Settings.OID_PARAM.length()), new RemoteCallback<Scheme>() {
+							@Override
+							public void callback(Scheme response) {
+								if (response == null) {
+									History.newItem(Settings.HOME_LINK);
+									TereeController.this.presenter.getTemplate().error("You don't have any rights to edit the scheme");
+								} else {
+									eventBus.fireEvent(new SchemeReceived(response));
+								}
 							}
-						}
-					});
+						});
+					} else if (currentUser.getUserInfo() == null) {
+						tmpPresenter = presenter;
+					} else if (tmpPresenter != null) {
+						presenter = tmpPresenter;
+						tmpPresenter = null;
+					}
 				}
 			} else if (token.startsWith(Settings.LOGIN_LINK)) {
 				IOCBeanDef<LoginPage> bean = manager
@@ -259,15 +252,7 @@ public class TereeController implements ValueChangeHandler<String> {
 			}
 
 			if (presenter != null) {
-				
 				setPresenter(presenter);
-				
-				if (createScheme) {
-					Tree s = new Tree(); // TODO: choose structure type
-					s.setRoot(NodeGenerator.complex());
-					s.setVisualization(TreeType.MindMap); // TODO: choose visualization type
-					eventBus.fireEvent(new SchemeReceived(s));
-				}
 			}
 
 		}

@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author ibek
  *
  */
-public class HierarchicalHotizontal<T extends Widget & NodeInterface> extends TreeRenderer<T> {
+public class HorizontalHierarchy<T extends Widget & NodeInterface> extends TreeRenderer<T> {
 
 	@Override
 	protected int[] render(Canvas canvas, List<T> nodes, Node root,
@@ -114,8 +114,11 @@ public class HierarchicalHotizontal<T extends Widget & NodeInterface> extends Tr
 		context.stroke(); // draw the arrows
 
 		int ellipseHeight = rw.getOffsetHeight()*2;
+		context.save();
+		context.setFillStyle(rw.getNode().getCategory().getBackground());
 		Shapes.drawEllipse(context, 0, height / 2 - ellipseHeight / 2,
 				rw.getOffsetWidth() + 2*MARGIN, ellipseHeight); // ellipse for the root node
+		context.restore();
 		
 		if (makePicture) {
 

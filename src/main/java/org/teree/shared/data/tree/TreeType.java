@@ -10,8 +10,8 @@ import org.teree.shared.data.common.Node.NodeLocation;
 public enum TreeType {
 
 	MindMap,
-	HierarchicalHorizontal(NodeLocation.RIGHT),
-	HierarchicalVertical(NodeLocation.NONE);
+	HorizontalHierarchy(NodeLocation.RIGHT),
+	VerticalHierarchy(NodeLocation.NONE);
 	
 	private NodeLocation location;
 	

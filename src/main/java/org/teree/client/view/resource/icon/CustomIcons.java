@@ -12,10 +12,4 @@ public interface CustomIcons extends ClientBundle {
 
     @Source("connector.png")
     ImageResource connector();
-
-    @Source("mindmap.png")
-    ImageResource mindmap();
-
-    @Source("hierarchicalhorizontal.png")
-    ImageResource hierarchicalhorizontal();
 }

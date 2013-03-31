@@ -15,7 +15,7 @@ import org.teree.client.view.editor.Scene;
 import org.teree.client.view.editor.TextNodeWidget;
 import org.teree.client.view.editor.event.SelectedNodeListener;
 import org.teree.client.view.resource.PageStyle;
-import org.teree.client.visualization.tree.HierarchicalHotizontal;
+import org.teree.client.visualization.tree.HorizontalHierarchy;
 import org.teree.client.visualization.tree.MindMap;
 import org.teree.client.visualization.tree.TreeRenderer;
 import org.teree.shared.data.common.Connector;
@@ -162,7 +162,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	    		}
 				break;
 			}
-			case HierarchicalHorizontal: {
+			case HorizontalHierarchy: {
 				if (selected.getNode().getLocation() != null) {
 					selectPrevious();
 				} else {
@@ -188,7 +188,7 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	    		}
 				break;
 			}
-			case HierarchicalHorizontal: {
+			case HorizontalHierarchy: {
 				if (selected.getNode().getLocation() != null) {
 					selectNext();
 				}
@@ -484,8 +484,8 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	    		renderer = new MindMap<T>();
 	    		break;
 	    	}
-	    	case HierarchicalHorizontal: {
-	    		renderer = new HierarchicalHotizontal<T>();
+	    	case HorizontalHierarchy: {
+	    		renderer = new HorizontalHierarchy<T>();
 	    		break;
 	    	}
     	}

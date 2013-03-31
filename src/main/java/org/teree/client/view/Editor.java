@@ -68,6 +68,7 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
         initWidget(uiBinder.createAndBindUi(this));
         bind();
         scene.setTmpFrame(tmpFrame);
+    	edit.setEnabled(false);
     }
     
     private void bind() {
@@ -174,6 +175,7 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 
 	@Override
 	public void setScheme(Scheme scheme) {
+    	edit.setEnabled(true);
 		scene.setScheme(scheme);
     	
     	scene.getController().addSelectedNodeListener(new SelectedNodeListener<NodeWidget>() {

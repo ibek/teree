@@ -7,15 +7,3 @@
   	width: 1.25em;
   	text-align: center;
 }
-
-@sprite .customIcon_mindmap {
-    gwt-image: "mindmap";
-    display: inline-block;
-  	text-align: center;
-}
-
-@sprite .customIcon_hierarchicalhorizontal {
-    gwt-image: "hierarchicalhorizontal";
-    display: inline-block;
-  	text-align: center;
-}

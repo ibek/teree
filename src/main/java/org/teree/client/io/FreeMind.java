@@ -8,6 +8,7 @@ import org.teree.shared.data.common.ImageLink;
 import org.teree.shared.data.common.Link;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.Node.NodeLocation;
+import org.teree.shared.data.common.NodeCategory;
 import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.tree.Tree;

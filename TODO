@@ -5,24 +5,22 @@
 
 umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
 
-dialog pro vytvoreni mapy - po stisknuti tlacitka create
- - vyber struktury a typ vizualizace
- - vlastni velke ikony
- - pozor na import - potreba vyber vizualizace
+pozor na import - potreba vyber vizualizace
  
- nove typy vizualizace Hierarchical Horizontal Tree a Hierarchical Vertical Tree
+implementovat vertical hierarchy
 
 kategorizace uzlu
+ - ikony
  - odstraneni kategorie z uzlu na serveru (ze vsech map) - jakmile to bude mozne provest pro vsechny naraz https://jira.mongodb.org/browse/SERVER-1243
 
 ===============
 0.9:
 ===============
 
-collaboration
-
 upravit explore aby zobrazoval jak posledne vlozene mapy tak i nejvice otevrene za tyden apod.
 pridat hodnoceni a pocet shlednuti mapy
+
+rozsahla uprava designu do moderniho stylu
 
 nastavit styl pro tisk
 
@@ -46,6 +44,8 @@ sepsat use cases (pro studovani ...) a vlozit na stranky
 ===============
 future:
 ===============
+
+collaboration
 
 various structure types - tree, list, n-dimension data, ...
 

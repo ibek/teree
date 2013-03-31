@@ -90,7 +90,7 @@ public abstract class Presenter {
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
-            	History.newItem(Settings.CREATE_LINK);
+            	History.newItem(Settings.EDIT_LINK);
             	eventBus.fireEvent(new SchemeReceived(scheme));
             }
         });

@@ -66,13 +66,59 @@ public class NodeGenerator {
         return root;
     }
     
+    public static Node mindmap() {
+        Node root = createTextNode("Mind Mapping", null);
+        Node technical = createTextNode("Technical", NodeLocation.LEFT);
+        technical.addChild(createTextNode("Report writing", null));
+        technical.addChild(createTextNode("Presentations", null));
+        technical.addChild(createTextNode("Problem solving", null));
+        technical.addChild(createTextNode("Planning", null));
+        technical.addChild(createTextNode("Presentation planning", null));
+        technical.addChild(createTextNode("Communication", null));
+        root.addChild(technical);
+        
+        Node managerial = createTextNode("Managerial", NodeLocation.LEFT);
+        Node interviews = createTextNode("Interviews", null);
+        interviews.addChild(createTextNode("Job descriptions", null));
+        interviews.addChild(createTextNode("Questioning techniques", null));
+        managerial.addChild(interviews);
+        managerial.addChild(createTextNode("Appraisals", null));
+        managerial.addChild(createTextNode("Meeting minutes", null));
+        managerial.addChild(createTextNode("Planning", null));
+        managerial.addChild(createTextNode("Time management", null));
+        root.addChild(managerial);
+
+        Node personal = createTextNode("Personal", NodeLocation.RIGHT);
+        personal.addChild(createTextNode("Planning your time", null));
+        personal.addChild(createTextNode("Organising your day", null));
+        personal.addChild(createTextNode("Letter writing", null));
+        personal.addChild(createTextNode("Report writing", null));
+        root.addChild(personal);
+
+        Node creative = createTextNode("Creative", NodeLocation.RIGHT);
+        creative.addChild(createTextNode("Problem solving", null));
+        creative.addChild(createTextNode("Generating ideas", null));
+        creative.addChild(createTextNode("Talks", null));
+        creative.addChild(createTextNode("Brainstorming", null));
+        root.addChild(creative);
+
+        return root;
+    }
+    
+    public static Node horizontalHierarchy() {
+        Node root = createTextNode("Horizontal Hierarchy", null);
+        root.addChild(createTextNode("Decision making", NodeLocation.RIGHT));
+        root.addChild(createTextNode("Problem solving", NodeLocation.RIGHT));
+        root.addChild(createTextNode("Planning", NodeLocation.RIGHT));
+        return root;
+    }
+    
     public static Node createTextNode(String text, NodeLocation loc) {
         Node n = new Node();
         IconText it = new IconText();
         it.setText(text);
         n.setContent(it);
         n.setLocation(loc);
-        n.setCategory(new NodeCategory());
         return n;
     }
     

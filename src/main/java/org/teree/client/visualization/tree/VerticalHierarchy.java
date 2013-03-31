@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author ibek
  *
  */
-public class HierarchicalVertical<T extends Widget & NodeInterface> extends TreeRenderer<T> {
+public class VerticalHierarchy<T extends Widget & NodeInterface> extends TreeRenderer<T> {
 
 	@Override
 	protected int[] render(Canvas canvas, List<T> nodes, Node root,

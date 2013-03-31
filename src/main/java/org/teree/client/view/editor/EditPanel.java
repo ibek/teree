@@ -130,6 +130,12 @@ public class EditPanel extends Composite {
 		
 	}
 	
+	public void setEnabled(boolean enabled) {
+		checkSelectedNode(null);
+		save.setEnabled(enabled);
+		refresh.setEnabled(enabled);
+	}
+	
 	private void loadIcons() {
 		Grid g = new Grid(ICON_ROWS, ICON_COLUMNS);
 		Set<IconType> is = IconTypeContent.ICONS.keySet();
