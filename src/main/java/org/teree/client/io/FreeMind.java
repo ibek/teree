@@ -64,8 +64,7 @@ public class FreeMind implements ISchemeImport, ISchemeExport {
 		}
 		Tree scheme = new Tree();
 		scheme.setRoot(root);
-		scheme.setVisualization(TreeType.MindMap);
-		CurrentPresenter.getInstance().getPresenter().createScheme(scheme);
+		CurrentPresenter.getInstance().getPresenter().importScheme(scheme);
 	}
 	
 	private void createElements(Node root, Document doc, Element parent) {

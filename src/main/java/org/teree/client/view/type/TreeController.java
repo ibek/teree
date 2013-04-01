@@ -18,6 +18,7 @@ import org.teree.client.view.resource.PageStyle;
 import org.teree.client.visualization.tree.HorizontalHierarchy;
 import org.teree.client.visualization.tree.MindMap;
 import org.teree.client.visualization.tree.TreeRenderer;
+import org.teree.client.visualization.tree.VerticalHierarchy;
 import org.teree.shared.data.common.Connector;
 import org.teree.shared.data.common.IconText;
 import org.teree.shared.data.common.Node;
@@ -486,6 +487,10 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	    	}
 	    	case HorizontalHierarchy: {
 	    		renderer = new HorizontalHierarchy<T>();
+	    		break;
+	    	}
+	    	case VerticalHierarchy: {
+	    		//renderer = new VerticalHierarchy<T>();
 	    		break;
 	    	}
     	}

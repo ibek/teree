@@ -17,11 +17,7 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * 
  * A scheme displayed from left side of scene.
- * 
- * @author ibek
- *
  */
 public class HorizontalHierarchy<T extends Widget & NodeInterface> extends TreeRenderer<T> {
 

@@ -4,6 +4,7 @@ import org.teree.client.view.resource.icon.CreateIcons;
 import org.teree.client.view.resource.icon.CustomIcons;
 import org.teree.shared.NodeGenerator;
 import org.teree.shared.data.common.Scheme;
+import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.tree.Tree;
 import org.teree.shared.data.tree.TreeType;
 
@@ -30,6 +31,7 @@ public class CreateDialog extends Composite {
 	private TabPanel tabPanel;
 	private Tab tree;
 	private Thumbnails treeContainer;
+	private StructureType filter;
 
 	private CreateSchemeHandler handler;
 
@@ -45,16 +47,23 @@ public class CreateDialog extends Composite {
 		tree.setIcon(IconType.SITEMAP);
 		tree.setHeading("Tree");
 
+		treeContainer = new Thumbnails();
 		initTreeContainer();
 		tree.add(treeContainer);
-
-		tabPanel.add(tree);
 
 		window.add(tabPanel);
 
 	}
 
 	public void show() {
+		show(null);
+	}
+	
+	public void show(StructureType filter) {
+		tabPanel.clear();
+		if (filter == null || filter == StructureType.Tree) {
+			tabPanel.add(tree);
+		}
 		window.show();
 	}
 
@@ -67,7 +76,7 @@ public class CreateDialog extends Composite {
 	}
 
 	private void initTreeContainer() {
-		treeContainer = new Thumbnails();
+		treeContainer.clear();
 		Style css = treeContainer.getElement().getStyle();
 		css.setPaddingLeft(35, Unit.PX);
 		css.setPaddingRight(5, Unit.PX);
@@ -79,6 +88,10 @@ public class CreateDialog extends Composite {
 		SchemeTypeWidget horizontalHierarchy = new SchemeTypeWidget(getHorizontalHierarchy(),
 				createIcons.horizontalHierarchy());
 		treeContainer.add(horizontalHierarchy);
+		
+		/**SchemeTypeWidget verticalHierarchy = new SchemeTypeWidget(getVerticalHierarchy(),
+				createIcons.horizontalHierarchy());
+		treeContainer.add(verticalHierarchy);*/
 
 	}
 
@@ -93,6 +106,13 @@ public class CreateDialog extends Composite {
 		Tree mm = new Tree();
 		mm.setRoot(NodeGenerator.horizontalHierarchy());
 		mm.setVisualization(TreeType.HorizontalHierarchy);
+		return mm;
+	}
+
+	private Scheme getVerticalHierarchy() {
+		Tree mm = new Tree();
+		mm.setRoot(NodeGenerator.horizontalHierarchy());
+		mm.setVisualization(TreeType.VerticalHierarchy);
 		return mm;
 	}
 

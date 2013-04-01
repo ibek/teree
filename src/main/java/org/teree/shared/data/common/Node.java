@@ -196,6 +196,12 @@ public class Node implements Cloneable {
 	public void setCategory(NodeCategory category) {
 		this.category = category;
 	}
+	
+	public void putAllRight() {
+		for (int i=0; childNodes != null && i<childNodes.size(); ++i) {
+			childNodes.get(i).setLocation(NodeLocation.RIGHT);
+		}
+	}
 
 	public enum NodeType {
         None,

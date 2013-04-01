@@ -14,6 +14,7 @@ import org.teree.client.Settings;
 import org.teree.client.event.RefreshUserInfo;
 import org.teree.client.event.SchemeReceived;
 import org.teree.client.text.UIMessages;
+import org.teree.client.view.editor.CreateDialog;
 import org.teree.shared.NodeCategoryService;
 import org.teree.shared.SchemeService;
 import org.teree.shared.SecuredSchemeService;
@@ -22,6 +23,9 @@ import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.common.NodeCategory;
 import org.teree.shared.data.common.Scheme;
 import org.teree.shared.data.common.SchemeFilter;
+import org.teree.shared.data.tree.Tree;
+import org.teree.shared.data.tree.TreeType;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.HandlerManager;
@@ -43,6 +47,8 @@ public abstract class Presenter {
 	
 	@Inject
 	private Caller<NodeCategoryService> nodeCategoryService;
+	
+	private CreateDialog createDialog;
 	
 	public Presenter() {
 		
@@ -94,6 +100,31 @@ public abstract class Presenter {
             	eventBus.fireEvent(new SchemeReceived(scheme));
             }
         });
+	}
+
+	public void importScheme(final Scheme scheme) {
+		if (createDialog == null) {
+			createDialog = new CreateDialog();
+			createDialog.setCreateSchemeHandler(new CreateDialog.CreateSchemeHandler() {
+				@Override
+				public void create(Scheme s) {
+					switch (scheme.getStructure()) {
+						case Tree: {
+							Tree t = (Tree)scheme;
+							t.setVisualization(((Tree)s).getVisualization());
+							if (t.getVisualization() == TreeType.HorizontalHierarchy ||
+									t.getVisualization() == TreeType.VerticalHierarchy) {
+								t.getRoot().putAllRight();
+							}
+							createScheme(t);
+							break;
+						}
+					}
+				}
+			});
+		}
+		createDialog.show(scheme.getStructure());
+		
 	}
 	
 	public void getScheme(String oid, RemoteCallback<Scheme> callback) {
@@ -208,7 +239,7 @@ public abstract class Presenter {
             	if (response == null) {
             		displayError("Cannot import the scheme");
             	} else {
-            		createScheme(response);
+            		importScheme(response);
             	}
             }
         }, new ErrorCallback() {

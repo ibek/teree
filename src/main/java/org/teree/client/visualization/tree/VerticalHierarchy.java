@@ -8,11 +8,7 @@ import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * 
  * A scheme displayed from top of scene.
- * 
- * @author ibek
- *
  */
 public class VerticalHierarchy<T extends Widget & NodeInterface> extends TreeRenderer<T> {
 

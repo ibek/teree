@@ -35,167 +35,185 @@ import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeCategory;
 import org.teree.shared.data.common.Scheme;
 
-public class Editor extends TemplateScene implements org.teree.client.presenter.Editor.Display {
-	
+public class Editor extends TemplateScene implements
+		org.teree.client.presenter.Editor.Display {
+
 	private static EditorBinder uiBinder = GWT.create(EditorBinder.class);
 
-    interface EditorBinder extends UiBinder<Widget, Editor> {
-    }
-    
-    @UiField(provided = true)
-    Scene scene;
-    
-    @UiField
-    EditPanel edit;
-    
-    @UiField
-    Frame tmpFrame;
-    
-    @UiField
-    WellNavList nodeCategory;
-    
-    private Map<String, NavLink> categoryLinks;
-    private Map<String, NodeCategory> nodeCategories;
-    private NavLink activeCategory;
-    private NodeCategoryDialog ncg;
-    
-    public Editor() {
-    	scene = new Scene();
-    }
-    
-    @PostConstruct
-    public void init() {
-        initWidget(uiBinder.createAndBindUi(this));
-        bind();
-        scene.setTmpFrame(tmpFrame);
-    	edit.setEnabled(false);
-    }
-    
-    private void bind() {
-    	
-    	edit.getRefreshButton().addClickHandler(new ClickHandler() {
+	interface EditorBinder extends UiBinder<Widget, Editor> {
+	}
+
+	@UiField(provided = true)
+	Scene scene;
+
+	@UiField
+	EditPanel edit;
+
+	@UiField
+	Frame tmpFrame;
+
+	@UiField
+	WellNavList nodeCategory;
+
+	private Map<String, NavLink> categoryLinks;
+	private Map<String, NodeCategory> nodeCategories;
+	private NavLink activeCategory;
+	private NodeCategoryDialog ncg;
+
+	public Editor() {
+		scene = new Scene();
+	}
+
+	@PostConstruct
+	public void init() {
+		initWidget(uiBinder.createAndBindUi(this));
+		bind();
+		scene.setTmpFrame(tmpFrame);
+		edit.setEnabled(false);
+	}
+
+	private void bind() {
+
+		edit.getRefreshButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				scene.getController().update(null);
 			}
 		});
-    	
-    	edit.getCreateTextButton().addClickHandler(new ClickHandler() {
+
+		edit.getCollapseButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				boolean collapsed = !edit.isCollapsed();
+				scene.getController().collapseAll(
+						scene.getController().getNodeWidgets(), collapsed);
+				scene.getController().update(null);
+				edit.setCollapsed(collapsed);
+			}
+		});
+
+		edit.getCreateTextButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				scene.createTextChildNode();
 			}
 		});
-    	
-    	edit.getCreateImgButton().addClickHandler(new ClickHandler() {
+
+		edit.getCreateImgButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				scene.createImageChildNode();
 			}
 		});
-    	
-    	edit.getCreateLinkButton().addClickHandler(new ClickHandler() {
+
+		edit.getCreateLinkButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				scene.createLinkChildNode();
 			}
 		});
-    	
-    	edit.getCreateMathExprButton().addClickHandler(new ClickHandler() {
+
+		edit.getCreateMathExprButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				scene.createMathExpressionChildNode();
 			}
 		});
-    	
-    	edit.getCreatePercentButton().addClickHandler(new ClickHandler() {
+
+		edit.getCreatePercentButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				scene.createPercentChildNode();
 			}
 		});
-    	
-    	edit.getCreateConnectorButton().addClickHandler(new ClickHandler() {
+
+		edit.getCreateConnectorButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				scene.createConnectorChildNode();
 			}
 		});
-    	
-    	edit.getMergeConnectorButton().addClickHandler(new ClickHandler() {
+
+		edit.getMergeConnectorButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				scene.getController().mergeConnectorNode();
 			}
 		});
-    	
-    	edit.getSplitConnectorButton().addClickHandler(new ClickHandler() {
+
+		edit.getSplitConnectorButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				scene.getController().splitAndConnectNode();
 			}
 		});
-    	
-    	edit.getCategoriesButton().addClickHandler(new ClickHandler() {
+
+		edit.getCategoriesButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (categoryLinks != null && !categoryLinks.isEmpty()) {
 					nodeCategory.setVisible(!nodeCategory.isVisible());
 				} else {
-					CurrentPresenter.getInstance().getPresenter().getNodeCategories(new RemoteCallback<List<NodeCategory>>() {
-						@Override
-						public void callback(List<NodeCategory> response) {
-							if (response != null) {
-								setCategoryLinks(response);
-							}
-						}
-					});
+					CurrentPresenter
+							.getInstance()
+							.getPresenter()
+							.getNodeCategories(
+									new RemoteCallback<List<NodeCategory>>() {
+										@Override
+										public void callback(
+												List<NodeCategory> response) {
+											if (response != null) {
+												setCategoryLinks(response);
+											}
+										}
+									});
 				}
 			}
 		});
-    	
-    	edit.setSelectIconHandler(new EditPanel.SelectIcon() {
+
+		edit.setSelectIconHandler(new EditPanel.SelectIcon() {
 			@Override
 			public void select(IconType icon) {
 				scene.getController().setNodeIcon(icon);
 			}
 		});
-    	
-    }
-    
-    @Override
-    public Widget asWidget() {
-        return this;
-    }
 
-    @Override
-    public HasClickHandlers getSaveButton() {
-        return edit.getSaveButton();
-    }
+	}
+
+	@Override
+	public Widget asWidget() {
+		return this;
+	}
+
+	@Override
+	public HasClickHandlers getSaveButton() {
+		return edit.getSaveButton();
+	}
 
 	@Override
 	public void setScheme(Scheme scheme) {
-    	edit.setEnabled(true);
+		edit.setEnabled(true);
 		scene.setScheme(scheme);
-    	
-    	scene.getController().addSelectedNodeListener(new SelectedNodeListener<NodeWidget>() {
-			@Override
-			public void selected(NodeWidget nw) {
-				edit.checkSelectedNode(nw);
-				NodeCategory nc = null;
-				if (nw != null) {
-					nc = nw.getNode().getCategory();
-				}
-				setActiveNodeCategory(nc);
-			}
-		});
-    	
-    	if (nodeCategories == null) {
-    		nodeCategories = new HashMap<String, NodeCategory>();
-    	}
-    	nodeCategories.clear();
-    	setNodeCategories(scheme.getFirst());
-    	
+
+		scene.getController().addSelectedNodeListener(
+				new SelectedNodeListener<NodeWidget>() {
+					@Override
+					public void selected(NodeWidget nw) {
+						edit.checkSelectedNode(nw);
+						NodeCategory nc = null;
+						if (nw != null) {
+							nc = nw.getNode().getCategory();
+						}
+						setActiveNodeCategory(nc);
+					}
+				});
+
+		if (nodeCategories == null) {
+			nodeCategories = new HashMap<String, NodeCategory>();
+		}
+		nodeCategories.clear();
+		setNodeCategories(scheme.getFirst());
+
 	}
 
 	@Override
@@ -205,8 +223,8 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 
 	@Override
 	public void delete() {
-    	scene.getController().removeNode();
-    	scene.getController().update(null);
+		scene.getController().removeNode();
+		scene.getController().update(null);
 	}
 
 	@Override
@@ -249,10 +267,10 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 		scene.getController().selectRightNode();
 	}
 
-    @Override
-    public String getSchemeSamplePicture() {
-        return scene.getSchemeSamplePicture();
-    }
+	@Override
+	public String getSchemeSamplePicture() {
+		return scene.getSchemeSamplePicture();
+	}
 
 	private void setCategoryLinks(List<NodeCategory> categories) {
 		nodeCategory.clear();
@@ -269,7 +287,8 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 			nodeCategory.add(this.categoryLinks.get(nc.getOid()));
 		}
 		NavLink addNodeCategory = new NavLink();
-		addNodeCategory.getElement().getStyle().setProperty("textAlign", "center");
+		addNodeCategory.getElement().getStyle()
+				.setProperty("textAlign", "center");
 		addNodeCategory.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -280,7 +299,7 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 		nodeCategory.add(addNodeCategory);
 		nodeCategory.setVisible(true);
 	}
-	
+
 	private void addNodeCategory(final NodeCategory nc) {
 		NavLink nl = new NavLink(nc.getName());
 		nl.addClickHandler(new ClickHandler() {
@@ -289,7 +308,8 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 				NodeWidget nw = scene.getController().getSelectedNode();
 				if (nw != null) {
 					Node n = nw.getNode();
-					if (nc.getOid() != null && n.getCategory() != null && nc.getOid().equals(n.getCategory().getOid())) { // reset
+					if (nc.getOid() != null && n.getCategory() != null
+							&& nc.getOid().equals(n.getCategory().getOid())) { // reset
 						nw.setNodeCategory(new NodeCategory());
 						setActiveNodeCategory(null);
 					} else {
@@ -309,27 +329,29 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 			@Override
 			public void onClick(ClickEvent event) {
 				event.stopPropagation();
-				final String oid = nc.getOid(); 
-				CurrentPresenter.getInstance().getPresenter().removeNodeCategory(nc, new RemoteCallback<Boolean>() {
-	                @Override
-	                public void callback(Boolean response) {
-	                	if (response == null || response) {
-	                		((NavList)nodeCategory.getWidget(0)).remove(categoryLinks.get(oid)); // remobe category from list
-	                		NodeCategory old = nodeCategories.get(oid);
-	                		if (old == null) {
-	                			old = nc;
-	                		} else {
-	                			nodeCategories.remove(oid); // remove category from map where are all the categories loaded in scheme
-	                		}
-                			old.set(new NodeCategory()); // reset category
-	                		categoryLinks.remove(oid);
-							scene.getController().checkAllNodes();
-	                    	info("Removed node category");
-	                	} else {
-	                		error("Node category wasn't removed");
-	                    }
-	                }
-	            });
+				final String oid = nc.getOid();
+				CurrentPresenter.getInstance().getPresenter()
+						.removeNodeCategory(nc, new RemoteCallback<Boolean>() {
+							@Override
+							public void callback(Boolean response) {
+								if (response == null || response) {
+									((NavList) nodeCategory.getWidget(0))
+											.remove(categoryLinks.get(oid)); // remobe category from list
+									NodeCategory old = nodeCategories.get(oid);
+									if (old == null) {
+										old = nc;
+									} else {
+										nodeCategories.remove(oid); // remove category from map where are all the categories loaded in scheme
+									}
+									old.set(new NodeCategory()); // reset category
+									categoryLinks.remove(oid);
+									scene.getController().checkAllNodes();
+									info("Removed node category");
+								} else {
+									error("Node category wasn't removed");
+								}
+							}
+						});
 			}
 		});
 		nl.add(removeIcon);
@@ -346,22 +368,22 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 		nl.add(editIcon);
 		this.categoryLinks.put(nc.getOid(), nl);
 	}
-    
-    private void setActiveNodeCategory(NodeCategory nc) {
+
+	private void setActiveNodeCategory(NodeCategory nc) {
 		if (activeCategory != null) {
 			activeCategory.setActive(false);
 			activeCategory = null;
 		}
-    	if (categoryLinks != null && nc != null) {
-    		NavLink nl = categoryLinks.get(nc.getOid());
-    		if (nl != null) {
-    			activeCategory = nl;
-    			activeCategory.setActive(true);
-    		}
-    	}
-    }
-    
-    private void showNodeCategoryDialog(final NodeCategory nc) {
+		if (categoryLinks != null && nc != null) {
+			NavLink nl = categoryLinks.get(nc.getOid());
+			if (nl != null) {
+				activeCategory = nl;
+				activeCategory.setActive(true);
+			}
+		}
+	}
+
+	private void showNodeCategoryDialog(final NodeCategory nc) {
 		ncg = new NodeCategoryDialog();
 		ncg.getSaveButton().addClickHandler(new ClickHandler() {
 			@Override
@@ -371,49 +393,62 @@ public class Editor extends TemplateScene implements org.teree.client.presenter.
 					return;
 				}
 				if (newnc.getOid() == null) {
-					CurrentPresenter.getInstance().getPresenter().insertNodeCategory(newnc, new RemoteCallback<String>() {
-		                @Override
-		                public void callback(String response) {
-		                	newnc.setOid(response);
-		                    addNodeCategory(newnc);
-		        			nodeCategory.insert(categoryLinks.get(newnc.getOid()), categoryLinks.size());
-		                    info("Created node category");
-		                }
-		            });
+					CurrentPresenter
+							.getInstance()
+							.getPresenter()
+							.insertNodeCategory(newnc,
+									new RemoteCallback<String>() {
+										@Override
+										public void callback(String response) {
+											newnc.setOid(response);
+											addNodeCategory(newnc);
+											nodeCategory.insert(categoryLinks
+													.get(newnc.getOid()),
+													categoryLinks.size());
+											info("Created node category");
+										}
+									});
 				} else {
-					CurrentPresenter.getInstance().getPresenter().updateNodeCategory(newnc, new RemoteCallback<Void>() {
-			            @Override
-			            public void callback(Void response) {
-							nc.set(newnc); // update the node category that was newly set
-							NodeCategory old = nodeCategories.get(newnc.getOid());
-							if (old != null) {
-								old.set(newnc); // update another instance of node category set in scheme
-							}
-							categoryLinks.get(newnc.getOid()).setText(newnc.getName());
-							scene.getController().checkAllNodes();
-			                info("Updated node category");
-			            }
-			        });
+					CurrentPresenter
+							.getInstance()
+							.getPresenter()
+							.updateNodeCategory(newnc,
+									new RemoteCallback<Void>() {
+										@Override
+										public void callback(Void response) {
+											nc.set(newnc); // update the node category that was newly set
+											NodeCategory old = nodeCategories
+													.get(newnc.getOid());
+											if (old != null) {
+												old.set(newnc); // update another instance of node category set in scheme
+											}
+											categoryLinks.get(newnc.getOid())
+													.setText(newnc.getName());
+											scene.getController()
+													.checkAllNodes();
+											info("Updated node category");
+										}
+									});
 				}
 				ncg.hide();
 			}
 		});
-    	ncg.setNodeCategory(nc);
-    	ncg.show();
-    }
-    
-    private void setNodeCategories(Node root) {
-    	NodeCategory nc = root.getCategory();
-    	if (nc != null && nc.getName() != null) {
-    		NodeCategory nc2 = nodeCategories.get(nc.getOid());
-    		if (nc2 == null) {
-    			nodeCategories.put(nc.getOid(), nc);
-    		}
-    	}
-    	List<Node> childNodes = root.getChildNodes();
-    	for (int i=0; childNodes != null && i<childNodes.size(); ++i) {
-    		setNodeCategories(childNodes.get(i));
-    	}
-    }
+		ncg.setNodeCategory(nc);
+		ncg.show();
+	}
+
+	private void setNodeCategories(Node root) {
+		NodeCategory nc = root.getCategory();
+		if (nc != null && nc.getName() != null) {
+			NodeCategory nc2 = nodeCategories.get(nc.getOid());
+			if (nc2 == null) {
+				nodeCategories.put(nc.getOid(), nc);
+			}
+		}
+		List<Node> childNodes = root.getChildNodes();
+		for (int i = 0; childNodes != null && i < childNodes.size(); ++i) {
+			setNodeCategories(childNodes.get(i));
+		}
+	}
 
 }

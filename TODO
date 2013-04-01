@@ -5,8 +5,6 @@
 
 umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
 
-pozor na import - potreba vyber vizualizace
- 
 implementovat vertical hierarchy
 
 kategorizace uzlu
@@ -26,6 +24,10 @@ nastavit styl pro tisk
 
 tvorba skupin (tymu) - pratele, apod ... pro urceni prav na urcite mapy
 uskupeni vice map do skupin - napr v ramci projektu
+
+SEO
+ - http://code.google.com/p/acris/wiki/AcrisSEO
+ - https://developers.google.com/webmasters/ajax-crawling/?hl=cs
 
 use Infinispan as a cache for users and maps
  - je potreba aby byl na openshiftu nejdrive umoznen domain mode https://openshift.redhat.com/community/content/jboss-as7-domain-mode
