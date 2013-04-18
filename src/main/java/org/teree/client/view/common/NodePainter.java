@@ -2,6 +2,7 @@ package org.teree.client.view.common;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale.Category;
 
 import org.teree.client.Settings;
 import org.teree.client.view.resource.IconTypeContent;
@@ -18,7 +19,7 @@ public class NodePainter {
 	private static String font;
 
 	public static void drawTextNode(Context2d context, int x, int y,
-			String text, IconType icon, boolean collapsed, int width,
+			String text, boolean collapsed, int width,
 			NodeCategory category) {
 
 		context.save();
@@ -62,6 +63,7 @@ public class NodePainter {
 
 		drawBackground(context, category, x, y - h + 2, width, h + 2);
 
+		String icon = category.getIconType();
 		if (icon != null) {
 			x += Settings.ICON_WIDTH;
 		}
@@ -78,7 +80,7 @@ public class NodePainter {
 		if (icon != null) {
 			context.setFont("14px FontAwesome");
 			String c = "";
-			c += IconTypeContent.get(icon);
+			c += IconTypeContent.get(IconType.valueOf(icon));
 			context.fillText(c, x - Settings.ICON_WIDTH, y - m);
 			context.setFont(font);
 		}

@@ -5,14 +5,14 @@ import org.jboss.errai.common.client.api.annotations.Portable;
 @Portable
 public class Connector {
 
-    private IconText root;
+    private Text root;
     private String oid;
     
-	public IconText getRoot() {
+	public Text getRoot() {
 		return root;
 	}
 	
-	public void setRoot(IconText root) {
+	public void setRoot(Text root) {
 		this.root = root;
 	}
 	

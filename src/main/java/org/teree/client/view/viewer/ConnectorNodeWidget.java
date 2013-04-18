@@ -24,9 +24,6 @@ public class ConnectorNodeWidget extends TextNodeWidget {
 	}
 
 	private void init() {
-		Connector con = (Connector) node.getContent();
-		setIconType(con.getRoot());
-		
 		addDomHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

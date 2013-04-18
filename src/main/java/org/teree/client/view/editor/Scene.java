@@ -16,7 +16,7 @@ import org.teree.client.view.type.Actions;
 import org.teree.client.view.type.BehaviorController;
 import org.teree.client.view.type.TreeController;
 import org.teree.shared.data.common.Connector;
-import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Text;
 import org.teree.shared.data.common.ImageLink;
 import org.teree.shared.data.common.Link;
 import org.teree.shared.data.common.MathExpression;
@@ -179,7 +179,7 @@ public class Scene extends Composite {
     
     public void createTextChildNode() {
     	Node child = new Node();
-    	IconText content = new IconText();
+    	Text content = new Text();
     	content.setText("");
     	child.setContent(content);
     	createChildNode(child);
@@ -208,7 +208,7 @@ public class Scene extends Composite {
     public void createConnectorChildNode() {
     	Node child = new Node();
     	Connector con = new Connector();
-    	con.setRoot(new IconText());
+    	con.setRoot(new Text());
     	child.setContent(con);
     	createChildNode(child);
     }

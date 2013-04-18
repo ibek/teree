@@ -1,6 +1,6 @@
 package org.teree.shared;
 
-import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Text;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeCategory;
 import org.teree.shared.data.common.Node.NodeLocation;
@@ -69,37 +69,37 @@ public class NodeGenerator {
     public static Node mindmap() {
         Node root = createTextNode("Mind Mapping", null);
         Node technical = createTextNode("Technical", NodeLocation.LEFT);
-        technical.addChild(createTextNode("Report writing", null));
-        technical.addChild(createTextNode("Presentations", null));
-        technical.addChild(createTextNode("Problem solving", null));
-        technical.addChild(createTextNode("Planning", null));
-        technical.addChild(createTextNode("Presentation planning", null));
-        technical.addChild(createTextNode("Communication", null));
+        technical.addChild(createTextNode("Report writing", NodeLocation.LEFT));
+        technical.addChild(createTextNode("Presentations", NodeLocation.LEFT));
+        technical.addChild(createTextNode("Problem solving", NodeLocation.LEFT));
+        technical.addChild(createTextNode("Planning", NodeLocation.LEFT));
+        technical.addChild(createTextNode("Presentation planning", NodeLocation.LEFT));
+        technical.addChild(createTextNode("Communication", NodeLocation.LEFT));
         root.addChild(technical);
         
         Node managerial = createTextNode("Managerial", NodeLocation.LEFT);
-        Node interviews = createTextNode("Interviews", null);
-        interviews.addChild(createTextNode("Job descriptions", null));
-        interviews.addChild(createTextNode("Questioning techniques", null));
+        Node interviews = createTextNode("Interviews", NodeLocation.LEFT);
+        interviews.addChild(createTextNode("Job descriptions", NodeLocation.LEFT));
+        interviews.addChild(createTextNode("Questioning techniques", NodeLocation.LEFT));
         managerial.addChild(interviews);
-        managerial.addChild(createTextNode("Appraisals", null));
-        managerial.addChild(createTextNode("Meeting minutes", null));
-        managerial.addChild(createTextNode("Planning", null));
-        managerial.addChild(createTextNode("Time management", null));
+        managerial.addChild(createTextNode("Appraisals", NodeLocation.LEFT));
+        managerial.addChild(createTextNode("Meeting minutes", NodeLocation.LEFT));
+        managerial.addChild(createTextNode("Planning", NodeLocation.LEFT));
+        managerial.addChild(createTextNode("Time management", NodeLocation.LEFT));
         root.addChild(managerial);
 
         Node personal = createTextNode("Personal", NodeLocation.RIGHT);
-        personal.addChild(createTextNode("Planning your time", null));
-        personal.addChild(createTextNode("Organising your day", null));
-        personal.addChild(createTextNode("Letter writing", null));
-        personal.addChild(createTextNode("Report writing", null));
+        personal.addChild(createTextNode("Planning your time", NodeLocation.RIGHT));
+        personal.addChild(createTextNode("Organising your day", NodeLocation.RIGHT));
+        personal.addChild(createTextNode("Letter writing", NodeLocation.RIGHT));
+        personal.addChild(createTextNode("Report writing", NodeLocation.RIGHT));
         root.addChild(personal);
 
         Node creative = createTextNode("Creative", NodeLocation.RIGHT);
-        creative.addChild(createTextNode("Problem solving", null));
-        creative.addChild(createTextNode("Generating ideas", null));
-        creative.addChild(createTextNode("Talks", null));
-        creative.addChild(createTextNode("Brainstorming", null));
+        creative.addChild(createTextNode("Problem solving", NodeLocation.RIGHT));
+        creative.addChild(createTextNode("Generating ideas", NodeLocation.RIGHT));
+        creative.addChild(createTextNode("Talks", NodeLocation.RIGHT));
+        creative.addChild(createTextNode("Brainstorming", NodeLocation.RIGHT));
         root.addChild(creative);
 
         return root;
@@ -115,7 +115,7 @@ public class NodeGenerator {
     
     public static Node createTextNode(String text, NodeLocation loc) {
         Node n = new Node();
-        IconText it = new IconText();
+        Text it = new Text();
         it.setText(text);
         n.setContent(it);
         n.setLocation(loc);

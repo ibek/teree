@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import org.bson.types.ObjectId;
 import org.teree.server.util.MongoDBFilter;
 import org.teree.shared.data.common.Connector;
-import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Text;
 import org.teree.shared.data.common.ImageLink;
 import org.teree.shared.data.common.Link;
 import org.teree.shared.data.common.MathExpression;
@@ -283,9 +283,8 @@ public class SchemeManager {
         
         switch(type){
             case IconText: {
-                IconText is = (IconText)value;
+                Text is = (Text)value;
                 doc.put("text", is.getText());
-                doc.put("icon", is.getIconType());
                 break;
             }
             case Link: {
@@ -307,7 +306,6 @@ public class SchemeManager {
             case Connector: {
             	Connector con = (Connector)value;
             	doc.put("text", con.getRoot().getText());
-            	doc.put("icon", con.getRoot().getIconType());
             	doc.put("conid", con.getOid());
             	break;
             }
@@ -378,10 +376,9 @@ public class SchemeManager {
 	    	case Tree: {
 	    		Tree tree = new Tree();
 	        	Node root = new Node();
-	        	IconText it = new IconText();
+	        	Text it = new Text();
 	        	DBObject r = (DBObject)scheme.get("root");
 	        	it.setText((String)r.get("text"));
-	        	it.setIconType((String)r.get("icon"));
 	        	root.setContent(it);
 	        	
 	        	tree.setRoot(root);
@@ -412,9 +409,8 @@ public class SchemeManager {
         
         switch(type){
             case IconText: {
-                IconText is = new IconText();
+                Text is = new Text();
                 is.setText(root.getString("text"));
-                is.setIconType(root.getString("icon"));
                 node.setContent(is);
                 break;
             }
@@ -439,9 +435,8 @@ public class SchemeManager {
             }
             case Connector: {
             	Connector con = new Connector();
-            	IconText it = new IconText();
+            	Text it = new Text();
             	it.setText(root.getString("text"));
-            	it.setIconType(root.getString("icon"));
             	con.setRoot(it);
             	con.setOid(root.getString("conid"));
             	node.setContent(con);

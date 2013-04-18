@@ -20,9 +20,16 @@
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<g:FlowPanel addStyleNames="{style.scene}">
 			<b:Heading size="2" text="{uic.change_logs}" />
+			<b:Heading size="4" text="v0.8 2013-04-19" />
+				<b:Paragraph>
+					<b:Badge>-</b:Badge><b:Badge text="New type of node - Percent" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="New visualization type - Horizontal Hierarchy" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Node custom categories with specific style of nodes" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="Create dialog to determine structure and visualization type" />
+				</b:Paragraph>
 			<b:Heading size="4" text="v0.7 2013-02-22" />
 				<b:Paragraph>
-					<b:Badge>-</b:Badge><b:Badge text="New types of nodes - Connector" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="New type of node - Connector" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="Ability to split text node from the current scheme into a new scheme and connect them with connector" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="Ability to merge a connected scheme with the current scheme" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="Simple search" /><br/>
@@ -30,8 +37,8 @@
 				</b:Paragraph>
 			<b:Heading size="4" text="v0.6 2012-12-25" />
 				<b:Paragraph>
-					<b:Badge>-</b:Badge><b:Badge text="New types of nodes - Math Expressions" /><br/>
-					<b:Badge>-</b:Badge><b:Badge text="New types of exports and imports - JSON" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="New type of node - Math Expressions" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="New type of export and import - JSON" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="Global and user permissions" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="Refresh button to refresh a scheme if it's needed" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="Next and previous buttons in explore are visible only if there are any next or previous maps" /><br/>
@@ -49,7 +56,7 @@
 					<b:Badge>-</b:Badge><b:Badge text="Text node can be extended with icon" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="New types of nodes - text, image and link" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="New types of exports - image and FreeMind map" /><br/>
-					<b:Badge>-</b:Badge><b:Badge text="New types of imports - FreeMind map" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="New type of import - FreeMind map" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="Drag and drop support" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="Keyboard control - arrows, F2(edit), Insert(add text child node), Delete(remove selected node), ..." />
 				</b:Paragraph>

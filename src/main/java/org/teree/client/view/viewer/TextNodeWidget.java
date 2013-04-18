@@ -8,7 +8,7 @@ import org.teree.client.view.common.NodeCategoryStyle;
 import org.teree.client.view.common.NodePainter;
 import org.teree.client.view.resource.IconTypeContent;
 import org.teree.client.view.viewer.event.CollapseNode;
-import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Text;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeCategory;
 
@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.HTML;
 
 public class TextNodeWidget extends NodeWidget {
 
-	protected Icon icon;
 	protected HTML content;
 
 	protected TextNodeWidget(Node node) {
@@ -40,11 +39,6 @@ public class TextNodeWidget extends NodeWidget {
 		content.setText(node.getContent().toString());
 		content.setStylePrimaryName(resources.css().node());
 		content.addStyleName(resources.css().nodeView());
-
-		icon = new Icon();
-		if (node.getContent() instanceof IconText) {
-			setIconType((IconText) node.getContent());
-		}
 
 		content.addMouseDownHandler(new MouseDownHandler() {
 			@Override
@@ -72,20 +66,9 @@ public class TextNodeWidget extends NodeWidget {
 		}, ClickEvent.getType());
 	}
 
-	protected void setIconType(IconText it) {
-		String iconType = it.getIconType();
-		if (iconType != null) {
-			icon.setType(IconType.valueOf(iconType));
-			container.insert(icon, 0, 5, 0);
-			content.getElement().getStyle()
-					.setPaddingLeft(Settings.ICON_WIDTH, Unit.PX);
-		}
-	}
-
 	@Override
 	public void draw(Context2d context, int x, int y) {
-		NodePainter.drawTextNode(context, x, y, content.getText(),
-				icon.getIconType(), collapsed, getOffsetWidth(),
+		NodePainter.drawTextNode(context, x, y, content.getText(), collapsed, getOffsetWidth(),
 				node.getCategory());
 	}
 

@@ -1,7 +1,7 @@
 package org.teree.client.view.editor;
 
 import org.teree.shared.data.common.Connector;
-import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Text;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.Node.NodeLocation;
 
@@ -47,7 +47,7 @@ public class ConnectorNodeWidget extends TextNodeWidget {
 			connectorDialog.getOk().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					IconText it = connectorDialog.getRoot();
+					Text it = connectorDialog.getRoot();
 					if (it != null) {
 						connector.setOid(connectorDialog.getOid());
 						connector.setRoot(it);

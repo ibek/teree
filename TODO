@@ -3,13 +3,12 @@
 0.8:
 ===============
 
-umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
+update help stranky
+update uvodni mind mapy
 
-implementovat vertical hierarchy
-
-kategorizace uzlu
- - ikony
- - odstraneni kategorie z uzlu na serveru (ze vsech map) - jakmile to bude mozne provest pro vsechny naraz https://jira.mongodb.org/browse/SERVER-1243
+ruzne typy Percent uzlu
+ - rodic je prumerem Percent potomku
+ - soucet Percent uzlu v dane urovni musi byt roven 100%
 
 ===============
 0.9:
@@ -22,26 +21,36 @@ rozsahla uprava designu do moderniho stylu
 
 nastavit styl pro tisk
 
-tvorba skupin (tymu) - pratele, apod ... pro urceni prav na urcite mapy
-uskupeni vice map do skupin - napr v ramci projektu
-
 SEO
  - http://code.google.com/p/acris/wiki/AcrisSEO
  - https://developers.google.com/webmasters/ajax-crawling/?hl=cs
+ 
+odstraneni uctu uzivatele
+aktivace uctu emailem
+pouziti obrazku z gravatara
+
+===============
+1.0:
+===============
+
+novy typ vizualizace - vertical hierarchy
+
+umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
+automaticky backup databaze
+ - replikace 1 den zpet?
+
+sepsat use cases (pro studovani ...) a vlozit na stranky
+
+===============
+when will be possible:
+===============
 
 use Infinispan as a cache for users and maps
  - je potreba aby byl na openshiftu nejdrive umoznen domain mode https://openshift.redhat.com/community/content/jboss-as7-domain-mode
  - pouzit synchronizovanou distribuovanou Infinispan cache https://github.com/infinispan/infinispan-quickstart/tree/master/jboss-as7
 replace openshift app to enable scalability https://openshift.redhat.com/community/developers/scaling
 
-===============
-1.0:
-===============
-
-novy typ struktury - graf
-novy typ vizualizace - vztahy mezi polozkami v kruhu
-
-sepsat use cases (pro studovani ...) a vlozit na stranky
+odstraneni kategorie z uzlu na serveru (ze vsech map) - jakmile to bude mozne provest pro vsechny naraz https://jira.mongodb.org/browse/SERVER-1243
 
 ===============
 future:
@@ -49,7 +58,12 @@ future:
 
 collaboration
 
+tvorba skupin (tymu) - pratele, apod ... pro urceni prav na urcite mapy
+uskupeni vice map do skupin - napr v ramci projektu
+
 various structure types - tree, list, n-dimension data, ...
+novy typ struktury - graf
+novy typ vizualizace - vztahy mezi polozkami v kruhu
 
 tvorba map z templates - nejake vyhody ? jake vzory napriklad?
 undo-redo funkce

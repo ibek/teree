@@ -20,7 +20,7 @@ import org.teree.client.visualization.tree.MindMap;
 import org.teree.client.visualization.tree.TreeRenderer;
 import org.teree.client.visualization.tree.VerticalHierarchy;
 import org.teree.shared.data.common.Connector;
-import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Text;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.StructureType;
 import org.teree.shared.data.common.Node.NodeLocation;
@@ -287,20 +287,25 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 	@Override
 	public void setNodeIcon(IconType icon) {
 		boolean updateReq = false;
-		if (selected != null && selected instanceof TextNodeWidget) {
-    		IconText it = (IconText)selected.getNode().getContent();
-    		updateReq = (it.getIconType() == null || it.getIconType().isEmpty());
-    		if (it.getIconType() != null && (icon == IconType.SIGN_BLANK || icon == IconType.valueOf(it.getIconType()))) {
+		if (selected != null) {
+			String itt = selected.getNode().getCategory().getIconType();
+    		updateReq = (itt == null || itt.isEmpty());
+    		if (itt != null && (icon == IconType.SIGN_BLANK || icon == IconType.valueOf(itt))) {
        		 	// remove icon
-				it.setIconType(null);
+    			selected.getNode().getCategory().setIconType(null);
 				updateReq = true;
 			} else {
-    			it.setIconType(icon.name());
+				selected.getNode().getCategory().setIconType(icon.name());
     		}
-			((TextNodeWidget) selected).update();
+			selected.update();
     	}
 		if (updateReq) {
-			update(null);
+			Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+    	        @Override
+    	        public void execute() {
+	        		update(null);
+    	        }
+			});
 		}
 	}
 
@@ -340,10 +345,9 @@ public class TreeController<T extends Widget & NodeInterface> extends BehaviorCo
 		                public void callback(String response) {
 		                    Node connector = new Node();
 		                    Connector con = new Connector();
-		                    IconText it = new IconText();
-		                    IconText rc = (IconText)t.getRoot().getContent();
+		                    Text it = new Text();
+		                    Text rc = (Text)t.getRoot().getContent();
 		                    it.setText(rc.getText());
-		                    it.setIconType(rc.getIconType());
 		                    con.setRoot(it);
 		                    con.setOid(response);
 		                    connector.setContent(con);

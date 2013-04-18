@@ -3,7 +3,7 @@ package org.teree.client.io;
 import java.util.List;
 
 import org.teree.client.CurrentPresenter;
-import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Text;
 import org.teree.shared.data.common.ImageLink;
 import org.teree.shared.data.common.Link;
 import org.teree.shared.data.common.Node;
@@ -57,7 +57,7 @@ public class FreeMind implements ISchemeImport, ISchemeExport {
 		com.google.gwt.xml.client.Node r = getFirstNode(doc.getChildNodes().item(0).getChildNodes());
 		if (r != null) {
 			String content = r.getAttributes().getNamedItem("TEXT").getNodeValue();
-			IconText it = new IconText();
+			Text it = new Text();
 			it.setText(content);
 			root.setContent(it);
 			insertChildNodes(root, r.getChildNodes());
@@ -150,11 +150,11 @@ public class FreeMind implements ISchemeImport, ISchemeExport {
 					}
 					cn.setContent(link);
 				} else if ((content = attr.getNamedItem("TEXT")) != null) {
-					IconText it = new IconText();
+					Text it = new Text();
 					it.setText(content.getNodeValue());
 					cn.setContent(it);
 				} else {
-					IconText it = new IconText();
+					Text it = new Text();
 					it.setText("unidentified");
 					cn.setContent(it);
 				}

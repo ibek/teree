@@ -2,12 +2,20 @@ package org.teree.client.view.resource;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
+import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Grid;
 
 public class IconTypeContent {
 
 	public static final Map<IconType, Character> ICONS = new LinkedHashMap<IconType, Character>();
+
+	private static final int ICON_COLUMNS = 7;
+	private static final int ICON_ROWS = 6;
 
 	static {
 		setIcons();
@@ -63,6 +71,33 @@ public class IconTypeContent {
 			setIcons();
 		}
 		return ICONS.get(icon);
+	}
+
+	public static Grid loadIcons(final SelectIconHandler selectIconHandler) {
+		Grid g = new Grid(ICON_ROWS, ICON_COLUMNS);
+		Set<IconType> is = IconTypeContent.ICONS.keySet();
+		IconType[] icons = new IconType[is.size()];
+		icons = is.toArray(icons);
+		for (int i = 0; i < icons.length; ++i) {
+			if (i / ICON_COLUMNS > ICON_ROWS - 1) {
+				break;
+			}
+			final IconType ic = icons[i];
+			NavLink ib = new NavLink();
+			ib.setIcon(ic);
+			ib.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					selectIconHandler.select(ic);
+				}
+			});
+			g.setWidget(i / ICON_COLUMNS, i % ICON_COLUMNS, ib);
+		}
+		return g;
+	}
+	
+	public static interface SelectIconHandler {
+		public void select(IconType icon);
 	}
 	
 }

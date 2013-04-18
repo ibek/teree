@@ -102,7 +102,7 @@ public class Node implements Cloneable {
         this.content = content;
         
         // set type
-        if (content instanceof IconText) {
+        if (content instanceof Text) {
         	type = NodeType.IconText;
         }
         else if (content instanceof Link) {

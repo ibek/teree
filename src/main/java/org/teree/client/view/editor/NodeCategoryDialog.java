@@ -1,8 +1,9 @@
 package org.teree.client.view.editor;
 
 import org.teree.client.view.common.ColorPicker;
+import org.teree.client.view.resource.IconTypeContent;
 import org.teree.client.view.validate.FormValidator;
-import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Text;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeCategory;
 
@@ -11,6 +12,7 @@ import com.github.gwtbootstrap.client.ui.CheckBox;
 import com.github.gwtbootstrap.client.ui.ControlGroup;
 import com.github.gwtbootstrap.client.ui.ControlLabel;
 import com.github.gwtbootstrap.client.ui.Controls;
+import com.github.gwtbootstrap.client.ui.DropdownButton;
 import com.github.gwtbootstrap.client.ui.Fieldset;
 import com.github.gwtbootstrap.client.ui.Form;
 import com.github.gwtbootstrap.client.ui.FormActions;
@@ -64,6 +66,9 @@ public class NodeCategoryDialog extends Composite {
 	private Button backgroundButton;
 	private ColorPicker backgroundPicker;
 
+	private String icon;
+	private DropdownButton iconButton;
+
 	private NodeCategory original;
 	private TextNodeWidget preview;
 	
@@ -82,6 +87,7 @@ public class NodeCategoryDialog extends Composite {
 		fs.add(createTransparency());
 		fs.add(createColor());
 		fs.add(createBackground());
+		fs.add(createIcon());
 		form.add(fs);
 
 		reset = new Button("Reset");
@@ -101,7 +107,7 @@ public class NodeCategoryDialog extends Composite {
 
 		Node n = new Node();
 		n.setCategory(new NodeCategory());
-		IconText it = new IconText();
+		Text it = new Text();
 		it.setText("Test node");
 		n.setContent(it);
 		preview = new TextNodeWidget(n);
@@ -143,6 +149,7 @@ public class NodeCategoryDialog extends Composite {
 		colorButton.getElement().getStyle().setColor(color);
 		background = nc.getBackground();
 		backgroundButton.getElement().getStyle().setColor(background);
+		icon = nc.getIconType();
 		updatePreview();
 	}
 
@@ -157,6 +164,7 @@ public class NodeCategoryDialog extends Composite {
 		nc.setTransparency(transparency.getPercent());
 		nc.setColor(color);
 		nc.setBackground(background);
+		nc.setIconType(icon);
 		return nc;
 	}
 
@@ -310,6 +318,27 @@ public class NodeCategoryDialog extends Composite {
 			}
 		});
 		controls.add(backgroundButton);
+		cg.add(controls);
+		return cg;
+	}
+	
+	private ControlGroup createIcon() {
+		ControlGroup cg = new ControlGroup();
+		ControlLabel cl = new ControlLabel();
+		cl.add(new Label("Name"));
+		cg.add(cl);
+		Controls controls = new Controls();
+		
+		iconButton = new DropdownButton("icon");
+		iconButton.add(IconTypeContent.loadIcons(new IconTypeContent.SelectIconHandler() {
+			@Override
+			public void select(IconType icon) {
+				NodeCategoryDialog.this.icon = icon.name();
+				updatePreview();
+			}
+		}));
+		
+		controls.add(iconButton);
 		cg.add(controls);
 		return cg;
 	}

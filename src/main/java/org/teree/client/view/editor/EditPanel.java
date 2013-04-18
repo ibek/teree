@@ -44,9 +44,6 @@ public class EditPanel extends Composite {
 	private boolean collapsed;
 	private Tooltip tooltipCollapse;
 
-	private static final int ICON_COLUMNS = 7;
-	private static final int ICON_ROWS = 6;
-
 	public EditPanel() {
 
 		container = new HorizontalPanel();
@@ -80,7 +77,12 @@ public class EditPanel extends Composite {
 		space4.getElement().getStyle().setMarginRight(20, Unit.PX);
 
 		icon = new DropdownButton("icon");
-		loadIcons();
+		icon.add(IconTypeContent.loadIcons(new IconTypeContent.SelectIconHandler() {
+			@Override
+			public void select(IconType icon) {
+				selectIcon(icon);
+			}
+		}));
 
 		categories = new Button("", IconType.EYE_OPEN);
 
@@ -144,29 +146,6 @@ public class EditPanel extends Composite {
 		refresh.setEnabled(enabled);
 	}
 
-	private void loadIcons() {
-		Grid g = new Grid(ICON_ROWS, ICON_COLUMNS);
-		Set<IconType> is = IconTypeContent.ICONS.keySet();
-		IconType[] icons = new IconType[is.size()];
-		icons = is.toArray(icons);
-		for (int i = 0; i < icons.length; ++i) {
-			if (i / ICON_COLUMNS > ICON_ROWS - 1) {
-				break;
-			}
-			final IconType ic = icons[i];
-			NavLink ib = new NavLink();
-			ib.setIcon(ic);
-			ib.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					selectIcon(ic);
-				}
-			});
-			g.setWidget(i / ICON_COLUMNS, i % ICON_COLUMNS, ib);
-		}
-		icon.add(g);
-	}
-
 	private void selectIcon(IconType icon) {
 		iconHandler.select(icon);
 	}
@@ -181,6 +160,7 @@ public class EditPanel extends Composite {
 						.getChildNodes().size() > 0));
 		disableNewChildNodes(nw == null || nw instanceof ConnectorNodeWidget
 				|| nw instanceof LinkNodeWidget);
+		icon.getTriggerWidget().setEnabled(nw != null);
 	}
 
 	public boolean isCollapsed() {
@@ -204,7 +184,6 @@ public class EditPanel extends Composite {
 		createImg.setEnabled(!disable);
 		createMathExpr.setEnabled(!disable);
 		createPercent.setEnabled(!disable);
-		icon.getTriggerWidget().setEnabled(!disable);
 		((Button) createConnector.getWidget(0)).setEnabled(!disable);
 	}
 

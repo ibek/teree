@@ -9,7 +9,7 @@ import org.teree.client.view.common.NodePainter;
 import org.teree.client.view.editor.event.NodeChanged;
 import org.teree.client.view.editor.event.SelectNode;
 import org.teree.client.view.resource.IconTypeContent;
-import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Text;
 import org.teree.shared.data.common.Node;
 import org.teree.shared.data.common.NodeCategory;
 import org.teree.shared.data.common.Node.NodeLocation;
@@ -44,20 +44,16 @@ import com.google.gwt.user.client.ui.TextArea;
  */
 public class TextNodeWidget extends NodeWidget {
 
-	protected Icon icon;
 	protected HTML content;
 	protected TextArea editContent;
 
-	protected IconText nodeContent;
+	protected Text nodeContent;
 
 	public TextNodeWidget(Node node) {
 		super(node);
 
-		icon = new Icon();
-		icon.getElement().getStyle().setZIndex(100);
-
-		if (node.getContent() instanceof IconText) {
-			nodeContent = (IconText) node.getContent();
+		if (node.getContent() instanceof Text) {
+			nodeContent = (Text) node.getContent();
 			view();
 		}
 
@@ -139,7 +135,7 @@ public class TextNodeWidget extends NodeWidget {
 			editContent.setHeight(Settings.NODE_DEFAULT_HEIGHT + "px");
 		}
 
-		if (nodeContent.getIconType() != null) {
+		if (node.getCategory().getIconType() != null) {
 			editContent.getElement().getStyle()
 					.setPaddingLeft(Settings.ICON_WIDTH, Unit.PX);
 		} else {
@@ -208,28 +204,12 @@ public class TextNodeWidget extends NodeWidget {
 			text = "[empty]";
 		}
 		content.setText(text);
-		if (nodeContent.getIconType() != null) {
-
-			icon.setType(IconType.valueOf(nodeContent.getIconType()));
-
-			if (container.getWidgetIndex(icon) < 0) {
-				container.insert(icon, 0, 5, 0);
-				content.getElement().getStyle()
-						.setPaddingLeft(Settings.ICON_WIDTH, Unit.PX);
-			}
-		} else {
-			if (container.getWidgetIndex(icon) >= 0) {
-				container.remove(icon);
-				content.getElement().getStyle().setPaddingLeft(0.0, Unit.PX);
-			}
-		}
 		setCollapsed(collapsed);
 	}
 
 	@Override
 	public void draw(Context2d context, int x, int y) {
-		NodePainter.drawTextNode(context, x, y, content.getText(),
-				icon.getIconType(), collapsed, getOffsetWidth(),
+		NodePainter.drawTextNode(context, x, y, content.getText(), collapsed, getOffsetWidth(),
 				node.getCategory());
 	}
 

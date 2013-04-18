@@ -7,7 +7,7 @@ import org.teree.client.CurrentPresenter;
 import org.teree.client.presenter.Editor;
 import org.teree.client.text.UIConstants;
 import org.teree.client.view.common.TDialog;
-import org.teree.shared.data.common.IconText;
+import org.teree.shared.data.common.Text;
 import org.teree.shared.data.common.Scheme;
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Image;
@@ -216,10 +216,10 @@ public class ConnectorDialog extends TDialog {
 		return okButton;
 	}
 	
-	public IconText getRoot() {
-		IconText it = null;
+	public Text getRoot() {
+		Text it = null;
 		if (scheme != null) {
-			it = new IconText();
+			it = new Text();
 			it.setText(scheme.toString());
 		}
 		return it;
