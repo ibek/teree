@@ -75,7 +75,7 @@ public class SchemeWidget extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				event.stopPropagation();
-				History.newItem(Settings.EDIT_LINK + scheme.getOid());
+				History.newItem(Settings.EDIT_LINK + Settings.OID_PARAM + scheme.getOid());
 			}
 		});
 		edit.getElement().getStyle().setFloat(Style.Float.LEFT);

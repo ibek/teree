@@ -313,6 +313,7 @@ public class SchemeManager {
                 PercentText pt = (PercentText)value;
                 doc.put("text", pt.getText());
                 doc.put("percentage", pt.getPercentage());
+                doc.put("group", pt.getGroup());
                 break;
             }
         }
@@ -446,6 +447,7 @@ public class SchemeManager {
                 PercentText pt = new PercentText();
                 pt.setText(root.getString("text"));
                 pt.setPercentage(root.getInt("percentage"));
+                pt.setGroup(root.getInt("group"));
                 node.setContent(pt);
                 break;
             }

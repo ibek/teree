@@ -86,7 +86,7 @@ public class PercentNodeWidget extends NodeWidget {
 			text = "[empty]";
 		}
 		content.setText(text);
-		percentage.setPercent(nodeContent.getPercentage());
+		percentage.setPercent((int)nodeContent.getPercentage());
 		percentage.setText(String.valueOf(nodeContent.getPercentage()) + "%");
 
 		if (editContent != null) {

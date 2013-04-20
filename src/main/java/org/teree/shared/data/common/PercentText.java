@@ -6,7 +6,8 @@ import org.jboss.errai.common.client.api.annotations.Portable;
 public class PercentText {
 
     private String text;
-    private int percentage = 50;
+    private double percentage = 50;
+    private int group = -1;
     
     public String getText() {
         return text;
@@ -16,12 +17,20 @@ public class PercentText {
         this.text = text;
     }
 	
-	public int getPercentage() {
+	public double getPercentage() {
 		return percentage;
 	}
 
-	public void setPercentage(int percentage) {
+	public void setPercentage(double percentage) {
 		this.percentage = percentage;
+	}
+
+	public int getGroup() {
+		return group;
+	}
+
+	public void setGroup(int group) {
+		this.group = group;
 	}
 
 	@Override

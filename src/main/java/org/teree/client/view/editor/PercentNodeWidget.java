@@ -15,9 +15,11 @@ import org.teree.shared.data.common.Node.NodeLocation;
 import org.teree.shared.data.common.Node.NodeType;
 import org.teree.shared.data.common.PercentText;
 
+import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Icon;
 import com.github.gwtbootstrap.client.ui.ProgressBar;
 import com.github.gwtbootstrap.client.ui.TextBox;
+import com.github.gwtbootstrap.client.ui.base.InlineLabel;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
@@ -25,6 +27,8 @@ import com.google.gwt.canvas.dom.client.TextMetrics;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -53,6 +57,7 @@ public class PercentNodeWidget extends NodeWidget {
 	protected HTML content;
 	protected TextBox editContent;
 	protected ProgressBar percentage;
+	protected InlineLabel group;
 
 	protected PercentText nodeContent;
 
@@ -135,7 +140,7 @@ public class PercentNodeWidget extends NodeWidget {
 		});
 
 		container.remove(content);
-		container.insert(editContent, 0);
+		container.insert(editContent, container.getWidgetIndex(group));
 
 		// only for better look
 		getParent().fireEvent(new SelectNode<PercentNodeWidget>(null));
@@ -151,7 +156,35 @@ public class PercentNodeWidget extends NodeWidget {
 
 			content.setStylePrimaryName(resources.css().node());
 			content.addStyleName(resources.css().nodeView());
+			content.getElement().getStyle()
+			.setPaddingRight(Settings.ICON_WIDTH, Unit.PX);
 
+			group = new InlineLabel();
+			group.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					event.stopPropagation();
+					int group = nodeContent.getGroup();
+					group++;
+					if (group > 9) {
+						group = -1;
+					}
+					nodeContent.setGroup(group);
+					update();
+				}
+			});
+			container.add(group, 0, 0);
+			Style gstyle = group.getElement().getStyle();
+			gstyle.setZIndex(100);
+			gstyle.clearLeft();
+			gstyle.setRight(0, Unit.PX);
+			gstyle.setTop(0, Unit.PX);
+			gstyle.setProperty("borderLeft", "2px #08C solid");
+			gstyle.setProperty("borderBottom", "2px #08C solid");
+			gstyle.setPaddingLeft(3.0, Unit.PX);
+			gstyle.setMarginTop(3.0, Unit.PX);
+			gstyle.setCursor(Cursor.POINTER);
+			
 		}
 		container.getElement().getStyle().setMarginLeft(0, Unit.PX);
 		container.setWidth("auto");
@@ -171,15 +204,19 @@ public class PercentNodeWidget extends NodeWidget {
 						nodeContent.setPercentage(percent);
 						update();
 						updateParentNodes(node.getParent());
+						updateGroupNodes(node);
 						getParent().fireEvent(new CheckNode());
 					}
 				}
 			}, ClickEvent.getType());
-			percentage.getElement().getStyle().setMargin(0.0, Unit.PX);
-			percentage.getElement().getStyle().setMarginBottom(2.0, Unit.PX);
+			Style pstyle = percentage.getElement().getStyle();
+			pstyle.setMargin(0.0, Unit.PX);
+			pstyle.setMarginBottom(2.0, Unit.PX);
 			percentage.setHeight("10px");
-			percentage.getElement().getStyle()
-					.setProperty("lineHeight", "10px");
+			pstyle.setProperty("lineHeight", "10px");
+			Style sliderStyle = percentage.getWidget(0).getElement().getStyle();
+			sliderStyle.setColor("black");
+			sliderStyle.setProperty("textAlign", "center");
 			container.add(percentage);
 			Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 				@Override
@@ -194,7 +231,7 @@ public class PercentNodeWidget extends NodeWidget {
 			container.remove(editContent);
 		}
 
-		container.insert(content, 0);
+		container.insert(content, container.getWidgetIndex(group));
 		update();
 
 	}
@@ -235,23 +272,57 @@ public class PercentNodeWidget extends NodeWidget {
 			text = "[empty]";
 		}
 		content.setText(text);
-		percentage.setPercent(nodeContent.getPercentage());
-		percentage.setText(String.valueOf(nodeContent.getPercentage()) + "%");
+		percentage.setPercent((int)nodeContent.getPercentage());
+		percentage.setText(String.valueOf((int)nodeContent.getPercentage()) + "%");
+		int g = nodeContent.getGroup();
+		String gs = "";
+		if (g > -1) {
+			gs += g;
+		} else {
+			gs += "–";
+		}
+		group.setText(gs);
 	}
 
 	private void updateParentNodes(Node parent) {
 		if (parent != null && parent.getType() == NodeType.Percent) {
-			int sum = 0;
+			double sum = 0;
 			int count = 0;
 			for (Node childNode : parent.getChildNodes()) {
-				if (childNode.getType() == NodeType.Percent) {
+				if (childNode.getType() == NodeType.Percent && ((PercentText) childNode.getContent()).getGroup() < 0) {
 					count++;
 					sum += ((PercentText) childNode.getContent())
 							.getPercentage();
 				}
 			}
-			((PercentText) parent.getContent()).setPercentage(sum / count); // average
+			PercentText pt = (PercentText) parent.getContent();
+			pt.setPercentage(sum / count); // average
 			updateParentNodes(parent.getParent()); // recursive
+			updateGroupNodes(parent); // recursive for groups
+		}
+	}
+	
+	private void updateGroupNodes(Node changed) {
+		PercentText changedContent = (PercentText)changed.getContent();
+		int group = changedContent.getGroup();
+		if (group >= 0) {
+			double diff = 100 - changedContent.getPercentage();
+			double sum = 0.0;
+			List<PercentText> ptlist = new ArrayList<PercentText>();
+			for (Node childNode : changed.getParent().getChildNodes()) {
+				if (childNode.getType() == NodeType.Percent && !changed.equals(childNode) && ((PercentText) childNode.getContent()).getGroup() == group) {
+					PercentText pt = (PercentText) childNode.getContent();
+					ptlist.add(pt);
+					sum += pt.getPercentage()/diff;
+				}
+			}
+			for (PercentText pt : ptlist) {
+				if (sum > 0.0) {
+					pt.setPercentage(pt.getPercentage() / sum);
+				} else {
+					pt.setPercentage(diff / ptlist.size());
+				}
+			}
 		}
 	}
 
