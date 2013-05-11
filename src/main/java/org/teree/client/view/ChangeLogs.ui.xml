@@ -20,9 +20,9 @@
 		<b:Alert ui:field="status" addStyleNames="{res.css.status}" close="false" visible="false"/>
 		<g:FlowPanel addStyleNames="{style.scene}">
 			<b:Heading size="2" text="{uic.change_logs}" />
-			<b:Heading size="4" text="v0.8 2013-04-19" />
+			<b:Heading size="4" text="v0.8 2013-04-20" />
 				<b:Paragraph>
-					<b:Badge>-</b:Badge><b:Badge text="New type of node - Percent" /><br/>
+					<b:Badge>-</b:Badge><b:Badge text="New type of node - Percentage" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="New visualization type - Horizontal Hierarchy" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="Node custom categories with specific style of nodes" /><br/>
 					<b:Badge>-</b:Badge><b:Badge text="Create dialog to determine structure and visualization type" />

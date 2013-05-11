@@ -61,7 +61,9 @@ public class TextNodeWidget extends NodeWidget {
 
 	@Override
 	public void edit() {
+		boolean firstTime = false;
 		if (editContent == null) {
+			firstTime = true;
 			editContent = new TextArea();
 
 			editContent.addKeyUpHandler(new KeyUpHandler() {
@@ -71,7 +73,11 @@ public class TextNodeWidget extends NodeWidget {
 							&& !event.isShiftKeyDown()) {
 						confirmChanges();
 					} else if (event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
+						String text = nodeContent.getText();
 						view();
+						if (text == null || text.isEmpty()) {
+							TextNodeWidget.this.getParent().fireEvent(new NodeChanged(null)); // null because nothing was inserted
+						}
 					}
 				}
 			});
@@ -118,7 +124,7 @@ public class TextNodeWidget extends NodeWidget {
 		if (getOffsetWidth() > Settings.NODE_DEFAULT_WIDTH) {
 			editContent.setWidth((getOffsetWidth() + 4) + "px");
 		} else {
-			if (node.getLocation() == NodeLocation.LEFT) {
+			if (node.getLocation() == NodeLocation.LEFT && !firstTime) {
 				container
 						.getElement()
 						.getStyle()
@@ -202,9 +208,13 @@ public class TextNodeWidget extends NodeWidget {
 		String text = nodeContent.getText();
 		if (text == null || text.isEmpty()) {
 			text = "[empty]";
+			nodeContent.setText(text);
+			setCollapsed(collapsed);
+			nodeContent.setText("");
+		} else {
+			content.setText(text);
+			setCollapsed(collapsed);
 		}
-		content.setText(text);
-		setCollapsed(collapsed);
 	}
 
 	@Override

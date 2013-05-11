@@ -94,7 +94,20 @@ public class NodePainter {
 		context.save();
 		setContextStyle(context, category);
 		drawBackground(context, category, x, y - height + 2, width, height + 2);
+		
+		String icon = category.getIconType();
+		if (icon != null) {
+			x += Settings.ICON_WIDTH;
+		}
 		context.drawImage(ielement, x, y - height);
+		
+		if (icon != null) {
+			context.setFont("14px FontAwesome");
+			String c = "";
+			c += IconTypeContent.get(IconType.valueOf(icon));
+			context.fillText(c, x - Settings.ICON_WIDTH, y - height + Settings.ICON_WIDTH);
+			context.setFont(font);
+		}
 		context.restore();
 	}
 
@@ -104,7 +117,20 @@ public class NodePainter {
 		context.save();
 		setContextStyle(context, category);
 		drawBackground(context, category, x, y - height + 2, width, height + 2);
+		
+		String icon = category.getIconType();
+		if (icon != null) {
+			x += Settings.ICON_WIDTH;
+		}
 		context.fillText(text, x, y);
+		
+		if (icon != null) {
+			context.setFont("14px FontAwesome");
+			String c = "";
+			c += IconTypeContent.get(IconType.valueOf(icon));
+			context.fillText(c, x - Settings.ICON_WIDTH, y);
+			context.setFont(font);
+		}
 		context.restore();
 	}
 
@@ -116,7 +142,13 @@ public class NodePainter {
 		setContextStyle(context, category);
 		drawBackground(context, category, x, y - height + 2, width,
 				height + 2);
+		int ox = x;
 
+		String icon = category.getIconType();
+		if (icon != null) {
+			x += Settings.ICON_WIDTH;
+		}
+		
 		int px = x;
 		y -= pheight + 5;
 
@@ -129,10 +161,18 @@ public class NodePainter {
 		y += 5;
 
 		context.setFillStyle(CssColor.make("#08C"));
-		context.fillRect(x, y, percent / 100.0 * pwidth, pheight);
+		context.fillRect(ox, y, percent / 100.0 * pwidth, pheight);
 
 		context.setFillStyle("#FFFFFF");
-		context.fillText(String.valueOf(percent) + "%", x + 10, y + pheight);
+		context.fillText(String.valueOf(percent) + "%", ox + 10, y + pheight);
+		
+		if (icon != null) {
+			context.setFont("14px FontAwesome");
+			String c = "";
+			c += IconTypeContent.get(IconType.valueOf(icon));
+			context.fillText(c, ox, y - 5);
+			context.setFont(font);
+		}
 
 		context.restore();
 	}

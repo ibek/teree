@@ -36,10 +36,10 @@ public class EditPanel extends Composite {
 	private SplitDropdownButton createConnector;
 	private NavLink mergeConnector;
 	private NavLink splitConnector;
-	private DropdownButton icon;
+	//private DropdownButton icon; // TODO: icon for any node independent on node category - maybe put the icon into node
 	private Button categories;
 
-	private SelectIcon iconHandler;
+	//private SelectIcon iconHandler;
 
 	private boolean collapsed;
 	private Tooltip tooltipCollapse;
@@ -76,13 +76,13 @@ public class EditPanel extends Composite {
 		Label space4 = new Label("");
 		space4.getElement().getStyle().setMarginRight(20, Unit.PX);
 
-		icon = new DropdownButton("icon");
+		/**icon = new DropdownButton("icon");
 		icon.add(IconTypeContent.loadIcons(new IconTypeContent.SelectIconHandler() {
 			@Override
 			public void select(IconType icon) {
 				selectIcon(icon);
 			}
-		}));
+		}));*/
 
 		categories = new Button("", IconType.EYE_OPEN);
 
@@ -116,7 +116,7 @@ public class EditPanel extends Composite {
 		tcme.add(createMathExpr);
 		container.add(tcme);
 
-		Tooltip tcp = new Tooltip("Create percentual node");
+		Tooltip tcp = new Tooltip(UIMessages.LANG.create_percentage());
 		tcp.add(createPercent);
 		container.add(tcp);
 
@@ -128,9 +128,9 @@ public class EditPanel extends Composite {
 
 		container.add(space4);
 
-		Tooltip ti = new Tooltip(UIMessages.LANG.choose_icon());
+		/**Tooltip ti = new Tooltip(UIMessages.LANG.choose_icon());
 		ti.add(icon);
-		container.add(ti);
+		container.add(ti);*/
 
 		Tooltip tc = new Tooltip("Show categories");
 		tc.add(categories);
@@ -146,9 +146,9 @@ public class EditPanel extends Composite {
 		refresh.setEnabled(enabled);
 	}
 
-	private void selectIcon(IconType icon) {
+	/**private void selectIcon(IconType icon) {
 		iconHandler.select(icon);
-	}
+	}*/
 
 	public void checkSelectedNode(NodeWidget nw) {
 		mergeConnector.setDisabled(nw == null
@@ -160,7 +160,7 @@ public class EditPanel extends Composite {
 						.getChildNodes().size() > 0));
 		disableNewChildNodes(nw == null || nw instanceof ConnectorNodeWidget
 				|| nw instanceof LinkNodeWidget);
-		icon.getTriggerWidget().setEnabled(nw != null);
+		//icon.getTriggerWidget().setEnabled(nw != null);
 	}
 
 	public boolean isCollapsed() {
@@ -235,9 +235,9 @@ public class EditPanel extends Composite {
 		return categories;
 	}
 
-	public void setSelectIconHandler(SelectIcon handler) {
+	/**public void setSelectIconHandler(SelectIcon handler) {
 		this.iconHandler = handler;
-	}
+	}*/
 
 	public static interface SelectIcon {
 

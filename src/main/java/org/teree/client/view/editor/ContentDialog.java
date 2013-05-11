@@ -1,6 +1,6 @@
 package org.teree.client.view.editor;
 
-import org.teree.client.view.common.TDialog;
+import org.teree.client.view.common.PopupPanel;
 
 import com.github.gwtbootstrap.client.ui.TextBox;
 import com.google.gwt.dom.client.Style.Unit;
@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class ContentDialog extends TDialog {
+public class ContentDialog extends PopupPanel {
 
 	private static final int WIDTH = 186;
 	private static final int HEIGHT = 100;

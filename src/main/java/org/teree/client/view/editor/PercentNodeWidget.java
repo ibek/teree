@@ -216,7 +216,6 @@ public class PercentNodeWidget extends NodeWidget {
 			pstyle.setProperty("lineHeight", "10px");
 			Style sliderStyle = percentage.getWidget(0).getElement().getStyle();
 			sliderStyle.setColor("black");
-			sliderStyle.setProperty("textAlign", "center");
 			container.add(percentage);
 			Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 				@Override
@@ -241,7 +240,7 @@ public class PercentNodeWidget extends NodeWidget {
 			return false;
 		}
 		for (Node childNode : node.getChildNodes()) {
-			if (childNode.getType() == NodeType.Percent) {
+			if (childNode.getType() == NodeType.Percent && ((PercentText) childNode.getContent()).getGroup() < 0) {
 				return true;
 			}
 			/**
@@ -296,7 +295,9 @@ public class PercentNodeWidget extends NodeWidget {
 				}
 			}
 			PercentText pt = (PercentText) parent.getContent();
-			pt.setPercentage(sum / count); // average
+			if (count > 0) {
+				pt.setPercentage(sum / count); // average
+			}
 			updateParentNodes(parent.getParent()); // recursive
 			updateGroupNodes(parent); // recursive for groups
 		}

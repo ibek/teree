@@ -171,12 +171,12 @@ public class Editor extends TemplateScene implements
 			}
 		});
 
-		edit.setSelectIconHandler(new EditPanel.SelectIcon() {
+		/**edit.setSelectIconHandler(new EditPanel.SelectIcon() {
 			@Override
 			public void select(IconType icon) {
 				scene.getController().setNodeIcon(icon);
 			}
-		});
+		});*/
 
 	}
 

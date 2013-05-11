@@ -23,6 +23,7 @@ import com.google.gwt.canvas.dom.client.TextMetrics;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -78,6 +79,8 @@ public class PercentNodeWidget extends NodeWidget {
 			percentage.setHeight("10px");
 			percentage.getElement().getStyle()
 					.setProperty("lineHeight", "10px");
+			Style sliderStyle = percentage.getWidget(0).getElement().getStyle();
+			sliderStyle.setColor("black");
 			container.add(percentage);
 		}
 

@@ -24,6 +24,7 @@ public interface UIMessages extends Messages {
     String new1();
     String new2();
     String new3();
+    String new4();
     
     String no_scheme();
     
@@ -41,6 +42,7 @@ public interface UIMessages extends Messages {
     String create_image();
     String create_link();
     String create_math();
+    String create_percentage();
     String bold_text();
     String choose_icon();
     

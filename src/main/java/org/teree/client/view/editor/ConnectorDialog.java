@@ -6,7 +6,7 @@ import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.teree.client.CurrentPresenter;
 import org.teree.client.presenter.Editor;
 import org.teree.client.text.UIConstants;
-import org.teree.client.view.common.TDialog;
+import org.teree.client.view.common.PopupPanel;
 import org.teree.shared.data.common.Text;
 import org.teree.shared.data.common.Scheme;
 import com.github.gwtbootstrap.client.ui.Button;
@@ -22,9 +22,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class ConnectorDialog extends TDialog {
+public class ConnectorDialog extends PopupPanel {
 
-	private static final int WIDTH = 226;
 	private static final int HEIGHT = 100;
 	
 	private Button next;
@@ -46,17 +45,13 @@ public class ConnectorDialog extends TDialog {
 
 		VerticalPanel panel = new VerticalPanel();
 		panel.getElement().getStyle().setMargin(0.0, Unit.PX);
-		//panel.setWidth(WIDTH+"px");
 		panel.setHeight(HEIGHT+"px");
 		
 		preview = new Image();
-		//preview.setWidth(Settings.SAMPLE_MAX_WIDTH + "px");
-		//preview.setHeight(Settings.SAMPLE_MAX_HEIGHT + "px");
 		panel.add(preview);
 
 		FlowPanel fp = new FlowPanel();
 		back = new Button(UIConstants.LANG.back());
-		//back.getElement().getStyle().setFloat(Float.LEFT);
 		back.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

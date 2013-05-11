@@ -42,9 +42,13 @@
 			<b:Image resource="{cres.features}" addStyleNames="{style.picture}"/>
 			<b:AlertBlock type="ERROR" heading="{uic.attention}" text="{uim.attention_testing}" close="false" addStyleNames="{style.alert}" />
 			<b:AlertBlock type="INFO" heading="{uic.news}" close="false" addStyleNames="{style.alert}">
+				2013-04-20
+				<ul>
+					<li><bb:InlineLabel text="{uim.new4}"/> <g:Anchor ui:field="changeLogs2" text='{uic.change_logs}' addStyleNames="{style.innerlink}"/></li>
+				</ul>
 				2013-02-22
 				<ul>
-					<li><bb:InlineLabel text="{uim.new3}"/> <g:Anchor ui:field="changeLogs2" text='{uic.change_logs}' addStyleNames="{style.innerlink}"/></li>
+					<li><bb:InlineLabel text="{uim.new3}"/></li>
 				</ul>
 				2012-12-25
 				<ul>
@@ -56,7 +60,7 @@
 			<b:Heading size="2" text="{uic.contact_and_feedback}" />
 				<b:Heading size="4">Ivo Bek</b:Heading>
 				<b:Paragraph>
-					If you have any questions, problems or ideas, contact me at:
+					Should you have any questions, problems or ideas, feel free to contact me at:
 					<b:Image resource="{cres.email}"/>
 				</b:Paragraph>
 		</g:FlowPanel>

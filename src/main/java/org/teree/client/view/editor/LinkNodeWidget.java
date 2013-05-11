@@ -68,14 +68,16 @@ public class LinkNodeWidget extends NodeWidget {
 				public void onClick(ClickEvent event) {
 					nodeContent.setText(linkDialog.getTextField());
 					nodeContent.setUrl(linkDialog.getUrlField());
+					unselect(); // node has to be unselected to get the right size for update
+	            	update();
+					linkDialog.hide();
 					Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 			            @Override
 			            public void execute() {
-							update();
-							getParent().fireEvent(new NodeChanged(null)); // null because nothing was inserted
+							LinkNodeWidget.this.getParent().fireEvent(new NodeChanged(null)); // null because nothing was inserted
+							LinkNodeWidget.this.getParent().fireEvent(new SelectNode<LinkNodeWidget>(LinkNodeWidget.this));
 			            }
 			        });
-					linkDialog.hide();
 				}
 			});
 			

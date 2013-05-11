@@ -3,7 +3,7 @@ package org.teree.client.view.explorer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.teree.client.view.common.TDialog;
+import org.teree.client.view.common.PopupPanel;
 import org.teree.shared.data.UserInfo;
 import org.teree.shared.data.common.Permissions;
 import org.teree.shared.data.common.UserPermissions;
@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PermissionsDialog extends TDialog {
+public class PermissionsDialog extends PopupPanel {
 
 	private static final int WIDTH = 210;
 	private static final int HEIGHT = 100;

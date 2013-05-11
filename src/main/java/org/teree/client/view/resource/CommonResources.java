@@ -13,26 +13,5 @@ public interface CommonResources extends Resources {
 	
 	@Source("img/email.png")
     ImageResource email();
-	
-	@Source("img/texticon.png")
-    ImageResource texticon();
-	
-	@Source("img/image.png")
-    ImageResource image();
-	
-	@Source("img/link.png")
-    ImageResource link();
-	
-	@Source("img/mathexpr.png")
-    ImageResource mathexpr();
-	
-	@Source("img/connector.png")
-    ImageResource connector();
-	
-	@Source("img/connectorDialog.png")
-    ImageResource connectorDialog();
-	
-	@Source("img/connectorView.png")
-    ImageResource connectorView();
     
 }

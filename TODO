@@ -1,44 +1,36 @@
 
 ===============
-0.8:
-===============
-
-update help stranky
-update uvodni mind mapy
-
-===============
 0.9:
 ===============
 
-upravit explore aby zobrazoval jak posledne vlozene mapy tak i nejvice otevrene za tyden apod.
-pridat hodnoceni a pocet shlednuti mapy
-
-rozsahla uprava designu do moderniho stylu
-
-nastavit styl pro tisk
+uprava hlavni stranky
+pocitat s ruznym zobrazovanim na ruznych zarizenich
+zmenit prihlasovani na MongoDB
 
 SEO
  - http://code.google.com/p/acris/wiki/AcrisSEO
  - https://developers.google.com/webmasters/ajax-crawling/?hl=cs
  
 odstraneni uctu uzivatele
-aktivace uctu emailem
-pouziti obrazku z gravatara
+
+oddelit "business" cast - stale zustane serverova cast pro errai, ale ta teprve bude provadet operace nad externi spring aplikaci
+http://krams915.blogspot.cz/2011/02/spring-data-mongodb-tutorial.html 
 
 ===============
-1.0:
+1.0: - stabilni verze, tak aby nebylo uz nutne odstranovat mapy z databaze s nasledujicimi updaty
 ===============
-
-novy typ vizualizace - vertical hierarchy
 
 umoznit export vsech map daneho uzivatele (pro zalohovani) - pomoci JSON
 automaticky backup databaze
  - replikace 1 den zpet?
 
+novy typ vizualizace - vertical hierarchy - pro WBS
+
 sepsat use cases (pro studovani ...) a vlozit na stranky
+provest kalkulace volneho mista pro db - vymyslet alternativy pro vetsi prostor
 
 ===============
-when will be possible:
+when it's possible:
 ===============
 
 use Infinispan as a cache for users and maps
@@ -57,17 +49,25 @@ collaboration
 tvorba skupin (tymu) - pratele, apod ... pro urceni prav na urcite mapy
 uskupeni vice map do skupin - napr v ramci projektu
 
+aktivace uctu emailem
+pouziti obrazku z gravatara
+
+rozsahla uprava designu do moderniho stylu
+
 various structure types - tree, list, n-dimension data, ...
 novy typ struktury - graf
 novy typ vizualizace - vztahy mezi polozkami v kruhu
 
+pridat hodnoceni a pocet shlednuti mapy
+upravit explore aby zobrazoval jak posledne vlozene mapy tak i nejvice otevrene za tyden apod.
+nastavit styl pro tisk
+
 tvorba map z templates - nejake vyhody ? jake vzory napriklad?
 undo-redo funkce
-fulltextove vyhledavani
+fulltextove vyhledavani - od mongodb 2.4
  - v budoucnu bude vysledkem vygenerovana mapa s odkazy a cestami na mapy kde se hledane slovo nachazi
 DBAuth pres SSL
 management console/app - napr pro upravu balicku, zmena limitu apod
 smysluplne testovani
 podpora tabletu a mobilu - pouzit android emulator pro testovani
-presun inline stylu ve tridach do css
 ulozeni ruznych pohledu na mapu - pokud najdu lepsi vyuziti nez jen urceni visibility a collapsed state
