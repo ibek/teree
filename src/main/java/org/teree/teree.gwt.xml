@@ -1,3 +1,13 @@
+<!--
+  Copyright (c) 2013 ibek.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the GNU Public License v3.0
+  which accompanies this distribution, and is available at
+  http://www.gnu.org/licenses/gpl.html
+  
+  Contributors:
+      ibek - initial API and implementation
+-->
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.4//EN"
         "http://google-web-toolkit.googlecode.com/svn/releases/2.4/distro-source/core/src/gwt-module.dtd">
 
@@ -43,8 +53,8 @@
 	<!--removes client-side stack trace info (can reduce size up to 15%)-->
     <set-property name="compiler.stackMode" value="strip"/>
 
-	<set-property name="user.agent" value="safari" />
-    <!-- <set-property name="user.agent" value="ie8,ie9,gecko1_8,safari"/>  -->
+	<!-- <set-property name="user.agent" value="safari" /> -->
+    <set-property name="user.agent" value="ie8,ie9,gecko1_8,safari"/>
 
     <!-- Set to false to avoid runtime warnings for mismatched runtime and -->
     <!-- compile time user.agent values -->
